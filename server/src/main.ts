@@ -14,7 +14,7 @@ async function bootstrap() {
     new FastifyAdapter()
   )
   app.enableCors()
-  app.setGlobalPrefix('/idle-elf/')
+  app.setGlobalPrefix('/chant/')
   app.useGlobalFilters(new GlobalExceptionFilter(), new HttpExceptionFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
   app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }))

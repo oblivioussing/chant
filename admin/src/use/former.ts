@@ -104,7 +104,7 @@ function useFormer(config = { type: 'page' } as Config) {
   }
   // 是否需要获取详情
   function _hasGetDetail() {
-    const copyAddFlag = route.query?.copyAddFlag
+    const copyAddFlag = route.query['copy-add-flag']
     const props = instance?.props
     return copyAddFlag === '1' || props?.type === 'edit'
   }

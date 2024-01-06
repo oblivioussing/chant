@@ -26,7 +26,11 @@
       </el-sub-menu>
     </el-menu>
     <!-- 版本号 -->
-    <div class="version">{{ t('version') }}: {{ appVersion }}</div>
+    <div class="version">
+      <template v-if="!props.isCollapse">{{ t('version') }}:</template>
+      {{ appVersion }}
+      <template v-if="isDev">({{ stage }})</template>
+    </div>
   </div>
 </template>
 
@@ -61,6 +65,8 @@ const appStore = useAppStore()
 // var
 let subIndex = ''
 const appVersion = window.__APP_VERSION__
+const isDev = import.meta.env.DEV
+const stage = import.meta.env.VITE_STAGE
 // state
 const menuRef = ref(null)
 const state = reactive({
@@ -124,11 +130,6 @@ function icon(icon?: unknown) {
   .menu-box {
     overflow: auto;
     flex: 1;
-    &.el-menu--collapse {
-      & + .version {
-        display: none;
-      }
-    }
     &:not(.el-menu--collapse) {
       width: 160px;
     }
