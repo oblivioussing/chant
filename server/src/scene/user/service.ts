@@ -96,7 +96,7 @@ export class UserService {
       return result
     }
     user.id = base.createUid()
-    user.createTime = base.getChinaDate()
+    user.createTime = new Date()
     user.password = await bcrypt.hash(user.password, 10)
     const data = core.toEntity(user, UserEntity)
     const row = await prisma.user.create({ data })

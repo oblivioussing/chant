@@ -19,7 +19,7 @@
     </template>
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict">
+  <chant-table v-model="state" :dict="dict" sort>
     <!-- 操作 -->
     <chant-column-operate :width="140">
       <template #="{ row }">

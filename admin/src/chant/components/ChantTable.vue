@@ -92,13 +92,13 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { ElMessage } from 'element-plus'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 // @ts-ignore
 import Sortable from 'sortablejs'
 import {
   computed,
-  nextTick,
   onActivated,
   onMounted,
   reactive,
@@ -111,7 +111,9 @@ import useClipboard from 'vue-clipboard3'
 import { DocumentCopy } from '@element-plus/icons-vue'
 import { useVModel } from '@vueuse/core'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
-import { base, format } from '@/utils'
+import { format } from '@/utils'
+
+dayjs.extend(utc)
 
 // defineExpose
 defineExpose({
@@ -219,12 +221,12 @@ function sortCreate() {
   const el = tableRef.value?.$el.querySelector('.el-table__body > tbody')
   Sortable.create(el, {
     onEnd: (event: any) => {
-      const data = base.clone(list.value)
-      const item = data?.splice(event.oldIndex, 1)[0]
-      data?.splice(event.newIndex, 0, item)
-      if (vModel.value) {
-        vModel.value.list = data as any[]
-        emits('update:modelValue', vModel.value)
+      const { oldIndex, newIndex } = event
+      const oldRow = list.value?.[oldIndex]
+      const newRow = list.value?.[newIndex]
+      if (list.value) {
+        list.value[oldIndex] = newRow
+        list.value[newIndex] = oldRow
       }
     }
   })
@@ -242,10 +244,10 @@ function tableAdapter() {
   if (props.heightWild) {
     return
   }
-  nextTick(() => {
+  setTimeout(() => {
     const el = tableRef.value?.$el as HTMLElement
     state.height = el?.offsetHeight
-  })
+  }, 300)
 }
 // value格式化
 function valueFmt(column: Column, value: any) {
@@ -308,14 +310,6 @@ function translate(column: Column) {
 .chant-table {
   flex: 1;
   overflow: hidden;
-  :deep(.link) {
-    color: var(--main-color);
-    cursor: pointer;
-    overflow: hidden;
-    text-decoration: underline;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   :deep(.el-button.is-link) {
     font-weight: normal;
   }
