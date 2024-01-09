@@ -1,6 +1,6 @@
 import { User } from 'prisma/prisma-client'
 
-export const UserEntity: User = {
+export const UserEntity = {
   id: '', // id
   avator: '', // 头像
   birthday: new Date(), // 出生日期
@@ -14,4 +14,4 @@ export const UserEntity: User = {
   phone: '', // 手机号
   status: '', // 状态
   updateTime: new Date() // 更新时间
-}
+} as User

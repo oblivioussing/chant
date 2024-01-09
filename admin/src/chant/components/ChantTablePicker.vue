@@ -14,7 +14,7 @@
           :dict="props.dict"
           :lang="props.lang"
           @query="getList"
-          @refresh="lister.refresh(getList, state)">
+          @reset="lister.reset(getList, state)">
         </chant-table-search>
         <!-- table -->
         <chant-table

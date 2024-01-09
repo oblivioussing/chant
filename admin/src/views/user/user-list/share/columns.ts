@@ -54,7 +54,8 @@ export default () => {
       prop: 'birthday',
       label: '生日',
       search: true,
-      type: 'date-picker'
+      type: 'date-picker',
+      datepickerType: 'date'
     },
     {
       prop: 'createTime',

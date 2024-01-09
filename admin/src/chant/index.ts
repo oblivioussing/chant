@@ -6,6 +6,5 @@ function install(app: App<Element>) {
 }
 
 export default { install }
-export * from './enum'
 export * from './type'
 export * from './utils'

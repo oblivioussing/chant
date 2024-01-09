@@ -92,26 +92,32 @@
         <slot v-else-if="item.searchSlot" :name="item.prop" :row="item"></slot>
       </el-form-item>
     </el-form>
-    <el-button-group>
-      <!-- 展开搜索 -->
-      <chant-button
-        v-if="state.arrow === 'down'"
-        :content="t('spread')"
-        :icon="ArrowDown"
-        @click="onCollapse('up')">
-      </chant-button>
-      <!-- 关闭搜索 -->
-      <chant-button
-        v-if="state.arrow === 'up'"
-        :content="t('fold')"
-        :icon="ArrowUp"
-        @click="onCollapse('down')">
-      </chant-button>
+    <!-- 展开搜索 -->
+    <chant-button
+      v-if="state.arrow === 'down'"
+      :content="t('spread')"
+      :icon="ArrowDown"
+      @click="onCollapse('up')">
+    </chant-button>
+    <!-- 关闭搜索 -->
+    <chant-button
+      v-if="state.arrow === 'up'"
+      :content="t('fold')"
+      :icon="ArrowUp"
+      @click="onCollapse('down')">
+    </chant-button>
+    <el-button-group style="margin-left: 10px">
       <!-- 查询 -->
       <chant-button
         :content="t('query')"
         :icon="Search"
         @click="onSubmit('query')">
+      </chant-button>
+      <!-- 重置 -->
+      <chant-button
+        :content="t('reset')"
+        :icon="Refresh"
+        @click="onSubmit('reset')">
       </chant-button>
     </el-button-group>
   </div>
@@ -121,7 +127,7 @@
 import type { FormInstance } from 'element-plus'
 import { computed, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ArrowDown, ArrowUp, Search } from '@element-plus/icons-vue'
+import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
 import { useThrottleFn, useVModel } from '@vueuse/core'
 import {
   formUtils,
@@ -136,11 +142,12 @@ const props = defineProps<{
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
   modelValue?: ListState // modelValue
+  queryInit?: Function // 查询条件初始化
   searchOrder?: string[] // 搜索字段顺序
   unfold?: boolean // 自动展开搜索条件
 }>()
 // emits
-const emits = defineEmits(['query', 'update:modelValue'])
+const emits = defineEmits(['query', 'reset', 'update:modelValue'])
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({
@@ -150,14 +157,14 @@ const { t } = useI18n({
       spread: 'spread search',
       fold: 'fold fold',
       query: 'query',
-      refresh: 'refresh'
+      reset: '重置'
     },
     zh: {
       ...props.lang?.zh,
       spread: '展开搜索',
       fold: '折叠搜索',
       query: '查询',
-      refresh: '刷新'
+      reset: '重置'
     }
   }
 })
@@ -212,6 +219,9 @@ onScopeDispose(() => {
 })
 // 绑定查询条件的值
 function bindQueryValue() {
+  if (props.queryInit && vModel.value?.query) {
+    vModel.value.query = props.queryInit()
+  }
   const query = vModel.value?.query
   vModel.value?.columns?.forEach((item) => {
     if (isDateRange(item)) {
@@ -270,8 +280,13 @@ function onDateRangeChange(column: Column) {
   emits('query')
 }
 // 提交
-async function onSubmit(type: 'query') {
+async function onSubmit(type: 'query' | 'reset') {
   try {
+    if (type === 'reset' && vModel.value) {
+      vModel.value.pages.pageNum = 1
+      vModel.value.query = {}
+      bindQueryValue()
+    }
     const status = await formRef.value?.validate()
     status && emits(type)
   } catch (error) {

@@ -1,0 +1,6 @@
+# compiled output
+/node_modules
+
+# local env files
+package-lock.json
+pnpm-lock.yaml

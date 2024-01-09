@@ -1,6 +1,10 @@
 <template>
   <!-- search -->
-  <chant-table-search v-model="state" :dict="dict" @query="getList">
+  <chant-table-search
+    v-model="state"
+    :dict="dict"
+    @query="getList"
+    @reset="getList">
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate

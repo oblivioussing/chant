@@ -99,11 +99,12 @@ export class UserService {
     user.createTime = new Date()
     user.password = await bcrypt.hash(user.password, 10)
     const data = core.toEntity(user, UserEntity)
-    const row = await prisma.user.create({ data })
-    if (row) {
+    try {
+      await prisma.user.create({ data })
       result.success({ msg: '注册成功' })
-    } else {
-      result.fail('注册失败')
+    } catch (error) {
+      console.log(error)
+      result.fail(error)
     }
     return result
   }
@@ -111,6 +112,7 @@ export class UserService {
   async update(user: User): Promise<Result<User>> {
     const result = new Result<User>()
     const data = core.toEntity(user, UserEntity)
+    data.updateTime = new Date()
     const row = await prisma.user.update({
       data,
       where: { id: user.id }

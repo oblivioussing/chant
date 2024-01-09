@@ -19,8 +19,8 @@ model User {
   nickname   String    @default("") @db.VarChar(50)
   password   String    @default("") @db.VarChar(100)
   phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
-  status     String    @default("") @db.VarChar(2)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  status     String    @default("") @db.VarChar(2)
 
   @@map("user")
 }

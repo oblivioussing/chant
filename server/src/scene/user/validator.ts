@@ -1,17 +1,7 @@
-import {
-  IsEmail,
-  IsMobilePhone,
-  IsDateString,
-  IsDefined,
-  IsNotEmpty
-} from 'class-validator'
+import { IsEmail, IsMobilePhone, IsDefined, IsNotEmpty } from 'class-validator'
 import { IsOptionalPlus } from '@/validator'
 
 class Base {
-  // 生日
-  @IsDateString({}, { message: '生日格式不正确' })
-  @IsOptionalPlus()
-  birthday: Date
   // 邮箱
   @IsEmail({}, { message: '邮箱格式不正确' })
   @IsOptionalPlus()

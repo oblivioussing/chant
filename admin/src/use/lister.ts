@@ -30,7 +30,7 @@ function useLister() {
   // 新增
   function add() {
     // 页面跳转
-    jump('/add')
+    _jump('/add')
   }
   // 批量操作
   function batch(
@@ -57,7 +57,7 @@ function useLister() {
   function copyAdd(row: any) {
     const query = { id: row.id, 'copy-add-flag': '1' }
     // 页面跳转
-    jump('/add', query)
+    _jump('/add', query)
   }
   // created
   function created(
@@ -111,7 +111,7 @@ function useLister() {
   function edit(row: any) {
     const query = { id: row.id }
     // 页面跳转
-    jump('/edit', query)
+    _jump('/edit', query)
   }
   // 获取数据
   async function getData(
@@ -152,13 +152,6 @@ function useLister() {
   // 是否选中数据
   function isSelected(state: State) {
     return state.selection.length > 0 || state.allFlag === 1
-  }
-  // 页面跳转
-  function jump(to: string, query?: any) {
-    const path = route?.path || ''
-    const toPath = path?.replace('/index', to)
-    appStore.updatePageRelation(toPath, path)
-    router.push({ path: toPath, query })
   }
   // 操作
   async function operate(
@@ -206,6 +199,13 @@ function useLister() {
     }
     return status
   }
+  // 页面跳转
+  function _jump(to: string, query?: any) {
+    const path = route?.path || ''
+    const toPath = path?.replace('/index', to)
+    appStore.updatePageRelation(toPath, path)
+    router.push({ path: toPath, query })
+  }
   // 事件监听
   function _on(callback: () => any, name?: string) {
     name = name || route?.path
@@ -235,7 +235,6 @@ function useLister() {
     getData,
     getListParams,
     isSelected,
-    jump,
     operate,
     remove,
     toggleRowSelection
