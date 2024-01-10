@@ -12,6 +12,10 @@
   "type": "module",
   "author": "oblivioussing@outlook.com",
   "dependencies": {
-    "@inquirer/prompts": "^3.3.0"
+    "@inquirer/prompts": "^3.3.0",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/shelljs": "^0.8.15"
   }
 }
