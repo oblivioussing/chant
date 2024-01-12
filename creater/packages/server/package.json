@@ -2,16 +2,20 @@
   "name": "chant-creater-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.ts",
   "scripts": {
-    "start": "tsx watch ./src/index.ts"
+    "start": "tsx watch ./src/main.ts"
   },
   "type": "module",
   "author": "oblivioussing@outlook.com",
   "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "handlebars": "^4.7.8",
     "koa": "^2.15.0",
+    "koa-bodyparser": "^4.4.1",
     "koa-router": "^12.0.1",
-    "mysql2": "^3.7.0"
+    "mysql2": "^3.7.0",
+    "sass": "^1.69.7"
   },
   "devDependencies": {
     "@types/koa": "^2.13.12",

@@ -1,5 +1,4 @@
 import qs from 'qs'
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 
 export enum ContentTypeEnum {
   Audio = 'audio/wav',

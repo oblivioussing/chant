@@ -12,8 +12,9 @@
       </el-checkbox>
     </div>
     <div class="button-box" ref="groupsRef">
-      <!-- 自定义按钮 -->
-      <el-button-group :disabled="vModel.selection.length === 0">
+      <slot name="group"></slot>
+      <!-- 自定义按钮(组) -->
+      <el-button-group class="m-l-10">
         <slot></slot>
       </el-button-group>
       <!-- 批量编辑 -->
@@ -30,7 +31,7 @@
           </template>
           <el-button v-else type="primary">
             {{ t('batch') + tg('button.alter') }}
-            <el-icon style="margin-left: 5px"><arrow-down /></el-icon>
+            <el-icon class="m-l-5"><arrow-down /></el-icon>
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -170,6 +171,9 @@ function onChange(val: any) {
   .button-box {
     display: flex;
     align-items: center;
+  }
+  .m-l-5 {
+    margin-left: 5px;
   }
   .m-l-10 {
     margin-left: 10px;
