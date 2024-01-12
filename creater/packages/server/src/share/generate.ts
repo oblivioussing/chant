@@ -2,13 +2,13 @@ import fs from 'fs'
 import handlebars from 'handlebars'
 
 // 生成代码
-export function generate() {
-  console.log(process.cwd())
-  const url = import.meta.url
-  const fileUrl = new URL(`./template/web/index.hbs`, url)
-  const source = fs.readFileSync(fileUrl, 'utf8')
+export function generate(data: any) {
+  const filePath = process.cwd() + '/src/template/web/index.hbs'
+  const source = fs.readFileSync(filePath, 'utf8')
   const template = handlebars.compile(source)
-  const code = template({ name: 123456 })
-  const saveUrl = new URL('../dist/index.vue', url)
+  const code = template(data)
+  const cmdPath = process.argv.pop()
+  const saveUrl = `${cmdPath}/index.vue`
+  console.log(saveUrl)
   fs.writeFileSync(saveUrl, code)
 }

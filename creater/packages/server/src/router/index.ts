@@ -42,10 +42,8 @@ router.get('/table/field', async (ctx) => {
 // 开始生成
 router.post('/generate/start', async (ctx) => {
   const body = ctx.request.body
-  const cmdPath = process.argv.pop()
-  console.log('cmdPath:', cmdPath)
   // 生成代码
-  // generate()
+  generate(body)
   ctx.body = {
     code: '1',
     body
