@@ -17,6 +17,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="路由:">
+        <el-input v-model="state.form.path"></el-input>
+      </el-form-item>
     </el-form>
     <el-table :data="state.list" :border="true">
       <el-table-column
@@ -99,7 +102,8 @@ const typeList = [
 const state = reactive({
   form: {
     type: '1',
-    tableName: ''
+    tableName: '',
+    path: ''
   },
   tableList: [] as any[],
   list: [],
@@ -142,7 +146,7 @@ async function onStart() {
   const config = {
     url: 'generate/start',
     method: 'POST',
-    body: state.list
+    body: { ...state.form, list: state.list }
   } as RequestConfig
   try {
     state.loading = true
