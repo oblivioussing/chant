@@ -18,25 +18,25 @@
         </el-select>
       </el-form-item>
       <el-form-item label="路由:">
-        <el-input v-model="state.form.path"></el-input>
+        <el-input v-model="state.form.routePath"></el-input>
       </el-form-item>
     </el-form>
     <el-table :data="state.list" :border="true">
       <el-table-column
         align="center"
-        prop="COLUMN_NAME"
+        prop="columnName"
         label="字段"
         width="140px">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="COLUMN_COMMENT"
+        prop="columnComment"
         label="字段名"
         width="140px">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="COLUMN_TYPE"
+        prop="columnType"
         label="字段类型"
         width="140px">
       </el-table-column>
@@ -103,7 +103,7 @@ const state = reactive({
   form: {
     type: '1',
     tableName: '',
-    path: ''
+    routePath: ''
   },
   tableList: [] as any[],
   list: [],

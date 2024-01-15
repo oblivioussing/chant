@@ -1,13 +1,12 @@
 export default {
-  // 性别
-  gender: {
-    1: '女',
-    2: '男'
-  },
-  // 状态
-  status: {
-    1: '正常',
-    2: '封禁',
-    3: '锁定'
-  }
+{{#each list}}
+  {{#if dict}}
+  // {{columnComment}}
+  {{columnName}}: {
+    {{#each dict}}
+    {{@key}}: '{{this}}'{{#if @last}}{{else}},{{/if}}
+    {{/each}}
+  }{{#if @last}}{{else}},{{/if}}
+  {{/if}}
+{{/each}}
 }

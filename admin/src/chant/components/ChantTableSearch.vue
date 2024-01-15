@@ -16,8 +16,8 @@
         :key="item.prop"
         :label="translate(item) + ':'"
         :prop="item.prop"
-        :required="item.required"
-        :rules="[{ required: item.required, message: '' }]">
+        :required="item.sarchRequired"
+        :rules="[{ required: item.sarchRequired, message: '' }]">
         <!-- input -->
         <el-input
           v-if="!item.type || item.type === 'input'"

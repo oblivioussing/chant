@@ -1,8 +1,6 @@
 import fs from 'fs/promises'
 import handlebars from 'handlebars'
-import path from 'path'
-import { rimraf } from 'rimraf'
-import type { Form, Type } from './type'
+import type { Form } from './type'
 
 const typeDict = {
   1: 'web',
@@ -11,41 +9,61 @@ const typeDict = {
 // 执行生成命令行所在的目录
 const cmdPath = process.argv.pop()!
 // 生成代码的目录
-const codeDir = `${cmdPath}/chant-generate-code/`
+const codeDir = `${cmdPath}/chant-generate-code`
 
 // 生成代码
 export async function generate(data: Form) {
+  const routePath = data.routePath?.replace(/^\/+|\/+$/g, '')
+  const [module, route] = routePath?.split('/') || []
   // 前端/后端的文件夹名称
   const typeDir = typeDict[data.type]
-  // 路由文件夹
-  const routerPath = `${codeDir}/${typeDir}/${data.path}`
+  // 保存目录路径
+  const savePath = `${codeDir}/${typeDir}/${data.routePath}`
   // 创建目录
-  mkDir(routerPath)
+  await mkDir(savePath)
   // 模版文件夹
   const templateDir = `${process.cwd()}/template/${typeDir}`
-  // 遍历目录
-  const files = await fs.readdir(templateDir)
-  files.forEach(async (item) => {
-    const fileName = item.replace('.hbs', '')
-    const stats = await fs.stat(`${templateDir}/${item}`)
-    console.log(stats)
-    if (stats.isDirectory()) {
-    } else {
+  // 递归目录(调用)
+  dirRecursion(templateDir, savePath)
+  // 递归目录
+  async function dirRecursion(templateDir: string, codePath: string) {
+    const files = await fs.readdir(templateDir)
+    for (let item of files) {
+      const hbs = `${templateDir}/${item}`
+      const stats = await fs.stat(hbs)
+      if (stats.isDirectory()) {
+        // 创建目录
+        await mkDir(`${codePath}/${item}`)
+        dirRecursion(`${templateDir}/${item}`, `${codePath}/${item}`)
+      } else {
+        createFile({
+          data: { module, route, ...data },
+          templateName: item,
+          hbs,
+          codePath
+        })
+      }
     }
-  })
-  // const filePath = process.cwd() + '/src/template/web/index.hbs'
-  // const source = fs.readFileSync(filePath, 'utf8')
-  // const template = handlebars.compile(source)
-  // const code = template(data)
-  // const saveUrl = `${cmdPath}/index.vue`
-  // console.log(saveUrl)
-  // fs.writeFileSync(saveUrl, code)
+  }
+}
+
+// 生成文件
+async function createFile(config: {
+  data: any
+  templateName: string
+  hbs: string
+  codePath: string
+}) {
+  const source = await fs.readFile(config.hbs, 'utf8')
+  const template = handlebars.compile(source)
+  const fileName = config.templateName.replace('.hbs', '')
+  const saveUrl = `${config.codePath}/${fileName}`
+  await fs.writeFile(saveUrl, template(config.data))
 }
 // 创建目录
 async function mkDir(dir: string) {
   try {
     await fs.statfs(dir)
-    await rimraf(dir)
   } catch (error: any) {
     // 文件夹不存在
     if (error.code === 'ENOENT') {
@@ -55,5 +73,3 @@ async function mkDir(dir: string) {
     }
   }
 }
-// 生成文件
-function createFile() {}

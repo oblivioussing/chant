@@ -5,6 +5,7 @@ export default () => {
     {
       prop: 'loginName',
       label: '用户名',
+      required: true,
       search: true
     },
     {

@@ -13,7 +13,6 @@ type BaseColumn = {
   label?: string // 标签文本
   prepend?: string // 输入框前置内容
   prop: string // 字段值
-  required?: boolean // 是否必填,如果pageType为list则仅在搜索条件中有效
   slot?: boolean // 字段内容slot
   type?: ElementType // 元素类型
   valueFormat?: string // 绑定值的格式,仅type为date-picker时有效
@@ -28,6 +27,7 @@ export type FormColumn = {
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效
   multiple?: boolean // 是否支持多选文件
+  required?: boolean // 是否必填
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: any[] // 表单验证规则
   selectMultiple?: boolean // select是否多选
@@ -45,6 +45,7 @@ export type ListColumn = {
   onlySearch?: boolean // 只作为搜索条件
   search?: boolean // 是否为搜索条件
   searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
+  sarchRequired?: boolean // 搜索条件是否为必填
   searchSlot?: boolean // 搜索条件slot
   tagType?: Record<string, TagProps['type']> // tag类型
   width?: number // 对应列的宽度

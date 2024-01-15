@@ -25,16 +25,25 @@ router.get('/table/list', async (ctx) => {
 router.get('/table/field', async (ctx) => {
   const tableName = ctx.query.tableName
   try {
-    const [data] = await mysql.connection.query(
-      `select column_name,column_type, column_comment
+    const [data] = (await mysql.connection.query(
+      `select 
+      column_name as columnName,column_type as columnType, column_comment as columnComment
       from information_schema.columns
       where table_name = '${tableName}' and table_schema = 'chant'`
-    )
-    console.log('data:', data)
-    ctx.body = {
-      code: '1',
-      data
-    }
+    )) as any
+    const list = data.map((item: any) => {
+      const comments = item.columnComment.split('\n')
+      if (comments.length > 1) {
+        item.columnComment = comments.shift()
+        item.dict = comments.reduce((acc: any, cur: any) => {
+          const [key, val] = cur.split('-')
+          acc[key] = val
+          return acc
+        }, {})
+      }
+      return item
+    })
+    ctx.body = { code: '1', data: list }
   } catch (error) {
     console.error('error:', error)
   }
@@ -43,11 +52,8 @@ router.get('/table/field', async (ctx) => {
 router.post('/generate/start', async (ctx) => {
   const body = ctx.request.body
   // 生成代码
-  generate(body)
-  ctx.body = {
-    code: '1',
-    body
-  }
+  generate(body as any)
+  ctx.body = { code: '1' }
 })
 
 export default router

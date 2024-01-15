@@ -132,15 +132,10 @@ function routerChange() {
       path: route.path,
       titleEn: meta?.titleEn as string,
       titleZh: meta?.titleZh as string,
-      name: getName(path)
+      name: path
     })
   }
   state.path = route.path
-}
-// 获取name
-function getName(path: any) {
-  const name = path?.replace(/^\/|\/$/g, '')
-  return name?.replace(/\//g, '-')
 }
 // 标题
 function title(row?: any) {

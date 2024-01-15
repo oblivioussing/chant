@@ -54,7 +54,7 @@
   </batch-alter>
 </template>
 
-<script setup lang="ts" name="user-user-list-index">
+<script setup lang="ts" name="/user/user-list/index">
 import { reactive } from 'vue'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
