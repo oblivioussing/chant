@@ -2,7 +2,7 @@
   <div class="chant-form">
     <el-form
       :label-width="props.labelWidth || '80px'"
-      :model="vModel.form"
+      :model="vModel?.form"
       ref="formRef">
       <template v-for="item in availableColumns" :key="item.prop">
         <!-- divider -->
@@ -21,7 +21,7 @@
             <!-- input -->
             <el-input
               v-if="!item.type || item.type === 'input'"
-              v-model="vModel.form[item.prop]"
+              v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :placeholder="translate(item, 'enter')"
               :rows="item.rows || 3"
@@ -36,7 +36,7 @@
             <!-- select -->
             <el-select
               v-else-if="item.type === 'select'"
-              v-model="vModel.form[item.prop]"
+              v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
@@ -53,12 +53,12 @@
               :name="item.prop"
               :label="translate(item)"
               :row="item"
-              :value="vModel.form[item.prop]">
+              :value="vModel!.form[item.prop]">
             </slot>
             <!-- timepicker -->
             <el-time-picker
               v-else-if="item.type === 'time-picker'"
-              v-model="vModel.form[item.prop]"
+              v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :placeholder="translate(item, 'select')"
               :value-format="item.valueFormat || 'HH:mm:ss'">
@@ -78,7 +78,7 @@
               </el-date-picker>
               <el-date-picker
                 v-else
-                v-model="vModel.form[item.prop]"
+                v-model="vModel!.form[item.prop]"
                 :clearable="item.clearable !== false"
                 :placeholder="translate(item, 'select')"
                 :type="item.datepickerType"
@@ -88,7 +88,7 @@
             <!-- input-number -->
             <el-input-number
               v-else-if="item.type === 'input-number'"
-              v-model="vModel.form[item.prop]"
+              v-model="vModel!.form[item.prop]"
               controls-position="right"
               :min="item.min"
               :max="item.max"
@@ -106,13 +106,13 @@
               v-else-if="item.type === 'input-number-range'"
               class="input-range">
               <el-input-number
-                v-model="vModel.form[rangeField(item, 'start')]"
+                v-model="vModel!.form[rangeField(item, 'start')]"
                 controls-position="right"
                 :placeholder="translate(item)">
               </el-input-number>
               <div class="connector">~</div>
               <el-input-number
-                v-model="vModel.form[rangeField(item, 'end')]"
+                v-model="vModel!.form[rangeField(item, 'end')]"
                 controls-position="right"
                 :placeholder="translate(item)">
               </el-input-number>
@@ -120,7 +120,7 @@
             <!-- radio -->
             <el-radio-group
               v-else-if="item.type === 'radio'"
-              v-model="vModel.form[item.prop]"
+              v-model="vModel!.form[item.prop]"
               :disabled="isDisabled(item)"
               :placeholder="translate(item, 'select')">
               <el-radio
@@ -154,7 +154,7 @@ const props = defineProps<{
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
   columns?: Column[] // model
-  modelValue: ModelValue // modelValue
+  modelValue?: ModelValue // modelValue
   pageType?: 'add' | 'edit' // 页面类型
 }>()
 // emits
@@ -194,12 +194,16 @@ onMounted(() => {
 // 初始化
 function init() {
   props.columns?.forEach((item) => {
+    // 默认值
+    if (item.defaultValue && props.pageType !== 'edit') {
+      vModel.value!.form[item.prop] = item.defaultValue
+    }
     // date range
     if (formUtils.isDateRange(item.datepickerType)) {
       const start = rangeField(item, 'start')
       // watch
       watch(
-        () => vModel.value.form[start],
+        () => vModel.value!.form[start],
         () => {
           // daterange赋值
           dateRangeVoluation(item)
@@ -212,8 +216,8 @@ function init() {
 function dateRangeVoluation(column: Column) {
   const start = rangeField(column, 'start')
   const end = rangeField(column, 'end')
-  const startTime = vModel.value.form[start]
-  const endTime = vModel.value.form[end]
+  const startTime = vModel.value!.form[start]
+  const endTime = vModel.value!.form[end]
   if (startTime && endTime) {
     state.range[column.prop] = [startTime, endTime]
   }
@@ -224,7 +228,7 @@ function dateRangeVoluation(column: Column) {
 // 是否禁用
 function isDisabled(row: Column) {
   if (typeof row.disabled === 'function') {
-    return row.disabled(vModel.value.form)
+    return row.disabled(vModel.value!.form)
   }
   if (row.disabledInPage && row.disabledInPage === props.pageType) {
     return true
@@ -263,7 +267,7 @@ function rules(column: Column) {
 }
 // change
 function onChange(column: Column) {
-  return column.change && column.change(vModel.value.form)
+  return column.change && column.change(vModel.value!.form)
 }
 // 日期范围选择
 function onDateRangeChange(column: Column) {
@@ -271,8 +275,8 @@ function onDateRangeChange(column: Column) {
   if (!value) {
     value = ['', '']
   }
-  vModel.value.form[rangeField(column, 'start')] = value[0]
-  vModel.value.form[rangeField(column, 'end')] = value[1]
+  vModel.value!.form[rangeField(column, 'start')] = value[0]
+  vModel.value!.form[rangeField(column, 'end')] = value[1]
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
