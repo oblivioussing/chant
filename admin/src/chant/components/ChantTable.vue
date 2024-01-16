@@ -186,15 +186,15 @@ onMounted(() => {
   emits('instance', tableRef.value)
   // 列表容器自适应
   tableAdapter()
-  // 拖拽
-  sortCreate()
+  // 初始化拖拽
+  initSortable()
 })
 // 组件激活时
 onActivated(() => {
   // 列表容器自适应
   tableAdapter()
-  // 拖拽
-  sortCreate()
+  // 初始化拖拽
+  initSortable()
 })
 // 全选按钮禁用状态
 function allCheckedStatus() {
@@ -213,8 +213,8 @@ function allCheckedStatus() {
   }
   inputEl.disabled = !!vModel.value?.allFlag
 }
-// 拖拽
-function sortCreate() {
+// 初始化拖拽
+function initSortable() {
   if (!props.sort || !list.value?.length) {
     return
   }

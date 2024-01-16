@@ -21,26 +21,43 @@
         <el-input v-model="state.form.routePath"></el-input>
       </el-form-item>
     </el-form>
-    <el-table :data="state.list" :border="true">
+    <el-table
+      :border="true"
+      :data="state.list"
+      ref="tableRef"
+      row-key="columnName">
+      <!-- 复选框 -->
+      <el-table-column
+        align="center"
+        fixed="left"
+        type="selection"
+        width="35" />
+      <!-- 字段 -->
       <el-table-column
         align="center"
         prop="columnName"
         label="字段"
-        width="140px">
+        :width="columnWidth">
       </el-table-column>
+      <!-- 字段名 -->
       <el-table-column
         align="center"
         prop="columnComment"
         label="字段名"
-        width="140px">
+        :width="columnWidth">
       </el-table-column>
+      <!-- 字段类型 -->
       <el-table-column
         align="center"
         prop="columnType"
         label="字段类型"
-        width="140px">
+        :width="columnWidth">
       </el-table-column>
-      <el-table-column align="center" prop="config" label="配置">
+      <!-- 配置 -->
+      <el-table-column
+        v-if="state.form.type === '1'"
+        align="center"
+        label="配置">
         <template #="{ row }">
           <div class="config-box">
             <!-- required -->
@@ -49,6 +66,23 @@
               <el-select v-model="row.required" size="small">
                 <el-option label="true" :value="1"></el-option>
                 <el-option label="false" :value="0"></el-option>
+              </el-select>
+            </div>
+            <!-- search -->
+            <div class="config-item">
+              <div class="label">search:</div>
+              <el-select v-model="row.search" size="small">
+                <el-option label="true" :value="1"></el-option>
+                <el-option label="false" :value="0"></el-option>
+              </el-select>
+            </div>
+            <!-- hideInPages -->
+            <div class="config-item">
+              <div class="label">hideInPages:</div>
+              <el-select v-model="row.hideInPages" multiple size="small">
+                <el-option label="list" value="list"></el-option>
+                <el-option label="add" value="add"></el-option>
+                <el-option label="edit" value="edit"></el-option>
               </el-select>
             </div>
             <!-- type -->
@@ -61,6 +95,27 @@
                   :label="item"
                   :value="item">
                 </el-option>
+              </el-select>
+            </div>
+            <!-- datepickerType -->
+            <div v-if="row.type === 'date-picker'" class="config-item">
+              <div class="label">datepickerType:</div>
+              <el-select v-model="row.datepickerType" size="small">
+                <el-option
+                  v-for="item in datepickerTypeList"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </div>
+            <!-- inputType -->
+            <div v-if="row.type === 'input'" class="config-item">
+              <div class="label">inputType:</div>
+              <el-select v-model="row.inputType" size="small">
+                <el-option label="password" value="password"></el-option>
+                <el-option label="text" value="text"></el-option>
+                <el-option label="textarea" value="textarea"></el-option>
               </el-select>
             </div>
           </div>
@@ -80,8 +135,10 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import { onMounted, reactive } from 'vue'
+import { ElMessage, type TableInstance } from 'element-plus'
+// @ts-ignore
+import Sortable from 'sortablejs'
+import { computed, onMounted, reactive, ref } from 'vue'
 import Ryougi, { type RequestConfig } from './api/ryougi'
 
 const ryougi = new Ryougi()
@@ -98,6 +155,19 @@ const typeList = [
   'time-picker',
   'upload'
 ]
+const datepickerTypeList = [
+  'year',
+  'month',
+  'date',
+  'dates',
+  'week',
+  'datetime',
+  'datetimerange',
+  'daterange',
+  'monthrange'
+]
+// ref
+const tableRef = ref<TableInstance>()
 // state
 const state = reactive({
   form: {
@@ -110,9 +180,16 @@ const state = reactive({
   loading: false,
   listLoading: false
 })
+// computed
+const columnWidth = computed(() => {
+  return state.form.type === '1' ? '140px' : undefined
+})
 // onMounted
 onMounted(() => {
+  // 获取表列表
   getTableList()
+  // 初始化拖拽
+  initSortable()
 })
 // 获取表列表
 async function getTableList() {
@@ -123,6 +200,19 @@ async function getTableList() {
   let response = await ryougi.request(config)
   const { data } = await response?.json()
   state.tableList = data
+}
+// 初始化拖拽
+function initSortable() {
+  const el = tableRef.value?.$el.querySelector('.el-table__body > tbody')
+  Sortable.create(el, {
+    onEnd: (event: any) => {
+      const { oldIndex, newIndex } = event
+      const oldRow = state.list[oldIndex]
+      const newRow = state.list[newIndex]
+      state.list[oldIndex] = newRow
+      state.list[newIndex] = oldRow
+    }
+  })
 }
 // 获取表字段
 async function getTableField() {
@@ -140,13 +230,23 @@ async function getTableField() {
     console.log(error)
   }
   state.listLoading = false
+  setTimeout(() => {
+    tableRef.value?.toggleAllSelection()
+  }, 0)
 }
 // 开始生成
 async function onStart() {
+  const selections = tableRef.value?.getSelectionRows() as any[]
+  const list = state.list.filter((item: any) => {
+    const row = selections.find((child) => {
+      return child.columnName === item.columnName
+    })
+    return row
+  })
   const config = {
     url: 'generate/start',
     method: 'POST',
-    body: { ...state.form, list: state.list }
+    body: { ...state.form, list }
   } as RequestConfig
   try {
     state.loading = true
@@ -164,7 +264,7 @@ async function onStart() {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .page-box {
   display: flex;
   flex-direction: column;
@@ -173,18 +273,17 @@ async function onStart() {
   padding: 10px;
 }
 .config-box {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   .config-item {
     display: flex;
     align-items: center;
+    margin: 3px 10px 3px 0;
     .label {
       margin-right: 10px;
     }
-  }
-  .config-item + .config-item {
-    margin-left: 10px;
   }
 }
 .footer-box {

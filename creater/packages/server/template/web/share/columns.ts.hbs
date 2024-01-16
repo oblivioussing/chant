@@ -6,11 +6,23 @@ export default () => {
     {
       prop: '{{columnName}}',
       label: '{{columnComment}}',
+      {{#if hideInPages}}
+      hideInPages: [{{#each hideInPages}}'{{this}}'{{#if @last}}{{else}},{{/if}}{{/each}}],
+      {{/if}}
       {{#if required}}
-      required: '{{required}}',
+      required: {{required}},
+      {{/if}}
+      {{#if search}}
+      search: {{search}},
       {{/if}}
       {{#if type}}
       type: '{{type}}',
+      {{/if}}
+      {{#if datepickerType}}
+      datepickerType: '{{datepickerType}}',
+      {{/if}}
+      {{#if inputType}}
+      inputType: '{{inputType}}',
       {{/if}}
     }{{#if @last}}{{else}},{{/if}}
   {{/each}}

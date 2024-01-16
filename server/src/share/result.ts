@@ -6,9 +6,9 @@ export class PageData<T> {
   total: number
 }
 
-export class Result<T = string> {
+export class Result<T = object> {
   code = '' as ApiCode
-  data = '' as T
+  data = null as T
   msg = ''
   // 成功
   success(row?: { data?: any; msg?: string }) {

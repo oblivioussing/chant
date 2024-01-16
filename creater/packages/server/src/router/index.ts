@@ -31,7 +31,7 @@ router.get('/table/field', async (ctx) => {
       from information_schema.columns
       where table_name = '${tableName}' and table_schema = 'chant'`
     )) as any
-    const list = data.map((item: any) => {
+    let list = data.map((item: any) => {
       const comments = item.columnComment.split('\n')
       if (comments.length > 1) {
         item.columnComment = comments.shift()
@@ -40,9 +40,20 @@ router.get('/table/field', async (ctx) => {
           acc[key] = val
           return acc
         }, {})
+        item.type = 'select'
       }
+      if (item.columnType === 'datetime') {
+        item.type = 'date-picker'
+      }
+      item.columnName = item.columnName.replace(
+        /_([a-z])/g,
+        (_: any, group1: string) => {
+          return group1.toUpperCase()
+        }
+      )
       return item
     })
+    list = list.filter((item: any) => item.columnName !== 'id')
     ctx.body = { code: '1', data: list }
   } catch (error) {
     console.error('error:', error)
@@ -50,9 +61,9 @@ router.get('/table/field', async (ctx) => {
 })
 // 开始生成
 router.post('/generate/start', async (ctx) => {
-  const body = ctx.request.body
+  const body = ctx.request.body as any
   // 生成代码
-  generate(body as any)
+  generate(body)
   ctx.body = { code: '1' }
 })
 

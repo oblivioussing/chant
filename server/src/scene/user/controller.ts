@@ -19,6 +19,12 @@ export class UserController {
     const result = await this.userService.add(user as User)
     return result
   }
+  // 删除
+  @Post('delete')
+  async delete(@Body('id') id: string) {
+    const result = await this.userService.delete(id)
+    return result
+  }
   // 详情
   @Get('detail')
   async detail(@Query('id') id: string) {

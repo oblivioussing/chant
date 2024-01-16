@@ -13,6 +13,10 @@ const codeDir = `${cmdPath}/chant-generate-code`
 
 // 生成代码
 export async function generate(data: Form) {
+  data.list?.forEach((item) => {
+    item.required = !!item.required
+    item.search = !!item.search
+  })
   const routePath = data.routePath?.replace(/^\/+|\/+$/g, '')
   const [module, route] = routePath?.split('/') || []
   // 前端/后端的文件夹名称

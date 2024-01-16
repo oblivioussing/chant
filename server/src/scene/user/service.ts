@@ -24,6 +24,19 @@ export class UserService {
     }
     return result
   }
+  // 删除
+  async delete(id: string): Promise<Result> {
+    const result = new Result()
+    const row = await prisma.user.delete({
+      where: { id }
+    })
+    if (row) {
+      result.success({ msg: '删除成功' })
+    } else {
+      result.fail('删除失败')
+    }
+    return result
+  }
   // 详情
   async detail(id: string): Promise<Result<User>> {
     const result = new Result<User>()
