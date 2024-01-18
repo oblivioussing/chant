@@ -23,6 +23,7 @@
               v-if="!item.type || item.type === 'input'"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
+              :disabled="isDisabled(item)"
               :placeholder="translate(item, 'enter')"
               :rows="item.rows || 3"
               :type="item.type">
@@ -38,6 +39,7 @@
               v-else-if="item.type === 'select'"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
+              :disabled="isDisabled(item)"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
               @change="onChange(item)">
@@ -60,6 +62,7 @@
               v-else-if="item.type === 'time-picker'"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
+              :disabled="isDisabled(item)"
               :placeholder="translate(item, 'select')"
               :value-format="item.valueFormat || 'HH:mm:ss'">
             </el-time-picker>
@@ -69,6 +72,7 @@
                 v-if="formUtils.isDateRange(item.datepickerType)"
                 v-model="state.range[item.prop]"
                 :clearable="item.clearable !== false"
+                :disabled="isDisabled(item)"
                 :placeholder="translate(item, 'select')"
                 :start-placeholder="translate(item)"
                 :end-placeholder="translate(item)"
@@ -80,6 +84,7 @@
                 v-else
                 v-model="vModel!.form[item.prop]"
                 :clearable="item.clearable !== false"
+                :disabled="isDisabled(item)"
                 :placeholder="translate(item, 'select')"
                 :type="item.datepickerType"
                 :value-format="item.valueFormat">
@@ -90,6 +95,7 @@
               v-else-if="item.type === 'input-number'"
               v-model="vModel!.form[item.prop]"
               controls-position="right"
+              :disabled="isDisabled(item)"
               :min="item.min"
               :max="item.max"
               :placeholder="translate(item, 'enter')">
@@ -97,6 +103,7 @@
             <!-- upload -->
             <chant-upload
               v-else-if="item.type === 'upload'"
+              :disabled="isDisabled(item)"
               :limit="item.limit"
               :multiple="item.multiple"
               :type="item.uploadType">
@@ -108,12 +115,14 @@
               <el-input-number
                 v-model="vModel!.form[rangeField(item, 'start')]"
                 controls-position="right"
+                :disabled="isDisabled(item)"
                 :placeholder="translate(item)">
               </el-input-number>
               <div class="connector">~</div>
               <el-input-number
                 v-model="vModel!.form[rangeField(item, 'end')]"
                 controls-position="right"
+                :disabled="isDisabled(item)"
                 :placeholder="translate(item)">
               </el-input-number>
             </div>
@@ -140,29 +149,26 @@
 import type { FormInstance } from 'element-plus'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useVModel } from '@vueuse/core'
 import { formUtils, type FormColumn as Column, type Lang } from '@/chant'
 
-// type
-type ModelValue = {
-  form: any
-  formLoading: boolean
-}
 // props
 const props = defineProps<{
   dict?: any // 字典
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
   columns?: Column[] // model
-  modelValue?: ModelValue // modelValue
-  pageType?: 'add' | 'edit' // 页面类型
 }>()
 // emits
-const emits = defineEmits(['instance', 'update:modelValue'])
+const emits = defineEmits(['instance'])
+// model
+const vModel = defineModel<{
+  form: any
+  formLoading: boolean
+  pageType?: 'add' | 'edit'
+}>()
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props.lang })
-const vModel = useVModel(props, 'modelValue', emits)
 // ref
 const formRef = ref<FormInstance>()
 // state
@@ -175,7 +181,7 @@ const availableColumns = computed(() => {
     if (item.hide) {
       return false
     }
-    if (item.hideInPages?.includes(props.pageType!)) {
+    if (item.hideInPages?.includes(vModel.value?.pageType!)) {
       return false
     }
     if (item.showCustom) {
@@ -195,7 +201,7 @@ onMounted(() => {
 function init() {
   props.columns?.forEach((item) => {
     // 默认值
-    if (item.defaultValue && props.pageType !== 'edit') {
+    if (item.defaultValue && vModel.value?.pageType !== 'edit') {
       vModel.value!.form[item.prop] = item.defaultValue
     }
     // date range
@@ -230,7 +236,7 @@ function isDisabled(row: Column) {
   if (typeof row.disabled === 'function') {
     return row.disabled(vModel.value!.form)
   }
-  if (row.disabledInPage && row.disabledInPage === props.pageType) {
+  if (row.disabledInPage && row.disabledInPage === vModel.value?.pageType) {
     return true
   }
   return row.disabled

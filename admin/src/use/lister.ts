@@ -1,36 +1,44 @@
 import { type TableInstance } from 'element-plus'
 import { nextTick, onActivated, onScopeDispose } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { shiki } from '@/api'
-import { type ListState as State } from '@/chant'
+import type { ListState as State, FormType } from '@/chant'
 import { ApiCode } from '@/enum'
 import { element } from '@/plugs'
-import { useAppStore } from '@/store'
+import { useChaoser } from '@/use'
 import { bus } from '@/utils'
 
 function useLister() {
-  const appStore = useAppStore()
+  const chaoser = useChaoser()
   const route = useRoute()
-  const router = useRouter()
   const state = {
+    editType: '' as 'add' | 'edit',
+    editVisible: false,
     allFlag: 0 as 0 | 1,
     columns: [],
+    copyFlag: 0 as 0 | 1,
     extra: {} as Record<string, any>,
+    formType: '' as FormType,
     keepQuery: {} as Record<string, any>,
     lang: {},
     list: [] as any[],
     loading: false,
     pages: { pageNum: 1, pageSize: 20 },
     query: {} as Record<string, any>,
-    selection: [] as any[],
+    selections: [] as any[],
+    selection: {} as any,
     total: 0
   }
   let tableInstance: TableInstance
 
   // 新增
-  function add() {
-    // 页面跳转
-    _jump('/add')
+  function add(state: State) {
+    if (state.formType === 'page') {
+      _jump('/add')
+    } else {
+      state.editType = 'add'
+      state.editVisible = true
+    }
   }
   // 批量操作
   function batch(
@@ -42,22 +50,24 @@ function useLister() {
   ) {
     const confirmTip = config.confirmTip
     const params = getListParams(state)
-    const title = params.allFlag ? '当前操作影响所有记录' : ''
+    const count = params.allFlag ? state.total : state.selections.length
+    const title = `总共${count}条记录`
     operate(path, state, { confirmTip, params, title })
-  }
-  // 批量删除
-  function batchRemove(path: string, state: State) {
-    batch(path, state, { confirmTip: '确认批量删除?' })
   }
   // 绑定列表实例
   function bindInstance(val: TableInstance) {
     tableInstance = val
   }
   // 复制新增
-  function copyAdd(row: any) {
-    const query = { id: row.id, 'copy-add-flag': '1' }
-    // 页面跳转
-    _jump('/add', query)
+  function copy(state: State, row: any) {
+    if (state.formType === 'page') {
+      _jump('/edit', { id: row.id, copyFlag: 1 })
+    } else {
+      state.copyFlag = 1
+      state.selection = row
+      state.editType = 'add'
+      state.editVisible = true
+    }
   }
   // created
   function created(
@@ -108,10 +118,14 @@ function useLister() {
     })
   }
   // 编辑
-  function edit(row: any) {
-    const query = { id: row.id }
-    // 页面跳转
-    _jump('/edit', query)
+  function edit(state: State, row: any) {
+    if (state.formType === 'page') {
+      _jump('/edit', { id: row.id })
+    } else {
+      state.selection = row
+      state.editType = 'edit'
+      state.editVisible = true
+    }
   }
   // 获取数据
   async function getData(
@@ -144,14 +158,14 @@ function useLister() {
   // 获取列表参数
   function getListParams(state: State) {
     return {
-      idList: state.selection.map((item) => item.id),
+      idList: state.selections.map((item) => item.id),
       allFlag: state.allFlag,
       search: getQuery(state)
     }
   }
   // 是否选中数据
   function isSelected(state: State) {
-    return state.selection.length > 0 || state.allFlag === 1
+    return state.selections.length > 0 || state.allFlag === 1
   }
   // 操作
   async function operate(
@@ -184,6 +198,20 @@ function useLister() {
       params
     })
   }
+  // 批量删除
+  function removes(path: string, state: State) {
+    batch(path, state, { confirmTip: '确认批量删除?' })
+  }
+  // 标题
+  function title(state: State) {
+    const meta = chaoser.getMetaByPath(route.path) as any
+    const map = {
+      add: '新增',
+      edit: '编辑'
+    }
+    const text = map[state.editType]
+    return meta?.titleZh?.replace('列表', text)
+  }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected: boolean) {
     tableInstance.toggleRowSelection(row, selected)
@@ -203,8 +231,7 @@ function useLister() {
   function _jump(to: string, query?: any) {
     const path = route?.path || ''
     const toPath = path?.replace('/index', to)
-    appStore.updatePageRelation(toPath, path)
-    router.push({ path: toPath, query })
+    chaoser.push({ path: toPath, query })
   }
   // 事件监听
   function _on(callback: () => any, name?: string) {
@@ -227,9 +254,8 @@ function useLister() {
     state,
     add,
     batch,
-    batchRemove,
     bindInstance,
-    copyAdd,
+    copy,
     created,
     edit,
     getData,
@@ -237,6 +263,8 @@ function useLister() {
     isSelected,
     operate,
     remove,
+    removes,
+    title,
     toggleRowSelection
   }
 }

@@ -55,6 +55,7 @@ function onChange(arr: any) {
 .home-body {
   display: flex;
   flex: 1;
+  overflow: hidden;
   .home-container {
     display: flex;
     flex-direction: column;

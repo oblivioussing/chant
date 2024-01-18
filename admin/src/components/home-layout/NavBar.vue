@@ -135,6 +135,10 @@ async function onQuit() {
   .right {
     display: flex;
     align-items: center;
+    .edit-type {
+      cursor: pointer;
+      font-size: 14px;
+    }
     .badge {
       cursor: pointer;
       top: -10px;

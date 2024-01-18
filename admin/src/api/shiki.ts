@@ -1,6 +1,5 @@
 import { ElMessage } from 'element-plus'
 import { ApiCode, ContentTypeEnum } from '../enum'
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 import Ryougi, { type RequestConfig } from './ryougi'
 
 type Config = {

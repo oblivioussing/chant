@@ -65,21 +65,26 @@
           </chant-icon-button>
         </el-button-group>
       </div>
-      <!-- 字段筛选 -->
-      <field-filter
-        v-if="vModel.columns && props.showFilter"
-        v-model="vModel"
-        :lang="props.lang">
-      </field-filter>
+      <el-button-group class="m-l-10">
+        <!-- 表单操作方式 -->
+        <chant-button :content="t('formType')" @click="onFormType">
+          <icon-font icon="13"></icon-font>
+        </chant-button>
+        <!-- 字段筛选 -->
+        <field-filter
+          v-if="vModel.columns && props.showFilter"
+          v-model="vModel"
+          :lang="props.lang">
+        </field-filter>
+      </el-button-group>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, useSlots } from 'vue'
+import { computed, onMounted, ref, useSlots, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { useVModel } from '@vueuse/core'
 import { type ListState } from '@/chant'
 import FieldFilter from './FieldFilter.vue'
 
@@ -88,7 +93,6 @@ type Option = 'add' | 'alter' | 'delete'
 interface Props {
   lang?: any // 国际化
   options?: Option[] // 按钮选项
-  modelValue: ListState // modelValue
   showCheckedAll?: boolean // 是否显示全选
   showFilter?: boolean // 是否显示过滤按钮
   splitButton?: boolean // 下拉触发元素呈现为按钮组(仅批量修改按钮生效)
@@ -98,13 +102,9 @@ const props = withDefaults(defineProps<Props>(), {
   showFilter: true
 })
 // emits
-const emits = defineEmits([
-  'add',
-  'alter',
-  'command',
-  'delete',
-  'update:modelValue'
-])
+const emits = defineEmits(['add', 'alter', 'command', 'delete'])
+// model
+const vModel = defineModel() as ModelRef<ListState>
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({
@@ -112,22 +112,23 @@ const { t } = useI18n({
     en: {
       all: 'all',
       batch: 'batch',
+      formType: 'form type',
       record: 'records'
     },
     zh: {
       all: '全部',
       batch: '批量',
+      formType: '表单操作方式',
       record: '条记录'
     }
   }
 })
 const slots = useSlots()
-const vModel = useVModel(props, 'modelValue', emits)
 // ref
 const groupsRef = ref()
 // computed
 const isSelected = computed(() => {
-  return vModel.value.selection.length > 0 || vModel.value.allFlag === 1
+  return vModel.value.selections.length > 0 || vModel.value.allFlag === 1
 })
 // onMounted
 onMounted(() => {
@@ -155,6 +156,14 @@ function show(type: Option) {
 function onChange(val: any) {
   vModel.value.allFlag = val ? 1 : 0
 }
+// 表单操作方式
+function onFormType() {
+  if (vModel.value.formType === 'dialog') {
+    vModel.value.formType = 'page'
+  } else {
+    vModel.value.formType = 'dialog'
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -163,6 +172,7 @@ function onChange(val: any) {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 5px;
+  position: relative;
   .all-box {
     font-size: 12px;
     font-weight: normal;

@@ -1,5 +1,5 @@
 <template>
-  <div class="chant-form-footer toolbar">
+  <div class="chant-form-footer" :class="{ toolbar: props.type }">
     <div>
       <!-- 继续新增 -->
       <el-checkbox v-model="vModel.continueAdd" class="continue">
@@ -7,22 +7,25 @@
       </el-checkbox>
     </div>
     <div>
-      <!-- 关闭 -->
-      <el-button @click="core.closePage()">{{ tg('button.close') }}</el-button>
-      <!-- 保存 -->
-      <el-button
-        :loading="vModel.loading"
-        type="primary"
-        @click="emits('save')">
-        {{ tg('button.save') }}
-      </el-button>
+      <slot></slot>
+      <template v-if="!$slots.default">
+        <!-- 关闭 -->
+        <el-button @click="onClose">{{ tg('button.close') }}</el-button>
+        <!-- 保存 -->
+        <el-button
+          :loading="vModel.loading"
+          type="primary"
+          @click="emits('save')">
+          {{ tg('button.save') }}
+        </el-button>
+      </template>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useVModel } from '@vueuse/core'
+import type { FormType } from '@/type'
 import { core } from '@/utils'
 
 // type
@@ -32,10 +35,12 @@ type ModelValue = {
 }
 // props
 const props = defineProps<{
-  modelValue: ModelValue // modelValue
+  type?: FormType
 }>()
 // emits
-const emits = defineEmits(['update:modelValue', 'save'])
+const emits = defineEmits(['close', 'save'])
+// model
+const vModel = defineModel() as ModelRef<ModelValue>
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({
@@ -48,11 +53,14 @@ const { t } = useI18n({
     }
   }
 })
-const vModel = useVModel(props, 'modelValue', emits)
-// state
-const state = reactive({
-  checked: false
-})
+// 关闭
+function onClose() {
+  if (props.type === 'page') {
+    core.closePage()
+  } else {
+    emits('close')
+  }
+}
 </script>
 <style scoped lang="scss">
 .chant-form-footer {

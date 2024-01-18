@@ -1,5 +1,4 @@
 import qs from 'qs'
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 import { ContentTypeEnum } from '@/enum'
 
 // 请求配置

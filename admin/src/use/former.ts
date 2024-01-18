@@ -2,42 +2,55 @@ import type { FormInstance } from 'element-plus'
 import { getCurrentInstance, onActivated } from 'vue'
 import { useRoute } from 'vue-router'
 import shiki from '@/api/shiki'
-import { type FormState as State } from '@/chant'
+import type { FormState as State, FormType } from '@/chant'
 import { ApiCode } from '@/enum'
+import type { FormProps } from '@/type'
 import { bus, core } from '@/utils'
 
-type Config = { type?: 'page' | 'dialog' | 'inline' }
-
-function useFormer(config = { type: 'page' } as Config) {
+function useFormer(config: FormProps) {
   let formInstance: FormInstance
   const instance = getCurrentInstance()
   const route = useRoute()
   const state = {
     continueAdd: false,
-    copyAddFlag: '0' as '0' | '1',
+    copyFlag: config.copyFlag as 0 | 1,
     form: {} as any,
     formLoading: false,
     loading: false,
-    query: {} as any
+    pageType: config.pageType,
+    query: {} as any,
+    selection: config.selection as { id: string },
+    type: config.type || ('dialog' as FormType)
   }
-
   // 绑定表单实例
   function bindInstance(val: FormInstance) {
     formInstance = val
   }
+  // 关闭
+  function close(state: State, emits: (evt: 'close') => void) {
+    if (state.type === 'page') {
+      core.closePage()
+    } else {
+      emits('close')
+    }
+  }
   // 初始化
   function created(callback: (_: boolean) => void, state: State) {
-    state.query = route?.query
-    callback(_hasGetDetail())
-    // onActivated
-    onActivated(() => {
-      // 路由参数是否变化
-      const isModify = _isRouterQueryModify(state)
-      if (isModify) {
-        state.query = route?.query
-        callback(_hasGetDetail())
-      }
-    })
+    if (state.type === 'page') {
+      state.query = route?.query
+      // onActivated
+      onActivated(() => {
+        // 路由参数是否变化
+        const isModify = _isRouterQueryModify(state)
+        if (isModify) {
+          state.query = route?.query
+          callback(_hasGetDetail(state))
+        }
+      })
+    } else {
+      state.query = { id: state.selection.id }
+    }
+    callback(_hasGetDetail(state))
   }
   // 获取数据
   async function getData(path: string, state: State) {
@@ -45,6 +58,9 @@ function useFormer(config = { type: 'page' } as Config) {
     const { data } = await shiki?.get(path, state.query)
     state.formLoading = false
     state.form = data || {}
+    if (state.copyFlag) {
+      state.form.id = undefined
+    }
   }
   // 保存
   async function save(path: string, state: State, row?: { params?: any }) {
@@ -66,18 +82,17 @@ function useFormer(config = { type: 'page' } as Config) {
       formInstance.resetFields()
       return true
     }
-    if (config.type === 'page') {
+    if (config.type === 'dialog') {
+      instance?.emit('update')
+      instance?.emit('close')
       // 刷新列表
-      const path = core.getParentPath(route?.path)
-      bus.emit(path)
+      bus.emit(route.path)
+    } else {
       // 关闭页面
-      core.closePage()
-    } else if (config.type === 'dialog') {
-      const emitsOptions = (instance as any)?.emitsOptions
-      if (emitsOptions?.hasOwnProperty('update')) {
-        instance?.emit('update')
-      }
-      instance?.emit('update:modelValue', false)
+      config.type === 'page' && core.closePage()
+      // 刷新列表
+      const parentPath = core.getParentPath(route?.path)
+      bus.emit(parentPath)
     }
     return true
   }
@@ -98,20 +113,24 @@ function useFormer(config = { type: 'page' } as Config) {
     for (let item in query) {
       if (query[item] !== state.query[item]) {
         status = true
+        break
       }
     }
     return status
   }
   // 是否需要获取详情
-  function _hasGetDetail() {
-    const copyAddFlag = route.query['copy-add-flag']
-    const props = instance?.props
-    return copyAddFlag === '1' || props?.type === 'edit'
+  function _hasGetDetail(state: State) {
+    let copyFlag: any = state.copyFlag
+    if (state.type === 'page') {
+      copyFlag = Number(route.query.copyFlag)
+    }
+    return copyFlag || state.pageType === 'edit'
   }
 
   return {
     state,
     bindInstance,
+    close,
     created,
     getData,
     save

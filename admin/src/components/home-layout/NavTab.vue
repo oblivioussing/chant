@@ -101,11 +101,14 @@ bus.on(BusEnum.ClosePage, (path) => {
   onTabRemove(path as string)
 })
 // 监听tabs变化
-watch(state.tabs, () => {
-  storage.setSession(StorageEnum.HomeNavTab, state.tabs)
-  // 通知外部keeps发生了变化
-  busKeeps()
-})
+watch(
+  () => [...state.tabs],
+  () => {
+    storage.setSession(StorageEnum.HomeNavTab, state.tabs)
+    // 通知外部keeps发生了变化
+    busKeeps()
+  }
+)
 // 监听路由变化
 watch(() => route?.path, routerChange)
 // onMounted

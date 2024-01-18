@@ -76,14 +76,8 @@ const state = reactive({
 const menus = computed(() => {
   const routes = router.options.routes
   return routes.filter((item) => {
-    const isIndex = '/' === item.path
-    if (isIndex) {
-      return
-    }
     if (item.children) {
-      item.children = item.children.filter((item) => {
-        return item.path.indexOf('/index') >= 0
-      })
+      item.children = item.children.filter((item) => item.meta?.menu)
     }
     return item.children?.length
   })

@@ -5,13 +5,14 @@
     v-model:visible="visible"
     placeholder="用户">
   </chant-picker-button>
+  {{ id }},{{ text }}
   <chant-table-picker
     v-if="visible"
     v-model="visible"
+    api-path="user/list"
     :columns="columns()"
     :columns-set="['name']"
     :dict="dict"
-    :lang="lang"
     title="用户"
     @change="onChange">
   </chant-table-picker>
@@ -19,22 +20,18 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useVModels } from '@vueuse/core'
-import { columns, dict, lang } from '@/views/user/user-list/share'
+import { columns, dict } from '@/views/user/user-list/share'
 
-// props
-const props = defineProps<{
-  id: string
-  text: string
-}>()
 // emits
 const emits = defineEmits(['update:id', 'update:text'])
-// use
-const { id, text } = useVModels(props, emits)
+// model
+const id = defineModel<string>('id')
+const text = defineModel<string>('text')
 // ref
 const visible = ref(false)
 // change
 function onChange(row: any) {
+  id.value = row.id
   text.value = row.name
 }
 </script>

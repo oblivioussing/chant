@@ -128,7 +128,7 @@ import type { FormInstance } from 'element-plus'
 import { computed, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
-import { useThrottleFn, useVModel } from '@vueuse/core'
+import { useThrottleFn } from '@vueuse/core'
 import {
   formUtils,
   type Lang,
@@ -141,13 +141,14 @@ const props = defineProps<{
   dict?: any // 字典
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
-  modelValue?: ListState // modelValue
   queryInit?: Function // 查询条件初始化
   searchOrder?: string[] // 搜索字段顺序
   unfold?: boolean // 自动展开搜索条件
 }>()
 // emits
-const emits = defineEmits(['query', 'reset', 'update:modelValue'])
+const emits = defineEmits(['query', 'reset'])
+// model
+const vModel = defineModel<ListState>()
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({
@@ -169,7 +170,6 @@ const { t } = useI18n({
   }
 })
 const resizeThrottle = useThrottleFn(containerAuto, 1000)
-const vModel = useVModel(props, 'modelValue', emits)
 // ref
 const formRef = ref<FormInstance>()
 const searchRef = ref()
@@ -352,6 +352,10 @@ function translate(column: Column, type?: 'enter' | 'select') {
     .el-input-number {
       width: var(--input-width);
     }
+    // select
+    .el-select {
+      width: var(--input-width);
+    }
     // date
     .el-date-editor.el-input {
       width: var(--input-width);
@@ -365,7 +369,7 @@ function translate(column: Column, type?: 'enter' | 'select') {
     .el-date-editor--datetimerange {
       background-color: #ffffff;
       box-sizing: border-box;
-      width: 340px;
+      width: 330px;
     }
   }
 }

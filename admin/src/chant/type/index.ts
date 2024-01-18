@@ -70,17 +70,27 @@ export type Lang = {
 }
 
 export type FormState = {
+  copyFlag?: 0 | 1
   continueAdd?: boolean
   form: any
   formLoading: boolean
   loading: boolean
+  pageType?: 'add' | 'edit'
   query: any
+  selection?: any
+  type: FormType
 }
+
+export type FormType = 'dialog' | 'inline' | 'page'
 
 export type ListState = {
   allFlag?: 0 | 1 // 全选
   columns: ListColumn[] // 列表字段
+  copyFlag?: 0 | 1 // 复制flag
+  editType: 'add' | 'edit' // 新增编辑的类型
+  editVisible?: boolean // 新增编辑visible
   extra: Record<string, any> // 页面额外数据
+  formType: FormType // 表单操作方式
   keepQuery: Record<string, any> // 持续存在的查询条件
   list: any[] // 列表数据
   loading: boolean // loading
@@ -89,7 +99,8 @@ export type ListState = {
     pageNum: number
     pageSize: number
   } // 分页
-  selection: any[] // 选中列表数据
+  selection: any // 当前处理的一条数据
+  selections: any[] // 列表选中的数据
   total: number // 总数
 }
 

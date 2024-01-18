@@ -2,7 +2,7 @@
   <add-edit type="edit"></add-edit>
 </template>
 
-<script setup lang="ts" name="/user/user-list/edit">
+<script setup lang="ts">
 import AddEdit from './components/AddEdit.vue'
 </script>
 

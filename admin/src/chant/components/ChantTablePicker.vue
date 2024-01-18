@@ -14,7 +14,7 @@
           :dict="props.dict"
           :lang="props.lang"
           @query="getList"
-          @reset="lister.reset(getList, state)">
+          @reset="getList">
         </chant-table-search>
         <!-- table -->
         <chant-table
@@ -40,43 +40,42 @@
           :columns-set="props.columnsSet!"
           :dict="props.dict"
           :lang="props.lang"
-          :list="state.selection"
+          :list="state.selections"
           @delete="lister.toggleRowSelection($event, false)">
         </chant-selected-table>
       </div>
     </div>
-    <template v-if="isMultiple" #footer>
+    <div v-if="isMultiple" class="button-box">
       <!-- 关闭 -->
       <el-button @click="vModel = false">{{ tg('button.close') }}</el-button>
       <!-- 保存 -->
       <el-button type="primary" @click="onSave">
         {{ tg('button.save') }}
       </el-button>
-    </template>
+    </div>
   </chant-dialog>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, onMounted, reactive, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useVModel } from '@vueuse/core'
 import { type ListColumn as Column } from '@/chant'
 import { useLister } from '@/use'
 
 // props
 const props = defineProps<{
+  apiPath: string
   columns: Column[]
   columnsSet?: Column['prop'][] // 将columns中的字段显示在右侧
   dict?: any
   lang?: any
-  modelValue: boolean
   title: string
   width?: string | number
 }>()
 // emits
-const emits = defineEmits(['change', 'update:modelValue'])
-// use
-const vModel = useVModel(props, 'modelValue', emits)
+const emits = defineEmits(['change'])
+// model
+const vModel = defineModel() as ModelRef<boolean>
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const lister = useLister()
@@ -89,41 +88,40 @@ const state = reactive({
 const isMultiple = computed(() => {
   return !!props.columnsSet?.length
 })
-// init
-getList() // 获取列表
+// onMounted
+onMounted(() => {
+  // 获取列表
+  getList()
+})
 // 获取列表
 function getList() {
-  lister.getData('xx/xxx', state)
+  lister.getData(props.apiPath, state)
 }
 // 行点击
 function onRowClick(row: any) {
-  if (!isMultiple) {
+  if (!isMultiple.value) {
     emits('change', row)
     vModel.value = false
   }
 }
 // 保存
-function onSave() {}
+function onSave() {
+  emits('change', state.selections)
+  vModel.value = false
+}
 </script>
 
 <style lang="scss">
 .chant-table-picker {
   height: 84vh;
-  .el-dialog__body {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    padding: 0 15px;
-  }
-  &.single {
-    .el-dialog__footer {
-      padding-bottom: 0;
-    }
-  }
   .picker-table {
     cursor: pointer;
+  }
+  .button-box {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 10px;
   }
 }
 </style>

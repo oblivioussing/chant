@@ -9,7 +9,7 @@
     @click="visible = true">
     <template #suffix>
       <div
-        v-if="props.text && props.disabled !== true"
+        v-if="text && props.disabled !== true"
         class="clear-box"
         @click="onClear">
         <el-icon :size="14" class="pointer">
@@ -24,26 +24,20 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { CircleClose, Search } from '@element-plus/icons-vue'
-import { useVModels } from '@vueuse/core'
 
 // props
 const props = defineProps<{
   disabled?: boolean
-  id: string
   placeholder?: string
-  text: string
-  visible: boolean
 }>()
 // emits
-const emits = defineEmits([
-  'clear',
-  'update:id',
-  'update:text',
-  'update:visible'
-])
+const emits = defineEmits(['clear'])
+// model
+const id = defineModel<string>('id')
+const text = defineModel<string>('text')
+const visible = defineModel<boolean>()
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
-const { id, text, visible } = useVModels(props, emits)
 // computed
 const tips = computed(() => {
   return tg('tips.select') + props.placeholder

@@ -9,18 +9,12 @@
   <!-- operate -->
   <chant-table-operate
     v-model="state"
-    :options="['add', 'alter', 'delete']"
+    :options="['add', 'delete']"
     show-checked-all
     split-button
-    @add="lister.add"
+    @add="lister.add(state)"
     @alter="onAlter"
-    @command="onCommand"
-    @delete="onBatchDelete">
-    <!-- 批量修改选项 -->
-    <template #alter-option>
-      <el-dropdown-item command="1">姓名</el-dropdown-item>
-      <el-dropdown-item command="2">年龄</el-dropdown-item>
-    </template>
+    @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
   <chant-table v-model="state" :dict="dict" sort>
@@ -28,9 +22,9 @@
     <chant-column-operate :width="140">
       <template #="{ row }">
         <!-- 编辑 -->
-        <chant-button link @click="lister.edit(row)">编辑</chant-button>
+        <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
         <!-- 复制 -->
-        <chant-button link @click="lister.copyAdd(row)">复制</chant-button>
+        <chant-button link @click="lister.copy(state, row)">复制</chant-button>
         <!-- 删除 -->
         <chant-button link type="danger" @click="onDelete(row)">
           删除
@@ -49,16 +43,23 @@
     :total="state.total"
     @change="getList">
   </chant-pagination>
-  <!-- 批量修改 -->
-  <batch-alter v-if="state.batchAlterVisible" v-model="state.batchAlterVisible">
-  </batch-alter>
+  <!-- 新增/编辑 -->
+  <chant-dialog v-model="state.editVisible" :title="lister.title(state)">
+    <add-edit
+      v-if="state.editVisible"
+      :copy-flag="state.copyFlag"
+      :page-type="state.editType"
+      :selection="state.selection"
+      @close="state.editVisible = false">
+    </add-edit>
+  </chant-dialog>
 </template>
 
-<script setup lang="ts" name="/user/user-list/index">
+<script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
-import BatchAlter from './components/BatchAlter.vue' // 批量修改
+import AddEdit from './components/AddEdit.vue'
 
 // use
 const lister = useLister()
@@ -78,8 +79,8 @@ function getList() {
   lister.getData('user/list', state)
 }
 // 批量删除
-function onBatchDelete() {
-  lister.batchRemove('xx/xx', state)
+function onDeletes() {
+  lister.removes('user/deletes', state)
 }
 // 删除
 function onDelete({ id }: any) {

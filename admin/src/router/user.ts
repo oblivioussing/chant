@@ -1,13 +1,13 @@
 export default [
   {
     path: '/user',
-    component: () => import('@/components/home-layout/index.vue'),
-    meta: { icon: 'nickname', titleEn: 'user manager', titleZh: '用户管理' },
+    component: () => import('@/components/home-layout/Index.vue'),
+    meta: { titleEn: 'user manager', titleZh: '用户管理', icon: 'nickname' },
     children: [
       {
-        path: 'user-list/index',
+        path: 'user-list',
         component: () => import('@/views/user/user-list/index.vue'),
-        meta: { titleEn: 'user list', titleZh: '用户列表' }
+        meta: { titleEn: 'user list', titleZh: '用户列表', menu: true }
       },
       {
         path: 'user-list/add',

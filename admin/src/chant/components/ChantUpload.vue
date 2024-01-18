@@ -1,6 +1,10 @@
 <template>
   <!-- pure-button -->
-  <el-button v-if="isPureButton" type="primary" @click="onTrigger">
+  <el-button
+    v-if="isPureButton"
+    :disabled="props.disabled"
+    type="primary"
+    @click="onTrigger">
     {{ props.buttonText || t('import') }}
   </el-button>
   <!-- upload -->
@@ -10,6 +14,7 @@
     :auto-upload="false"
     class="chant-upload"
     :class="[props.type]"
+    :disabled="props.disabled"
     :limit="props.limit"
     :list-type="props.type === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
@@ -47,6 +52,7 @@ import { type UploadType } from '@/chant'
 // type
 interface Props {
   buttonText?: string // 按钮文本
+  disabled?: boolean
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
   type: UploadType // 文件上传类型

@@ -94,7 +94,6 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
 // @ts-ignore
 import Sortable from 'sortablejs'
 import {
@@ -113,8 +112,6 @@ import { useVModel } from '@vueuse/core'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
 import { format } from '@/utils'
 
-dayjs.extend(utc)
-
 // defineExpose
 defineExpose({
   scrollToBottom // 滚动到底部
@@ -127,7 +124,6 @@ interface Props {
   heightWild?: boolean // 高度不限制
   lang?: Lang // 国际化
   list?: any[] // 列表数据
-  modelValue?: ListState // modelValue
   reserveSelection?: boolean // 数据刷新后是否保留选项
   rowKey?: string // 行数据的key
   showSelection?: boolean // 显示勾选框
@@ -139,12 +135,13 @@ const props = withDefaults(defineProps<Props>(), {
   showSelection: true
 })
 // emits
-const emits = defineEmits(['instance', 'update:modelValue'])
+const emits = defineEmits(['instance'])
+// model
+const vModel = defineModel<ListState>()
 // use
 const { toClipboard } = useClipboard()
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props?.lang })
-const vModel = useVModel(props, 'modelValue', emits)
 // ref
 const tableRef = ref()
 // state
@@ -282,7 +279,7 @@ function selectable() {
 // 选择项发生变化时
 function onSelectChange(selection: any[]) {
   if (vModel.value) {
-    vModel.value.selection = selection
+    vModel.value.selections = selection
   }
 }
 // 复制

@@ -1,52 +1,49 @@
 <template>
-  <div class="field-filter">
-    <chant-button
-      :content="t('filter')"
-      :icon="Document"
-      type="primary"
-      @click.stop="onShowFilter">
-    </chant-button>
-    <div v-if="state.visible" class="fly-box" @click.stop>
-      <div class="bubble"></div>
-      <draggable
-        v-bind="{ animation: 200 }"
-        v-model="vModel.columns"
-        class="container"
-        item-key="prop">
-        <template #item="{ element }">
-          <div v-if="show(element)" class="item">
-            <el-icon class="handle">
-              <Sort></Sort>
-            </el-icon>
-            <el-checkbox
-              :checked="!element.hide"
-              :value="!element.hide"
-              @change="onChange($event, element)">
-              {{ translate(element) }}
-            </el-checkbox>
-          </div>
-        </template>
-      </draggable>
-      <!-- 保存 -->
-      <div class="btn-box">
-        <el-button @click="onReset">
-          {{ t('reset') }}
-        </el-button>
-        <el-button type="primary" @click="onSave">
-          {{ tg('button.save') }}
-        </el-button>
-      </div>
+  <div v-if="state.visible" class="field-filter" @click.stop>
+    <div class="bubble"></div>
+    <draggable
+      v-bind="{ animation: 200 }"
+      v-model="vModel.columns"
+      class="container"
+      item-key="prop">
+      <template #item="{ element }">
+        <div v-if="show(element)" class="item">
+          <el-icon class="handle">
+            <Sort></Sort>
+          </el-icon>
+          <el-checkbox
+            :checked="!element.hide"
+            :value="!element.hide"
+            @change="onChange($event, element)">
+            {{ translate(element) }}
+          </el-checkbox>
+        </div>
+      </template>
+    </draggable>
+    <!-- 保存 -->
+    <div class="btn-box">
+      <el-button @click="onReset">
+        {{ t('reset') }}
+      </el-button>
+      <el-button type="primary" @click="onSave">
+        {{ tg('button.save') }}
+      </el-button>
     </div>
   </div>
+  <chant-button
+    :content="t('filter')"
+    :icon="Document"
+    type="primary"
+    @click.stop="onShowFilter">
+  </chant-button>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, watch } from 'vue'
+import { onMounted, reactive, watch, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import draggable from 'vuedraggable'
 import { Document, Sort } from '@element-plus/icons-vue'
-import { useVModel } from '@vueuse/core'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
 import { StorageEnum } from '@/enum'
 import { base, storage } from '@/utils'
@@ -54,10 +51,9 @@ import { base, storage } from '@/utils'
 // props
 const props = defineProps<{
   lang?: Lang // 国际化
-  modelValue: ListState
 }>()
-// emits
-const emits = defineEmits(['update:modelValue'])
+// model
+const vModel = defineModel() as ModelRef<ListState>
 // use
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({
@@ -75,9 +71,8 @@ const { t } = useI18n({
   }
 })
 const route = useRoute()
-const vModel = useVModel(props, 'modelValue', emits)
 // var
-const columnsBackups = base.clone(props.modelValue.columns)
+const columnsBackups = base.clone(vModel.value.columns)
 // state
 const state = reactive({
   visible: false
@@ -164,71 +159,67 @@ function translate(column: Column) {
 
 <style scoped lang="scss">
 .field-filter {
-  margin-left: 10px;
-  position: relative;
-  .fly-box {
-    background-color: #ffffff;
-    border-radius: 2px;
-    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    padding: 5px 0;
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  padding: 5px 0;
+  position: absolute;
+  top: 53px;
+  right: 0;
+  z-index: 9;
+  .bubble {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ffffff;
     position: absolute;
-    top: 45px;
-    right: -10px;
-    z-index: 9;
-    .bubble {
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 10px solid #ffffff;
+    top: -10px;
+    right: 15px;
+    &::before {
+      content: '';
       position: absolute;
-      top: -10px;
-      right: 15px;
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-left: 11px solid transparent;
-        border-right: 11px solid transparent;
-        border-bottom: 11px solid rgba(0, 0, 0, 0.2);
-        position: absolute;
-        top: -1px;
-        left: -11px;
-        z-index: -1;
-        filter: blur(2px);
-      }
-      &::after {
-        background-color: #ffffff;
-        content: '';
-        position: absolute;
-        top: 10px;
-        left: -10px;
-        height: 10px;
-        width: 20px;
-      }
+      top: 0;
+      left: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-bottom: 11px solid rgba(0, 0, 0, 0.2);
+      position: absolute;
+      top: -1px;
+      left: -11px;
+      z-index: -1;
+      filter: blur(2px);
     }
-    .container {
-      max-height: 350px;
-      overflow: auto;
-    }
-    .item {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      white-space: nowrap;
-      .handle {
-        cursor: move;
-        margin-right: 10px;
-      }
+    &::after {
+      background-color: #ffffff;
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: -10px;
+      height: 10px;
+      width: 20px;
     }
   }
-  .btn-box {
+  .container {
+    max-height: 350px;
+    overflow: auto;
+  }
+  .item {
+    cursor: pointer;
     display: flex;
+    align-items: center;
     padding: 0 10px;
-    :deep(.el-button) {
-      height: 24px;
+    white-space: nowrap;
+    .handle {
+      cursor: move;
+      margin-right: 10px;
     }
+  }
+}
+.btn-box {
+  display: flex;
+  padding: 0 10px;
+  :deep(.el-button) {
+    height: 24px;
   }
 }
 </style>

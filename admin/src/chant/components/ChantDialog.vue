@@ -5,24 +5,18 @@
     :close-on-click-modal="false"
     :title="props.title">
     <slot></slot>
-    <template #footer>
-      <slot name="footer"></slot>
-    </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
+import { type ModelRef } from 'vue'
 
 // props
 const props = defineProps<{
-  modelValue: boolean
   title: string
 }>()
-// emits
-const emits = defineEmits(['update:modelValue'])
-// use
-const vModel = useVModel(props, 'modelValue', emits)
+// model
+const vModel = defineModel() as ModelRef<boolean>
 </script>
 
 <style lang="scss">
@@ -35,14 +29,14 @@ const vModel = useVModel(props, 'modelValue', emits)
   overflow: hidden;
   .el-dialog__body {
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    overflow: auto;
-    padding: 0 15px;
+    overflow: hidden;
+    padding: 0 15px 10px;
   }
   .el-dialog__footer {
-    box-sizing: border-box;
-    padding-top: 10px;
-    padding-bottom: 15px;
+    padding: 0;
   }
 }
 </style>

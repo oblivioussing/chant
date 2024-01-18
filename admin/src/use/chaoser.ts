@@ -6,7 +6,6 @@ function useChaoser() {
   const appStore = useAppStore()
   const route = useRoute()
   const router = useRouter()
-  const routes = router.getRoutes()
 
   // 路由跳转
   function push(config: { path: string; query?: any }) {
@@ -18,6 +17,7 @@ function useChaoser() {
   function getMetaByPath(path?: string) {
     path = path || route.path
     path = path.replace(/\/$/g, '')
+    const routes = router.getRoutes()
     const row = routes.find((item) => item.path === path)
     return row?.meta
   }
