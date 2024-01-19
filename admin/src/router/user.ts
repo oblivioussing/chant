@@ -2,7 +2,11 @@ export default [
   {
     path: '/user',
     component: () => import('@/components/home-layout/Index.vue'),
-    meta: { titleEn: 'user manager', titleZh: '用户管理', icon: 'nickname' },
+    meta: {
+      titleEn: 'user manager',
+      titleZh: '用户管理',
+      icon: 'yonghu'
+    },
     children: [
       {
         path: 'user-list',

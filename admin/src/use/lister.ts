@@ -8,7 +8,7 @@ import { element } from '@/plugs'
 import { useChaoser } from '@/use'
 import { bus } from '@/utils'
 
-function useLister() {
+function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()
   const route = useRoute()
   const state = {
@@ -18,7 +18,7 @@ function useLister() {
     columns: [],
     copyFlag: 0 as 0 | 1,
     extra: {} as Record<string, any>,
-    formType: 'dialog' as FormType,
+    formType: config?.type || 'dialog',
     keepQuery: {} as Record<string, any>,
     lang: {},
     list: [] as any[],

@@ -8,12 +8,13 @@ import { StorageEnum } from '@/enum'
 import { base, storage } from '@/utils'
 
 import app from './app' // app
-import order from './order' // 订单管理
+import trade from './trade' // 交易管理
 import user from './user' // 用户管理
+import salary from './salary' // 工资管理
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...app, ...order, ...user]
+  routes: [...app, ...trade, ...user, ...salary]
 })
 
 // 全局解析守卫

@@ -11,6 +11,7 @@ function useFormer(config: FormProps) {
   let formInstance: FormInstance
   const instance = getCurrentInstance()
   const route = useRoute()
+
   const state = {
     continueAdd: false,
     copyFlag: config.copyFlag as 0 | 1,
@@ -20,7 +21,7 @@ function useFormer(config: FormProps) {
     pageType: config.pageType,
     query: {} as any,
     selection: config.selection as { id: string },
-    type: config.type || ('dialog' as FormType)
+    type: config.type || 'dialog'
   }
   // 绑定表单实例
   function bindInstance(val: FormInstance) {

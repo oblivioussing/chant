@@ -1,5 +1,5 @@
 <template>
-  <div class="chant-form-footer" :class="{ toolbar: props.type !== 'dialog' }">
+  <div class="chant-form-footer" :class="{ toolbar: vModel.type !== 'dialog' }">
     <div>
       <!-- 继续新增 -->
       <el-checkbox v-model="vModel.continueAdd" class="continue">
@@ -25,18 +25,14 @@
 <script setup lang="ts">
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FormType } from '@/chant'
-import { core } from '@/utils'
+import { core, type FormType } from '@/chant'
 
 // type
 type ModelValue = {
   continueAdd: boolean
   loading: boolean
+  type: FormType
 }
-// props
-const props = defineProps<{
-  type?: FormType
-}>()
 // emits
 const emits = defineEmits(['close', 'save'])
 // model
@@ -55,7 +51,7 @@ const { t } = useI18n({
 })
 // 关闭
 function onClose() {
-  if (props.type === 'page') {
+  if (vModel.value.type === 'page') {
     core.closePage()
   } else {
     emits('close')
