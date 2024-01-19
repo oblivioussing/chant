@@ -8,6 +8,7 @@
     ref="tableRef"
     :row-key="(row) => row[props.rowKey]"
     @row-click="onRowClick"
+    @row-dblclick="onRowDbClick"
     @selection-change="onSelectChange">
     <!-- 复选框 -->
     <el-table-column
@@ -110,8 +111,8 @@ import {
 import { useI18n } from 'vue-i18n'
 import useClipboard from 'vue-clipboard3'
 import { DocumentCopy } from '@element-plus/icons-vue'
-import { useVModel } from '@vueuse/core'
-import type { Lang, ListColumn as Column, ListState } from '@/chant'
+import { useLister } from '@/chant'
+import type { Lang, ListColumn as Column, ListState } from '@/chant/type'
 import { format } from '@/utils'
 
 // defineExpose
@@ -122,6 +123,7 @@ defineExpose({
 interface Props {
   columns?: Column[] // 列表字段
   columnWidth?: number // 列宽度
+  dbEdit?: boolean // 是否可双击编辑
   dict?: any // 字典
   heightWild?: boolean // 高度不限制
   lang?: Lang // 国际化
@@ -134,6 +136,7 @@ interface Props {
 }
 // props
 const props = withDefaults(defineProps<Props>(), {
+  dbEdit: true,
   rowKey: 'id',
   showSelection: true
 })
@@ -145,6 +148,7 @@ const vModel = defineModel<ListState>()
 const { toClipboard } = useClipboard()
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props?.lang })
+const lister = useLister()
 // ref
 const tableRef = ref<TableInstance>()
 // state
@@ -279,13 +283,19 @@ function dictFmt(prop: string, value: any) {
 function selectable() {
   return vModel.value?.allFlag === 0
 }
-// 行点击
+// 单元格点击
 function onRowClick(row: any) {
   if (props.rowChecked) {
     // @ts-expect-error
     tableRef.value?.toggleRowSelection(row, undefined)
   }
   emits('row-click')
+}
+// 单元格双击
+function onRowDbClick(row: any) {
+  if (vModel.value && props.dbEdit) {
+    lister.edit(vModel.value, row)
+  }
 }
 // 选择项发生变化时
 function onSelectChange(selection: any[]) {
