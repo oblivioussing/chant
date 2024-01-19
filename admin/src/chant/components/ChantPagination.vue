@@ -2,10 +2,10 @@
   <div class="toolbar chant-pagination">
     <el-pagination
       background
-      :current-page="vModel.pageNum"
+      :current-page="vModel?.pageNum"
       :layout="props.layout"
       :pager-count="props.pagerCount"
-      :page-size="vModel.pageSize"
+      :page-size="vModel?.pageSize"
       :page-sizes="[10, 20, 50]"
       small
       :total="props.total"

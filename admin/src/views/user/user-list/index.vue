@@ -13,7 +13,6 @@
     show-checked-all
     split-button
     @add="lister.add(state)"
-    @alter="onAlter"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
@@ -66,8 +65,7 @@ const lister = useLister()
 // state
 const state = reactive({
   ...lister.state,
-  columns: columns(),
-  batchAlterVisible: false
+  columns: columns()
 })
 // created
 lister.created(() => {
@@ -78,17 +76,13 @@ lister.created(() => {
 function getList() {
   lister.getData('user/list', state)
 }
-// 批量删除
-function onDeletes() {
-  lister.removes('user/deletes', state)
-}
 // 删除
 function onDelete({ id }: any) {
   lister.remove('user/delete', state, { id })
 }
-// 批量修改
-function onAlter() {
-  state.batchAlterVisible = true
+// 批量删除
+function onDeletes() {
+  lister.removes('user/deletes', state)
 }
 // 批量修改command
 function onCommand(val: any) {

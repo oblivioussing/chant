@@ -1,8 +1,8 @@
 <template>
   <chant-picker-button
+    v-model="visible"
     v-model:id="id"
     v-model:text="text"
-    v-model:visible="visible"
     placeholder="用户">
   </chant-picker-button>
   {{ id }},{{ text }}

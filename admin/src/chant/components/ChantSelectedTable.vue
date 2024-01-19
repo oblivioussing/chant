@@ -7,7 +7,7 @@
     :lang="props.lang"
     :show-selection="false">
     <!-- 操作 -->
-    <chant-column-operate>
+    <chant-column-operate :width="60">
       <template #="{ row }">
         <!-- 删除 -->
         <el-button link type="danger" @click="onDelete(row)">

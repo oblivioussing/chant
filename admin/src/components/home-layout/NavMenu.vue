@@ -9,10 +9,17 @@
       @open="onMenuOpen">
       <el-sub-menu v-for="item in menus" :key="item.path" :index="item.path">
         <template #title>
-          <el-icon>
-            <icon-font :icon="icon(item.meta?.icon)"></icon-font>
-          </el-icon>
-          <span style="padding-left: 5px">{{ title(item.meta) }}</span>
+          <div class="menu-item">
+            <div class="menu-icon-box">
+              <el-icon>
+                <icon-font :icon="icon(item.meta?.icon)"></icon-font>
+              </el-icon>
+              <span v-if="props.isCollapse">{{ title(item.meta) }}</span>
+            </div>
+            <div v-if="!props.isCollapse" style="padding-left: 5px">
+              {{ title(item.meta) }}
+            </div>
+          </div>
         </template>
         <el-menu-item-group>
           <el-menu-item
@@ -126,6 +133,21 @@ function icon(icon?: unknown) {
     flex: 1;
     &:not(.el-menu--collapse) {
       width: 160px;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      .menu-icon-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 12px;
+        gap: 5px;
+        line-height: 1;
+      }
     }
   }
   .version {

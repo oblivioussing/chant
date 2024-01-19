@@ -36,5 +36,6 @@ const { t } = useI18n({
 .column-operate {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 </style>
