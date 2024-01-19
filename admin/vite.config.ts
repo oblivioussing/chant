@@ -1,10 +1,10 @@
 import { fileURLToPath, URL } from 'node:url'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
+import autoImport from 'unplugin-auto-import/vite'
+import components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { defineConfig } from 'vite'
-
 import vue from '@vitejs/plugin-vue'
+import setupName from './vite-plugins/setup-name'
 
 export default defineConfig(() => {
   return {
@@ -14,13 +14,14 @@ export default defineConfig(() => {
     },
     envDir: './env',
     plugins: [
-      vue(),
-      AutoImport({
+      autoImport({
         resolvers: [ElementPlusResolver()]
       }),
-      Components({
+      components({
         resolvers: [ElementPlusResolver()]
-      })
+      }),
+      setupName(),
+      vue()
     ],
     resolve: {
       alias: {

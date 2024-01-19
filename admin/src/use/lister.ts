@@ -210,7 +210,7 @@ function useLister() {
       edit: '编辑'
     }
     const text = map[state.editType]
-    return meta?.titleZh?.replace('列表', text)
+    return meta?.titleZh?.replace('列表', text) || ''
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected: boolean) {
