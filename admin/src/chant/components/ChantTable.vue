@@ -7,6 +7,7 @@
     :height="state.height || undefined"
     ref="tableRef"
     :row-key="(row) => row[props.rowKey]"
+    @row-click="onRowClick"
     @selection-change="onSelectChange">
     <!-- 复选框 -->
     <el-table-column
@@ -24,6 +25,7 @@
       :fixed="item.fixed"
       :label="translate(item)"
       :min-width="item.width || columnWidth || 144"
+      :prop="item.prop"
       show-overflow-tooltip
       sortable>
       <template #="{ row, $index }">
@@ -92,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { ElMessage, type TableInstance } from 'element-plus'
 import dayjs from 'dayjs'
 // @ts-ignore
 import Sortable from 'sortablejs'
@@ -125,6 +127,7 @@ interface Props {
   lang?: Lang // 国际化
   list?: any[] // 列表数据
   reserveSelection?: boolean // 数据刷新后是否保留选项
+  rowChecked?: boolean // 行点击是否可选中
   rowKey?: string // 行数据的key
   showSelection?: boolean // 显示勾选框
   sort?: boolean // 行是否可以拖动
@@ -135,7 +138,7 @@ const props = withDefaults(defineProps<Props>(), {
   showSelection: true
 })
 // emits
-const emits = defineEmits(['instance'])
+const emits = defineEmits(['instance', 'row-click'])
 // model
 const vModel = defineModel<ListState>()
 // use
@@ -143,7 +146,7 @@ const { toClipboard } = useClipboard()
 const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props?.lang })
 // ref
-const tableRef = ref()
+const tableRef = ref<TableInstance>()
 // state
 const state = reactive({
   height: 0
@@ -275,6 +278,14 @@ function dictFmt(prop: string, value: any) {
 // CheckBox是否可勾选
 function selectable() {
   return vModel.value?.allFlag === 0
+}
+// 行点击
+function onRowClick(row: any) {
+  if (props.rowChecked) {
+    // @ts-expect-error
+    tableRef.value?.toggleRowSelection(row, undefined)
+  }
+  emits('row-click')
 }
 // 选择项发生变化时
 function onSelectChange(selection: any[]) {

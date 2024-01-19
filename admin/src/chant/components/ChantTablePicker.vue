@@ -3,7 +3,6 @@
     v-model="vModel"
     append-to-body
     class="chant-table-picker"
-    :class="{ single: !isMultiple }"
     :title="props.title"
     :width="props.width || '70%'">
     <div class="column-box">
@@ -19,10 +18,11 @@
         <!-- table -->
         <chant-table
           v-model="state"
-          :class="{ 'picker-table': !isMultiple }"
+          class="picker-table"
           :dict="props.dict"
           :lang="props.lang"
           :reserve-selection="isMultiple"
+          row-checked
           :show-selection="isMultiple"
           @instance="lister.bindInstance"
           @row-click="onRowClick">

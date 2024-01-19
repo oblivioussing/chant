@@ -213,7 +213,8 @@ function useLister() {
     return meta?.titleZh?.replace('列表', text) || ''
   }
   // 切换某一行的选中状态
-  function toggleRowSelection(row: any, selected: boolean) {
+  function toggleRowSelection(row: any, selected?: boolean) {
+    // @ts-expect-error
     tableInstance.toggleRowSelection(row, selected)
   }
   // 路由参数是否变化

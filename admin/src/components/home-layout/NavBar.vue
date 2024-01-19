@@ -6,7 +6,7 @@
       <!-- 项目名 -->
       <div>{{ tg('app.project') }}</div>
       <!-- 折叠/展开 -->
-      <el-icon @click="onCollapse">
+      <el-icon class="pointer" @click="onCollapse">
         <Expand v-if="state.isCollapse" />
         <Fold v-else />
       </el-icon>
@@ -130,6 +130,9 @@ async function onQuit() {
     .logo-ic {
       margin-right: 5px;
       width: 20px;
+    }
+    .pointer {
+      cursor: pointer;
     }
   }
   .right {
