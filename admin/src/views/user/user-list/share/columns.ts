@@ -5,26 +5,26 @@ export default () => {
     {
       prop: 'loginName',
       label: '登录账号',
-      required: true,
+      // required: true,
       search: true
     },
     {
       prop: 'password',
       label: '密码',
-      hideInPages: ['list'],
-      inputType: 'password',
-      required: true
+      hideInPages: ['list', 'edit'],
+      inputType: 'password'
+      // required: true
     },
     {
       prop: 'phone',
       label: '手机号',
-      required: true,
+      // required: true,
       search: true
     },
     {
       prop: 'name',
       label: '姓名',
-      required: true,
+      // required: true,
       search: true
     },
     {

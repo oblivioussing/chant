@@ -6,3 +6,10 @@ export function IsOptionalPlus(validationOptions?: ValidationOptions) {
     return value !== null && value !== undefined && value !== ''
   }, validationOptions)
 }
+// 空校验
+export function IsNotEmpty(validationOptions?: ValidationOptions) {
+  return ValidateIf((_, value) => {
+    console.log('value:', value)
+    return true
+  }, validationOptions)
+}

@@ -14,7 +14,9 @@
               <el-icon>
                 <icon-font :icon="icon(item.meta?.icon)"></icon-font>
               </el-icon>
-              <span v-if="props.isCollapse">{{ title(item.meta) }}</span>
+              <span v-if="props.isCollapse">
+                {{ title(item.meta) }}
+              </span>
             </div>
             <div v-if="!props.isCollapse" style="padding-left: 5px">
               {{ title(item.meta) }}

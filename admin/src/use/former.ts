@@ -83,17 +83,17 @@ function useFormer(config: FormProps) {
       formInstance.resetFields()
       return true
     }
-    if (config.type === 'dialog') {
+    if (state.type === 'dialog') {
       instance?.emit('update')
       instance?.emit('close')
       // 刷新列表
       bus.emit(route.path)
-    } else {
-      // 关闭页面
-      config.type === 'page' && core.closePage()
-      // 刷新列表
+    } else if (state.type === 'page') {
+      core.closePage()
       const parentPath = core.getParentPath(route?.path)
       bus.emit(parentPath)
+    } else {
+      bus.emit(route.path)
     }
     return true
   }

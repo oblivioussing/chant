@@ -9,18 +9,20 @@ datasource db {
 
 model User {
   id         String    @id @db.Char(20)
-  avator     String    @default("") @db.VarChar(100)
-  birthday   DateTime? @db.DateTime(0)
   createTime DateTime  @map("create_time") @db.DateTime(0)
-  email      String    @unique(map: "email_UNIQUE") @default("") @db.VarChar(50)
   gender     String    @default("") @db.VarChar(1)
   loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
   name       String    @default("") @db.VarChar(50)
-  nickname   String    @default("") @db.VarChar(50)
   password   String    @default("") @db.VarChar(100)
   phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
-  updateTime DateTime? @map("update_time") @db.DateTime(0)
   status     String    @default("") @db.VarChar(2)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
 
   @@map("user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model test {
+  id   String  @id @db.VarChar(50)
+  name String? @db.VarChar(45)
 }

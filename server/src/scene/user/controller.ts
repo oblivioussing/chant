@@ -7,7 +7,7 @@ import { Page } from '@/type'
 import { getUidByToken } from '@/utils/base'
 import { UserEntity } from './entity'
 import { UserService } from './service'
-import { LoginVali, RegisterVali, UpdateVali } from './validator'
+import { LoginVali, AddVali, UpdateVali } from './validator'
 
 @Controller('user')
 export class UserController {
@@ -15,7 +15,7 @@ export class UserController {
 
   // 新增
   @Post('add')
-  async add(@Body() user: RegisterVali) {
+  async add(@Body() user: AddVali) {
     const result = await this.userService.add(user as User)
     return result
   }
@@ -55,13 +55,6 @@ export class UserController {
   @Post('login')
   async login(@Body() user: LoginVali) {
     const result = await this.userService.login(user as User)
-    return result
-  }
-  // 注册
-  @Auth(false)
-  @Post('register')
-  async register(@Body() user: RegisterVali) {
-    const result = await this.userService.register(user as User)
     return result
   }
   // 更新
