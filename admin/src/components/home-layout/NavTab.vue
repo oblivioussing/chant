@@ -211,12 +211,12 @@ function onRemoveOther(path: string) {
     state.tabs = [indexRaw, row]
   }
   // 路由参数
-  const routerQuery = storage.getSession(StorageEnum.RouterQuery) as any
+  const routerQuery = storage.getSession(StorageEnum.PageQuery) as any
   if (routerQuery) {
     const pathQuery = routerQuery[path]
     const map = {} as any
     map[path] = pathQuery
-    storage.setSession(StorageEnum.RouterQuery, map)
+    storage.setSession(StorageEnum.PageQuery, map)
   }
   router.push({ path: row?.path })
 }
@@ -224,7 +224,7 @@ function onRemoveOther(path: string) {
 function onRemoveAll() {
   state.tabs = [indexRaw]
   // 路由参数
-  storage.setSession(StorageEnum.RouterQuery, {})
+  storage.setSession(StorageEnum.PageQuery, {})
   router.push({ path: '/' })
 }
 </script>

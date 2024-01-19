@@ -1,5 +1,5 @@
 <template>
-  <add-edit type="edit"></add-edit>
+  <add-edit page-type="edit" type="page"></add-edit>
 </template>
 
 <script setup lang="ts">

@@ -45,8 +45,7 @@ import { useRoute } from 'vue-router'
 import draggable from 'vuedraggable'
 import { Document, Sort } from '@element-plus/icons-vue'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
-import { StorageEnum } from '@/enum'
-import { base, storage } from '@/utils'
+import { base, core } from '@/utils'
 
 // props
 const props = defineProps<{
@@ -97,8 +96,8 @@ onMounted(() => {
 })
 // 获取缓存columns
 function getStorageColumns() {
-  const obj = storage.getLocal(StorageEnum.TableFilter)
-  const list = obj?.[route.path] as Column[]
+  const obj = core.getPageStorage(route.path)
+  const list = obj?.tableFilter as Column[]
   const columns = vModel.value.columns
   if (list?.length) {
     list.forEach((item, index) => {
@@ -125,10 +124,9 @@ function onChange(val: any, column: Column) {
 }
 // 默认
 function onReset() {
-  const obj = storage.getLocal(StorageEnum.TableFilter)
+  const obj = core.getPageStorage(route.path)
   if (obj) {
-    Reflect.deleteProperty(obj, route.path)
-    storage.setLocal(StorageEnum.TableFilter, obj)
+    core.setPageStorage(route.path, 'tableFilter', undefined)
   }
   vModel.value.columns = base.clone(columnsBackups)
   state.visible = false
@@ -139,7 +137,7 @@ function onSave() {
     const { prop, hide } = item
     return { prop, hide }
   })
-  storage.setLocal(StorageEnum.TableFilter, { [route.path]: columns })
+  core.setPageStorage(route.path, 'tableFilter', columns)
   state.visible = false
 }
 // 是否显示

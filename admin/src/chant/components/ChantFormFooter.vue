@@ -1,5 +1,5 @@
 <template>
-  <div class="chant-form-footer" :class="{ toolbar: props.type }">
+  <div class="chant-form-footer" :class="{ toolbar: props.type !== 'dialog' }">
     <div>
       <!-- 继续新增 -->
       <el-checkbox v-model="vModel.continueAdd" class="continue">
@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FormType } from '@/type'
+import type { FormType } from '@/chant'
 import { core } from '@/utils'
 
 // type

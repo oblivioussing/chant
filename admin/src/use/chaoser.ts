@@ -1,16 +1,18 @@
 import { useRoute, useRouter } from 'vue-router'
 import qs from 'qs'
-import { useAppStore } from '@/store'
+import { StorageEnum } from '@/enum'
+import { storage } from '@/utils'
 
 function useChaoser() {
-  const appStore = useAppStore()
   const route = useRoute()
   const router = useRouter()
 
   // 路由跳转
   function push(config: { path: string; query?: any }) {
     const path = route?.path || ''
-    appStore.updatePageRelation(config.path, path)
+    const obj = storage.getSession(StorageEnum.PageParent) || {}
+    obj[config.path] = path
+    storage.setSession(StorageEnum.PageParent, obj)
     router.push({ path: config.path, query: config.query })
   }
   // 根据path获取meta

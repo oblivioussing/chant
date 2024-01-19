@@ -19,7 +19,7 @@ const router = createRouter({
 // 全局解析守卫
 router.beforeResolve((to: RouteLocationNormalized) => {
   // 跳转的页面参数
-  const queryMap = storage.getSession(StorageEnum.RouterQuery) || ({} as any)
+  const queryMap = storage.getSession(StorageEnum.PageQuery) || ({} as any)
   const { path, query } = to
   const store = queryMap[path]
   const queryEmpty = base.isEmptyObject(query)
@@ -32,7 +32,7 @@ router.beforeResolve((to: RouteLocationNormalized) => {
   } else {
     if (!queryEmpty) {
       queryMap[path] = query
-      storage.setSession(StorageEnum.RouterQuery, queryMap)
+      storage.setSession(StorageEnum.PageQuery, queryMap)
     }
   }
 })

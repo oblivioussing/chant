@@ -1,1 +1,1 @@
-export { default as formUtils } from './form'
+export * as formUtils from './form'

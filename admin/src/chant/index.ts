@@ -8,3 +8,11 @@ function install(app: App<Element>) {
 export default { install }
 export * from './type'
 export * from './utils'
+
+export * from '@/api'
+export * from '@/enum'
+export * from '@/plugs'
+export * from '@/store'
+export * from '@/type'
+export * from '@/use'
+export * from '@/utils'

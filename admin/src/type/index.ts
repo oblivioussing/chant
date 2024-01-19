@@ -17,4 +17,3 @@ export type ListParams = {
   allFlag?: number
   searchForm?: Record<string, any>
 }
-export type PageRelation = Record<string, { parent: string }>

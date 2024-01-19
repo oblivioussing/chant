@@ -68,7 +68,7 @@
       <el-button-group class="m-l-10">
         <!-- 表单操作方式 -->
         <chant-button :content="t('formType')" @click="onFormType">
-          <icon-font icon="13"></icon-font>
+          <icon-font :icon="formTypeIcon"></icon-font>
         </chant-button>
         <!-- 字段筛选 -->
         <field-filter
@@ -83,13 +83,16 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, useSlots, type ModelRef } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { type ListState } from '@/chant'
+import { type FormType, type ListState } from '@/chant'
+import { StorageEnum } from '@/enum'
+import { core, storage } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
-type Option = 'add' | 'alter' | 'delete'
 // type
+type Option = 'add' | 'alter' | 'delete'
 interface Props {
   lang?: any // 国际化
   options?: Option[] // 按钮选项
@@ -118,15 +121,23 @@ const { t } = useI18n({
     zh: {
       all: '全部',
       batch: '批量',
-      formType: '表单操作方式',
+      formType: '表单类型',
       record: '条记录'
     }
   }
 })
+const route = useRoute()
 const slots = useSlots()
 // ref
 const groupsRef = ref()
 // computed
+const formTypeIcon = computed(() => {
+  const map = {
+    page: '13',
+    dialog: 'popup'
+  } as any
+  return map[vModel.value.formType]
+})
 const isSelected = computed(() => {
   return vModel.value.selections.length > 0 || vModel.value.allFlag === 1
 })
@@ -134,6 +145,8 @@ const isSelected = computed(() => {
 onMounted(() => {
   // 按钮组
   buttonGroup()
+  // 获取缓存formType
+  getStorageFormType()
 })
 // 按钮组
 function buttonGroup() {
@@ -148,6 +161,14 @@ function buttonGroup() {
     })
   }, 100)
 }
+// 获取缓存formType
+function getStorageFormType() {
+  const obj = core.getPageStorage(route.path)
+  const formType = obj?.formType
+  if (formType) {
+    vModel.value.formType = formType as FormType
+  }
+}
 // 显示按钮
 function show(type: Option) {
   return props.options?.includes(type)
@@ -158,11 +179,14 @@ function onChange(val: any) {
 }
 // 表单操作方式
 function onFormType() {
+  let formType: FormType
   if (vModel.value.formType === 'dialog') {
-    vModel.value.formType = 'page'
+    formType = 'page'
   } else {
-    vModel.value.formType = 'dialog'
+    formType = 'dialog'
   }
+  vModel.value.formType = formType
+  core.setPageStorage(route.path, 'formType', formType)
 }
 </script>
 

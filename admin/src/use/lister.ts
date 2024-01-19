@@ -18,7 +18,7 @@ function useLister() {
     columns: [],
     copyFlag: 0 as 0 | 1,
     extra: {} as Record<string, any>,
-    formType: '' as FormType,
+    formType: 'dialog' as FormType,
     keepQuery: {} as Record<string, any>,
     lang: {},
     list: [] as any[],
@@ -229,9 +229,7 @@ function useLister() {
   }
   // 页面跳转
   function _jump(to: string, query?: any) {
-    const path = route?.path || ''
-    const toPath = path?.replace('/index', to)
-    chaoser.push({ path: toPath, query })
+    chaoser.push({ path: route?.path + to, query })
   }
   // 事件监听
   function _on(callback: () => any, name?: string) {

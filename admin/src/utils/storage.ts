@@ -22,7 +22,7 @@ class Storage {
     sessionStorage.setItem(this.getKey(key), v)
   }
   // 获取session
-  getSession(key: string) {
+  getSession(key: string): any {
     let v = sessionStorage.getItem(this.getKey(key))
     if (v) {
       v = this.getStorageValue(v)

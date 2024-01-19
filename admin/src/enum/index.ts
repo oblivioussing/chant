@@ -24,11 +24,11 @@ export enum LangEnum {
 }
 
 export enum StorageEnum {
-  Lang = 'lang',
   HomeNavTab = 'home-nav-tab',
-  PageRelation = 'page-relation',
-  RouterQuery = 'router-query',
-  TableFilter = 'table-filter',
+  Lang = 'lang',
+  Page = 'page',
+  PageParent = 'page-parent',
+  PageQuery = 'page-query',
   Token = 'token',
   User = 'user'
 }
