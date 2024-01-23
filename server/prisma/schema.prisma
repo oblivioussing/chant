@@ -8,7 +8,8 @@ datasource db {
 }
 
 model User {
-  id         String    @id @db.Char(20)
+  id         String    @id @db.VarChar(20)
+  createdId  String    @map("created_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   gender     String    @default("") @db.VarChar(1)
   loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
@@ -16,13 +17,31 @@ model User {
   password   String    @default("") @db.VarChar(100)
   phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
   status     String    @default("") @db.VarChar(2)
+  updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
 
   @@map("user")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model test {
-  id   String  @id @db.VarChar(50)
-  name String? @db.VarChar(45)
+model Salary {
+  id          String   @id @unique(map: "id_UNIQUE") @db.VarChar(20)
+  bonus       Decimal  @default(0.00) @db.Decimal(10, 2)
+  createdTime DateTime @map("created_time") @db.DateTime(0)
+  uid         String   @db.VarChar(20)
+
+  @@map("salary")
+}
+
+model Trade {
+  id         String    @id @db.VarChar(20)
+  commission String    @db.VarChar(2)
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  remark     String    @default("") @db.VarChar(45)
+  status     String    @db.VarChar(2)
+  uid        String    @db.VarChar(20)
+  updateId   String    @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
+
+  @@map("trade")
 }

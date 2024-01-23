@@ -20,8 +20,8 @@ type BaseColumn = {
 
 export type FormColumn = {
   change?: (row: any) => void // 值变更事件
+  default?: any // 默认值
   defaultTime?: Date | [Date, Date] // 范围选择时选中日期所使用的当日内具体时刻
-  defaultValue?: any // 默认值
   disabled?: boolean | ((row: any) => boolean) // 是否禁用
   disabledDate?: (data: Date, form: any) => boolean //  用来判断该日期是否被禁用的函数,仅type为date-picker时有效
   disabledInPage?: PageType // 在特定页面类型中禁用

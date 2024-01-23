@@ -17,7 +17,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/chant/')
   app.useGlobalFilters(new GlobalExceptionFilter(), new HttpExceptionFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
-  app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }))
+  app.useGlobalPipes(new ValidationPipe({}))
   await app.listen(3000, '0.0.0.0')
 }
 bootstrap()

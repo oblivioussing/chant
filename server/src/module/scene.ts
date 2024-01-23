@@ -1,4 +1,4 @@
-import { SystemModule } from '../scene/system/module'
+import { TradeModule } from '../scene/trade/module'
 import { UserModule } from '../scene/user/module'
 
-export default [SystemModule, UserModule]
+export default [TradeModule, UserModule]

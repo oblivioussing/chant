@@ -33,6 +33,8 @@ router.get('/table/field', async (ctx) => {
     )) as any
     let list = data.map((item: any) => {
       const comments = item.columnComment.split('\n')
+      console.log('columnName:', item.columnName)
+      console.log('comments:', comments)
       if (comments.length > 1) {
         item.columnComment = comments.shift()
         item.dict = comments.reduce((acc: any, cur: any) => {

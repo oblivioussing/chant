@@ -26,7 +26,7 @@
               :disabled="isDisabled(item)"
               :placeholder="translate(item, 'enter')"
               :rows="item.rows || 3"
-              :type="item.type">
+              :type="item.inputType">
               <template v-if="item.prepend" #prepend>
                 {{ tg(item.prepend) }}
               </template>
@@ -203,8 +203,8 @@ onMounted(() => {
 function init() {
   props.columns?.forEach((item) => {
     // 默认值
-    if (item.defaultValue && vModel.value?.pageType !== 'edit') {
-      vModel.value!.form[item.prop] = item.defaultValue
+    if (item.default && vModel.value?.pageType !== 'edit') {
+      vModel.value!.form[item.prop] = item.default
     }
     // date range
     if (formUtils.isDateRange(item.datepickerType)) {

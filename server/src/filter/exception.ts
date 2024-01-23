@@ -28,7 +28,7 @@ message:${exception?.message}
     console.error(exception?.message)
     const result = new Result()
     result.code = ApiCode.Exception
-    result.msg = '系统异常'
+    result.msg = exception?.message
     response.status(200).send(result)
   }
 }

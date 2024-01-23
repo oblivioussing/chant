@@ -3,6 +3,7 @@
     v-model="state"
     :dict="dict"
     :columns="columns()"
+    label-width="90px"
     @instance="former.bindInstance">
   </chant-form>
   <chant-form-footer
@@ -35,13 +36,13 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('{{module}}/detail', state)
+  former.getData('trade/detail', state)
 }
 // 保存
 function onSave() {
   const map = {
-    add: '{{module}}/add',
-    edit: '{{module}}/update'
+    add: 'trade/add',
+    edit: 'trade/update'
   }
   const path = map[props.pageType]
   former.save(path, state)

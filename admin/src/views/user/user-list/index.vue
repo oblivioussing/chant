@@ -18,21 +18,14 @@
   <!-- table -->
   <chant-table v-model="state" :dict="dict" sort>
     <!-- 操作 -->
-    <chant-column-operate :width="140">
+    <chant-column-operate :width="100">
       <template #="{ row }">
         <!-- 编辑 -->
         <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
-        <!-- 复制 -->
-        <chant-button link @click="lister.copy(state, row)">复制</chant-button>
         <!-- 删除 -->
         <chant-button link type="danger" @click="onDelete(row)">
           删除
         </chant-button>
-        <!-- 更多 -->
-        <chant-more-dropdown @command="onCommand">
-          <el-dropdown-item command="1">action1</el-dropdown-item>
-          <el-dropdown-item command="2">action2</el-dropdown-item>
-        </chant-more-dropdown>
       </template>
     </chant-column-operate>
   </chant-table>
@@ -83,10 +76,6 @@ function onDelete({ id }: any) {
 // 批量删除
 function onDeletes() {
   lister.removes('user/deletes', state)
-}
-// 批量修改command
-function onCommand(val: any) {
-  console.log(val)
 }
 </script>
 

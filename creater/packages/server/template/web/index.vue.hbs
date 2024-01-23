@@ -10,16 +10,16 @@
   <chant-table-operate
     v-model="state"
     :options="['add', 'delete']"
-    @add="lister.add"
-    @delete="onBatchDelete">
+    @add="lister.add(state)"
+    @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
   <chant-table v-model="state" :dict="dict">
     <!-- 操作 -->
-    <chant-column-operate>
+    <chant-column-operate :width="100">
       <template #="{ row }">
         <!-- 编辑 -->
-        <chant-button link @click="lister.edit(row)">编辑</chant-button>
+        <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
         <!-- 删除 -->
         <chant-button link type="danger" @click="onDelete(row)">
           删除
@@ -33,12 +33,23 @@
     :total="state.total"
     @change="getList">
   </chant-pagination>
+  <!-- 新增/编辑 -->
+  <chant-dialog v-model="state.editVisible" :title="lister.title(state)">
+    <add-edit
+      v-if="state.editVisible"
+      :copy-flag="state.copyFlag"
+      :page-type="state.editType"
+      :selection="state.selection"
+      @close="state.editVisible = false">
+    </add-edit>
+  </chant-dialog>
 </template>
 
-<script setup lang="ts" name="/{{module}}/{{route}}/index">
+<script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
+import AddEdit from './components/AddEdit.vue'
 
 // use
 const lister = useLister()
@@ -56,13 +67,13 @@ lister.created(() => {
 function getList() {
   lister.getData('{{module}}/list', state)
 }
-// 批量删除
-function onBatchDelete() {
-  lister.batchRemove('{{module}}/removes', state)
-}
 // 删除
 function onDelete({ id }: any) {
-  lister.remove('{{module}}/remove', state, { id })
+  lister.remove('{{module}}/delete', state, { id })
+}
+// 批量删除
+function onDeletes() {
+  lister.removes('{{module}}/deletes', state)
 }
 </script>
 

@@ -1,7 +1,9 @@
 <template>
-  <div>add</div>
+  <add-edit page-type="add" type="page"></add-edit>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AddEdit from './components/AddEdit.vue'
+</script>
 
 <style scoped lang="scss"></style>

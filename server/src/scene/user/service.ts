@@ -1,48 +1,71 @@
-import * as bcrypt from 'bcrypt'
+import { compare, hash } from 'bcrypt'
 import { Injectable } from '@nestjs/common'
-import { PrismaClient, User } from '@prisma/client'
-import { ApiCode } from '@/enum'
+import { PrismaClient, User, type Prisma } from '@prisma/client'
 import { RedisService } from '@/module/redis/service'
 import { PageData, Result } from '@/share'
-import { Page } from '@/type'
+import { Many, Page } from '@/type'
 import { base, core, encrypt } from '@/utils'
-import { UserEntity } from './entity'
-
-const prisma = new PrismaClient()
+import { UserEntity } from './model'
 
 @Injectable()
 export class UserService {
-  constructor(private redisService: RedisService) {}
+  private user: Prisma.UserDelegate
+
+  constructor(private redisService: RedisService) {
+    const prisma = new PrismaClient()
+    this.user = prisma.user
+  }
 
   // 新增
-  async add(user: User): Promise<Result> {
-    const result = await this.register(user)
-    if (result.code === ApiCode.Success) {
-      result.msg = '用户新增成功'
+  async add(user: User) {
+    const result = new Result()
+    const userData = await this.user.findUnique({
+      where: { loginName: user.loginName }
+    })
+    if (userData) {
+      result.fail('该用户已经存在')
+      return result
+    }
+    user.id = base.createUid()
+    user.createTime = new Date()
+    user.password = await hash(user.password, 10)
+    const data = core.toModel(user, UserEntity)
+    const row = await this.user.create({ data })
+    if (row) {
+      result.success({ msg: '用户新增成功' })
     } else {
-      result.msg = '用户新增失败'
+      result.fail('用户新增失败')
     }
     return result
   }
   // 删除
-  async delete(id: string): Promise<Result> {
+  async delete(id: string) {
     const result = new Result()
-    const row = await prisma.user.delete({
-      where: { id }
-    })
-    if (row) {
-      result.success({ msg: '删除成功' })
+    const data = await this.user.delete({ where: { id } })
+    if (data) {
+      result.success({ msg: '用户删除成功' })
     } else {
-      result.fail('删除失败')
+      result.fail('用户删除失败')
+    }
+    return result
+  }
+  // 批量删除
+  async deletes(params: Many<User>) {
+    const result = new Result()
+    const where = core.manyWhere(params, UserEntity)
+    const data = await this.user.deleteMany({ where })
+    if (data.count) {
+      result.success({ msg: '批量删除成功' })
+    } else {
+      result.fail('批量删除失败')
     }
     return result
   }
   // 详情
-  async detail(id: string): Promise<Result<User>> {
+  async detail(id: string) {
     const result = new Result<User>()
-    const data = await prisma.user.findUnique({ where: { id } })
+    const data = await this.user.findUnique({ where: { id } })
     if (data) {
-      // 删除密码
       Reflect.deleteProperty(data, 'password')
       result.data = data
       result.success({ msg: '用户信息查询成功' })
@@ -52,30 +75,27 @@ export class UserService {
     return result
   }
   // 列表
-  async list(user: User, page: Page): Promise<Result<PageData<User>>> {
+  async list(user: User, page: Page) {
     const pageData = new PageData<User>()
     const result = new Result<PageData<User>>()
-    const data = await prisma.user.findMany({
+    const data = await this.user.findMany({
       ...core.pageHelper(page),
-      orderBy: {
-        createTime: 'desc'
-      },
+      orderBy: { createTime: 'desc' },
       where: user
     })
-    const total = await prisma.user.count()
+    const total = await this.user.count({ where: user })
     pageData.list = data?.map((item) => {
       Reflect.deleteProperty(item, 'password')
       return item
     })
     pageData.total = total
-    result.data = pageData
-    result.success({ msg: '查询用户列表成功' })
+    result.success({ data: pageData, msg: '查询用户列表成功' })
     return result
   }
   // 登陆
-  async login(user: User): Promise<Result<string>> {
+  async login(user: User) {
     const result = new Result<string>()
-    const data = await prisma.user.findUnique({
+    const data = await this.user.findUnique({
       where: { loginName: user.loginName },
       select: {
         id: true,
@@ -87,7 +107,7 @@ export class UserService {
       return result
     }
     // 判断密码是否相同
-    const isMatch = await bcrypt.compare(user.password, data.password)
+    const isMatch = await compare(user.password, data.password)
     if (isMatch) {
       const { iv, hash } = encrypt(data.id)
       const token = `${iv}.${hash}`
@@ -98,35 +118,12 @@ export class UserService {
     }
     return result
   }
-  // 注册
-  async register(user: User): Promise<Result> {
-    const result = new Result()
-    const userData = await prisma.user.findUnique({
-      where: { loginName: user.loginName }
-    })
-    if (userData) {
-      result.fail('该用户已经存在')
-      return result
-    }
-    user.id = base.createUid()
-    user.createTime = new Date()
-    user.password = await bcrypt.hash(user.password, 10)
-    const data = core.toEntity(user, UserEntity)
-    try {
-      await prisma.user.create({ data })
-      result.success({ msg: '注册成功' })
-    } catch (error) {
-      console.log(error)
-      result.fail(error)
-    }
-    return result
-  }
   // 更新
-  async update(user: User): Promise<Result<User>> {
+  async update(user: User) {
     const result = new Result<User>()
-    const data = core.toEntity(user, UserEntity)
+    const data = core.toModel(user, UserEntity)
     data.updateTime = new Date()
-    const row = await prisma.user.update({
+    const row = await this.user.update({
       data,
       where: { id: user.id }
     })

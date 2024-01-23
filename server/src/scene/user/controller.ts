@@ -1,11 +1,10 @@
 import { Body, Controller, Headers, Get, Post, Query } from '@nestjs/common'
-import { User } from '@prisma/client'
-import { Auth, QueryEntity, QueryPage } from '@/decorator'
-import { ApiCode } from '@/enum'
-import { Result } from '@/share'
-import { Page } from '@/type'
+import type { User } from '@prisma/client'
+import { Auth, QueryModel, QueryPage } from '@/decorator'
+import type { Many, Page } from '@/type'
 import { getUidByToken } from '@/utils/base'
-import { UserEntity } from './entity'
+import { IdVali } from '@/validator'
+import { UserEntity } from './model'
 import { UserService } from './service'
 import { LoginVali, AddVali, UpdateVali } from './validator'
 
@@ -21,20 +20,20 @@ export class UserController {
   }
   // 删除
   @Post('delete')
-  async delete(@Body('id') id: string) {
-    const result = await this.userService.delete(id)
+  async delete(@Body() user: IdVali) {
+    const result = await this.userService.delete(user.id)
+    return result
+  }
+  // 批量删除
+  @Post('deletes')
+  async deletes(@Body() params: Many<User>) {
+    const result = await this.userService.deletes(params)
     return result
   }
   // 详情
   @Get('detail')
-  async detail(@Query('id') id: string) {
-    let result = new Result<User>()
-    if (id) {
-      result = await this.userService.detail(id)
-    } else {
-      result.code = ApiCode.ParamError
-      result.msg = 'id不能为空'
-    }
+  async detail(@Query() user: IdVali) {
+    const result = await this.userService.detail(user.id)
     return result
   }
   // 用户信息
@@ -46,7 +45,7 @@ export class UserController {
   }
   // 列表
   @Get('list')
-  async list(@QueryEntity(UserEntity) user: User, @QueryPage() page: Page) {
+  async list(@QueryModel(UserEntity) user: User, @QueryPage() page: Page) {
     const result = await this.userService.list(user, page)
     return result
   }
