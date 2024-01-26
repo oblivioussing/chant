@@ -6,7 +6,7 @@ export default {
     {{#each dict}}
     {{@key}}: '{{this}}'{{#if @last}}{{else}},{{/if}}
     {{/each}}
-  }{{#if @last}}{{else}},{{/if}}
+  },
   {{/if}}
 {{/each}}
 }

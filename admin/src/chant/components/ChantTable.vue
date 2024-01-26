@@ -289,7 +289,7 @@ function onRowClick(row: any) {
     // @ts-expect-error
     tableRef.value?.toggleRowSelection(row, undefined)
   }
-  emits('row-click')
+  emits('row-click', row)
 }
 // 单元格双击
 function onRowDbClick(row: any) {

@@ -1,8 +1,8 @@
-import type { User } from 'prisma/prisma-client'
+import { type User } from '@prisma/client'
 
 export const UserEntity = {
   id: '', // id
-  createdId: '', // 创建人
+  createId: '', // 创建人
   createTime: new Date(), // 创建时间
   gender: '', // 性别(0-女 1-男)
   loginName: '', // 用户名

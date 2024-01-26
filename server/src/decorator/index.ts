@@ -18,7 +18,7 @@ export const QueryModel = createParamDecorator(
         Reflect.deleteProperty(query, item)
       }
     }
-    const data = core.toModel(query, entity)
+    const data = core.toEntity(query, entity)
     return data
   }
 )

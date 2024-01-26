@@ -11,6 +11,7 @@ type BaseColumn = {
   hideInPages?: PageType[] // 在特定页面类型中隐藏
   inputType?: 'password' | 'text' | 'textarea'
   label?: string // 标签文本
+  precision?: number // 数值精度,仅type为input-number时有效
   prepend?: string // 输入框前置内容
   prop: string // 字段值
   slot?: boolean // 字段内容slot

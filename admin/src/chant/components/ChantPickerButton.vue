@@ -1,5 +1,6 @@
 <template>
   <el-input
+    v-model="text"
     class="chant-picker-input"
     :disabled="props.disabled"
     :placeholder="tips"

@@ -3,8 +3,21 @@
     v-model="state"
     :dict="dict"
     :columns="columns()"
-    label-width="90px"
     @instance="former.bindInstance">
+    <!-- 销售员 -->
+    <template #userName>
+      <user-picker
+        v-model:id="state.form.userId"
+        v-model:text="state.form.userName">
+      </user-picker>
+    </template>
+    <!-- 所属人 -->
+    <template #belongName>
+      <user-picker
+        v-model:id="state.form.belongId"
+        v-model:text="state.form.belongName">
+      </user-picker>
+    </template>
   </chant-form>
   <chant-form-footer
     v-model="state"

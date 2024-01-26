@@ -74,7 +74,8 @@
         <field-filter
           v-if="vModel.columns && props.showFilter"
           v-model="vModel"
-          :lang="props.lang">
+          :lang="props.lang"
+          :parent-node="groupsRef">
         </field-filter>
       </el-button-group>
     </div>
@@ -87,8 +88,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { type FormType, type ListState } from '@/chant'
-import { StorageEnum } from '@/enum'
-import { core, storage } from '@/utils'
+import { core } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
 // type
@@ -139,7 +139,8 @@ const formTypeIcon = computed(() => {
   return map[vModel.value.formType]
 })
 const isSelected = computed(() => {
-  return vModel.value.selections.length > 0 || vModel.value.allFlag === 1
+  const { selections, allFlag } = vModel.value
+  return selections.length > 0 || allFlag === 1
 })
 // onMounted
 onMounted(() => {

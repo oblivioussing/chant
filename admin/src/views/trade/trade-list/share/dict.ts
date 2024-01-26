@@ -1,8 +1,8 @@
 export default {
   // 提成(百分比)
   commission: {
-    1: '10',
-    2: '15'
+    1: '10%',
+    2: '15%'
   },
   // 状态
   status: {

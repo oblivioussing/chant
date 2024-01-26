@@ -1,35 +1,37 @@
 <template>
-  <div v-if="state.visible" class="field-filter" @click.stop>
-    <div class="bubble"></div>
-    <draggable
-      v-bind="{ animation: 200 }"
-      v-model="vModel.columns"
-      class="container"
-      item-key="prop">
-      <template #item="{ element }">
-        <div v-if="show(element)" class="item">
-          <el-icon class="handle">
-            <Sort></Sort>
-          </el-icon>
-          <el-checkbox
-            :checked="!element.hide"
-            :value="!element.hide"
-            @change="onChange($event, element)">
-            {{ translate(element) }}
-          </el-checkbox>
-        </div>
-      </template>
-    </draggable>
-    <!-- 保存 -->
-    <div class="btn-box">
-      <el-button @click="onReset">
-        {{ t('reset') }}
-      </el-button>
-      <el-button type="primary" @click="onSave">
-        {{ tg('button.save') }}
-      </el-button>
+  <Teleport v-if="state.visible" :to="props.parentNode">
+    <div class="field-filter" @click.stop>
+      <div class="bubble"></div>
+      <draggable
+        v-bind="{ animation: 200 }"
+        v-model="vModel.columns"
+        class="container"
+        item-key="prop">
+        <template #item="{ element }">
+          <div v-if="show(element)" class="item">
+            <el-icon class="handle">
+              <Sort></Sort>
+            </el-icon>
+            <el-checkbox
+              :checked="!element.hide"
+              :value="!element.hide"
+              @change="onChange($event, element)">
+              {{ translate(element) }}
+            </el-checkbox>
+          </div>
+        </template>
+      </draggable>
+      <!-- 保存 -->
+      <div class="btn-box">
+        <el-button @click="onReset">
+          {{ t('reset') }}
+        </el-button>
+        <el-button type="primary" @click="onSave">
+          {{ tg('button.save') }}
+        </el-button>
+      </div>
     </div>
-  </div>
+  </Teleport>
   <chant-button
     :content="t('filter')"
     :icon="Document"
@@ -50,6 +52,7 @@ import { base, core } from '@/utils'
 // props
 const props = defineProps<{
   lang?: Lang // 国际化
+  parentNode?: any // 父节点,解决el-button-group边框问题
 }>()
 // model
 const vModel = defineModel() as ModelRef<ListState>

@@ -1,19 +1,20 @@
 import { compare, hash } from 'bcrypt'
-import { Injectable } from '@nestjs/common'
-import { PrismaClient, User, type Prisma } from '@prisma/client'
+import { User, type Prisma } from '@prisma/client'
+import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
-import { PageData, Result } from '@/share'
+import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core, encrypt } from '@/utils'
 import { UserEntity } from './model'
 
-@Injectable()
-export class UserService {
+export class UserService extends BaseService {
+  @Inject(RedisService)
+  private redisService: RedisService
   private user: Prisma.UserDelegate
 
-  constructor(private redisService: RedisService) {
-    const prisma = new PrismaClient()
-    this.user = prisma.user
+  constructor() {
+    super()
+    this.user = this.prisma.user
   }
 
   // 新增
@@ -27,9 +28,10 @@ export class UserService {
       return result
     }
     user.id = base.createUid()
+    user.createId = this.getUid()
     user.createTime = new Date()
     user.password = await hash(user.password, 10)
-    const data = core.toModel(user, UserEntity)
+    const data = core.toEntity(user, UserEntity)
     const row = await this.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
@@ -121,7 +123,7 @@ export class UserService {
   // 更新
   async update(user: User) {
     const result = new Result<User>()
-    const data = core.toModel(user, UserEntity)
+    const data = core.toEntity(user, UserEntity)
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

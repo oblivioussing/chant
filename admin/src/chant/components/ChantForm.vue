@@ -18,9 +18,17 @@
             :label="translate(item) + ':'"
             :prop="item.prop"
             :rules="rules(item)">
+            <!-- slot -->
+            <slot
+              v-if="item.slot"
+              :name="item.prop"
+              :label="translate(item)"
+              :row="item"
+              :value="vModel!.form[item.prop]">
+            </slot>
             <!-- input -->
             <el-input
-              v-if="!item.type || item.type === 'input'"
+              v-else-if="!item.type || item.type === 'input'"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
@@ -49,14 +57,6 @@
                 :value="key">
               </el-option>
             </el-select>
-            <!-- slot -->
-            <slot
-              v-else-if="item.slot"
-              :name="item.prop"
-              :label="translate(item)"
-              :row="item"
-              :value="vModel!.form[item.prop]">
-            </slot>
             <!-- timepicker -->
             <el-time-picker
               v-else-if="item.type === 'time-picker'"
@@ -100,6 +100,7 @@
               :disabled="isDisabled(item)"
               :min="item.min"
               :max="item.max"
+              :precision="item.precision"
               :placeholder="translate(item, 'enter')">
             </el-input-number>
             <!-- upload -->
@@ -165,7 +166,6 @@ const emits = defineEmits(['instance'])
 // model
 const vModel = defineModel<{
   form: any
-  formLoading: boolean
   pageType?: 'add' | 'edit'
 }>()
 // use
@@ -276,7 +276,7 @@ function rules(column: Column) {
       }
     ]
   }
-  return column.rules
+  return column.rules || []
 }
 // change
 function onChange(column: Column) {
@@ -319,6 +319,9 @@ function translate(column: Column, type?: 'enter' | 'select') {
   .el-form {
     display: flex;
     flex-wrap: wrap;
+    .el-input-number {
+      width: 140px;
+    }
     .el-select {
       width: 100%;
     }

@@ -1,17 +1,17 @@
 <template>
   <chant-picker-button
+    v-bind="$attrs"
     v-model="visible"
     v-model:id="id"
     v-model:text="text"
     placeholder="用户">
   </chant-picker-button>
-  {{ id }},{{ text }}
   <chant-table-picker
     v-if="visible"
+    v-bind="$attrs"
     v-model="visible"
     api-path="user/list"
     :columns="columns()"
-    :columns-set="['name']"
     :dict="dict"
     title="用户"
     @change="onChange">
@@ -29,6 +29,7 @@ const id = defineModel<string>('id')
 const text = defineModel<string>('text')
 // ref
 const visible = ref(false)
+
 // change
 function onChange(row: any) {
   id.value = row.id

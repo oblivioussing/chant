@@ -1,25 +1,24 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaClient, Trade, type Prisma } from '@prisma/client'
-import { PageData, Result } from '@/share'
+import { Trade, type Prisma } from '@prisma/client'
+import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core } from '@/utils'
 import { TradeEntity } from './model'
 
-@Injectable()
-export class TradeService {
+export class TradeService extends BaseService {
   private trade: Prisma.TradeDelegate
 
   constructor() {
-    const prisma = new PrismaClient()
-    this.trade = prisma.trade
+    super()
+    this.trade = this.prisma.trade
   }
 
   // 新增
   async add(trade: Trade) {
     const result = new Result()
     trade.id = base.createUid()
+    trade.createId = this.getUid()
     trade.createTime = new Date()
-    const data = core.toModel(trade, TradeEntity)
+    const data = core.toEntity(trade, TradeEntity)
     const row = await this.trade.create({ data })
     if (row) {
       result.success({ msg: '交易新增成功' })
@@ -69,8 +68,7 @@ export class TradeService {
     const pageData = new PageData<Trade>()
     const result = new Result<PageData<Trade>>()
     const data = await this.trade.findMany({
-      ...core.pageHelper(page),
-      orderBy: { createTime: 'desc' },
+      ...core.pageHelper(page, 'desc'),
       where: trade
     })
     const total = await this.trade.count({ where: trade })
@@ -85,7 +83,8 @@ export class TradeService {
   // 更新
   async update(trade: Trade) {
     const result = new Result<Trade>()
-    const data = core.toModel(trade, TradeEntity)
+    const data = core.toEntity(trade, TradeEntity)
+    data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await this.trade.update({
       data,

@@ -3,13 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("MY_SQL_URL")
+  provider     = "mysql"
+  url          = env("MY_SQL_URL")
+  relationMode = "prisma"
 }
 
 model User {
   id         String    @id @db.VarChar(20)
-  createdId  String    @map("created_id") @db.VarChar(20)
+  createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   gender     String    @default("") @db.VarChar(1)
   loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
@@ -34,14 +35,16 @@ model Salary {
 
 model Trade {
   id         String    @id @db.VarChar(20)
+  amount     Decimal   @db.Decimal(10, 2)
+  belongId   String    @default("") @map("belong_id") @db.VarChar(20)
   commission String    @db.VarChar(2)
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   remark     String    @default("") @db.VarChar(45)
-  status     String    @db.VarChar(2)
-  uid        String    @db.VarChar(20)
-  updateId   String    @map("update_id") @db.VarChar(20)
+  status     String    @default("") @db.VarChar(2)
+  updateId   String    @default("") @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  userId     String    @map("user_id") @db.VarChar(20)
 
   @@map("trade")
 }
