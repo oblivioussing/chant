@@ -2,7 +2,10 @@ import { Trade, type Prisma } from '@prisma/client'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core } from '@/utils'
-import { TradeEntity } from './model'
+import { StatusEnum } from './enum'
+import { TradeEntity, TradeDto } from './model'
+
+type TradeDto = typeof TradeDto
 
 export class TradeService extends BaseService {
   private trade: Prisma.TradeDelegate
@@ -11,13 +14,13 @@ export class TradeService extends BaseService {
     super()
     this.trade = this.prisma.trade
   }
-
   // 新增
   async add(trade: Trade) {
     const result = new Result()
-    trade.id = base.createUid()
     trade.createId = this.getUid()
     trade.createTime = new Date()
+    trade.id = base.createUid()
+    trade.status = StatusEnum.Normal
     const data = core.toEntity(trade, TradeEntity)
     const row = await this.trade.create({ data })
     if (row) {
@@ -53,10 +56,10 @@ export class TradeService extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<Trade>()
-    const data = await this.trade.findUnique({ where: { id } })
+    let data = await this.trade.findUnique({ where: { id } })
     if (data) {
-      Reflect.deleteProperty(data, 'password')
-      result.data = data
+      data = core.toEntity(data, TradeDto)
+      result.data = await this.userIdToName(data, ['belongId', 'userId'])
       result.success({ msg: '交易信息查询成功' })
     } else {
       result.fail('交易信息查询失败')
@@ -66,16 +69,18 @@ export class TradeService extends BaseService {
   // 列表
   async list(trade: Trade, page: Page) {
     const pageData = new PageData<Trade>()
-    const result = new Result<PageData<Trade>>()
+    const result = new Result<PageData<TradeDto>>()
     const data = await this.trade.findMany({
       ...core.pageHelper(page, 'desc'),
       where: trade
     })
     const total = await this.trade.count({ where: trade })
-    pageData.list = data?.map((item) => {
-      Reflect.deleteProperty(item, 'password')
-      return item
-    })
+    pageData.list = await this.userIdsToName(data, [
+      'belongId',
+      'createId',
+      'updateId',
+      'userId'
+    ])
     pageData.total = total
     result.success({ data: pageData, msg: '查询交易列表成功' })
     return result

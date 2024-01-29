@@ -1,5 +1,6 @@
 import type { Many, Page } from '@/type'
 import { isDate } from './base'
+import { Prisma } from '@prisma/client'
 
 type PageHelper = {
   skip: number
@@ -28,15 +29,15 @@ export function toEntity<T>(data: Record<string, any>, entity: T): T {
     if (entity.hasOwnProperty(item)) {
       const entityValue = entity[item]
       const dataValue = data[item]
+      const isNumber =
+        typeof entityValue === 'number' || entityValue instanceof Prisma.Decimal
       if (isDate(entityValue)) {
         if (dataValue) {
           obj[item] = new Date(dataValue)
         } else {
-          obj[item] = null
+          obj[item] = undefined
         }
-      } else if (dataValue === null) {
-        obj[item] = entityValue
-      } else if (typeof entityValue === 'number') {
+      } else if (isNumber) {
         obj[item] = Number(dataValue)
       } else if (typeof entityValue === 'string') {
         obj[item] = String(dataValue)

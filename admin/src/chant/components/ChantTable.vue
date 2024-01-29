@@ -33,7 +33,7 @@
         <div class="content-box">
           <!-- prop slot -->
           <slot
-            v-if="item.slot"
+            v-if="item.listSlot"
             :index="$index"
             :item="item"
             :name="item.prop"

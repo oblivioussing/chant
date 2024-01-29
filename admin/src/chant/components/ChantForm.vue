@@ -20,7 +20,7 @@
             :rules="rules(item)">
             <!-- slot -->
             <slot
-              v-if="item.slot"
+              v-if="item.formSlot"
               :name="item.prop"
               :label="translate(item)"
               :row="item"

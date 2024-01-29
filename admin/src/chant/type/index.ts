@@ -14,7 +14,6 @@ type BaseColumn = {
   precision?: number // 数值精度,仅type为input-number时有效
   prepend?: string // 输入框前置内容
   prop: string // 字段值
-  slot?: boolean // 字段内容slot
   type?: ElementType // 元素类型
   valueFormat?: string // 绑定值的格式,仅type为date-picker时有效
 }
@@ -26,6 +25,7 @@ export type FormColumn = {
   disabled?: boolean | ((row: any) => boolean) // 是否禁用
   disabledDate?: (data: Date, form: any) => boolean //  用来判断该日期是否被禁用的函数,仅type为date-picker时有效
   disabledInPage?: PageType // 在特定页面类型中禁用
+  formSlot?: boolean // 表单slot
   limit?: number // 允许上传文件的最大数量
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效
@@ -45,11 +45,12 @@ export type ListColumn = {
   fixed?: 'left' | 'right' // 列是否固定在左侧或者右侧
   format?: 'money' // 格式化
   like?: boolean // 是否为模糊查询
+  listSlot?: boolean // 列表slot
   onlySearch?: boolean // 只作为搜索条件
   search?: boolean // 是否为搜索条件
   searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
   sarchRequired?: boolean // 搜索条件是否为必填
-  searchSlot?: boolean // 搜索条件slot
+  searchSlot?: boolean // 搜索slot
   tagType?: Record<string, TagProps['type']> // tag类型
   width?: number // 对应列的宽度
 } & BaseColumn

@@ -12,8 +12,8 @@ export default () => {
     {
       prop: 'userName',
       label: '销售员',
-      required: true,
-      slot: true
+      formSlot: true,
+      required: true
     },
     {
       prop: 'commission',
@@ -24,30 +24,22 @@ export default () => {
     {
       prop: 'belongName',
       label: '所属人',
-      slot: true
+      formSlot: true
     },
     {
       prop: 'status',
       label: '状态',
       hideInPages: ['add'],
+      tagType: {
+        1: 'success',
+        2: 'danger'
+      },
       type: 'select'
     },
     {
       prop: 'remark',
       label: '备注',
       inputType: 'textarea'
-    },
-    {
-      prop: 'createName',
-      label: '创建人',
-      hideInPages: ['add', 'edit']
-    },
-    {
-      prop: 'createTime',
-      label: '创建时间',
-      type: 'date-picker',
-      datepickerType: 'datetime',
-      hideInPages: ['add', 'edit']
     }
   ] as Column[]
 }
