@@ -94,7 +94,7 @@ export class UserService extends BaseService {
       where: user
     })
     const total = await this.user.count({ where: user })
-    pageData.list = rows?.map((item) => core.toEntity(item, userVo))
+    pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
     return result
@@ -115,8 +115,13 @@ export class UserService extends BaseService {
     if (isMatch) {
       const { iv, hash } = encrypt(row.id)
       const token = `${iv}.${hash}`
-      this.redisService.set(row.id, token, 60 * 60 * 24 * 30)
-      result.success({ data: token, msg: '登陆成功' })
+      const ret = await this.redisService.set('token', row.id, token)
+      if (ret) {
+        await this.redisService.expire('token', token, 60 * 60 * 24 * 30)
+        result.success({ data: token, msg: '登陆成功' })
+      } else {
+        result.fail('登录失败')
+      }
     } else {
       result.fail('密码错误')
     }
