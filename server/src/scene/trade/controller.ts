@@ -3,7 +3,7 @@ import type { Trade } from '@prisma/client'
 import { QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { IdVali } from '@/validator'
-import { TradeEntity } from './model'
+import { tradeEntity } from './model'
 import { TradeService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -37,7 +37,7 @@ export class TradeController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(TradeEntity) trade: Trade, @QueryPage() page: Page) {
+  async list(@QueryModel(tradeEntity) trade: Trade, @QueryPage() page: Page) {
     const result = await this.tradeService.list(trade, page)
     return result
   }

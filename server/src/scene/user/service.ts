@@ -1,11 +1,12 @@
 import { compare, hash } from 'bcrypt'
-import { User, type Prisma } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core, encrypt } from '@/utils'
-import { UserEntity } from './model'
+import { StatusEnum } from './enum'
+import { userBase, userEntity, userVo, type UserVo } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -20,18 +21,26 @@ export class UserService extends BaseService {
   // 新增
   async add(user: User) {
     const result = new Result()
-    const userData = await this.user.findUnique({
-      where: { loginName: user.loginName }
+    const { loginName, phone } = user
+    const userData = await this.user.findFirst({
+      where: {
+        OR: [{ loginName }, { phone }]
+      }
     })
     if (userData) {
-      result.fail('该用户已经存在')
+      if (userData.loginName === loginName) {
+        result.fail('该账号已经存在')
+      } else {
+        result.fail('该手机号已经存在')
+      }
       return result
     }
-    user.id = base.createUid()
-    user.createId = this.getUid()
-    user.createTime = new Date()
-    user.password = await hash(user.password, 10)
-    const data = core.toEntity(user, UserEntity)
+    const data = core.toEntity(user, userBase) as User
+    data.id = base.createUid()
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    data.password = await hash(user.password, 10)
+    data.status = StatusEnum.Normal
     const row = await this.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
@@ -43,8 +52,8 @@ export class UserService extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const data = await this.user.delete({ where: { id } })
-    if (data) {
+    const row = await this.user.delete({ where: { id } })
+    if (row) {
       result.success({ msg: '用户删除成功' })
     } else {
       result.fail('用户删除失败')
@@ -54,9 +63,9 @@ export class UserService extends BaseService {
   // 批量删除
   async deletes(params: Many<User>) {
     const result = new Result()
-    const where = core.manyWhere(params, UserEntity)
-    const data = await this.user.deleteMany({ where })
-    if (data.count) {
+    const where = core.manyWhere(params, userEntity)
+    const row = await this.user.deleteMany({ where })
+    if (row.count) {
       result.success({ msg: '批量删除成功' })
     } else {
       result.fail('批量删除失败')
@@ -65,11 +74,10 @@ export class UserService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<User>()
-    const data = await this.user.findUnique({ where: { id } })
-    if (data) {
-      Reflect.deleteProperty(data, 'password')
-      result.data = data
+    const result = new Result<UserVo>()
+    const row = await this.user.findUnique({ where: { id } })
+    if (row) {
+      result.data = core.toEntity(row, userVo)
       result.success({ msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')
@@ -78,18 +86,15 @@ export class UserService extends BaseService {
   }
   // 列表
   async list(user: User, page: Page) {
-    const pageData = new PageData<User>()
-    const result = new Result<PageData<User>>()
-    const data = await this.user.findMany({
-      ...core.pageHelper(page),
-      orderBy: { createTime: 'desc' },
+    const pageData = new PageData<UserVo>()
+    const result = new Result<typeof pageData>()
+    const rows = await this.user.findMany({
+      ...core.pageHelper(page, 'desc'),
+      select: core.entityToSelect(userBase),
       where: user
     })
     const total = await this.user.count({ where: user })
-    pageData.list = data?.map((item) => {
-      Reflect.deleteProperty(item, 'password')
-      return item
-    })
+    pageData.list = rows?.map((item) => core.toEntity(item, userVo))
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
     return result
@@ -97,23 +102,20 @@ export class UserService extends BaseService {
   // 登陆
   async login(user: User) {
     const result = new Result<string>()
-    const data = await this.user.findUnique({
+    const row = await this.user.findUnique({
       where: { loginName: user.loginName },
-      select: {
-        id: true,
-        password: true
-      }
+      select: { id: true, password: true }
     })
-    if (!data) {
+    if (!row) {
       result.fail('账号错误')
       return result
     }
     // 判断密码是否相同
-    const isMatch = await compare(user.password, data.password)
+    const isMatch = await compare(user.password, row.password)
     if (isMatch) {
-      const { iv, hash } = encrypt(data.id)
+      const { iv, hash } = encrypt(row.id)
       const token = `${iv}.${hash}`
-      this.redisService.set(data.id, token, 60 * 60 * 24 * 30)
+      this.redisService.set(row.id, token, 60 * 60 * 24 * 30)
       result.success({ data: token, msg: '登陆成功' })
     } else {
       result.fail('密码错误')
@@ -123,7 +125,7 @@ export class UserService extends BaseService {
   // 更新
   async update(user: User) {
     const result = new Result<User>()
-    const data = core.toEntity(user, UserEntity)
+    const data = core.toEntity(user, userBase) as User
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

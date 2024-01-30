@@ -3,9 +3,7 @@ import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core } from '@/utils'
 import { StatusEnum } from './enum'
-import { TradeEntity, TradeDto } from './model'
-
-type TradeDto = typeof TradeDto
+import { tradeBase, tradeEntity, type TradeVo } from './model'
 
 export class TradeService extends BaseService {
   private trade: Prisma.TradeDelegate
@@ -17,11 +15,11 @@ export class TradeService extends BaseService {
   // 新增
   async add(trade: Trade) {
     const result = new Result()
-    trade.createId = this.getUid()
-    trade.createTime = new Date()
-    trade.id = base.createUid()
-    trade.status = StatusEnum.Normal
-    const data = core.toEntity(trade, TradeEntity)
+    const data = core.toEntity(trade, tradeBase) as Trade
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    data.id = base.createUid()
+    data.status = StatusEnum.Normal
     const row = await this.trade.create({ data })
     if (row) {
       result.success({ msg: '交易新增成功' })
@@ -44,7 +42,7 @@ export class TradeService extends BaseService {
   // 批量删除
   async deletes(params: Many<Trade>) {
     const result = new Result()
-    const where = core.manyWhere(params, TradeEntity)
+    const where = core.manyWhere(params, tradeEntity)
     const data = await this.trade.deleteMany({ where })
     if (data.count) {
       result.success({ msg: '批量删除成功' })
@@ -55,10 +53,13 @@ export class TradeService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<Trade>()
-    let data = await this.trade.findUnique({ where: { id } })
+    const result = new Result<TradeVo>()
+    let data = await this.trade.findUnique({
+      select: core.entityToSelect(tradeBase),
+      where: { id }
+    })
     if (data) {
-      data = core.toEntity(data, TradeDto)
+      data = core.toEntity(data, tradeBase)
       result.data = await this.userIdToName(data, ['belongId', 'userId'])
       result.success({ msg: '交易信息查询成功' })
     } else {
@@ -69,18 +70,14 @@ export class TradeService extends BaseService {
   // 列表
   async list(trade: Trade, page: Page) {
     const pageData = new PageData<Trade>()
-    const result = new Result<PageData<TradeDto>>()
-    const data = await this.trade.findMany({
+    const result = new Result<typeof pageData>()
+    const rows = await this.trade.findMany({
       ...core.pageHelper(page, 'desc'),
+      select: core.entityToSelect(tradeBase),
       where: trade
     })
     const total = await this.trade.count({ where: trade })
-    pageData.list = await this.userIdsToName(data, [
-      'belongId',
-      'createId',
-      'updateId',
-      'userId'
-    ])
+    pageData.list = await this.userIdsToName(rows, ['belongId', 'userId'])
     pageData.total = total
     result.success({ data: pageData, msg: '查询交易列表成功' })
     return result
@@ -88,7 +85,7 @@ export class TradeService extends BaseService {
   // 更新
   async update(trade: Trade) {
     const result = new Result<Trade>()
-    const data = core.toEntity(trade, TradeEntity)
+    const data = core.toEntity(trade, tradeBase) as Trade
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await this.trade.update({

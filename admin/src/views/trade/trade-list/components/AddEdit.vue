@@ -8,14 +8,16 @@
     <template #userName>
       <user-picker
         v-model:id="state.form.userId"
-        v-model:text="state.form.userName">
+        v-model:text="state.form.userName"
+        title="销售员">
       </user-picker>
     </template>
     <!-- 所属人 -->
     <template #belongName>
       <user-picker
         v-model:id="state.form.belongId"
-        v-model:text="state.form.belongName">
+        v-model:text="state.form.belongName"
+        title="所属人">
       </user-picker>
     </template>
   </chant-form>

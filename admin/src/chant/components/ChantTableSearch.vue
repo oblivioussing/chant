@@ -16,11 +16,13 @@
         :key="item.prop"
         :label="translate(item) + ':'"
         :prop="item.prop"
-        :required="item.sarchRequired"
-        :rules="[{ required: item.sarchRequired, message: '' }]">
+        :required="item.searchRequired"
+        :rules="[{ required: item.searchRequired, message: '' }]">
+        <!-- slot -->
+        <slot v-if="item.slotSearch" :name="item.prop" :row="item"></slot>
         <!-- input -->
         <el-input
-          v-if="!item.type || item.type === 'input'"
+          v-else-if="!item.type || item.type === 'input'"
           v-model="vModel.query[item.like ? item.prop + 'Like' : item.prop]"
           :clearable="item.clearable !== false"
           :placeholder="translate(item, 'enter')">
@@ -88,8 +90,6 @@
             :placeholder="translate(item)">
           </el-input-number>
         </div>
-        <!-- slot -->
-        <slot v-else-if="item.searchSlot" :name="item.prop" :row="item"></slot>
       </el-form-item>
     </el-form>
     <!-- 展开搜索 -->

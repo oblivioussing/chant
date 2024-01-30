@@ -5,6 +5,22 @@
     :dict="dict"
     @query="getList"
     @reset="getList">
+    <!-- 销售员 -->
+    <template #userName>
+      <user-picker
+        v-model:id="state.query.userId"
+        title="销售员"
+        @change="getList">
+      </user-picker>
+    </template>
+    <!-- 所属人 -->
+    <template #belongName>
+      <user-picker
+        v-model:id="state.query.belongId"
+        title="所属人"
+        @change="getList">
+      </user-picker>
+    </template>
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate

@@ -4,7 +4,8 @@
     v-model="visible"
     v-model:id="id"
     v-model:text="text"
-    placeholder="用户">
+    :placeholder="props.title"
+    @clear="emits('change')">
   </chant-picker-button>
   <chant-table-picker
     v-if="visible"
@@ -13,7 +14,7 @@
     api-path="user/list"
     :columns="columns()"
     :dict="dict"
-    title="用户"
+    :title="props.title"
     @change="onChange">
   </chant-table-picker>
 </template>
@@ -22,8 +23,12 @@
 import { ref } from 'vue'
 import { columns, dict } from '@/views/user/user-list/share'
 
+// props
+const props = defineProps<{
+  title: string
+}>()
 // emits
-const emits = defineEmits(['update:id', 'update:text'])
+const emits = defineEmits(['change'])
 // model
 const id = defineModel<string>('id')
 const text = defineModel<string>('text')
@@ -34,6 +39,7 @@ const visible = ref(false)
 function onChange(row: any) {
   id.value = row.id
   text.value = row.name
+  emits('change')
 }
 </script>
 

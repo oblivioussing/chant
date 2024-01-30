@@ -12,8 +12,10 @@ export default () => {
     {
       prop: 'userName',
       label: '销售员',
-      formSlot: true,
-      required: true
+      required: true,
+      search: true,
+      slotForm: true,
+      slotSearch: true
     },
     {
       prop: 'commission',
@@ -24,12 +26,15 @@ export default () => {
     {
       prop: 'belongName',
       label: '所属人',
-      formSlot: true
+      search: true,
+      slotForm: true,
+      slotSearch: true
     },
     {
       prop: 'status',
-      label: '状态',
+      label: '状态', // 1-正常 2-作废
       hideInPages: ['add'],
+      search: true,
       tagType: {
         1: 'success',
         2: 'danger'

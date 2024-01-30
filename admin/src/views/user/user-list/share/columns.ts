@@ -37,30 +37,13 @@ export default () => {
     {
       prop: 'status',
       label: '状态',
-      default: '1',
+      hideInPages: ['add'],
       search: true,
       tagType: {
         1: 'success',
         2: 'danger'
       },
       type: 'select'
-    },
-    {
-      prop: 'createTime',
-      label: '创建时间',
-      hideInPages: ['add', 'edit'],
-      search: true,
-      searchDatepickerType: 'datetimerange',
-      type: 'date-picker',
-      datepickerType: 'datetime'
-    },
-    {
-      prop: 'updateTime',
-      label: '更新时间',
-      hideInPages: ['add', 'edit'],
-      search: true,
-      type: 'date-picker',
-      datepickerType: 'datetime'
     }
   ] as Column[]
 }
