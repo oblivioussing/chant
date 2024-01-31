@@ -1,0 +1,49 @@
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { QueryModel, QueryPage } from '@/decorator'
+import type { Many, Page } from '@/type'
+import { IdVali } from '@/validator'
+import { {{module}}Base, type {{upper module}}Base } from './model'
+import { {{upper module}}Service } from './service'
+import { AddVali, UpdateVali } from './validator'
+
+@Controller('{{module}}')
+export class {{upper module}}Controller {
+  constructor(private readonly {{module}}Service: {{upper module}}Service) {}
+
+  // 新增
+  @Post('add')
+  async add(@Body() {{module}}: AddVali) {
+    const result = await this.{{module}}Service.add({{module}} as {{upper module}}Base)
+    return result
+  }
+  // 删除
+  @Post('delete')
+  async delete(@Body() {{upper module}}: IdVali) {
+    const result = await this.{{module}}Service.delete({{upper module}}.id)
+    return result
+  }
+  // 批量删除
+  @Post('deletes')
+  async deletes(@Body() params: Many<{{upper module}}Base>) {
+    const result = await this.{{module}}Service.deletes(params)
+    return result
+  }
+  // 详情
+  @Get('detail')
+  async detail(@Query() {{module}}: IdVali) {
+    const result = await this.{{module}}Service.detail({{module}}.id)
+    return result
+  }
+  // 列表
+  @Get('list')
+  async list(@QueryModel({{module}}Base) trade: {{upper module}}Base, @QueryPage() page: Page) {
+    const result = await this.{{module}}Service.list({{module}}, page)
+    return result
+  }
+  // 更新
+  @Post('update')
+  async update(@Body() {{module}}: UpdateVali) {
+    const result = await this.{{module}}Service.update({{module}} as {{upper module}}Base)
+    return result
+  }
+}

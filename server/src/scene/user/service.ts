@@ -6,7 +6,7 @@ import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core, encrypt } from '@/utils'
 import { StatusEnum } from './enum'
-import { userBase, userEntity, userVo, type UserVo } from './model'
+import { userBase, userVo, type UserBase, type UserVo } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -61,9 +61,9 @@ export class UserService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<User>) {
+  async deletes(params: Many<UserBase>) {
     const result = new Result()
-    const where = core.manyWhere(params, userEntity)
+    const where = core.manyWhere(params, userBase)
     const row = await this.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -85,7 +85,7 @@ export class UserService extends BaseService {
     return result
   }
   // 列表
-  async list(user: User, page: Page) {
+  async list(user: UserBase, page: Page) {
     const pageData = new PageData<UserVo>()
     const result = new Result<typeof pageData>()
     const rows = await this.user.findMany({
@@ -128,7 +128,7 @@ export class UserService extends BaseService {
     return result
   }
   // 更新
-  async update(user: User) {
+  async update(user: UserBase) {
     const result = new Result<User>()
     const data = core.toEntity(user, userBase) as User
     data.updateTime = new Date()

@@ -4,7 +4,7 @@ export default () => {
   return [
   {{#each list}}
     {
-      prop: '{{columnName}}',
+      prop: '{{columnName}}', {{#if (equal type 'select') }}// {{#each dict}}{{@key}}-{{@this}} {{/each}} {{/if}}
       label: '{{columnComment}}',
       {{#if hideInPages}}
       hideInPages: [{{#each hideInPages}}'{{this}}'{{#if @last}}{{else}},{{/if}}{{/each}}],

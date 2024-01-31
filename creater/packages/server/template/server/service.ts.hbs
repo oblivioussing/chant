@@ -3,24 +3,23 @@ import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core } from '@/utils'
 import { StatusEnum } from './enum'
-import { TradeBase, tradeBase, tradeEntity, type TradeVo } from './model'
+import { {{upper module}}Base, {{module}}Base, type {{upper module}}Vo } from './model'
 
-export class TradeService extends BaseService {
-  private trade: Prisma.TradeDelegate
+export class {{upper module}}Service extends BaseService {
+  private {{module}}: Prisma.{{upper module}}Delegate
 
   constructor() {
     super()
-    this.trade = this.prisma.trade
+    this.{{module}} = this.prisma.{{module}}
   }
   // 新增
-  async add(trade: TradeBase) {
+  async add({{module}}: {{upper module}}Base) {
     const result = new Result()
-    const data = core.toEntity(trade, tradeBase) as Trade
+    const data = core.toEntity({{module}}, {{module}}Base) as {{upper module}}
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
-    data.status = StatusEnum.Normal
-    const row = await this.trade.create({ data })
+    const row = await this.{{module}}.create({ data })
     if (row) {
       result.success({ msg: '交易新增成功' })
     } else {
@@ -42,7 +41,7 @@ export class TradeService extends BaseService {
   // 批量删除
   async deletes(params: Many<TradeBase>) {
     const result = new Result()
-    const where = core.manyWhere(params, tradeEntity)
+    const where = core.manyWhere(params, tradeBase)
     const data = await this.trade.deleteMany({ where })
     if (data.count) {
       result.success({ msg: '批量删除成功' })

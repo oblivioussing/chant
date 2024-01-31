@@ -11,9 +11,6 @@ export class RedisService {
 
   async set(prfix: Prefix, key: string, value: any) {
     return await this.redis.set(`${prfix}_${key}`, value)
-    // if (ttl) {
-    //   await this.expire(key, ttl)
-    // }
   }
   async get(prfix: Prefix, key: string) {
     return await this.redis.get(`${prfix}_${key}`)

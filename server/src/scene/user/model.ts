@@ -22,4 +22,5 @@ export const userVo = {
   ...userBase
 }
 
+export type UserBase = typeof userBase
 export type UserVo = typeof userVo

@@ -6,7 +6,7 @@ export class PageData<T> {
   total: number
 }
 
-export class Result<T = object> {
+export class Result<T = null> {
   code = '' as ApiCode
   data = null as T
   msg = ''

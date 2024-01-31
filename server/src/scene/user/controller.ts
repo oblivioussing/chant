@@ -4,7 +4,7 @@ import { Auth, QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { getUidByToken } from '@/utils/base'
 import { IdVali } from '@/validator'
-import { userEntity } from './model'
+import { userEntity, type UserBase } from './model'
 import { UserService } from './service'
 import { LoginVali, AddVali, UpdateVali } from './validator'
 
@@ -26,7 +26,7 @@ export class UserController {
   }
   // 批量删除
   @Post('deletes')
-  async deletes(@Body() params: Many<User>) {
+  async deletes(@Body() params: Many<UserBase>) {
     const result = await this.userService.deletes(params)
     return result
   }
@@ -45,7 +45,7 @@ export class UserController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(userEntity) user: User, @QueryPage() page: Page) {
+  async list(@QueryModel(userEntity) user: UserBase, @QueryPage() page: Page) {
     const result = await this.userService.list(user, page)
     return result
   }
@@ -59,7 +59,7 @@ export class UserController {
   // 更新
   @Post('update')
   async update(@Body() user: UpdateVali) {
-    const result = await this.userService.update(user as User)
+    const result = await this.userService.update(user as UserBase)
     return result
   }
 }

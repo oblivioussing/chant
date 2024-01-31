@@ -1,7 +1,9 @@
 import fs from 'fs/promises'
 import handlebars from 'handlebars'
 import type { Form } from './type'
+import './handlebar'
 
+// var
 const typeDict = {
   1: 'web',
   2: 'server'
@@ -22,7 +24,8 @@ export async function generate(data: Form) {
   // 前端/后端的文件夹名称
   const typeDir = typeDict[data.type]
   // 保存目录路径
-  const savePath = `${codeDir}/${typeDir}/${data.routePath}`
+  const path = data.type === '1' ? data.routePath : data.tableName
+  const savePath = `${codeDir}/${typeDir}/${path}`
   // 创建目录
   await mkDir(savePath)
   // 模版文件夹
@@ -59,10 +62,14 @@ async function createFile(config: {
   codePath: string
 }) {
   const source = await fs.readFile(config.hbs, 'utf8')
-  const template = handlebars.compile(source)
-  const fileName = config.templateName.replace('.hbs', '')
-  const saveUrl = `${config.codePath}/${fileName}`
-  await fs.writeFile(saveUrl, template(config.data))
+  try {
+    const template = handlebars.compile(source)
+    const fileName = config.templateName.replace('.hbs', '')
+    const saveUrl = `${config.codePath}/${fileName}`
+    fs.writeFile(saveUrl, template(config.data))
+  } catch (error) {
+    console.error(error)
+  }
 }
 // 创建目录
 async function mkDir(dir: string) {
