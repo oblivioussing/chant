@@ -36,7 +36,7 @@ export class {{upper module}}Controller {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel({{module}}Base) trade: {{upper module}}Base, @QueryPage() page: Page) {
+  async list(@QueryModel({{module}}Base) {{module}}: {{upper module}}Base, @QueryPage() page: Page) {
     const result = await this.{{module}}Service.list({{module}}, page)
     return result
   }

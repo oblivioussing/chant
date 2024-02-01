@@ -7,12 +7,14 @@ export default () => {
       label: '奖金(元)'
     },
     {
-      prop: 'uid',
-      label: '员工'
+      prop: 'userName',
+      label: '员工',
+      slotSearch: true
     },
     {
-      prop: 'createdTime',
+      prop: 'date',
       label: '日期',
+      search: true,
       type: 'date-picker',
       datepickerType: 'month'
     }

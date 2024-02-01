@@ -1,25 +1,28 @@
 <template>
   <!-- search -->
-  <chant-table-search
-    v-model="state"
-    :dict="dict"
-    @query="getList"
-    @reset="getList">
+  <chant-table-search v-model="state" @query="getList" @reset="getList">
+    <!-- 员工 -->
+    <template #userName>
+      <user-picker v-model="state.query.userId" title="员工"></user-picker>
+    </template>
   </chant-table-search>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict"></chant-table>
+  <chant-table v-model="state"></chant-table>
   <!-- pagination -->
   <chant-pagination
     v-model="state.pages"
     :total="state.total"
     @change="getList">
   </chant-pagination>
+  <!-- 详情 -->
+  <chant-dialog v-model="state.editVisible" :title="lister.title(state)">
+  </chant-dialog>
 </template>
 
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from '@/use'
-import { columns, dict } from './share'
+import { columns } from './share'
 
 // use
 const lister = useLister()

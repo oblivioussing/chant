@@ -12,8 +12,11 @@
           <el-option
             v-for="item in state.tableList"
             :key="item.tableName"
-            :label="item.tableName"
             :value="item.tableName">
+            <div class="option-box">
+              <div>{{ item.tableName }}</div>
+              <div class="minor">{{ item.tableComment }}</div>
+            </div>
           </el-option>
         </el-select>
       </el-form-item>
@@ -171,9 +174,10 @@ const tableRef = ref<TableInstance>()
 // state
 const state = reactive({
   form: {
-    type: '1',
+    routePath: '',
+    tableComment: '',
     tableName: '',
-    routePath: ''
+    type: '1'
   },
   tableList: [] as any[],
   list: [],
@@ -215,7 +219,14 @@ function initSortable() {
   })
 }
 // 获取表字段
-async function getTableField() {
+async function getTableField(val: string) {
+  const row = state.tableList.find((item) => item.tableName === val)
+  state.form.tableComment = row.tableComment
+  // 获取表字段
+  getFidld()
+}
+// 获取表字段
+async function getFidld() {
   const config = {
     url: 'table/field',
     method: 'GET',
@@ -271,6 +282,14 @@ async function onStart() {
   flex: 1;
   overflow: hidden;
   padding: 10px;
+}
+.option-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .minor {
+    color: var(--el-text-color-secondary);
+  }
 }
 .config-box {
   box-sizing: border-box;

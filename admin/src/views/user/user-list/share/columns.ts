@@ -17,14 +17,14 @@ export default () => {
       required: true
     },
     {
-      prop: 'phone',
-      label: '手机号',
+      prop: 'name',
+      label: '姓名',
       required: true,
       search: true
     },
     {
-      prop: 'name',
-      label: '姓名',
+      prop: 'phone',
+      label: '手机号',
       required: true,
       search: true
     },

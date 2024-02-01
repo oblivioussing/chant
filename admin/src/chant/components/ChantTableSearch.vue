@@ -183,7 +183,7 @@ const availableColumns = computed(() => {
   const columns = vModel.value?.columns
   const searchOrder = props.searchOrder?.reverse()
   return columns?.reduce((acc: Column[], cur: Column) => {
-    const status = !cur.hide && (cur.search || cur.onlySearch)
+    const status = !cur.hide && (cur.search || cur.onlySearch || cur.slotSearch)
     if (!status) {
       return acc
     }

@@ -7,16 +7,12 @@ const router = new Router()
 router.get('/table/list', async (ctx) => {
   try {
     const [data] = await mysql.connection.query(
-      `select table_name from information_schema.tables 
+      `select 
+      table_name as tableName, table_comment as tableComment 
+      from information_schema.tables 
       where table_schema = 'chant' and table_name!='_prisma_migrations'`
     )
-    ctx.body = {
-      code: '1',
-      data: (data as any[])?.map((item) => {
-        const tableName = item.TABLE_NAME
-        return { tableName }
-      })
-    }
+    ctx.body = { code: '1', data }
   } catch (error) {
     console.error('error:', error)
   }
@@ -53,7 +49,12 @@ router.get('/table/field', async (ctx) => {
       )
       return item
     })
-    list = list.filter((item: any) => item.columnName !== 'id')
+    list = list.filter(
+      (item: any) =>
+        !['id', 'createId', 'createTime', 'updateId', 'updateTime'].includes(
+          item.columnName
+        )
+    )
     ctx.body = { code: '1', data: list }
   } catch (error) {
     console.error('error:', error)

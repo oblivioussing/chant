@@ -4,7 +4,7 @@ export default () => {
   return [
   {{#each list}}
     {
-      prop: '{{columnName}}', {{#if (equal type 'select') }}// {{#each dict}}{{@key}}-{{@this}} {{/each}} {{/if}}
+      prop: '{{columnName}}', {{#if dict }}// {{dictNote dict}} {{/if}}
       label: '{{columnComment}}',
       {{#if hideInPages}}
       hideInPages: [{{#each hideInPages}}'{{this}}'{{#if @last}}{{else}},{{/if}}{{/each}}],
@@ -24,7 +24,7 @@ export default () => {
       {{#if inputType}}
       inputType: '{{inputType}}',
       {{/if}}
-    }{{#if @last}}{{else}},{{/if}}
+    }{{comma @last}}
   {{/each}}
   ] as Column[]
 }

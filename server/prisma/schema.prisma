@@ -25,10 +25,10 @@ model User {
 }
 
 model Salary {
-  id          String   @id @unique(map: "id_UNIQUE") @db.VarChar(20)
-  bonus       Decimal  @default(0.00) @db.Decimal(10, 2)
-  createdTime DateTime @map("created_time") @db.DateTime(0)
-  uid         String   @db.VarChar(20)
+  id     String   @id @db.VarChar(20)
+  bonus  Decimal  @default(0.00) @db.Decimal(10, 2)
+  date   DateTime @db.DateTime(0)
+  userId String   @map("user_id") @db.VarChar(20)
 
   @@map("salary")
 }

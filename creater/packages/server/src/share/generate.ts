@@ -44,7 +44,7 @@ export async function generate(data: Form) {
         dirRecursion(`${templateDir}/${item}`, `${codePath}/${item}`)
       } else {
         createFile({
-          data: { module, route, ...data },
+          data: { module: module || data.tableName, route, ...data },
           templateName: item,
           hbs,
           codePath
