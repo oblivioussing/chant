@@ -145,7 +145,7 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import Ryougi, { type RequestConfig } from './api/ryougi'
 
 const ryougi = new Ryougi()
-ryougi.baseurl = 'http://127.0.0.1:7200/'
+ryougi.baseurl = 'http://127.0.0.1:7010/'
 
 // var
 const typeList = [

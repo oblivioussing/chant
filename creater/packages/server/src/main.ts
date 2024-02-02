@@ -12,6 +12,6 @@ app.use(router.allowedMethods())
 app.use(bodyParser())
 app.use(router.routes())
 // listen
-app.listen(7200, () => {
+app.listen(7010, () => {
   console.log('koa服务启动成功')
 })
