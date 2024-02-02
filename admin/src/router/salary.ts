@@ -9,9 +9,9 @@ export default [
     },
     children: [
       {
-        path: 'salary-list',
-        component: () => import('@/views/salary/salary-list/index.vue'),
-        meta: { titleEn: 'salary list', titleZh: '工资列表', menu: true }
+        path: 'bonus-list',
+        component: () => import('@/views/salary/bonus-list/index.vue'),
+        meta: { titleEn: 'bonus list', titleZh: '奖金列表', menu: true }
       }
     ]
   }

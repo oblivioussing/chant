@@ -41,18 +41,14 @@
           :placeholder="translate(item, 'enter')">
         </el-input-number>
         <!-- select -->
-        <el-select
+        <chant-select
           v-else-if="item.type === 'select'"
           v-model="vModel.query[item.prop]"
           :clearable="item.clearable !== false"
+          :data="props.dict?.[item.prop]"
           :placeholder="translate(item, 'select')"
           @change="emits('query')">
-          <el-option
-            v-for="(val, key) in props.dict?.[item.prop]"
-            :label="val"
-            :value="key">
-          </el-option>
-        </el-select>
+        </chant-select>
         <!-- date-picker -->
         <template v-else-if="item.type === 'date-picker'">
           <el-date-picker

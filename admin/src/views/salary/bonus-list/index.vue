@@ -3,7 +3,11 @@
   <chant-table-search v-model="state" @query="getList" @reset="getList">
     <!-- 员工 -->
     <template #userName>
-      <user-picker v-model="state.query.userId" title="员工"></user-picker>
+      <user-picker
+        v-model:id="state.query.userId"
+        title="员工"
+        @change="getList">
+      </user-picker>
     </template>
   </chant-table-search>
   <!-- table -->
@@ -38,7 +42,7 @@ lister.created(() => {
 })
 // 获取列表
 function getList() {
-  lister.getData('salary/list', state)
+  lister.getData('bonus/list', state, { limit: false })
 }
 </script>
 

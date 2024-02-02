@@ -16,7 +16,8 @@ export default () => {
       label: '日期',
       search: true,
       type: 'date-picker',
-      datepickerType: 'month'
+      datepickerType: 'month',
+      valueFormat: 'YYYY-MM'
     }
   ] as Column[]
 }

@@ -43,20 +43,16 @@
               </template>
             </el-input>
             <!-- select -->
-            <el-select
+            <chant-select
               v-else-if="item.type === 'select'"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
+              :data="props?.dict?.[item.prop]"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
               @change="onChange(item)">
-              <el-option
-                v-for="(val, key) in props?.dict?.[item.prop]"
-                :label="val"
-                :value="key">
-              </el-option>
-            </el-select>
+            </chant-select>
             <!-- timepicker -->
             <el-time-picker
               v-else-if="item.type === 'time-picker'"

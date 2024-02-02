@@ -1,8 +1,8 @@
-import { {{upper module}}, type Prisma } from '@prisma/client'
+import type { Prisma, {{upper module}} } from '@prisma/client'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core } from '@/utils'
-import { {{upper module}}Base, {{module}}Base, type {{upper module}}Vo } from './model'
+import { {{module}}Entity, type {{upper module}}Vo } from './model'
 
 export class {{upper module}}Service extends BaseService {
   private {{module}}: Prisma.{{upper module}}Delegate
@@ -12,9 +12,9 @@ export class {{upper module}}Service extends BaseService {
     this.{{module}} = this.prisma.{{module}}
   }
   // 新增
-  async add({{module}}: {{upper module}}Base) {
+  async add({{module}}: {{upper module}}) {
     const result = new Result()
-    const data = core.toEntity({{module}}, {{module}}Base) as {{upper module}}
+    const data = core.toEntity({{module}}, {{module}}Entity)
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
@@ -38,9 +38,9 @@ export class {{upper module}}Service extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<{{upper module}}Base>) {
+  async deletes(params: Many<{{upper module}}>) {
     const result = new Result()
-    const where = core.manyWhere(params, {{module}}Base)
+    const where = core.manyWhere(params, {{module}}Entity)
     const data = await this.{{module}}.deleteMany({ where })
     if (data.count) {
       result.success({ msg: '{{tableComment}}批量删除成功' })
@@ -53,7 +53,7 @@ export class {{upper module}}Service extends BaseService {
   async detail(id: string) {
     const result = new Result<{{upper module}}Vo>()
     const data = await this.{{module}}.findUnique({
-      select: core.entityToSelect({{module}}Base),
+      select: core.entityToSelect({{module}}Entity),
       where: { id }
     })
     if (data) {
@@ -65,12 +65,12 @@ export class {{upper module}}Service extends BaseService {
     return result
   }
   // 列表
-  async list({{module}}: {{upper module}}Base, page: Page) {
+  async list({{module}}: {{upper module}}, page: Page) {
     const pageData = new PageData<{{upper module}}Vo>()
     const result = new Result<typeof pageData>()
     const rows = await this.{{module}}.findMany({
       ...core.pageHelper(page, 'desc'),
-      select: core.entityToSelect({{module}}Base),
+      select: core.entityToSelect({{module}}Entity),
       where: {{module}}
     })
     const total = await this.{{module}}.count({ where: {{module}} })
@@ -80,9 +80,9 @@ export class {{upper module}}Service extends BaseService {
     return result
   }
   // 更新
-  async update({{module}}: {{upper module}}Base) {
-    const result = new Result<{{upper module}}Base>()
-    const data = core.toEntity({{module}}, {{module}}Base) as {{upper module}}
+  async update({{module}}: {{upper module}}) {
+    const result = new Result<{{upper module}}>()
+    const data = core.toEntity({{module}}, {{module}}Entity) as {{upper module}}
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await this.{{module}}.update({

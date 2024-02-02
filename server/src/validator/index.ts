@@ -20,9 +20,8 @@ export function IsNotEqualTo(
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          console.log('value:', value)
-          console.log('args:', args)
-          return false
+          const [to] = args.constraints
+          return value !== args.object[to]
         }
       }
     })

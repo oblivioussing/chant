@@ -43,7 +43,7 @@ export type ListColumn = {
   copy?: boolean // 是否可以复制
   editable?: boolean // 是否可编辑
   fixed?: 'left' | 'right' // 列是否固定在左侧或者右侧
-  format?: 'money' // 格式化
+  format?: string // 格式化
   like?: boolean // 是否为模糊查询
   onlySearch?: boolean // 只作为搜索条件
   search?: boolean // 是否为搜索条件

@@ -24,20 +24,11 @@ model User {
   @@map("user")
 }
 
-model Salary {
-  id     String   @id @db.VarChar(20)
-  bonus  Decimal  @default(0.00) @db.Decimal(10, 2)
-  date   DateTime @db.DateTime(0)
-  userId String   @map("user_id") @db.VarChar(20)
-
-  @@map("salary")
-}
-
 model Trade {
   id         String    @id @db.VarChar(20)
   amount     Decimal   @db.Decimal(10, 2)
   belongId   String    @default("") @map("belong_id") @db.VarChar(20)
-  commission String    @db.VarChar(2)
+  commission Float     @db.Float
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   remark     String    @default("") @db.VarChar(45)

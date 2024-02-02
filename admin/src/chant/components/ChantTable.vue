@@ -49,17 +49,13 @@
               :placeholder="translate(item)">
             </el-input>
             <!-- select -->
-            <el-select
+            <chant-select
               v-else-if="item.type === 'select'"
               v-model="row[item.prop]"
+              clearable
+              :data="props.dict?.[item.prop]"
               :placeholder="translate(item)">
-              <el-option
-                v-for="(val, key) in props.dict?.[item.prop]"
-                :key="key"
-                :label="val"
-                :value="key">
-              </el-option>
-            </el-select>
+            </chant-select>
             <!-- input-number -->
             <el-input-number
               v-else-if="item.type === 'input-number'"
@@ -113,7 +109,6 @@ import useClipboard from 'vue-clipboard3'
 import { DocumentCopy } from '@element-plus/icons-vue'
 import { useLister } from '@/chant'
 import type { Lang, ListColumn as Column, ListState } from '@/chant/type'
-import { format } from '@/utils'
 
 // defineExpose
 defineExpose({
@@ -262,22 +257,26 @@ function valueFmt(column: Column, value: any) {
   if (column.datepickerType) {
     const map = {
       date: 'YYYY-MM-DD',
-      datetime: 'YYYY-MM-DD HH:mm:ss'
+      datetime: 'YYYY-MM-DD HH:mm:ss',
+      month: 'YYYY-MM'
     } as any
     const template = map[column.datepickerType]
     return dayjs(value).format(template)
   }
-  // money
-  if (column.format === 'money') {
-    return format.money(value)
-  }
+  // format
+  // if(column.format === 'xxx'){}
   // append
   const append = column.append ? tg(column.append) : ''
   return value + append
 }
 // 字典格式化
 function dictFmt(prop: string, value: any) {
-  return props.dict?.[prop]?.[value] || '-'
+  const dict = props.dict?.[prop]
+  if (dict instanceof Map) {
+    return dict.get(value) || '-'
+  } else {
+    return dict?.[value] || '-'
+  }
 }
 // CheckBox是否可勾选
 function selectable() {

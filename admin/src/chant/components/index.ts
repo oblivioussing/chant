@@ -22,6 +22,7 @@ const ChantPagination = defineAsyncComponent(
 const ChantPickerButton = defineAsyncComponent(
   () => import('./ChantPickerButton.vue')
 )
+const ChantSelect = defineAsyncComponent(() => import('./ChantSelect.vue'))
 const ChantSelectedTable = defineAsyncComponent(
   () => import('./ChantSelectedTable.vue')
 )
@@ -47,6 +48,7 @@ function components(app: App<Element>) {
   app.component('ChantMoreDropdown', ChantMoreDropdown)
   app.component('ChantPagination', ChantPagination)
   app.component('ChantPickerButton', ChantPickerButton)
+  app.component('ChantSelect', ChantSelect)
   app.component('ChantSelectedTable', ChantSelectedTable)
   app.component('ChantTablePicker', ChantTablePicker)
   app.component('ChantTable', ChantTable)

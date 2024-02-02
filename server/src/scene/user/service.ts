@@ -6,7 +6,7 @@ import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, core, encrypt } from '@/utils'
 import { StatusEnum } from './enum'
-import { userBase, userVo, type UserBase, type UserVo } from './model'
+import { userEntity, userVo, type UserVo } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -35,7 +35,7 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const data = core.toEntity(user, userBase) as User
+    const data = core.toEntity(user, userEntity)
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -61,9 +61,9 @@ export class UserService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<UserBase>) {
+  async deletes(params: Many<User>) {
     const result = new Result()
-    const where = core.manyWhere(params, userBase)
+    const where = core.manyWhere(params, userEntity)
     const row = await this.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -85,12 +85,12 @@ export class UserService extends BaseService {
     return result
   }
   // 列表
-  async list(user: UserBase, page: Page) {
+  async list(user: User, page: Page) {
     const pageData = new PageData<UserVo>()
     const result = new Result<typeof pageData>()
     const rows = await this.user.findMany({
       ...core.pageHelper(page, 'desc'),
-      select: core.entityToSelect(userBase),
+      select: core.entityToSelect(userEntity),
       where: user
     })
     const total = await this.user.count({ where: user })
@@ -128,9 +128,9 @@ export class UserService extends BaseService {
     return result
   }
   // 更新
-  async update(user: UserBase) {
+  async update(user: User) {
     const result = new Result<User>()
-    const data = core.toEntity(user, userBase) as User
+    const data = core.toEntity(user, user) as User
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

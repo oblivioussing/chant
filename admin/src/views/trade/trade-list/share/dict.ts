@@ -1,9 +1,9 @@
 export default {
   // 提成(百分比)
-  commission: {
-    1: '10%',
-    2: '15%'
-  },
+  commission: new Map([
+    [0.1, '10%'],
+    [0.15, '15%']
+  ]),
   // 状态
   status: {
     1: '正常',

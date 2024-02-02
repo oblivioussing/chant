@@ -1,23 +1,19 @@
 import { Prisma, type {{upper module}} } from '@prisma/client'
 
-export const {{module}}Base = {
+export const {{module}}Entity = {
   id: '', // id
   {{#each list}}
   {{columnName}}: {{valueType columnType}}{{comma @last}} // {{columnComment}} {{dictNote dict}}
   {{/each}}
-}
-
-export const {{module}}Entity = {
-  ...{{module}}Base,
-  createId: '', // 创建人id
-  createTime: new Date(), // 创建时间
-  updateId: '', // 更新人id
-  updateTime: new Date() // 更新时间
 } as {{upper module}}
 
-export const {{module}}Vo = {
-  ...{{module}}Base
+export const {{module}}Dto = {
+  ...{{module}}Entity
 }
 
-export type {{upper module}}Base = typeof {{module}}Base
+export const {{module}}Vo = {
+  ...{{module}}Entity
+}
+
+export type {{upper module}}Dto = typeof {{module}}Dto
 export type {{upper module}}Vo = typeof {{module}}Vo
