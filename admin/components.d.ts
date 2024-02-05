@@ -44,6 +44,7 @@ declare module 'vue' {
     HomeLayout: typeof import('./src/components/home-layout/index.vue')['default']
     IconFont: typeof import('./src/components/IconFont.vue')['default']
     Index: typeof import('./src/components/home-layout/Index.vue')['default']
+    Index1: typeof import('./src/components/home-layout/Index-1.vue')['default']
     NavBar: typeof import('./src/components/home-layout/NavBar.vue')['default']
     NavMenu: typeof import('./src/components/home-layout/NavMenu.vue')['default']
     NavTab: typeof import('./src/components/home-layout/NavTab.vue')['default']
