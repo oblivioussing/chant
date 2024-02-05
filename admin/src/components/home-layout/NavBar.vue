@@ -35,8 +35,8 @@
               src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
           </el-avatar>
           <div class="login-name-box">
-            <div>登录名</div>
-            <div>姓名</div>
+            <div>{{ userStore.state.user.loginName }}</div>
+            <div>{{ userStore.state.user.name }}</div>
           </div>
         </div>
         <template #dropdown>
