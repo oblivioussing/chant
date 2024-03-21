@@ -3,7 +3,7 @@
     <div>
       <!-- 继续新增 -->
       <el-checkbox v-model="vModel.continueAdd" class="continue">
-        {{ t('continue') }}
+        {{ t('continueAdd') }}
       </el-checkbox>
     </div>
     <div>
@@ -26,6 +26,7 @@
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { core, type FormType } from '@/chant'
+import lang from '@/lang/chant'
 
 // type
 type ModelValue = {
@@ -38,17 +39,8 @@ const emits = defineEmits(['close', 'save'])
 // model
 const vModel = defineModel() as ModelRef<ModelValue>
 // use
+const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
-const { t } = useI18n({
-  messages: {
-    en: {
-      continue: 'continue add'
-    },
-    zh: {
-      continue: '继续新增'
-    }
-  }
-})
 // 关闭
 function onClose() {
   if (vModel.value.type === 'page') {

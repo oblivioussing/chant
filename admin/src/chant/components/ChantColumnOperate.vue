@@ -14,22 +14,14 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import lang from '@/lang/chant'
 
 // props
 const props = defineProps<{
   width?: string | number
 }>()
 // use
-const { t } = useI18n({
-  messages: {
-    en: {
-      operate: 'operate'
-    },
-    zh: {
-      operate: '操作'
-    }
-  }
-})
+const { t } = useI18n({ messages: lang })
 </script>
 
 <style scoped lang="scss">

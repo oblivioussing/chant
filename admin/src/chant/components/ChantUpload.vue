@@ -48,6 +48,7 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
 import { type UploadType } from '@/chant'
+import lang from '@/lang/chant'
 
 // type
 interface Props {
@@ -61,20 +62,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: 'pure-button'
 })
-
 // use
-const { t } = useI18n({
-  messages: {
-    en: {
-      import: 'import',
-      upload: 'click upload'
-    },
-    zh: {
-      import: '导入',
-      upload: '点击上传'
-    }
-  }
-})
+const { t } = useI18n({ messages: lang })
 // var
 const isPureButton = props.type === 'pure-button'
 // ref

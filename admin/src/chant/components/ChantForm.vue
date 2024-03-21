@@ -165,8 +165,8 @@ const vModel = defineModel<{
   pageType?: 'add' | 'edit'
 }>()
 // use
-const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props.lang })
+const { t: tg } = useI18n({ useScope: 'global' })
 // ref
 const formRef = ref<FormInstance>()
 // state

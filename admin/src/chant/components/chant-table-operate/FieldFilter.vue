@@ -47,6 +47,7 @@ import { useRoute } from 'vue-router'
 import draggable from 'vuedraggable'
 import { Document, Sort } from '@element-plus/icons-vue'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
+import lang from '@/lang/chant'
 import { base, core } from '@/utils'
 
 // props
@@ -57,21 +58,10 @@ const props = defineProps<{
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
+const en = { ...props.lang?.en, ...lang.en }
+const zh = { ...props.lang?.zh, ...lang.zh }
+const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
-const { t } = useI18n({
-  messages: {
-    en: {
-      ...props.lang?.en,
-      reset: 'reset',
-      filter: 'filter'
-    },
-    zh: {
-      ...props.lang?.zh,
-      reset: '重置',
-      filter: '过滤'
-    }
-  }
-})
 const route = useRoute()
 // var
 const columnsBackups = base.clone(vModel.value.columns)

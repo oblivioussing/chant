@@ -131,6 +131,7 @@ import {
   type ListColumn as Column,
   type ListState
 } from '@/chant'
+import lang from '@/lang/chant'
 
 // props
 const props = defineProps<{
@@ -146,25 +147,10 @@ const emits = defineEmits(['query', 'reset'])
 // model
 const vModel = defineModel<ListState>()
 // use
+const en = { ...props.lang?.en, ...lang.en }
+const zh = { ...props.lang?.zh, ...lang.zh }
+const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
-const { t } = useI18n({
-  messages: {
-    en: {
-      ...props.lang?.en,
-      spread: 'spread search',
-      fold: 'fold fold',
-      query: 'query',
-      reset: '重置'
-    },
-    zh: {
-      ...props.lang?.zh,
-      spread: '展开搜索',
-      fold: '折叠搜索',
-      query: '查询',
-      reset: '重置'
-    }
-  }
-})
 const resizeThrottle = useThrottleFn(containerAuto, 1000)
 // ref
 const formRef = ref<FormInstance>()

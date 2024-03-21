@@ -88,6 +88,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { type FormType, type ListState } from '@/chant'
+import lang from '@/lang/chant'
 import { core } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
@@ -109,23 +110,8 @@ const emits = defineEmits(['add', 'alter', 'command', 'delete'])
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
+const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
-const { t } = useI18n({
-  messages: {
-    en: {
-      all: 'all',
-      batch: 'batch',
-      formType: 'form type',
-      record: 'records'
-    },
-    zh: {
-      all: '全部',
-      batch: '批量',
-      formType: '表单类型',
-      record: '条记录'
-    }
-  }
-})
 const route = useRoute()
 const slots = useSlots()
 // ref

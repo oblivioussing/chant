@@ -141,8 +141,8 @@ const emits = defineEmits(['instance', 'row-click'])
 const vModel = defineModel<ListState>()
 // use
 const { toClipboard } = useClipboard()
-const { t: tg } = useI18n({ useScope: 'global' })
 const { t } = useI18n({ messages: props?.lang })
+const { t: tg } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // ref
 const tableRef = ref<TableInstance>()
@@ -315,8 +315,7 @@ async function onCopy(text: string) {
 // 翻译
 function translate(column: Column) {
   let label = column.label || column.prop
-  var pattern = new RegExp('[\u4E00-\u9FA5]+')
-  if (pattern.test(label)) {
+  if (!props.lang) {
     return label
   }
   return t(label)
