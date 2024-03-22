@@ -56,5 +56,9 @@ function onSize(size: number) {
   justify-content: center;
   height: 44px;
   margin-top: 5px;
+  // 貌似是element-plus的bug
+  :deep(.el-input__validateIcon) {
+    display: none;
+  }
 }
 </style>

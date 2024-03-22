@@ -10,16 +10,16 @@
       <el-sub-menu v-for="item in menus" :key="item.path" :index="item.path">
         <template #title>
           <div class="menu-item">
-            <div class="menu-icon-box">
+            <div class="menu-item-collapse-box">
               <el-icon>
                 <icon-font :icon="icon(item.meta?.icon)"></icon-font>
               </el-icon>
-              <span v-if="props.isCollapse">
+              <el-text v-if="props.isCollapse" truncated>
                 {{ title(item.meta) }}
-              </span>
+              </el-text>
             </div>
-            <div v-if="!props.isCollapse" style="padding-left: 5px">
-              {{ title(item.meta) }}
+            <div v-if="!props.isCollapse" class="menu-item-text">
+              <el-text truncated>{{ title(item.meta) }}</el-text>
             </div>
           </div>
         </template>
@@ -29,7 +29,7 @@
             :key="`${child.path}`"
             :index="`${item.path}/${child.path}`"
             @click="onTab(`${item.path}/${child.path}`)">
-            {{ title(child.meta) }}
+            <el-text truncated>{{ title(child.meta) }}</el-text>
           </el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
@@ -123,7 +123,7 @@ function icon(icon?: unknown) {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .home-nav-menu {
   box-sizing: border-box;
   display: flex;
@@ -136,19 +136,33 @@ function icon(icon?: unknown) {
     &:not(.el-menu--collapse) {
       width: 160px;
     }
-    .menu-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-      .menu-icon-box {
+    .el-text {
+      color: inherit;
+    }
+    .el-sub-menu__title {
+      padding: 0 10px !important;
+      .el-sub-menu__icon-arrow {
+        right: 10px;
+      }
+      .menu-item {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        font-size: 12px;
-        gap: 5px;
-        line-height: 1;
+        justify-content: center;
+        width: 100%;
+        .menu-item-collapse-box {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-size: 12px;
+          gap: 5px;
+          line-height: 1;
+          overflow: hidden;
+        }
+        .menu-item-text {
+          flex: 1;
+          overflow: hidden;
+          padding-right: 30px;
+        }
       }
     }
   }

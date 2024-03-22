@@ -11,7 +11,11 @@ export default [
       {
         path: 'trade-list',
         component: () => import('@/views/trade/trade-list/index.vue'),
-        meta: { titleEn: 'trade list', titleZh: '交易列表', menu: true }
+        meta: {
+          titleEn: 'trade list',
+          titleZh: '交易列表',
+          menu: true
+        }
       },
       {
         path: 'trade-list/add',

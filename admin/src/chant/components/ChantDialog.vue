@@ -27,6 +27,7 @@ const vModel = defineModel() as ModelRef<boolean>
   max-height: 84vh;
   margin: 8vh auto;
   overflow: hidden;
+  padding-bottom: 0;
   .el-dialog__body {
     box-sizing: border-box;
     display: flex;
