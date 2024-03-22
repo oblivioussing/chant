@@ -1,8 +1,8 @@
 export default {
   amount: 'amount',
-  userName: 'userName',
+  userName: 'user name',
   commission: 'commission',
-  belongName: 'belongName',
+  belongName: 'belong name',
   status: 'status',
   remark: 'remark'
 }

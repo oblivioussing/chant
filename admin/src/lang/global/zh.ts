@@ -1,6 +1,11 @@
 export default {
   app: {
-    project: '野鬼的窝'
+    projectName: '野鬼的窝',
+    quit: '退出',
+    close: '关闭',
+    closeAll: '关闭所有',
+    closeOther: '关闭其他',
+    version: '版本号'
   },
   button: {
     add: '新增',

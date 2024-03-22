@@ -17,7 +17,7 @@ export default [
       {
         path: '/',
         component: () => import('@/views/app/index/index.vue'),
-        meta: { titleEn: 'index', titleZh: '首页' }
+        meta: { title: 'index' }
       }
     ]
   }

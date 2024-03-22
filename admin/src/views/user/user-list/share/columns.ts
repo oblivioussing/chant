@@ -3,40 +3,34 @@ import type { Column } from '@/chant'
 export default () => {
   return [
     {
-      prop: 'loginName',
-      label: '登录账号',
+      prop: 'loginName', // 登录账号
       disabledInPage: 'edit',
       required: true,
       search: true
     },
     {
-      prop: 'password',
-      label: '密码',
+      prop: 'password', // 密码
       hideInPages: ['list', 'edit'],
       inputType: 'password',
       required: true
     },
     {
-      prop: 'name',
-      label: '姓名',
+      prop: 'name', // 姓名
       required: true,
       search: true
     },
     {
-      prop: 'phone',
-      label: '手机号',
+      prop: 'phone', // 手机号
       required: true,
       search: true
     },
     {
-      prop: 'gender',
-      label: '性别',
+      prop: 'gender', // 性别
       search: true,
       type: 'select'
     },
     {
-      prop: 'status',
-      label: '状态',
+      prop: 'status', // 状态
       hideInPages: ['add'],
       search: true,
       tagType: {

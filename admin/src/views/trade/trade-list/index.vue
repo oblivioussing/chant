@@ -3,13 +3,14 @@
   <chant-table-search
     v-model="state"
     :dict="dict"
+    :lang="lang"
     @query="getList"
     @reset="getList">
     <!-- 销售员 -->
     <template #userName>
       <user-picker
         v-model:id="state.query.userId"
-        title="销售员"
+        :title="t('userName')"
         @change="getList">
       </user-picker>
     </template>
@@ -17,7 +18,7 @@
     <template #belongName>
       <user-picker
         v-model:id="state.query.belongId"
-        title="所属人"
+        :title="t('belongName')"
         @change="getList">
       </user-picker>
     </template>
@@ -26,19 +27,22 @@
   <chant-table-operate
     v-model="state"
     :options="['add', 'delete']"
+    :lang="lang"
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict">
+  <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
     <chant-column-operate :width="100">
       <template #="{ row }">
         <!-- 编辑 -->
-        <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
+        <chant-button link @click="lister.edit(state, row)">
+          {{ tg('button.edit') }}
+        </chant-button>
         <!-- 删除 -->
         <chant-button link type="danger" @click="onDelete(row)">
-          删除
+          {{ tg('button.delete') }}
         </chant-button>
       </template>
     </chant-column-operate>
@@ -63,11 +67,15 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import lang from '@/lang/trade'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
 import AddEdit from './components/AddEdit.vue'
 
 // use
+const { t } = useI18n({ messages: lang })
+const { t: tg } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // state
 const state = reactive({

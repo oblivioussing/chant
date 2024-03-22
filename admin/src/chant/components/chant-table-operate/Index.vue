@@ -40,7 +40,7 @@
           </template>
         </el-dropdown>
         <el-button v-else type="primary" @click="emits('alter')">
-          {{ t('batch') + tg('button.alter') }}
+          {{ `${t('batch')} ${tg('button.alter')}` }}
         </el-button>
       </div>
       <!-- 新增,批量删除 -->
@@ -57,7 +57,7 @@
           <!-- 批量删除 -->
           <chant-icon-button
             v-if="show('delete')"
-            :content="t('batch') + tg('button.delete')"
+            :content="`${t('batch')} ${tg('button.delete')}`"
             :disabled="!isSelected"
             icon-type="delete"
             type="danger"

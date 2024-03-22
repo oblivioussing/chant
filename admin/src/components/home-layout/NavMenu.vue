@@ -36,7 +36,7 @@
     </el-menu>
     <!-- 版本号 -->
     <div class="version">
-      <template v-if="!props.isCollapse">{{ t('version') }}:</template>
+      <template v-if="!props.isCollapse">{{ tg('app.version') }}:</template>
       {{ appVersion }}
       <template v-if="isDev">({{ stage }})</template>
     </div>
@@ -47,30 +47,18 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { LangEnum } from '@/enum'
-import { useAppStore } from '@/store'
+import lang from '@/lang/router'
 import IconFont from '../IconFont.vue'
 
 // props
 const props = defineProps<{
   isCollapse: boolean
 }>()
-// i18n
-const { t } = useI18n({
-  messages: {
-    en: {
-      version: 'version'
-    },
-    zh: {
-      version: '版本号'
-    }
-  }
-})
-// router
+// use
+const { t } = useI18n({ messages: lang })
+const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
-// store
-const appStore = useAppStore()
 // var
 let subIndex = ''
 const appVersion = window.__APP_VERSION__
@@ -105,9 +93,7 @@ watch(
 )
 // 标题
 function title(meta?: any) {
-  const { titleEn, titleZh } = meta || {}
-  const lang = appStore.state.lang
-  return lang === LangEnum.En ? titleEn : titleZh
+  return t(meta.title)
 }
 // 菜单切换
 function onTab(path: string) {
@@ -156,7 +142,6 @@ function icon(icon?: unknown) {
           font-size: 12px;
           gap: 5px;
           line-height: 1;
-          overflow: hidden;
         }
         .menu-item-text {
           flex: 1;

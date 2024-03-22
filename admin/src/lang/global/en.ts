@@ -1,6 +1,11 @@
 export default {
   app: {
-    project: 'nest of ghost'
+    projectName: 'nest of ghost',
+    quit: 'quit',
+    close: 'close',
+    closeAll: 'close',
+    closeOther: 'close other',
+    version: 'version'
   },
   button: {
     add: 'add',

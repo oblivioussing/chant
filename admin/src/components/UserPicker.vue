@@ -14,6 +14,7 @@
     api-path="user/list"
     :columns="columns()"
     :dict="dict"
+    :lang="lang"
     :title="props.title"
     @change="onChange">
   </chant-table-picker>
@@ -21,6 +22,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import lang from '@/lang/user'
 import { columns, dict } from '@/views/user/user-list/share'
 
 // props

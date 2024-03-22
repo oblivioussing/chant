@@ -4,7 +4,7 @@
       <!-- logo -->
       <img src="/image/logo.png" class="logo-ic" />
       <!-- 项目名 -->
-      <div>{{ tg('app.project') }}</div>
+      <div>{{ tg('app.projectName') }}</div>
       <!-- 折叠/展开 -->
       <el-icon class="pointer" @click="onCollapse">
         <Expand v-if="state.isCollapse" />
@@ -15,7 +15,7 @@
       <!-- 语言 -->
       <el-dropdown @command="onLang">
         <div class="dropdown">
-          <div>{{ lang }}</div>
+          <div>{{ langLabel }}</div>
           <el-icon class="arrow-down-icon">
             <caret-bottom />
           </el-icon>
@@ -35,13 +35,15 @@
               src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
           </el-avatar>
           <div class="login-name-box">
-            <div>{{ userStore.state.user.loginName }}</div>
-            <div>{{ userStore.state.user.name }}</div>
+            <div>{{ user.loginName }}</div>
+            <div>{{ user.name }}</div>
           </div>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="quit">{{ t('quit') }}</el-dropdown-item>
+            <el-dropdown-item command="quit">
+              {{ tg('app.quit') }}
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -63,21 +65,12 @@ import { storage } from '@/utils'
 const emits = defineEmits(['update:modelValue'])
 // i18n
 const { t: tg } = useI18n({ useScope: 'global' })
-const { t } = useI18n({
-  messages: {
-    en: {
-      quit: 'quit'
-    },
-    zh: {
-      quit: '退出'
-    }
-  }
-})
 // router
 const router = useRouter()
 // store
 const appStore = useAppStore()
 const userStore = useUserStore()
+const user = userStore.state.user
 // state
 const state = reactive({
   orgs: [] as any[],
@@ -87,7 +80,7 @@ const state = reactive({
 const avatarUrl = computed(() => {
   return ''
 })
-const lang = computed(() => {
+const langLabel = computed(() => {
   const map = {
     en: 'English',
     zh: '中文'

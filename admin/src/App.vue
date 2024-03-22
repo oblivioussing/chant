@@ -20,7 +20,7 @@ appStore.$subscribe((_, _state) => {
 setTitle() // 设置标题
 // 设置标题
 function setTitle() {
-  document.title = tg('app.project')
+  document.title = tg('app.projectName')
 }
 </script>
 

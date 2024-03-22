@@ -34,7 +34,7 @@ const vModel = defineModel() as ModelRef<boolean>
     flex-direction: column;
     flex: 1;
     overflow: hidden;
-    padding: 0 15px 10px;
+    padding: 0 0 10px;
   }
   .el-dialog__footer {
     padding: 0;

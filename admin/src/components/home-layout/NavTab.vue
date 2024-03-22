@@ -18,17 +18,17 @@
           trigger="contextmenu"
           @command="onCommand($event, item.path)"
           @visible-change="onVisibleChange($event, item.path)">
-          <span>{{ title(item) }}</span>
+          <span>{{ t(item?.title) }}</span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="close">
-                {{ t('close') }}
+                {{ tg('app.close') }}
               </el-dropdown-item>
               <el-dropdown-item command="closeOther">
-                {{ t('closeOther') }}
+                {{ tg('app.closeOther') }}
               </el-dropdown-item>
               <el-dropdown-item command="closeAll">
-                {{ t('closeAll') }}
+                {{ tg('app.closeAll') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -39,50 +39,33 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
-import Sortable from 'sortablejs'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { BusEnum, LangEnum, StorageEnum } from '@/enum'
-import { useAppStore } from '@/store'
+import { BusEnum, StorageEnum } from '@/enum'
+import lang from '@/lang/router'
 import { useChaoser } from '@/use'
-import { base, bus, core, storage } from '@/utils'
+import { bus, core, storage } from '@/utils'
 
 // type
 type PathMapping = {
   name: string
   path: string
-  titleEn: string
-  titleZh: string
+  title: string
 }
 // emits
 const emits = defineEmits(['change'])
 // use
-const appStore = useAppStore()
 const chaoser = useChaoser()
-const { t } = useI18n({
-  messages: {
-    en: {
-      close: 'close',
-      closeAll: 'close',
-      closeOther: 'close other'
-    },
-    zh: {
-      close: '关闭',
-      closeAll: '关闭所有',
-      closeOther: '关闭其他'
-    }
-  }
-})
+const { t } = useI18n({ messages: lang })
+const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
 // var
 const indexRaw = {
   name: '/',
   path: '/',
-  titleEn: 'index',
-  titleZh: '首页'
+  title: 'index'
 }
 const tabs = (storage.getSession(StorageEnum.HomeNavTab) || [
   indexRaw
@@ -133,18 +116,11 @@ function routerChange() {
   if (meta) {
     state.tabs.push({
       path: route.path,
-      titleEn: meta?.titleEn as string,
-      titleZh: meta?.titleZh as string,
+      title: meta?.title as string,
       name: path
     })
   }
   state.path = route.path
-}
-// 标题
-function title(row?: any) {
-  const { titleEn, titleZh } = row || {}
-  const lang = appStore.state.lang
-  return lang === LangEnum.En ? titleEn : titleZh
 }
 // 通知外部keeps发生了变化
 function busKeeps() {

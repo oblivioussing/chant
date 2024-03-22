@@ -222,6 +222,7 @@ function initSortable() {
 async function getTableField(val: string) {
   const row = state.tableList.find((item) => item.tableName === val)
   state.form.tableComment = row.tableComment
+  state.form.routePath = row.tableName
   // 获取表字段
   getFidld()
 }

@@ -80,7 +80,7 @@ class Ryougi {
       body = JSON.stringify(body)
     }
     // 请求配置
-    let requestInit: RequestInit = {
+    const requestInit: RequestInit = {
       body,
       headers,
       method: config.method,
