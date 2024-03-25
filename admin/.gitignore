@@ -9,8 +9,8 @@ dist
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-# .npmrc
-
+auto-imports.d.ts
+components.d.ts
 # Log files
 npm-debug.log*
 yarn-debug.log*
