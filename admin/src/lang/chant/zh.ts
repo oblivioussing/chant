@@ -8,7 +8,8 @@ export default {
   continueAdd: '继续新增',
   operate: '操作',
   all: '全部',
-  batch: '批量',
+  batchDelete: '批量删除',
+  batchEdit: '批量编辑',
   formType: '表单类型',
   record: '条记录',
   filter: '过滤'

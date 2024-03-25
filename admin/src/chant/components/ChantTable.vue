@@ -28,7 +28,12 @@
       :min-width="item.width || columnWidth || 144"
       :prop="item.prop"
       show-overflow-tooltip
-      sortable>
+      :sortable="item.sortable">
+      <template #header>
+        <!-- <el-tooltip :content="translate(item)" effect="dark" placement="top"> -->
+        <el-text truncated>{{ translate(item) }}</el-text>
+        <!-- </el-tooltip> -->
+      </template>
       <template #="{ row, $index }">
         <div class="content-box">
           <!-- prop slot -->
@@ -322,7 +327,7 @@ function translate(column: Column) {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .chant-table {
   flex: 1;
   overflow: hidden;
@@ -331,6 +336,17 @@ function translate(column: Column) {
   }
   :deep(.el-button + .el-button) {
     margin-left: 3px;
+  }
+  .cell {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center;
+    .table-header {
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      display: inline-block;
+      white-space: nowrap;
+    }
   }
   .content-box {
     display: flex;

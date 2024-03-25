@@ -26,8 +26,9 @@
   <!-- operate -->
   <chant-table-operate
     v-model="state"
-    :options="['add', 'delete']"
+    :options="['add', 'alter', 'delete']"
     :lang="lang"
+    show-checked-all
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>

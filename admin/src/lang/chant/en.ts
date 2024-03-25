@@ -1,6 +1,6 @@
 export default {
   spread: 'spread search',
-  fold: 'fold fold',
+  fold: 'fold search',
   query: 'query',
   reset: 'reset',
   import: 'import',
@@ -8,7 +8,8 @@ export default {
   continueAdd: 'continue add',
   operate: 'operate',
   all: 'all',
-  batch: 'batch',
+  batchDelete: 'batch delete',
+  batchEdit: 'batch edit',
   formType: 'form type',
   record: 'records',
   filter: 'filter'

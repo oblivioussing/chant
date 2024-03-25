@@ -51,6 +51,7 @@ export type ListColumn = {
   searchRequired?: boolean // 搜索条件是否为必填
   slotList?: boolean // 列表slot
   slotSearch?: boolean // 搜索slot
+  sortable?: boolean // 对应列是否可以排序
   tagType?: Record<string, TagProps['type']> // tag类型
   width?: number // 对应列的宽度
 } & BaseColumn

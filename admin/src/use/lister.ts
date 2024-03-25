@@ -1,5 +1,6 @@
 import { type TableInstance } from 'element-plus'
 import { nextTick, onActivated, onScopeDispose } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { shiki } from '@/api'
 import type { ListState as State, FormType } from '@/chant'
@@ -10,6 +11,7 @@ import { bus } from '@/utils'
 
 function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()
+  const { t } = useI18n({ useScope: 'global' })
   const route = useRoute()
   const state = {
     editType: '' as 'add' | 'edit',
@@ -210,7 +212,7 @@ function useLister(config?: { type: FormType }) {
       edit: '编辑'
     }
     const text = map[state.editType]
-    return meta?.titleZh?.replace('列表', text) || ''
+    return meta?.title?.replace('列表', text) || 'xxx'
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected?: boolean) {

@@ -27,10 +27,10 @@
           @click="emits('alter')"
           @command="emits('command', $event)">
           <template v-if="props.splitButton">
-            {{ t('batch') + tg('button.alter') }}
+            {{ t('batchEdit') }}
           </template>
           <el-button v-else type="primary">
-            {{ t('batch') + tg('button.alter') }}
+            {{ t('batchEdit') }}
             <el-icon class="m-l-5"><arrow-down /></el-icon>
           </el-button>
           <template #dropdown>
@@ -40,7 +40,7 @@
           </template>
         </el-dropdown>
         <el-button v-else type="primary" @click="emits('alter')">
-          {{ `${t('batch')} ${tg('button.alter')}` }}
+          {{ t('batchEdit') }}
         </el-button>
       </div>
       <!-- 新增,批量删除 -->
@@ -57,7 +57,7 @@
           <!-- 批量删除 -->
           <chant-icon-button
             v-if="show('delete')"
-            :content="`${t('batch')} ${tg('button.delete')}`"
+            :content="t('batchDelete')"
             :disabled="!isSelected"
             icon-type="delete"
             type="danger"
