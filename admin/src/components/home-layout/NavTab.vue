@@ -18,7 +18,7 @@
           trigger="contextmenu"
           @command="onCommand($event, item.path)"
           @visible-change="onVisibleChange($event, item.path)">
-          <span>{{ t(item?.title) }}</span>
+          <span>{{ tg(`router.${item?.title}`) }}</span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="close">
@@ -43,7 +43,6 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { BusEnum, StorageEnum } from '@/enum'
-import lang from '@/lang/router'
 import { useChaoser } from '@/use'
 import { bus, core, storage } from '@/utils'
 
@@ -57,7 +56,6 @@ type PathMapping = {
 const emits = defineEmits(['change'])
 // use
 const chaoser = useChaoser()
-const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()

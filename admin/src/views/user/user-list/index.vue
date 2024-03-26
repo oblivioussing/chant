@@ -3,6 +3,7 @@
   <chant-table-search
     v-model="state"
     :dict="dict"
+    :lang="lang"
     @query="getList"
     @reset="getList">
   </chant-table-search>
@@ -10,16 +11,17 @@
   <chant-table-operate
     v-model="state"
     :options="['add', 'delete']"
+    :lang="lang"
     show-checked-all
     split-button
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict" sort>
+  <chant-table v-model="state" :dict="dict" :lang="lang" sort>
     <!-- 操作 -->
     <chant-column-operate :width="100">
-      <template #="{ row }">
+      <template #default="{ row }">
         <!-- 编辑 -->
         <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
         <!-- 删除 -->
@@ -49,6 +51,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import lang from '@/lang/user'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
 import AddEdit from './components/AddEdit.vue'

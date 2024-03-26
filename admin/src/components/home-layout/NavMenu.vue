@@ -6,8 +6,7 @@
       :default-active="state.path"
       ref="menuRef"
       unique-opened
-      @open="onMenuOpen"
-    >
+      @open="onMenuOpen">
       <el-sub-menu v-for="item in menus" :key="item.path" :index="item.path">
         <template #title>
           <div class="menu-item">
@@ -29,8 +28,7 @@
             v-for="child in item.children"
             :key="`${child.path}`"
             :index="`${item.path}/${child.path}`"
-            @click="onTab(`${item.path}/${child.path}`)"
-          >
+            @click="onTab(`${item.path}/${child.path}`)">
             <el-text truncated>{{ title(child.meta) }}</el-text>
           </el-menu-item>
         </el-menu-item-group>
@@ -49,7 +47,6 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import lang from '@/lang/router'
 import IconFont from '../IconFont.vue'
 
 // props
@@ -57,7 +54,6 @@ const props = defineProps<{
   isCollapse: boolean
 }>()
 // use
-const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
@@ -95,7 +91,7 @@ watch(
 )
 // 标题
 function title(meta?: any) {
-  return t(meta.title)
+  return tg(`router.${meta.title}`)
 }
 // 菜单切换
 function onTab(path: string) {

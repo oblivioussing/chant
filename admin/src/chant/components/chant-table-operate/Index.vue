@@ -88,7 +88,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { type FormType, type ListState } from '@/chant'
-import lang from '@/lang/chant'
+import chantLang from '@/lang/chant'
 import { core } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
@@ -110,7 +110,7 @@ const emits = defineEmits(['add', 'alter', 'command', 'delete'])
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
-const { t } = useI18n({ messages: lang })
+const { t } = useI18n({ messages: chantLang })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const slots = useSlots()

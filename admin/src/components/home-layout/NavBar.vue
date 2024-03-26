@@ -31,7 +31,8 @@
       <el-dropdown @command="onQuit">
         <div class="dropdown">
           <el-avatar :src="avatarUrl" :size="25">
-            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+            <img
+              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
           </el-avatar>
           <div class="login-name-box">
             <div>{{ user.loginName }}</div>

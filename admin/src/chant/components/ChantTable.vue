@@ -34,7 +34,7 @@
         <el-text truncated>{{ translate(item) }}</el-text>
         <!-- </el-tooltip> -->
       </template>
-      <template #="{ row, $index }">
+      <template #default="{ row, $index }">
         <div class="content-box">
           <!-- prop slot -->
           <slot
