@@ -36,7 +36,7 @@
   <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
     <chant-column-operate :width="100">
-      <template #="{ row }">
+      <template #default="{ row }">
         <!-- 编辑 -->
         <chant-button link @click="lister.edit(state, row)">
           {{ tg('button.edit') }}

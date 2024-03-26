@@ -5,13 +5,15 @@ import { useRoute } from 'vue-router'
 import { shiki } from '@/api'
 import type { ListState as State, FormType } from '@/chant'
 import { ApiCode } from '@/enum'
+import lang from '@/lang/router'
 import { element } from '@/plugs'
 import { useChaoser } from '@/use'
 import { bus } from '@/utils'
 
 function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()
-  const { t } = useI18n({ useScope: 'global' })
+  const { t } = useI18n({ messages: lang })
+  const { t: tg } = useI18n({ useScope: 'global' })
   const route = useRoute()
   const state = {
     editType: '' as 'add' | 'edit',
@@ -53,7 +55,7 @@ function useLister(config?: { type: FormType }) {
     const confirmTip = config.confirmTip
     const params = getListParams(state)
     const count = params.allFlag ? state.total : state.selections.length
-    const title = `总共${count}条记录`
+    const title = tg('tips.totalRecords', [count])
     operate(path, state, { confirmTip, params, title })
   }
   // 绑定列表实例
@@ -143,7 +145,7 @@ function useLister(config?: { type: FormType }) {
       Object.assign(query, state.pages)
     }
     state.loading = true
-    const { data } = await shiki?.get(path, query)
+    const { data } = await shiki.get(path, query)
     // 返回数据
     if (config?.custom) {
       state.loading = false
@@ -196,23 +198,24 @@ function useLister(config?: { type: FormType }) {
   // 删除
   function remove(path: string, state: State, params: any) {
     operate(path, state, {
-      confirmTip: '确认删除?',
+      confirmTip: tg('tips.confirmDelete'),
       params
     })
   }
   // 批量删除
   function removes(path: string, state: State) {
-    batch(path, state, { confirmTip: '确认批量删除?' })
+    batch(path, state, { confirmTip: tg('tips.confirmBatchDelete') })
   }
   // 标题
   function title(state: State) {
     const meta = chaoser.getMetaByPath(route.path) as any
     const map = {
-      add: '新增',
-      edit: '编辑'
+      add: tg('button.add'),
+      edit: tg('button.edit')
     }
     const text = map[state.editType]
-    return meta?.title?.replace('列表', text) || 'xxx'
+    console.log(t(meta?.title))
+    return t(meta?.title)?.replace(tg('app.list'), text) || ''
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected?: boolean) {
@@ -223,7 +226,7 @@ function useLister(config?: { type: FormType }) {
   function _isRouterQueryModify(state: State) {
     let status = false
     const query = route.query
-    for (let item in query) {
+    for (const item in query) {
       if (query[item] !== state.query[item]) {
         status = true
       }

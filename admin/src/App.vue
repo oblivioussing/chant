@@ -3,24 +3,29 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import lang from '@/lang/app'
 import { useAppStore } from '@/store'
 
 // use
 const appStore = useAppStore()
 // i18n
-const { t: tg } = useI18n({ useScope: 'global' })
-// subscribe
-appStore.$subscribe((_, _state) => {
+const { t } = useI18n({ messages: lang })
+// onMounted
+onMounted(() => {
   // 设置标题
   setTitle()
 })
-// init
-setTitle() // 设置标题
+// subscribe
+appStore.$subscribe(() => {
+  // 设置标题
+  setTitle()
+})
 // 设置标题
 function setTitle() {
-  document.title = tg('app.projectName')
+  document.title = t('projectName')
 }
 </script>
 

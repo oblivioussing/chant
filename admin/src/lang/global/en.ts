@@ -1,11 +1,11 @@
 export default {
   app: {
-    projectName: 'nest of ghost',
     quit: 'quit',
     close: 'close',
     closeAll: 'close',
     closeOther: 'close other',
-    version: 'version'
+    version: 'version',
+    list:'list'
   },
   button: {
     add: 'add',
@@ -18,9 +18,12 @@ export default {
   tips: {
     copyFail: 'copy fail',
     copySuccess: 'copy success',
-    enter: 'please enter ',
-    required: 'can not be null',
-    select: 'please select '
+    enter: 'Please enter',
+    required: ' can not be null',
+    select: 'Please select ',
+    totalRecords:'A total of {0} records',
+    confirmDelete:'Confirm delete?',
+    confirmBatchDelete:'Confirm batch delete?'
   },
   unit: {
     minute: 'minute'

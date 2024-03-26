@@ -10,83 +10,86 @@
       @keyup.enter="onSubmit('query')">
       <slot></slot>
       <!-- 查询条件 -->
-      <el-form-item
-        v-if="vModel"
-        v-for="item in availableColumns"
-        :key="item.prop"
-        :label="translate(item) + ':'"
-        :prop="item.prop"
-        :required="item.searchRequired"
-        :rules="[{ required: item.searchRequired, message: '' }]">
-        <!-- slot -->
-        <slot v-if="item.slotSearch" :name="item.prop" :row="item"></slot>
-        <!-- input -->
-        <el-input
-          v-else-if="!item.type || item.type === 'input'"
-          v-model="vModel.query[item.like ? item.prop + 'Like' : item.prop]"
-          :clearable="item.clearable !== false"
-          :placeholder="translate(item, 'enter')">
-          <template v-if="item.prepend" #prepend>
-            {{ tg(item.prepend) }}
-          </template>
-          <template v-else-if="item.append" #append>
-            {{ tg(item.append) }}
-          </template>
-        </el-input>
-        <!-- input-number -->
-        <el-input-number
-          v-else-if="item.type === 'input-number'"
-          v-model="vModel.query[item.prop]"
-          controls-position="right"
-          :placeholder="translate(item, 'enter')">
-        </el-input-number>
-        <!-- select -->
-        <chant-select
-          v-else-if="item.type === 'select'"
-          v-model="vModel.query[item.prop]"
-          :clearable="item.clearable !== false"
-          :data="props.dict?.[item.prop]"
-          :placeholder="translate(item, 'select')"
-          @change="emits('query')">
-        </chant-select>
-        <!-- date-picker -->
-        <template v-else-if="item.type === 'date-picker'">
-          <el-date-picker
-            v-if="isDateRange(item)"
-            v-model="state.range[item.prop]"
+      <template v-for="item in availableColumns">
+        <el-form-item
+          v-if="vModel"
+          :key="item.prop"
+          :label="translate(item) + ':'"
+          :prop="item.prop"
+          :required="item.searchRequired"
+          :rules="[{ required: item.searchRequired, message: '' }]">
+          <!-- slot -->
+          <slot v-if="item.slotSearch" :name="item.prop" :row="item"></slot>
+          <!-- input -->
+          <el-input
+            v-else-if="!item.type || item.type === 'input'"
+            v-model="vModel.query[item.like ? item.prop + 'Like' : item.prop]"
             :clearable="item.clearable !== false"
-            :placeholder="translate(item, 'select')"
-            :start-placeholder="translate(item)"
-            :end-placeholder="translate(item)"
-            :type="item.searchDatepickerType || item.datepickerType"
-            :value-format="item.valueFormat"
-            @change="onDateRangeChange(item)">
-          </el-date-picker>
-          <el-date-picker
-            v-else
+            :placeholder="translate(item, 'enter')">
+            <template v-if="item.prepend" #prepend>
+              {{ tg(item.prepend) }}
+            </template>
+            <template v-else-if="item.append" #append>
+              {{ tg(item.append) }}
+            </template>
+          </el-input>
+          <!-- input-number -->
+          <el-input-number
+            v-else-if="item.type === 'input-number'"
+            v-model="vModel.query[item.prop]"
+            controls-position="right"
+            :placeholder="translate(item, 'enter')">
+          </el-input-number>
+          <!-- select -->
+          <chant-select
+            v-else-if="item.type === 'select'"
             v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
+            :data="props.dict?.[item.prop]"
             :placeholder="translate(item, 'select')"
-            :type="item.searchDatepickerType || item.datepickerType"
-            :value-format="item.valueFormat"
             @change="emits('query')">
-          </el-date-picker>
-        </template>
-        <!-- input-number-range -->
-        <div v-else-if="item.type === 'input-number-range'" class="input-range">
-          <el-input-number
-            v-model="vModel.query[rangeField(item, 'start')]"
-            controls-position="right"
-            :placeholder="translate(item)">
-          </el-input-number>
-          <div class="connector">~</div>
-          <el-input-number
-            v-model="vModel.query[rangeField(item, 'end')]"
-            controls-position="right"
-            :placeholder="translate(item)">
-          </el-input-number>
-        </div>
-      </el-form-item>
+          </chant-select>
+          <!-- date-picker -->
+          <template v-else-if="item.type === 'date-picker'">
+            <el-date-picker
+              v-if="isDateRange(item)"
+              v-model="state.range[item.prop]"
+              :clearable="item.clearable !== false"
+              :placeholder="translate(item, 'select')"
+              :start-placeholder="translate(item)"
+              :end-placeholder="translate(item)"
+              :type="item.searchDatepickerType || item.datepickerType"
+              :value-format="item.valueFormat"
+              @change="onDateRangeChange(item)">
+            </el-date-picker>
+            <el-date-picker
+              v-else
+              v-model="vModel.query[item.prop]"
+              :clearable="item.clearable !== false"
+              :placeholder="translate(item, 'select')"
+              :type="item.searchDatepickerType || item.datepickerType"
+              :value-format="item.valueFormat"
+              @change="emits('query')">
+            </el-date-picker>
+          </template>
+          <!-- input-number-range -->
+          <div
+            v-else-if="item.type === 'input-number-range'"
+            class="input-range">
+            <el-input-number
+              v-model="vModel.query[rangeField(item, 'start')]"
+              controls-position="right"
+              :placeholder="translate(item)">
+            </el-input-number>
+            <div class="connector">~</div>
+            <el-input-number
+              v-model="vModel.query[rangeField(item, 'end')]"
+              controls-position="right"
+              :placeholder="translate(item)">
+            </el-input-number>
+          </div>
+        </el-form-item>
+      </template>
     </el-form>
     <!-- 展开搜索 -->
     <chant-button
@@ -126,12 +129,13 @@ import { useI18n } from 'vue-i18n'
 import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
 import { useThrottleFn } from '@vueuse/core'
 import {
+  base,
   formUtils,
   type Lang,
   type ListColumn as Column,
   type ListState
 } from '@/chant'
-import lang from '@/lang/chant'
+import chantLang from '@/lang/chant'
 
 // props
 const props = defineProps<{
@@ -147,8 +151,8 @@ const emits = defineEmits(['query', 'reset'])
 // model
 const vModel = defineModel<ListState>()
 // use
-const en = { ...props.lang?.en, ...lang.en }
-const zh = { ...props.lang?.zh, ...lang.zh }
+const en = { ...props.lang?.en, ...chantLang.en }
+const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
 const resizeThrottle = useThrottleFn(containerAuto, 1000)
@@ -163,7 +167,7 @@ const state = reactive({
 // computed
 const availableColumns = computed(() => {
   const columns = vModel.value?.columns
-  const searchOrder = props.searchOrder?.reverse()
+  const searchOrder = base.clone(props.searchOrder)?.reverse()
   return columns?.reduce((acc: Column[], cur: Column) => {
     const status = !cur.hide && (cur.search || cur.onlySearch || cur.slotSearch)
     if (!status) {
@@ -278,19 +282,19 @@ async function onSubmit(type: 'query' | 'reset') {
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
   const label = column.label || column.prop
-  const pattern = new RegExp('[\u4E00-\u9FA5]+')
   const map = {
     enter: tg('tips.enter'),
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  if (pattern.test(label)) {
+  if (label.indexOf('global.') >= 0) {
+    return tips + tg(label.replace(/global\./, ''))
+  }
+  if (props.lang) {
+    return tips + t(label)
+  } else {
     return tips + label
   }
-  if (label.indexOf('.') >= 0) {
-    return tips + tg(label)
-  }
-  return tips + t(label)
 }
 </script>
 

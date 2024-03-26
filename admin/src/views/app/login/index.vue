@@ -4,33 +4,36 @@
       <img class="abyss-img" src="./img/abyss.jpg" />
     </div>
     <div class="container">
-      <div class="title">{{ tg('app.project') }}</div>
+      <div class="title">{{ t('projectName') }}</div>
       <el-form class="form" :model="state.form" ref="formRef" :rules="rules">
+        <!-- 登录名 -->
         <el-form-item prop="loginName">
           <el-input
             v-model="state.form.loginName"
-            placeholder="请输入登录名"
+            :placeholder="t('loginName')"
             :prefix-icon="User"
             size="large">
           </el-input>
         </el-form-item>
+        <!-- 密码 -->
         <el-form-item prop="password">
           <el-input
             v-model="state.form.password"
-            placeholder="请输入登录密码"
+            :placeholder="t('password')"
             :prefix-icon="Lock"
             size="large"
             type="password">
           </el-input>
         </el-form-item>
       </el-form>
+      <!-- 登录 -->
       <el-button
         class="login-btn"
         :loading="state.loading"
         size="large"
         type="primary"
         @click="onLogin">
-        登录
+        {{ t('login') }}
       </el-button>
     </div>
   </div>
@@ -44,13 +47,14 @@ import { useI18n } from 'vue-i18n'
 import { Lock, User } from '@element-plus/icons-vue'
 import { shiki } from '@/api'
 import { StorageEnum } from '@/enum'
+import lang from '@/lang/app'
 import { useUserStore } from '@/store'
 import { storage } from '@/utils'
 
 // use
 const router = useRouter()
 const userStore = useUserStore()
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ messages: lang })
 // ref
 const formRef = ref<FormInstance>()
 // state
@@ -62,8 +66,8 @@ const state = reactive({
   loading: false
 })
 const rules = reactive({
-  loginName: [{ required: true, message: '登录名不能为空' }],
-  password: [{ required: true, message: '密码不能为空' }]
+  loginName: [{ required: true, message: t('loginNameRequired') }],
+  password: [{ required: true, message: t('passwordRequired') }]
 })
 // 登录
 async function onLogin() {

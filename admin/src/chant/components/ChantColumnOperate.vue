@@ -1,10 +1,6 @@
 <template>
-  <el-table-column
-    :align="'center'"
-    fixed="right"
-    :label="t('operate')"
-    :width="props.width">
-    <template #="{ row, $index }">
+  <el-table-column :align="'center'" fixed="right" :label="t('operate')" :width="props.width">
+    <template #default="{ row, $index }">
       <div class="column-operate">
         <slot :index="$index" :row="row"></slot>
       </div>

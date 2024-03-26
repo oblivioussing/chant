@@ -4,7 +4,7 @@
       <!-- logo -->
       <img src="/image/logo.png" class="logo-ic" />
       <!-- 项目名 -->
-      <div>{{ tg('app.projectName') }}</div>
+      <div>{{ t('projectName') }}</div>
       <!-- 折叠/展开 -->
       <el-icon class="pointer" @click="onCollapse">
         <Expand v-if="state.isCollapse" />
@@ -31,8 +31,7 @@
       <el-dropdown @command="onQuit">
         <div class="dropdown">
           <el-avatar :src="avatarUrl" :size="25">
-            <img
-              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
           </el-avatar>
           <div class="login-name-box">
             <div>{{ user.loginName }}</div>
@@ -57,6 +56,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { CaretBottom, Expand, Fold } from '@element-plus/icons-vue'
 import { LangEnum, StorageEnum } from '@/enum'
+import lang from '@/lang/app'
 import { vuei18n } from '@/plugs'
 import { useAppStore, useUserStore } from '@/store'
 import { storage } from '@/utils'
@@ -64,6 +64,7 @@ import { storage } from '@/utils'
 // emits
 const emits = defineEmits(['update:modelValue'])
 // i18n
+const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
 // router
 const router = useRouter()
@@ -73,7 +74,6 @@ const userStore = useUserStore()
 const user = userStore.state.user
 // state
 const state = reactive({
-  orgs: [] as any[],
   isCollapse: false
 })
 // computed
@@ -94,9 +94,9 @@ function onCollapse() {
 }
 // 设置语言
 function onLang(lang: LangEnum) {
+  vuei18n.global.locale.value = lang
   storage.setLocal(StorageEnum.Lang, lang)
   appStore.state.lang = lang
-  vuei18n.global.locale.value = lang
 }
 // 退出
 async function onQuit() {

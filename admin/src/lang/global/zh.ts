@@ -1,11 +1,11 @@
 export default {
   app: {
-    projectName: '野鬼的窝',
     quit: '退出',
     close: '关闭',
     closeAll: '关闭所有',
     closeOther: '关闭其他',
-    version: '版本号'
+    version: '版本号',
+    list:'列表'
   },
   button: {
     add: '新增',
@@ -20,7 +20,10 @@ export default {
     copySuccess: '复制成功',
     enter: '请输入',
     required: '不能为空',
-    select: '请选择'
+    select: '请选择',
+    totalRecords:'总共{0}条记录',
+    confirmDelete:'确认删除?',
+    confirmBatchDelete:'确认批量删除?'
   },
   unit: {
     minute: '分钟'

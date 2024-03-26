@@ -133,6 +133,7 @@
               :placeholder="translate(item, 'select')">
               <el-radio
                 v-for="(val, key) in props.dict?.[item.prop]"
+                :key="key"
                 :label="key">
                 {{ val }}
               </el-radio>
@@ -290,16 +291,16 @@ function onDateRangeChange(column: Column) {
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
   const label = column.label || column.prop || column.title!
-  const pattern = new RegExp('[\u4E00-\u9FA5]+')
   const map = {
     enter: tg('tips.enter'),
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  if (pattern.test(label)) {
+  if (props.lang) {
+    return tips + t(label)
+  } else {
     return tips + label
   }
-  return tips + t(label)
 }
 </script>
 
