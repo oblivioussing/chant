@@ -1,4 +1,8 @@
 export default {
+  dict: {
+    normal: '正常',
+    void: '作废'
+  },
   amount: '售价(元)',
   userName: '销售员',
   commission: '提成',

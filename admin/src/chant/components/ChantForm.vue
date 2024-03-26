@@ -47,6 +47,7 @@
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
               :data="props?.dict?.[item.prop]"
+              :lang="lang"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
               @change="onChange(item)">

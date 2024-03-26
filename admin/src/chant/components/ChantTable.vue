@@ -60,6 +60,7 @@
               v-model="row[item.prop]"
               clearable
               :data="props.dict?.[item.prop]"
+              :lang="lang"
               :placeholder="translate(item)">
             </chant-select>
             <!-- input-number -->
@@ -278,10 +279,16 @@ function valueFmt(column: Column, value: any) {
 // 字典格式化
 function dictFmt(prop: string, value: any) {
   const dict = props.dict?.[prop]
+  let val = ''
   if (dict instanceof Map) {
-    return dict.get(value) || '-'
+    val = dict.get(value)
   } else {
-    return dict?.[value] || '-'
+    val = dict?.[value]
+  }
+  if (val?.indexOf('dict.') >= 0) {
+    return t(val)
+  } else {
+    return val || '-'
   }
 }
 // CheckBox是否可勾选

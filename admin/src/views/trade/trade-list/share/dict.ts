@@ -6,7 +6,7 @@ export default {
   ]),
   // 状态
   status: {
-    1: '正常',
-    2: '作废'
+    1: 'dict.normal', // 正常
+    2: 'dict.void' // 作废
   }
 }

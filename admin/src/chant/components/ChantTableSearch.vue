@@ -46,6 +46,7 @@
             v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
             :data="props.dict?.[item.prop]"
+            :lang="lang"
             :placeholder="translate(item, 'select')"
             @change="emits('query')">
           </chant-select>
