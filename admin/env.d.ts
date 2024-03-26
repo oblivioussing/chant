@@ -5,8 +5,6 @@ interface ImportMetaEnv {
   readonly VITE_STAGE: 'dev' | 'test' | 'prod'
 }
 
-declare global {
-  interface Window {
-    __APP_VERSION__: string
-  }
+interface Window {
+  __APP_VERSION__: string
 }

@@ -61,7 +61,7 @@ class Shiki {
     this.requestInterceptors.forEach((callback) => {
       requestConfig = callback(requestConfig)
     })
-    let response = await this.ryougi.request(requestConfig)
+    const response = await this.ryougi.request(requestConfig)
     let result = {} as Result
     if (response?.status !== 200) {
       this.message('error', response?.statusText, config)
@@ -82,11 +82,7 @@ class Shiki {
     return result
   }
   // 消息提示
-  private message(
-    type: 'success' | 'error',
-    message?: string,
-    config?: Config
-  ) {
+  private message(type: 'success' | 'error', message?: string, config?: Config) {
     const successStatus = type === 'success' && config?.successTip
     const errorStatus = type === 'error' && config?.failTip
     if (successStatus || errorStatus) {

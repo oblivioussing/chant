@@ -6,7 +6,8 @@
       :default-active="state.path"
       ref="menuRef"
       unique-opened
-      @open="onMenuOpen">
+      @open="onMenuOpen"
+    >
       <el-sub-menu v-for="item in menus" :key="item.path" :index="item.path">
         <template #title>
           <div class="menu-item">
@@ -28,7 +29,8 @@
             v-for="child in item.children"
             :key="`${child.path}`"
             :index="`${item.path}/${child.path}`"
-            @click="onTab(`${item.path}/${child.path}`)">
+            @click="onTab(`${item.path}/${child.path}`)"
+          >
             <el-text truncated>{{ title(child.meta) }}</el-text>
           </el-menu-item>
         </el-menu-item-group>

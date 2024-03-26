@@ -4,11 +4,7 @@ export default (): Plugin => {
   return {
     name: 'vite:setup-name',
     transform(src: string, id: string) {
-      if (
-        /\.vue$/.test(id) &&
-        /\/views\//.test(id) &&
-        !/\/components\//.test(id)
-      ) {
+      if (/\.vue$/.test(id) && /\/views\//.test(id) && !/\/components\//.test(id)) {
         const regex = /\/views(\/[^.]+)\.vue$/
         let name = id.match(regex)?.[1]
         name = name?.replace(/\/index/, '')
@@ -17,7 +13,7 @@ export default (): Plugin => {
           export default defineComponent({
             name: '${name}',
           })
-        <\/script>`
+        </script>`
         return { code: script + src }
       }
     }
