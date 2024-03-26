@@ -13,6 +13,7 @@ import ChantTable from './ChantTable.vue'
 import ChantTableOperate from './chant-table-operate/Index.vue'
 import ChantTablePicker from './ChantTablePicker.vue'
 import ChantTableSearch from './ChantTableSearch.vue'
+import ChantTooltip from './ChantTooltip.vue'
 import ChantUpload from './ChantUpload.vue'
 
 import '@vue/runtime-core'
@@ -34,6 +35,7 @@ declare module '@vue/runtime-core' {
     ChantTableOperate: typeof ChantTableOperate
     ChantTablePicker: typeof ChantTablePicker
     ChantTableSearch: typeof ChantTableSearch
+    ChantTooltip: typeof ChantTooltip
     ChantUpload: typeof ChantUpload
   }
 }

@@ -36,6 +36,7 @@ const ChantTablePicker = defineAsyncComponent(
 const ChantTableSearch = defineAsyncComponent(
   () => import('./ChantTableSearch.vue')
 )
+const ChantTooltip = defineAsyncComponent(() => import('./ChantTooltip.vue'))
 const ChantUpload = defineAsyncComponent(() => import('./ChantUpload.vue'))
 
 function components(app: App<Element>) {
@@ -50,10 +51,11 @@ function components(app: App<Element>) {
   app.component('ChantPickerButton', ChantPickerButton)
   app.component('ChantSelect', ChantSelect)
   app.component('ChantSelectedTable', ChantSelectedTable)
-  app.component('ChantTablePicker', ChantTablePicker)
   app.component('ChantTable', ChantTable)
   app.component('ChantTableOperate', ChantTableOperate)
+  app.component('ChantTablePicker', ChantTablePicker)
   app.component('ChantTableSearch', ChantTableSearch)
+  app.component('ChantTooltip', ChantTooltip)
   app.component('ChantUpload', ChantUpload)
 }
 

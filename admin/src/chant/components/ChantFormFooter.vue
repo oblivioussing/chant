@@ -2,7 +2,10 @@
   <div class="chant-form-footer" :class="{ toolbar: vModel.type !== 'dialog' }">
     <div>
       <!-- 继续新增 -->
-      <el-checkbox v-model="vModel.continueAdd" class="continue">
+      <el-checkbox
+        v-if="vModel.pageType === 'add'"
+        v-model="vModel.continueAdd"
+        class="continue">
         {{ t('continueAdd') }}
       </el-checkbox>
     </div>
@@ -22,6 +25,7 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -32,6 +36,7 @@ import lang from '@/lang/chant'
 type ModelValue = {
   continueAdd: boolean
   loading: boolean
+  pageType: 'add' | 'edit'
   type: FormType
 }
 // emits
@@ -50,6 +55,7 @@ function onClose() {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .chant-form-footer {
   display: flex;

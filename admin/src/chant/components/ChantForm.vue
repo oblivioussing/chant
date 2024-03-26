@@ -1,9 +1,6 @@
 <template>
   <div class="chant-form">
-    <el-form
-      :label-width="props.labelWidth || '80px'"
-      :model="vModel?.form"
-      ref="formRef">
+    <el-form :label-width="labelWidthCpd" :model="vModel?.form" ref="formRef">
       <template v-for="item in availableColumns" :key="item.prop">
         <!-- divider -->
         <el-divider v-if="item.title" content-position="left">
@@ -14,10 +11,11 @@
           v-else
           class="chant-form-item"
           :class="{ 'whole-box': isWhole(item) }">
-          <el-form-item
-            :label="translate(item) + ':'"
-            :prop="item.prop"
-            :rules="rules(item)">
+          <el-form-item :prop="item.prop" :rules="rules(item)">
+            <!-- label -->
+            <template #label>
+              <chant-tooltip :text="`${translate(item)}:`"></chant-tooltip>
+            </template>
             <!-- slot -->
             <slot
               v-if="item.slotForm"
@@ -149,7 +147,13 @@
 import type { FormInstance } from 'element-plus'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { formUtils, type FormColumn as Column, type Lang } from '@/chant'
+import {
+  formUtils,
+  useAppStore,
+  LangEnum,
+  type FormColumn as Column,
+  type Lang
+} from '@/chant'
 
 // props
 const props = defineProps<{
@@ -166,6 +170,7 @@ const vModel = defineModel<{
   pageType?: 'add' | 'edit'
 }>()
 // use
+const appStore = useAppStore()
 const { t } = useI18n({ messages: props.lang })
 const { t: tg } = useI18n({ useScope: 'global' })
 // ref
@@ -188,6 +193,17 @@ const availableColumns = computed(() => {
     }
     return true
   })
+})
+const labelWidthCpd = computed(() => {
+  if (props.labelWidth) {
+    return props.labelWidth
+  }
+  const lang = appStore.state.lang
+  const map = new Map([
+    [LangEnum.En, '100px'],
+    [LangEnum.Zh, '80px']
+  ])
+  return map.get(lang)
 })
 // onMounted
 onMounted(() => {
@@ -316,6 +332,9 @@ function translate(column: Column, type?: 'enter' | 'select') {
   .el-form {
     display: flex;
     flex-wrap: wrap;
+    .el-form-item__label {
+      padding-left: 5px;
+    }
     .el-input-number {
       width: 140px;
     }

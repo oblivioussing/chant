@@ -30,9 +30,7 @@
       show-overflow-tooltip
       :sortable="item.sortable">
       <template #header>
-        <!-- <el-tooltip :content="translate(item)" effect="dark" placement="top"> -->
-        <el-text truncated>{{ translate(item) }}</el-text>
-        <!-- </el-tooltip> -->
+        <chant-tooltip :text="translate(item)"></chant-tooltip>
       </template>
       <template #default="{ row, $index }">
         <div class="content-box">
