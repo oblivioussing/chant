@@ -1,6 +1,6 @@
 <template>
   <el-tooltip :content="props.text" :disabled="isDisabled" placement="top">
-    <el-text ref="textRef" truncated>{{ props.text }}</el-text>
+    <el-text v-bind="$attrs" ref="textRef" truncated>{{ props.text }}</el-text>
   </el-tooltip>
 </template>
 

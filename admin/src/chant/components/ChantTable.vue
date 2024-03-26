@@ -30,7 +30,10 @@
       show-overflow-tooltip
       :sortable="item.sortable">
       <template #header>
-        <chant-tooltip :text="translate(item)"></chant-tooltip>
+        <chant-tooltip
+          style="color: var(--el-table-header-text-color)"
+          :text="translate(item)">
+        </chant-tooltip>
       </template>
       <template #default="{ row, $index }">
         <div class="content-box">
