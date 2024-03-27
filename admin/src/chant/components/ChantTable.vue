@@ -360,6 +360,7 @@ function translate(column: Column) {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
   .table-icon-copy {
     color: var(--main-color);

@@ -34,17 +34,10 @@
   <!-- table -->
   <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
-    <chant-column-operate :width="100">
-      <template #default="{ row }">
-        <!-- 编辑 -->
-        <chant-button link @click="lister.edit(state, row)">
-          {{ tg('button.edit') }}
-        </chant-button>
-        <!-- 删除 -->
-        <chant-button link type="danger" @click="onDelete(row)">
-          {{ tg('button.delete') }}
-        </chant-button>
-      </template>
+    <chant-column-operate
+      :options="['edit', 'delete']"
+      @edit="lister.edit(state, $event)"
+      @delete="onDelete($event)">
     </chant-column-operate>
   </chant-table>
   <!-- pagination -->
@@ -75,7 +68,6 @@ import AddEdit from './components/AddEdit.vue'
 
 // use
 const { t } = useI18n({ messages: lang })
-const { t: tg } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // state
 const state = reactive({
