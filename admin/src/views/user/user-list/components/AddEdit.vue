@@ -1,8 +1,9 @@
 <template>
   <chant-form
     v-model="state"
-    :dict="dict"
     :columns="columns()"
+    :dict="dict"
+    :lang="lang"
     @instance="former.bindInstance">
   </chant-form>
   <chant-form-footer
@@ -15,6 +16,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import type { FormProps, FormEmits } from '@/chant'
+import lang from '@/lang/user'
 import { useFormer } from '@/use'
 import { columns, dict } from '../share'
 

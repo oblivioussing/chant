@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import lang from '@/lang/trade'
 import type { FormProps, FormEmits } from '@/chant'
+import lang from '@/lang/trade'
 import { useFormer } from '@/use'
 import { columns, dict } from '../share'
 
