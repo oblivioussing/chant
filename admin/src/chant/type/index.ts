@@ -80,15 +80,15 @@ export type Lang = {
 }
 
 export type FormState = {
-  copyFlag?: 0 | 1
-  continueAdd?: boolean
-  form: any
-  formLoading: boolean
-  loading: boolean
-  pageType?: 'add' | 'edit'
-  query: any
-  selection?: any
-  type: FormType
+  copyFlag?: 0 | 1 // 是否复制新增
+  continueAdd?: boolean // 是否继续新增
+  form: any // 表单数据
+  formLoading: boolean // 表单加载loading
+  loading: boolean // 保存loading
+  pageType?: 'add' | 'edit' // 页面为新增还是编辑
+  query: any // 查询条件
+  selection?: any // 从列表带过来的那行数据
+  type: FormType // 页面类型
 }
 
 export type FormType = 'dialog' | 'inline' | 'page'

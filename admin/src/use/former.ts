@@ -56,7 +56,7 @@ function useFormer(config: FormProps) {
   // 获取数据
   async function getData(path: string, state: State) {
     state.formLoading = true
-    const { data } = await shiki?.get(path, state.query)
+    const { data } = await shiki.get(path, state.query)
     state.formLoading = false
     state.form = data || {}
     if (state.copyFlag) {
@@ -72,7 +72,7 @@ function useFormer(config: FormProps) {
     }
     const params = row?.params || state.form
     state.loading = true
-    const { code } = await shiki?.post(path, params)
+    const { code } = await shiki.post(path, params)
     state.loading = false
     if (code !== ApiCode.Success) {
       return false
@@ -111,7 +111,7 @@ function useFormer(config: FormProps) {
   function _isRouterQueryModify(state: State) {
     let status = false
     const query = route.query
-    for (let item in query) {
+    for (const item in query) {
       if (query[item] !== state.query[item]) {
         status = true
         break
