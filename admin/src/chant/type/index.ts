@@ -87,11 +87,28 @@ export type FormState = {
   loading: boolean // 保存loading
   pageType?: 'add' | 'edit' // 页面为新增还是编辑
   query: any // 查询条件
-  selection?: any // 从列表带过来的那行数据
   type: FormType // 页面类型
 }
 
+export type FormProps = {
+  copyFlag?: 0 | 1
+  pageType: 'add' | 'edit'
+  selection?: { id: string }
+  type?: FormType
+}
+
 export type FormType = 'dialog' | 'inline' | 'page'
+
+export type FormEmits = {
+  close: []
+  update: []
+}
+
+export type ListParams = {
+  idList?: string[]
+  allFlag?: number
+  searchForm?: Record<string, any>
+}
 
 export type ListState = {
   allFlag?: 0 | 1 // 全选

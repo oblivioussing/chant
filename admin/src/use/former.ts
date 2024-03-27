@@ -2,9 +2,8 @@ import type { FormInstance } from 'element-plus'
 import { getCurrentInstance, onActivated } from 'vue'
 import { useRoute } from 'vue-router'
 import shiki from '@/api/shiki'
-import type { FormState as State, FormType } from '@/chant'
+import type { FormProps, FormState as State } from '@/chant'
 import { ApiCode } from '@/enum'
-import type { FormProps } from '@/type'
 import { bus, core } from '@/utils'
 
 function useFormer(config: FormProps) {
@@ -20,7 +19,6 @@ function useFormer(config: FormProps) {
     loading: false,
     pageType: config.pageType,
     query: {} as any,
-    selection: config.selection as { id: string },
     type: config.type || 'dialog'
   }
   // 绑定表单实例
@@ -49,7 +47,7 @@ function useFormer(config: FormProps) {
         }
       })
     } else {
-      state.query = { id: state.selection.id }
+      state.query = { id: config?.selection?.id }
     }
     callback(_hasGetDetail(state))
   }

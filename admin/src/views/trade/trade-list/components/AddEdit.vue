@@ -5,22 +5,6 @@
     :dict="dict"
     :lang="lang"
     @instance="former.bindInstance">
-    <!-- 销售员 -->
-    <template #userName>
-      <user-picker
-        v-model:id="state.form.userId"
-        v-model:text="state.form.userName"
-        :title="t('userName')">
-      </user-picker>
-    </template>
-    <!-- 所属人 -->
-    <template #belongName>
-      <user-picker
-        v-model:id="state.form.belongId"
-        v-model:text="state.form.belongName"
-        :title="t('belongName')">
-      </user-picker>
-    </template>
   </chant-form>
   <chant-form-footer
     v-model="state"
@@ -31,9 +15,8 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useI18n } from 'vue-i18n'
 import lang from '@/lang/trade'
-import type { FormProps, FormEmits } from '@/type'
+import type { FormProps, FormEmits } from '@/chant'
 import { useFormer } from '@/use'
 import { columns, dict } from '../share'
 
@@ -43,7 +26,6 @@ const props = defineProps<FormProps>()
 const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
-const { t } = useI18n({ messages: lang })
 // state
 const state = reactive({
   ...former.state
