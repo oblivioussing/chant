@@ -65,7 +65,7 @@ function useLister(config?: { type: FormType }) {
   // 复制新增
   function copy(state: State, row: any) {
     if (state.formType === 'page') {
-      _jump('/edit', { id: row.id, copyFlag: 1 })
+      _jump('/add', { id: row.id, copyFlag: 1 })
     } else {
       state.copyFlag = 1
       state.selection = row
@@ -209,6 +209,9 @@ function useLister(config?: { type: FormType }) {
   // 标题
   function title(state: State) {
     const meta = chaoser.getMetaByPath(route.path) as any
+    if (!meta?.title) {
+      return ''
+    }
     const pageText = tg(`router.${meta?.title}`)?.replace(tg('app.list'), '')
     const map = {
       add: tg('button.add'),
