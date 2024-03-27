@@ -134,9 +134,16 @@
                 v-for="(val, key) in props.dict?.[item.prop]"
                 :key="key"
                 :label="key">
-                {{ val }}
+                {{ dictTranslate(val) }}
               </el-radio>
             </el-radio-group>
+            <!-- tips -->
+            <el-tooltip
+              v-if="item.tips"
+              :content="t(item.tips)"
+              placement="top">
+              <icon-font class="icon-query" icon="query"></icon-font>
+            </el-tooltip>
           </el-form-item>
         </div>
       </template>
@@ -319,6 +326,10 @@ function translate(column: Column, type?: 'enter' | 'select') {
     return tips + label
   }
 }
+// 字典翻译
+function dictTranslate(label: string) {
+  return label.indexOf('dict.') >= 0 ? t(label) : label
+}
 </script>
 
 <style lang="scss">
@@ -336,14 +347,26 @@ function translate(column: Column, type?: 'enter' | 'select') {
     .el-form-item__label {
       padding-left: 5px;
     }
+    .el-form-item__content {
+      display: flex;
+      align-items: center;
+    }
     .el-input-number {
       width: 140px;
     }
     .el-select {
-      width: 100%;
+      flex: 1;
     }
     .el-date-editor {
-      width: 100%;
+      flex: 1;
+    }
+    .chant-picker-input {
+      flex: 1;
+    }
+    .icon-query {
+      color: var(--el-text-color-regular);
+      font-size: 16px;
+      margin-left: 3px;
     }
   }
   // range

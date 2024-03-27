@@ -35,6 +35,7 @@ export type FormColumn = {
   selectMultiple?: boolean // select是否多选
   showCustom?: (row: any) => boolean // 自定义显示逻辑
   slotForm?: boolean // 表单slot
+  tips?: string // 提示
   title?: string // 标题
   uploadType?: UploadType // 文件上传类型,仅type为Upload时有效
 } & BaseColumn

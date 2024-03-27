@@ -15,15 +15,19 @@
       <!-- 语言 -->
       <el-dropdown @command="onLang">
         <div class="dropdown">
-          <div>{{ langLabel }}</div>
+          <div>{{ langDict.get(locale) }}</div>
           <el-icon class="arrow-down-icon">
             <caret-bottom />
           </el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item :command="LangEnum.Zh">中文</el-dropdown-item>
-            <el-dropdown-item :command="LangEnum.En">English</el-dropdown-item>
+            <el-dropdown-item
+              v-for="(item, index) in langDict"
+              :key="index"
+              :command="item[0]">
+              {{ item[1] }}
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -72,22 +76,19 @@ const router = useRouter()
 // store
 const appStore = useAppStore()
 const userStore = useUserStore()
-const user = userStore.state.user
+// var
+const langDict = new Map([
+  [LangEnum.En, 'English'],
+  [LangEnum.Zh, '中文']
+])
 // state
 const state = reactive({
   isCollapse: false
 })
 // computed
-const avatarUrl = computed(() => {
-  return ''
-})
-const langLabel = computed(() => {
-  const map = {
-    en: 'English',
-    zh: '中文'
-  }
-  return map[appStore.state.lang]
-})
+const avatarUrl = computed(() => '')
+const locale = computed(() => appStore.state.lang)
+const user = computed(() => userStore.state.user)
 // 切换
 function onCollapse() {
   state.isCollapse = !state.isCollapse
@@ -96,8 +97,8 @@ function onCollapse() {
 // 设置语言
 function onLang(lang: LangEnum) {
   vuei18n.global.locale.value = lang
-  storage.setLocal(StorageEnum.Lang, lang)
   appStore.state.lang = lang
+  storage.setLocal(StorageEnum.Lang, lang)
 }
 // 退出
 async function onQuit() {

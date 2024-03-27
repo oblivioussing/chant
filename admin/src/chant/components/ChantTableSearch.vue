@@ -288,9 +288,6 @@ function translate(column: Column, type?: 'enter' | 'select') {
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  if (label.indexOf('global.') >= 0) {
-    return tips + tg(label.replace(/global\./, ''))
-  }
   if (props.lang) {
     return tips + t(label)
   } else {
