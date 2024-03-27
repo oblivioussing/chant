@@ -70,8 +70,8 @@ export type ElementType =
   | 'upload'
 
 export type Lang = {
-  en: Record<string, string>
-  zh: Record<string, string>
+  en: Record<string, string | Record<string, string>>
+  zh: Record<string, string | Record<string, string>>
 }
 
 export type FormState = {
