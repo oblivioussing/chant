@@ -1,35 +1,28 @@
 <template>
-  <chant-base-picker
+  <!-- user-picker -->
+  <user-picker
+    v-if="props.type === 'user-picker'"
     v-model:id="id"
     v-model:text="text"
-    api-path="user/list"
-    :columns="columns()"
-    :dict="dict"
-    :lang="lang"
     :title="props.title"
-    @change="onChange">
-  </chant-base-picker>
+    @change="emits('change')">
+  </user-picker>
 </template>
 
 <script setup lang="ts">
-import lang from '@/lang/user'
-import { columns, dict } from '@/views/user/user-list/share'
+import { type CustomPicker } from '@/chant'
+import UserPicker from './UserPicker.vue'
 
 // props
 const props = defineProps<{
   title: string
+  type: CustomPicker
 }>()
 // emits
 const emits = defineEmits(['change'])
 // model
 const id = defineModel<string>('id')
 const text = defineModel<string>('text')
-// change
-function onChange(row: any) {
-  id.value = row.id
-  text.value = row.name
-  emits('change')
-}
 </script>
 
 <style scoped lang="scss"></style>

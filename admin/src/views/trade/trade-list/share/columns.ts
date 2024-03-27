@@ -10,10 +10,11 @@ export default () => {
     },
     {
       prop: 'userName', // 销售员
+      dynamicId: 'userId',
       required: true,
       search: true,
-      slotForm: true,
-      slotSearch: true
+      type: 'custom-picker',
+      customPicker: 'user-picker'
     },
     {
       prop: 'commission', // 提成
@@ -22,9 +23,10 @@ export default () => {
     },
     {
       prop: 'belongName', // 所属人
+      dynamicId: 'belongId',
       search: true,
-      slotForm: true,
-      slotSearch: true
+      type: 'custom-picker',
+      customPicker: 'user-picker'
     },
     {
       prop: 'status', // 状态 1-正常 2-作废

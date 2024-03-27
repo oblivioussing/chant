@@ -1,3 +1,4 @@
+import ChantBasePicker from './ChantBasePicker.vue'
 import ChantButton from './ChantButton.vue'
 import ChantColumnOperate from './ChantColumnOperate.vue'
 import ChantDialog from './ChantDialog.vue'
@@ -21,6 +22,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ChantBasePicker: typeof ChantBasePicker
     ChantButton: typeof ChantButton
     ChantColumnOperate: typeof ChantColumnOperate
     ChantDialog: typeof ChantDialog

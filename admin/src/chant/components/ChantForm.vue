@@ -137,6 +137,14 @@
                 {{ dictTranslate(val) }}
               </el-radio>
             </el-radio-group>
+            <!-- custom-picker -->
+            <dynamic-picker
+              v-if="item.type === 'custom-picker'"
+              v-model:id="vModel!.form[item.dynamicId || item.prop]"
+              v-model:text="vModel!.form[item.dynamicText || item.prop]"
+              :title="translate(item)"
+              :type="item.customPicker!">
+            </dynamic-picker>
             <!-- tips -->
             <el-tooltip
               v-if="item.tips"

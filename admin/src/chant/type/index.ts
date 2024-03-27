@@ -1,10 +1,25 @@
 import type { DatePickType, TagProps } from 'element-plus'
 
+export type CustomPicker = 'user-picker'
+
+export type ElementType =
+  | 'custom-picker'
+  | 'date-picker'
+  | 'input'
+  | 'input-number'
+  | 'input-number-range'
+  | 'radio'
+  | 'select'
+  | 'time-picker'
+  | 'upload'
+
 type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
+  customPicker?: CustomPicker // 自定义picker
   datepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
   dynamicId?: string // 动态id字段
+  dynamicText?: string // 动态text字段
   dynamicStart?: string // 范围选择start字段
   dynamicEnd?: string // 动态范围选择end字段
   hide?: boolean // 是否隐藏
@@ -59,16 +74,6 @@ export type ListColumn = {
 
 export type Column = BaseColumn & FormColumn & ListColumn
 
-export type ElementType =
-  | 'date-picker'
-  | 'input'
-  | 'input-number'
-  | 'input-number-range'
-  | 'radio'
-  | 'select'
-  | 'time-picker'
-  | 'upload'
-
 export type Lang = {
   en: Record<string, string | Record<string, string>>
   zh: Record<string, string | Record<string, string>>
@@ -110,6 +115,16 @@ export type ListState = {
 }
 
 export type PageType = 'list' | 'add' | 'edit'
+
+export type TablePickerProps = {
+  apiPath: string // 接口地址
+  columns: ListColumn[] // 列表字段
+  columnsSet?: ListColumn['prop'][] // 将columns中的字段显示在右侧
+  dict?: any // 字典
+  lang?: any // 国际化
+  title: string // 显示的标题
+  width?: string | number // 宽度
+}
 
 export type UploadType =
   | 'file-list'

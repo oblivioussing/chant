@@ -79,7 +79,7 @@
             {{ dictFmt(item.prop, row[item.prop]) }}
           </el-tag>
           <!-- text -->
-          <el-text v-else truncated>
+          <el-text v-else class="text-box" truncated>
             {{ valueFmt(item, row[item.prop]) }}
           </el-text>
           <!-- copy -->
@@ -361,12 +361,17 @@ function translate(column: Column) {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    .text-box {
+      padding: 0 10px;
+    }
   }
   .table-icon-copy {
     color: var(--main-color);
     cursor: pointer;
     font-size: 14px;
     margin-left: 5px;
+    position: absolute;
+    right: 10px;
   }
 }
 </style>

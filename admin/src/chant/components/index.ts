@@ -1,6 +1,9 @@
 import { defineAsyncComponent, type App } from 'vue'
 import './components.d'
 
+const ChantBasePicker = defineAsyncComponent(
+  () => import('./ChantBasePicker.vue')
+)
 const ChantButton = defineAsyncComponent(() => import('./ChantButton.vue'))
 const ChantColumnOperate = defineAsyncComponent(
   () => import('./ChantColumnOperate.vue')
@@ -41,6 +44,7 @@ const ChantTooltip = defineAsyncComponent(() => import('./ChantTooltip.vue'))
 const ChantUpload = defineAsyncComponent(() => import('./ChantUpload.vue'))
 
 function components(app: App<Element>) {
+  app.component('ChantBasePicker', ChantBasePicker)
   app.component('ChantButton', ChantButton)
   app.component('ChantColumnOperate', ChantColumnOperate)
   app.component('ChantDialog', ChantDialog)

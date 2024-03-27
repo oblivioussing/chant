@@ -59,19 +59,11 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { type ListColumn as Column } from '@/chant'
+import type { TablePickerProps } from '@/chant/type'
 import { useLister } from '@/use'
 
 // props
-const props = defineProps<{
-  apiPath: string
-  columns: Column[]
-  columnsSet?: Column['prop'][] // 将columns中的字段显示在右侧
-  dict?: any
-  lang?: any
-  title: string
-  width?: string | number
-}>()
+const props = defineProps<TablePickerProps>()
 // emits
 const emits = defineEmits(['change'])
 // model

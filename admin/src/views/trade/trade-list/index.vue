@@ -6,22 +6,6 @@
     :lang="lang"
     @query="getList"
     @reset="getList">
-    <!-- 销售员 -->
-    <template #userName>
-      <user-picker
-        v-model:id="state.query.userId"
-        :title="t('userName')"
-        @change="getList">
-      </user-picker>
-    </template>
-    <!-- 所属人 -->
-    <template #belongName>
-      <user-picker
-        v-model:id="state.query.belongId"
-        :title="t('belongName')"
-        @change="getList">
-      </user-picker>
-    </template>
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate
@@ -60,14 +44,12 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useI18n } from 'vue-i18n'
 import lang from '@/lang/trade'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
 import AddEdit from './components/AddEdit.vue'
 
 // use
-const { t } = useI18n({ messages: lang })
 const lister = useLister()
 // state
 const state = reactive({

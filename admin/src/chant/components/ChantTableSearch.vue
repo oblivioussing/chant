@@ -89,6 +89,14 @@
               :placeholder="translate(item)">
             </el-input-number>
           </div>
+          <!-- custom-picker -->
+          <dynamic-picker
+            v-if="item.type === 'custom-picker'"
+            v-model:id="vModel.query[item.dynamicId || item.prop]"
+            :title="translate(item)"
+            :type="item.customPicker!"
+            @change="emits('query')">
+          </dynamic-picker>
         </el-form-item>
       </template>
     </el-form>
