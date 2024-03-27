@@ -12,7 +12,8 @@
       :type="props.type || 'primary'">
       <slot></slot>
       <el-icon v-if="props.icon"><component :is="props.icon" /></el-icon>
-      <icon-font v-if="props.iconfont" :icon="props.iconfont"></icon-font>
+      <chant-icon-font v-if="props.iconfont" :icon="props.iconfont">
+      </chant-icon-font>
     </el-button>
   </el-tooltip>
 </template>

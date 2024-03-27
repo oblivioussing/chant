@@ -4,6 +4,7 @@ import ChantDialog from './ChantDialog.vue'
 import ChantForm from './ChantForm.vue'
 import ChantFormFooter from './ChantFormFooter.vue'
 import ChantIconButton from './ChantIconButton.vue'
+import ChantIconFont from './ChantIconFont.vue'
 import ChantMoreDropdown from './ChantMoreDropdown.vue'
 import ChantPagination from './ChantPagination.vue'
 import ChantPickerButton from './ChantPickerButton.vue'
@@ -26,6 +27,7 @@ declare module '@vue/runtime-core' {
     ChantForm: typeof ChantForm
     ChantFormFooter: typeof ChantFormFooter
     ChantIconButton: typeof ChantIconButton
+    ChantIconFont: typeof ChantIconFont
     ChantMoreDropdown: typeof ChantMoreDropdown
     ChantPagination: typeof ChantPagination
     ChantPickerButton: typeof ChantPickerButton

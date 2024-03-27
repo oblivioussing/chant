@@ -13,6 +13,7 @@ const ChantFormFooter = defineAsyncComponent(
 const ChantIconButton = defineAsyncComponent(
   () => import('./ChantIconButton.vue')
 )
+const ChantIconFont = defineAsyncComponent(() => import('./ChantIconFont.vue'))
 const ChantMoreDropdown = defineAsyncComponent(
   () => import('./ChantMoreDropdown.vue')
 )
@@ -46,6 +47,7 @@ function components(app: App<Element>) {
   app.component('ChantForm', ChantForm)
   app.component('ChantFormFooter', ChantFormFooter)
   app.component('ChantIconButton', ChantIconButton)
+  app.component('ChantIconFont', ChantIconFont)
   app.component('ChantMoreDropdown', ChantMoreDropdown)
   app.component('ChantPagination', ChantPagination)
   app.component('ChantPickerButton', ChantPickerButton)

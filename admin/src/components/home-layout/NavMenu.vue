@@ -12,7 +12,8 @@
           <div class="menu-item">
             <div class="menu-item-collapse-box">
               <el-icon>
-                <icon-font :icon="icon(item.meta?.icon)"></icon-font>
+                <chant-icon-font :icon="icon(item.meta?.icon)">
+                </chant-icon-font>
               </el-icon>
               <el-text v-if="props.isCollapse" truncated>
                 {{ title(item.meta) }}
@@ -47,7 +48,6 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import IconFont from '../IconFont.vue'
 
 // props
 const props = defineProps<{

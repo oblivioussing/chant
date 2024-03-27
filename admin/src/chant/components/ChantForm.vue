@@ -142,7 +142,8 @@
               v-if="item.tips"
               :content="t(item.tips)"
               placement="top">
-              <icon-font class="icon-query" icon="query"></icon-font>
+              <chant-icon-font class="icon-query" icon="query">
+              </chant-icon-font>
             </el-tooltip>
           </el-form-item>
         </div>

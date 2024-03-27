@@ -68,7 +68,7 @@
       <el-button-group class="m-l-10">
         <!-- 表单操作方式 -->
         <chant-button :content="t('formType')" @click="onFormType">
-          <icon-font :icon="formTypeIcon"></icon-font>
+          <chant-icon-font :icon="formTypeIcon"></chant-icon-font>
         </chant-button>
         <!-- 字段筛选 -->
         <field-filter
