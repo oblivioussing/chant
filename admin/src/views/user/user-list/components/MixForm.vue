@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import type { FormProps, FormEmits } from '@/chant'
-import lang from '@/lang/trade'
+import lang from '@/lang/user'
 import { useFormer } from '@/use'
 import { columns, dict } from '../share'
 
@@ -37,15 +37,15 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('trade/detail', state)
+  former.getData('user/detail', state)
 }
 // 保存
 function onSave() {
   const map = {
-    add: 'trade/add',
-    edit: 'trade/update'
+    add: 'user/add',
+    edit: 'user/update'
   }
-  const path = map[props.editType]
+  const path = map[props.pageType]
   former.save(path, state)
 }
 </script>

@@ -2,8 +2,8 @@
   <chant-form
     v-model="state"
     :columns="columns()"
-    :dict="dict"
-    :lang="lang"
+    :dict
+    :lang
     @instance="former.bindInstance">
   </chant-form>
   <chant-form-footer
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import type { FormProps, FormEmits } from '@/chant'
-import lang from '@/lang/user'
+import lang from '@/lang/trade'
 import { useFormer } from '@/use'
 import { columns, dict } from '../share'
 
@@ -37,15 +37,15 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('user/detail', state)
+  former.getData('trade/detail', state)
 }
 // 保存
 function onSave() {
   const map = {
-    add: 'user/add',
-    edit: 'user/update'
+    add: 'trade/add',
+    edit: 'trade/update'
   }
-  const path = map[props.editType]
+  const path = map[props.pageType]
   former.save(path, state)
 }
 </script>

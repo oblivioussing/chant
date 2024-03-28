@@ -13,6 +13,12 @@ export type ElementType =
   | 'time-picker'
   | 'upload'
 
+export type PageType = 'add' | 'edit'
+
+export type FormType = 'dialog' | 'inline' | 'page'
+
+export type ColumnPage = PageType | 'list'
+
 type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
@@ -23,7 +29,7 @@ type BaseColumn = {
   dynamicStart?: string // 范围选择start字段
   dynamicEnd?: string // 动态范围选择end字段
   hide?: boolean // 是否隐藏
-  hideInPages?: PageType[] // 在特定页面类型中隐藏
+  hideInPages?: ColumnPage[] // 在特定页面类型中隐藏
   inputType?: 'password' | 'text' | 'textarea'
   label?: string // 标签文本
   precision?: number // 数值精度,仅type为input-number时有效
@@ -39,7 +45,7 @@ export type FormColumn = {
   defaultTime?: Date | [Date, Date] // 范围选择时选中日期所使用的当日内具体时刻
   disabled?: boolean | ((row: any) => boolean) // 是否禁用
   disabledDate?: (data: Date, form: any) => boolean //  用来判断该日期是否被禁用的函数,仅type为date-picker时有效
-  disabledInPage?: PageType // 在特定页面类型中禁用
+  disabledInPage?: ColumnPage // 在特定页面类型中禁用
   limit?: number // 允许上传文件的最大数量
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效
@@ -85,19 +91,17 @@ export type FormState = {
   form: any // 表单数据
   formLoading: boolean // 表单加载loading
   loading: boolean // 保存loading
-  editType?: 'add' | 'edit' // 页面为新增还是编辑
+  pageType?: PageType // 页面类型
   query: any // 查询条件
   type: FormType // 页面类型
 }
 
 export type FormProps = {
   copyFlag?: 0 | 1
-  editType: 'add' | 'edit'
+  pageType: PageType
   selection?: { id: string }
   type?: FormType
 }
-
-export type FormType = 'dialog' | 'inline' | 'page'
 
 export type FormEmits = {
   close: []
@@ -114,8 +118,8 @@ export type ListState = {
   allFlag?: 0 | 1 // 全选
   columns: ListColumn[] // 列表字段
   copyFlag?: 0 | 1 // 复制flag
-  editType: 'add' | 'edit' // 新增编辑的类型
-  editVisible?: boolean // 新增编辑visible
+
+  mixForm?: boolean // mix-form是否显示
   extra: Record<string, any> // 页面额外数据
   formType: FormType // 表单操作方式
   keepQuery: Record<string, any> // 持续存在的查询条件
@@ -126,12 +130,11 @@ export type ListState = {
     pageNum: number
     pageSize: number
   } // 分页
+  pageType: PageType // 页面类型
   selection: any // 当前处理的一条数据
   selections: any[] // 列表选中的数据
   total: number // 总数
 }
-
-export type PageType = 'list' | 'add' | 'edit'
 
 export type TablePickerProps = {
   apiPath: string // 接口地址

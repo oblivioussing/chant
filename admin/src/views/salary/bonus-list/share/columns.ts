@@ -9,7 +9,11 @@ export default () => {
     {
       prop: 'userName',
       label: '员工',
-      slotSearch: true
+      dynamicId: 'userId',
+      required: true,
+      search: true,
+      type: 'custom-picker',
+      customPicker: 'user-picker'
     },
     {
       prop: 'date',

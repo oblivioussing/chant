@@ -1,22 +1,17 @@
 <template>
   <!-- search -->
-  <chant-table-search
-    v-model="state"
-    :dict="dict"
-    :lang="lang"
-    @query="getList"
-    @reset="getList">
+  <chant-table-search v-model="state" v-bind="{ dict, lang }" @query="getList">
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate
     v-model="state"
+    :lang
     :options="['add', 'delete']"
-    :lang="lang"
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict" :lang="lang">
+  <chant-table v-model="state" :dict :lang>
     <!-- 操作 -->
     <chant-column-operate
       :options="['edit', 'delete']"
@@ -30,15 +25,15 @@
     :total="state.total"
     @change="getList">
   </chant-pagination>
-  <!-- 新增/编辑 -->
-  <chant-dialog v-model="state.editVisible" :title="lister.title(state)">
-    <add-edit
-      v-if="state.editVisible"
+  <!-- mix-form -->
+  <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
+    <mix-form
+      v-if="state.mixForm"
       :copy-flag="state.copyFlag"
-      :edit-type="state.editType"
+      :page-type="state.pageType"
       :selection="state.selection"
-      @close="state.editVisible = false">
-    </add-edit>
+      @close="state.mixForm = false">
+    </mix-form>
   </chant-dialog>
 </template>
 
@@ -47,7 +42,7 @@ import { reactive } from 'vue'
 import lang from '@/lang/trade'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
-import AddEdit from './components/AddEdit.vue'
+import MixForm from './components/MixForm.vue'
 
 // use
 const lister = useLister()

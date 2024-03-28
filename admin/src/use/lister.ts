@@ -3,7 +3,7 @@ import { nextTick, onActivated, onScopeDispose } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { shiki } from '@/api'
-import type { ListState as State, FormType } from '@/chant'
+import type { ListState as State, FormType, PageType } from '@/chant'
 import { ApiCode, LangEnum } from '@/enum'
 import { element } from '@/plugs'
 import { useAppStore } from '@/store'
@@ -16,21 +16,20 @@ function useLister(config?: { type: FormType }) {
   const { t: tg } = useI18n({ useScope: 'global' })
   const route = useRoute()
   const state = {
-    editType: '' as 'add' | 'edit',
-    editVisible: false,
     allFlag: 0 as 0 | 1,
     columns: [],
     copyFlag: 0 as 0 | 1,
     extra: {} as Record<string, any>,
     formType: config?.type || 'dialog',
     keepQuery: {} as Record<string, any>,
-    lang: {},
     list: [] as any[],
     loading: false,
+    mixForm: false,
     pages: { pageNum: 1, pageSize: 20 },
+    pageType: '' as PageType,
     query: {} as Record<string, any>,
-    selections: [] as any[],
     selection: {} as any,
+    selections: [] as any[],
     total: 0
   }
   let tableInstance: TableInstance
@@ -40,8 +39,8 @@ function useLister(config?: { type: FormType }) {
     if (state.formType === 'page') {
       _jump('/add')
     } else {
-      state.editType = 'add'
-      state.editVisible = true
+      state.pageType = 'add'
+      state.mixForm = true
     }
   }
   // 批量操作
@@ -69,8 +68,8 @@ function useLister(config?: { type: FormType }) {
     } else {
       state.copyFlag = 1
       state.selection = row
-      state.editType = 'add'
-      state.editVisible = true
+      state.pageType = 'add'
+      state.mixForm = true
     }
   }
   // created
@@ -127,8 +126,8 @@ function useLister(config?: { type: FormType }) {
       _jump('/edit', { id: row.id })
     } else {
       state.selection = row
-      state.editType = 'edit'
-      state.editVisible = true
+      state.pageType = 'edit'
+      state.mixForm = true
     }
   }
   // 获取数据
@@ -215,9 +214,10 @@ function useLister(config?: { type: FormType }) {
     const pageText = tg(`router.${meta?.title}`)?.replace(tg('app.list'), '')
     const map = {
       add: tg('button.add'),
-      edit: tg('button.edit')
+      edit: tg('button.edit'),
+      detail: tg('button.detail')
     }
-    let typeText = map[state.editType]
+    let typeText = map[state.pageType]
     if ([LangEnum.En].includes(appStore.state.lang)) {
       typeText = ` ${typeText}`
     }

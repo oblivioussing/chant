@@ -10,6 +10,7 @@ export default {
   button: {
     add: 'add',
     alter: 'alter',
+    detail: 'detail',
     close: 'close',
     cancel: 'cancel',
     confirm: 'confirm',

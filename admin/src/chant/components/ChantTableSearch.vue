@@ -156,7 +156,7 @@ const props = defineProps<{
   unfold?: boolean // 自动展开搜索条件
 }>()
 // emits
-const emits = defineEmits(['query', 'reset'])
+const emits = defineEmits(['query'])
 // model
 const vModel = defineModel<ListState>()
 // use
@@ -283,7 +283,7 @@ async function onSubmit(type: 'query' | 'reset') {
       bindQueryValue()
     }
     const status = await formRef.value?.validate()
-    status && emits(type)
+    status && emits('query')
   } catch (error) {
     console.error(error)
   }

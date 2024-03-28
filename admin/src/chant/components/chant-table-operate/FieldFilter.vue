@@ -47,7 +47,7 @@ import { useRoute } from 'vue-router'
 import draggable from 'vuedraggable'
 import { Document, Sort } from '@element-plus/icons-vue'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
-import lang from '@/lang/chant'
+import chantLang from '@/lang/chant'
 import { base, core } from '@/utils'
 
 // props
@@ -58,8 +58,8 @@ const props = defineProps<{
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
-const en = { ...props.lang?.en, ...lang.en }
-const zh = { ...props.lang?.zh, ...lang.zh }
+const en = { ...props.lang?.en, ...chantLang.en }
+const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
