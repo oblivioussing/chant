@@ -85,14 +85,14 @@ export type FormState = {
   form: any // 表单数据
   formLoading: boolean // 表单加载loading
   loading: boolean // 保存loading
-  pageType?: 'add' | 'edit' // 页面为新增还是编辑
+  editType?: 'add' | 'edit' // 页面为新增还是编辑
   query: any // 查询条件
   type: FormType // 页面类型
 }
 
 export type FormProps = {
   copyFlag?: 0 | 1
-  pageType: 'add' | 'edit'
+  editType: 'add' | 'edit'
   selection?: { id: string }
   type?: FormType
 }

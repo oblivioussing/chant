@@ -12,12 +12,12 @@ function useFormer(config: FormProps) {
   const route = useRoute()
 
   const state = {
+    editType: config.editType,
     continueAdd: false,
     copyFlag: config.copyFlag as 0 | 1,
     form: {} as any,
     formLoading: false,
     loading: false,
-    pageType: config.pageType,
     query: {} as any,
     type: config.type || 'dialog'
   }
@@ -123,7 +123,7 @@ function useFormer(config: FormProps) {
     if (state.type === 'page') {
       copyFlag = Number(route.query.copyFlag)
     }
-    return copyFlag || state.pageType === 'edit'
+    return copyFlag || state.editType === 'edit'
   }
 
   return {

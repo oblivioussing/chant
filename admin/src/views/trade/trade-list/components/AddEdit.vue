@@ -45,7 +45,7 @@ function onSave() {
     add: 'trade/add',
     edit: 'trade/update'
   }
-  const path = map[props.pageType]
+  const path = map[props.editType]
   former.save(path, state)
 }
 </script>

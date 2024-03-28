@@ -37,7 +37,7 @@
     <add-edit
       v-if="state.editVisible"
       :copy-flag="state.copyFlag"
-      :page-type="state.editType"
+      :edit-type="state.editType"
       :selection="state.selection"
       @close="state.editVisible = false">
     </add-edit>

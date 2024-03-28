@@ -184,7 +184,7 @@ const emits = defineEmits(['instance'])
 // model
 const vModel = defineModel<{
   form: any
-  pageType?: 'add' | 'edit'
+  editType?: 'add' | 'edit'
 }>()
 // use
 const appStore = useAppStore()
@@ -202,7 +202,7 @@ const availableColumns = computed(() => {
     if (item.hide) {
       return false
     }
-    if (item.hideInPages?.includes(vModel.value?.pageType!)) {
+    if (item.hideInPages?.includes(vModel.value?.editType!)) {
       return false
     }
     if (item.showCustom) {
@@ -233,7 +233,7 @@ onMounted(() => {
 function init() {
   props.columns?.forEach((item) => {
     // 默认值
-    if (item.default && vModel.value?.pageType !== 'edit') {
+    if (item.default && vModel.value?.editType !== 'edit') {
       vModel.value!.form[item.prop] = item.default
     }
     // date range
@@ -273,7 +273,7 @@ function isDisabled(row: Column) {
   if (typeof row.disabled === 'function') {
     return row.disabled(vModel.value!.form)
   }
-  if (row.disabledInPage && row.disabledInPage === vModel.value?.pageType) {
+  if (row.disabledInPage && row.disabledInPage === vModel.value?.editType) {
     return true
   }
   return row.disabled

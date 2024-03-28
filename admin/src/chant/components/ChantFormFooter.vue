@@ -3,7 +3,7 @@
     <div>
       <!-- 继续新增 -->
       <el-checkbox
-        v-if="vModel.pageType === 'add'"
+        v-if="vModel.editType === 'add'"
         v-model="vModel.continueAdd"
         class="continue">
         {{ t('continueAdd') }}
@@ -35,8 +35,8 @@ import lang from '@/lang/chant'
 // type
 type ModelValue = {
   continueAdd: boolean
+  editType: 'add' | 'edit'
   loading: boolean
-  pageType: 'add' | 'edit'
   type: FormType
 }
 // emits
