@@ -2,8 +2,8 @@
   <chant-form
     v-model="state"
     :columns="columns()"
-    :dict
-    :lang
+    :dict="dict"
+    :lang="lang"
     @instance="former.bindInstance">
   </chant-form>
   <chant-form-footer

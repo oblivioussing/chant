@@ -139,6 +139,7 @@ import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
 import { useThrottleFn } from '@vueuse/core'
 import {
   base,
+  core,
   formUtils,
   type Lang,
   type ListColumn as Column,
@@ -290,17 +291,14 @@ async function onSubmit(type: 'query' | 'reset') {
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
-  const label = column.label || column.prop
+  let label = column.label || column.prop
+  label = props.lang ? t(label) : label
   const map = {
     enter: tg('tips.enter'),
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  if (props.lang) {
-    return tips + t(label)
-  } else {
-    return tips + label
-  }
+  return core.i18nJoint(tips, label)
 }
 </script>
 

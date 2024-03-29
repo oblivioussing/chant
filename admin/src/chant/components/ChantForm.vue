@@ -165,6 +165,7 @@ import type { FormInstance } from 'element-plus'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
+  core,
   formUtils,
   useAppStore,
   LangEnum,
@@ -323,17 +324,14 @@ function onDateRangeChange(column: Column) {
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
-  const label = column.label || column.prop || column.title!
+  let label = column.label || column.prop || column.title!
+  label = props.lang ? t(label) : label
   const map = {
     enter: tg('tips.enter'),
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  if (props.lang) {
-    return tips + t(label)
-  } else {
-    return tips + label
-  }
+  return core.i18nJoint(tips, label)
 }
 // 字典翻译
 function dictTranslate(label: string) {

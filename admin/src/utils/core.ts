@@ -1,6 +1,5 @@
 import type { FormColumn, ListColumn } from '@/chant'
-import { BusEnum, StorageEnum } from '@/enum'
-import { useAppStore } from '@/store/app'
+import { BusEnum, LangEnum, StorageEnum } from '@/enum'
 import { clone } from './base'
 import bus from './bus'
 import storage from './storage'
@@ -67,4 +66,13 @@ export function updateColumn<T extends Columns>(
     list[index] = row
   }
   return list
+}
+// 国际化字符拼接
+export function i18nJoint(str1: string, str2: string) {
+  const lang = storage.getLocal(StorageEnum.Lang) as LangEnum
+  if ([LangEnum.En].includes(lang)) {
+    return `${str1} ${str2}`
+  } else {
+    return `${str1}${str2}`
+  }
 }

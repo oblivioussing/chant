@@ -87,7 +87,7 @@ import { computed, onMounted, ref, useSlots, type ModelRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { type FormType, type ListState } from '@/chant'
+import type { FormType, Lang, ListState } from '@/chant'
 import chantLang from '@/lang/chant'
 import { core } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
@@ -95,7 +95,7 @@ import FieldFilter from './FieldFilter.vue'
 // type
 type Option = 'add' | 'alter' | 'delete'
 interface Props {
-  lang?: any // 国际化
+  lang?: Lang // 国际化
   options?: Option[] // 按钮选项
   showCheckedAll?: boolean // 是否显示全选
   showFilter?: boolean // 是否显示过滤按钮
@@ -110,7 +110,9 @@ const emits = defineEmits(['add', 'alter', 'command', 'delete'])
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
-const { t } = useI18n({ messages: chantLang })
+const en = { ...props.lang?.en, ...chantLang.en }
+const zh = { ...props.lang?.zh, ...chantLang.zh }
+const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const slots = useSlots()

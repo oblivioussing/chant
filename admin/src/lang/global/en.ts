@@ -23,7 +23,7 @@ export default {
     copySuccess: 'copy success',
     enter: 'Please enter',
     required: ' can not be null',
-    select: 'Please select ',
+    select: 'Please select',
     totalRecords: 'A total of {0} records',
     confirmDelete: 'Confirm delete?',
     confirmBatchDelete: 'Confirm batch delete?'

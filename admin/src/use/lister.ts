@@ -4,14 +4,12 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { shiki } from '@/api'
 import type { ListState as State, FormType, PageType } from '@/chant'
-import { ApiCode, LangEnum } from '@/enum'
+import { ApiCode } from '@/enum'
 import { element } from '@/plugs'
-import { useAppStore } from '@/store'
 import { useChaoser } from '@/use'
-import { bus } from '@/utils'
+import { bus, core } from '@/utils'
 
 function useLister(config?: { type: FormType }) {
-  const appStore = useAppStore()
   const chaoser = useChaoser()
   const { t: tg } = useI18n({ useScope: 'global' })
   const route = useRoute()
@@ -211,17 +209,16 @@ function useLister(config?: { type: FormType }) {
     if (!meta?.title) {
       return ''
     }
-    const pageText = tg(`router.${meta?.title}`)?.replace(tg('app.list'), '')
+    const title = tg(`router.${meta?.title}`)
+      ?.replace(tg('app.list'), '')
+      .trim()
     const map = {
       add: tg('button.add'),
       edit: tg('button.edit'),
       detail: tg('button.detail')
     }
-    let typeText = map[state.pageType]
-    if ([LangEnum.En].includes(appStore.state.lang)) {
-      typeText = ` ${typeText}`
-    }
-    return `${pageText?.trim()}${typeText}`
+    const typeText = map[state.pageType]
+    return core.i18nJoint(title, typeText)
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected?: boolean) {

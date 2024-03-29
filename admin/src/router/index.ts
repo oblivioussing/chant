@@ -5,7 +5,7 @@ import {
   type RouteLocationNormalized
 } from 'vue-router'
 import { StorageEnum } from '@/enum'
-import { base, storage } from '@/utils'
+import { storage } from '@/utils'
 
 import app from './app' // app
 import trade from './trade' // 交易管理
@@ -23,7 +23,7 @@ router.beforeResolve((to: RouteLocationNormalized) => {
   const queryMap = storage.getSession(StorageEnum.PageQuery) || ({} as any)
   const { path, query } = to
   const store = queryMap[path]
-  const queryEmpty = base.isEmptyObject(query)
+  const queryEmpty = isEmptyObject(query)
   if (queryEmpty && store) {
     const queryString = qs.stringify(store)
     setTimeout(() => {
@@ -37,5 +37,14 @@ router.beforeResolve((to: RouteLocationNormalized) => {
     }
   }
 })
+// 是否为空对象
+function isEmptyObject(data: object) {
+  if (typeof data === 'object') {
+    const keys = Object.keys(data)
+    return keys.length === 0
+  } else {
+    return true
+  }
+}
 
 export default router

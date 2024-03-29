@@ -1,17 +1,21 @@
 <template>
   <!-- search -->
-  <chant-table-search v-model="state" v-bind="{ dict, lang }" @query="getList">
+  <chant-table-search
+    v-model="state"
+    :dict="dict"
+    :lang="lang"
+    @query="getList">
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate
     v-model="state"
-    :lang
+    :lang="lang"
     :options="['add', 'delete']"
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict :lang>
+  <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
     <chant-column-operate
       :options="['edit', 'delete']"
