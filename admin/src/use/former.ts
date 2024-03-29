@@ -12,7 +12,7 @@ function useFormer(config: FormProps) {
   const route = useRoute()
 
   const state = {
-    editType: config.editType,
+    pageType: config.pageType,
     continueAdd: false,
     copyFlag: config.copyFlag as 0 | 1,
     form: {} as any,
@@ -123,7 +123,7 @@ function useFormer(config: FormProps) {
     if (state.type === 'page') {
       copyFlag = Number(route.query.copyFlag)
     }
-    return copyFlag || state.editType === 'edit'
+    return copyFlag || state.pageType === 'edit'
   }
 
   return {
