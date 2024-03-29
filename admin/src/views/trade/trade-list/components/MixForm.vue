@@ -44,7 +44,7 @@ function onSave() {
   const map = {
     add: 'trade/add',
     edit: 'trade/update'
-  }
+  } as any
   const path = map[props.pageType]
   former.save(path, state)
 }

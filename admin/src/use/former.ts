@@ -123,7 +123,7 @@ function useFormer(config: FormProps) {
     if (state.type === 'page') {
       copyFlag = Number(route.query.copyFlag)
     }
-    return copyFlag || state.pageType === 'edit'
+    return copyFlag || ['detail', 'edit'].includes(state.pageType as string)
   }
 
   return {

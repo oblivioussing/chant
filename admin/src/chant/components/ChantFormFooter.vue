@@ -3,7 +3,7 @@
     <div>
       <!-- 继续新增 -->
       <el-checkbox
-        v-if="vModel.editType === 'add'"
+        v-if="vModel.pageType === 'add'"
         v-model="vModel.continueAdd"
         class="continue">
         {{ t('continueAdd') }}
@@ -16,6 +16,7 @@
         <el-button @click="onClose">{{ tg('button.close') }}</el-button>
         <!-- 保存 -->
         <el-button
+          v-if="vModel.pageType !== 'detail'"
           :loading="vModel.loading"
           type="primary"
           @click="emits('save')">
@@ -29,14 +30,14 @@
 <script setup lang="ts">
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { core, type FormType } from '@/chant'
+import { core, type FormType, type PageType } from '@/chant'
 import lang from '@/lang/chant'
 
 // type
 type ModelValue = {
   continueAdd: boolean
-  editType: 'add' | 'edit'
   loading: boolean
+  pageType: PageType
   type: FormType
 }
 // emits
@@ -60,6 +61,7 @@ function onClose() {
 .chant-form-footer {
   display: flex;
   justify-content: space-between;
+  margin-right: 5px;
   margin-top: 5px;
   :deep(.el-button + .el-button) {
     margin-left: 8px;

@@ -1,6 +1,10 @@
 <template>
   <div class="chant-form">
-    <el-form :label-width="labelWidthCpd" :model="vModel?.form" ref="formRef">
+    <el-form
+      :label-width="labelWidthCpd"
+      :model="vModel?.form"
+      :disabled="vModel?.pageType === 'detail'"
+      ref="formRef">
       <template v-for="item in availableColumns" :key="item.prop">
         <!-- divider -->
         <el-divider v-if="item.title" content-position="left">
@@ -170,7 +174,8 @@ import {
   useAppStore,
   LangEnum,
   type FormColumn as Column,
-  type Lang
+  type Lang,
+  type PageType
 } from '@/chant'
 
 // props
@@ -185,7 +190,7 @@ const emits = defineEmits(['instance'])
 // model
 const vModel = defineModel<{
   form: any
-  editType?: 'add' | 'edit'
+  pageType?: PageType
 }>()
 // use
 const appStore = useAppStore()
@@ -203,7 +208,7 @@ const availableColumns = computed(() => {
     if (item.hide) {
       return false
     }
-    if (item.hideInPages?.includes(vModel.value?.editType!)) {
+    if (item.hideInPages?.includes(vModel.value?.pageType!)) {
       return false
     }
     if (item.showCustom) {
@@ -234,7 +239,7 @@ onMounted(() => {
 function init() {
   props.columns?.forEach((item) => {
     // 默认值
-    if (item.default && vModel.value?.editType !== 'edit') {
+    if (item.default && vModel.value?.pageType !== 'edit') {
       vModel.value!.form[item.prop] = item.default
     }
     // date range
@@ -274,7 +279,7 @@ function isDisabled(row: Column) {
   if (typeof row.disabled === 'function') {
     return row.disabled(vModel.value!.form)
   }
-  if (row.disabledInPage && row.disabledInPage === vModel.value?.editType) {
+  if (row.disabledInPage && row.disabledInPage === vModel.value?.pageType) {
     return true
   }
   return row.disabled

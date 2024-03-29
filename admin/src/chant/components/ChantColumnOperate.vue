@@ -10,6 +10,10 @@
         <chant-button v-if="show('edit')" link @click="emits('edit', row)">
           {{ tg('button.edit') }}
         </chant-button>
+        <!-- 详情 -->
+        <chant-button v-if="show('detail')" link @click="emits('detail', row)">
+          {{ tg('button.detail') }}
+        </chant-button>
         <!-- 删除 -->
         <chant-button
           v-if="show('delete')"
@@ -29,14 +33,14 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import lang from '@/lang/chant'
 
-type Option = 'edit' | 'delete'
+type Option = 'edit' | 'detail' | 'delete'
 // props
 const props = defineProps<{
   options?: Option[]
   width?: string | number
 }>()
 // emits
-const emits = defineEmits(['edit', 'delete'])
+const emits = defineEmits(['edit', 'detail', 'delete'])
 // use
 const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
@@ -46,7 +50,7 @@ const widthCpd = computed(() => {
     return props.width
   }
   const count = props.options?.length || 0
-  return count > 1 ? 100 : 60
+  return count > 1 ? 50 * count : 60
 })
 // 显示按钮
 function show(type: Option) {

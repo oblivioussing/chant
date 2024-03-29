@@ -32,15 +32,6 @@ function useLister(config?: { type: FormType }) {
   }
   let tableInstance: TableInstance
 
-  // 新增
-  function add(state: State) {
-    if (state.formType === 'page') {
-      _jump('/add')
-    } else {
-      state.pageType = 'add'
-      state.mixForm = true
-    }
-  }
   // 批量操作
   function batch(
     path: string,
@@ -58,17 +49,6 @@ function useLister(config?: { type: FormType }) {
   // 绑定列表实例
   function bindInstance(val: TableInstance) {
     tableInstance = val
-  }
-  // 复制新增
-  function copy(state: State, row: any) {
-    if (state.formType === 'page') {
-      _jump('/add', { id: row.id, copyFlag: 1 })
-    } else {
-      state.copyFlag = 1
-      state.selection = row
-      state.pageType = 'add'
-      state.mixForm = true
-    }
   }
   // created
   function created(
@@ -118,15 +98,26 @@ function useLister(config?: { type: FormType }) {
       state.loading = false
     })
   }
-  // 编辑
-  function edit(state: State, row: any) {
+  // 新增
+  function add(state: State) {
     if (state.formType === 'page') {
-      _jump('/edit', { id: row.id })
+      _jump('/add')
     } else {
-      state.selection = row
-      state.pageType = 'edit'
+      state.pageType = 'add'
       state.mixForm = true
     }
+  }
+  // 复制新增
+  function copy(state: State, row: any) {
+    _pageHandle(state, row, { type: 'add', copyFlag: 1 })
+  }
+  // 编辑
+  function edit(state: State, row: any) {
+    _pageHandle(state, row, { type: 'edit' })
+  }
+  // 详情
+  function detail(state: State, row: any) {
+    _pageHandle(state, row, { type: 'detail' })
   }
   // 获取数据
   async function getData(
@@ -249,6 +240,25 @@ function useLister(config?: { type: FormType }) {
       name && bus.off(name)
     })
   }
+  // 页面处理
+  function _pageHandle(
+    state: State,
+    row: any,
+    config: {
+      type: PageType
+      copyFlag?: 0 | 1
+    }
+  ) {
+    if (state.formType === 'page') {
+      const copyFlag = config.copyFlag
+      _jump(`/${config.type}`, { id: row.id, copyFlag })
+    } else {
+      state.selection = row
+      state.pageType = config.type
+      state.mixForm = true
+      state.copyFlag = config.copyFlag
+    }
+  }
   // 重置
   function _reset(state: State) {
     state.keepQuery = {}
@@ -265,6 +275,7 @@ function useLister(config?: { type: FormType }) {
     copy,
     created,
     edit,
+    detail,
     getData,
     getListParams,
     isSelected,

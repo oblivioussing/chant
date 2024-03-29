@@ -13,7 +13,7 @@ export type ElementType =
   | 'time-picker'
   | 'upload'
 
-export type PageType = 'add' | 'edit'
+export type PageType = 'add' | 'edit' | 'detail'
 
 export type FormType = 'dialog' | 'inline' | 'page'
 

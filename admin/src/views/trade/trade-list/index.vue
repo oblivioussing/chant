@@ -18,8 +18,9 @@
   <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
     <chant-column-operate
-      :options="['edit', 'delete']"
+      :options="['edit', 'detail', 'delete']"
       @edit="lister.edit(state, $event)"
+      @detail="lister.detail(state, $event)"
       @delete="onDelete($event)">
     </chant-column-operate>
   </chant-table>
