@@ -11,6 +11,7 @@ export default {
     add: '新增',
     alter: '修改',
     detail: '详情',
+    copy: '复制',
     close: '关闭',
     cancel: '取消',
     confirm: '确认',

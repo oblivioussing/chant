@@ -18,9 +18,9 @@
   <chant-table v-model="state" :dict="dict" :lang="lang">
     <!-- 操作 -->
     <chant-column-operate
-      :options="['edit', 'detail', 'delete']"
+      :options="['edit', 'copy', 'delete']"
       @edit="lister.edit(state, $event)"
-      @detail="lister.detail(state, $event)"
+      @copy="lister.copy(state, $event)"
       @delete="onDelete($event)">
     </chant-column-operate>
   </chant-table>
@@ -44,8 +44,8 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import lang from '@/lang/trade'
 import { useLister } from '@/chant'
+import lang from '@/lang/trade'
 import { columns, dict } from './share'
 import MixForm from './components/MixForm.vue'
 

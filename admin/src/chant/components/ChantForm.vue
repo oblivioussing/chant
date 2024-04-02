@@ -336,7 +336,11 @@ function translate(column: Column, type?: 'enter' | 'select') {
     select: tg('tips.select')
   }
   const tips = type ? map[type] : ''
-  return core.i18nJoint(tips, label)
+  if (tips) {
+    return core.i18nJoint(tips, label)
+  } else {
+    return label
+  }
 }
 // 字典翻译
 function dictTranslate(label: string) {

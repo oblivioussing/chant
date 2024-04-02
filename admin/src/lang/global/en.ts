@@ -11,6 +11,7 @@ export default {
     add: 'add',
     alter: 'alter',
     detail: 'detail',
+    copy: 'copy',
     close: 'close',
     cancel: 'cancel',
     confirm: 'confirm',

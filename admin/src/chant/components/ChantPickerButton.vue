@@ -25,6 +25,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { CircleClose, Search } from '@element-plus/icons-vue'
+import { core } from '@/chant'
 
 // props
 const props = defineProps<{
@@ -41,7 +42,7 @@ const visible = defineModel<boolean>()
 const { t: tg } = useI18n({ useScope: 'global' })
 // computed
 const tips = computed(() => {
-  return tg('tips.select') + props.placeholder
+  return core.i18nJoint(tg('tips.select'), props.placeholder || '')
 })
 // 清空
 function onClear() {
@@ -52,6 +53,13 @@ function onClear() {
 </script>
 
 <style scoped lang="scss">
+.chant-picker-input {
+  &.is-disabled {
+    .clear-box {
+      display: none;
+    }
+  }
+}
 .chant-picker-input:not(.is-disabled) {
   .clear-box {
     cursor: pointer;

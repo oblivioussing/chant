@@ -10,6 +10,10 @@
         <chant-button v-if="show('edit')" link @click="emits('edit', row)">
           {{ tg('button.edit') }}
         </chant-button>
+        <!-- 复制 -->
+        <chant-button v-if="show('copy')" link @click="emits('copy', row)">
+          {{ tg('button.copy') }}
+        </chant-button>
         <!-- 详情 -->
         <chant-button v-if="show('detail')" link @click="emits('detail', row)">
           {{ tg('button.detail') }}
@@ -33,14 +37,14 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import lang from '@/lang/chant'
 
-type Option = 'edit' | 'detail' | 'delete'
+type Option = 'edit' | 'copy' | 'detail' | 'delete'
 // props
 const props = defineProps<{
   options?: Option[]
   width?: string | number
 }>()
 // emits
-const emits = defineEmits(['edit', 'detail', 'delete'])
+const emits = defineEmits(['edit','copy', 'detail', 'delete'])
 // use
 const { t } = useI18n({ messages: lang })
 const { t: tg } = useI18n({ useScope: 'global' })
