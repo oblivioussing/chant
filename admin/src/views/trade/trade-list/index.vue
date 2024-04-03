@@ -10,9 +10,19 @@
   <chant-table-operate
     v-model="state"
     :lang="lang"
-    :options="['add', 'delete']"
+    show-checked-all
+    :options="['add', 'set', 'delete', 'more']"
     @add="lister.add(state)"
-    @delete="onDeletes">
+    @set="onSet"
+    @delete="onDeletes"
+    @more="onMore">
+    <template #edit-option>
+      <el-dropdown-item command="status">状态</el-dropdown-item>
+      <el-dropdown-item command="void">作废</el-dropdown-item>
+    </template>
+    <template #more-option>
+      <el-dropdown-item command="export">导出</el-dropdown-item>
+    </template>
   </chant-table-operate>
   <!-- table -->
   <chant-table v-model="state" :dict="dict" :lang="lang">
@@ -22,10 +32,13 @@
       @edit="lister.edit(state, $event)"
       @copy="lister.copy(state, $event)"
       @delete="onDelete($event)">
-      <chant-more-dropdown>
-        <el-dropdown-item>状态</el-dropdown-item>
-        <el-dropdown-item>状态</el-dropdown-item>
-      </chant-more-dropdown>
+      <template #default="{ row }">
+        <!-- more -->
+        <chant-more-dropdown @command="onMoreOperate($event, row)">
+          <el-dropdown-item command="status">状态</el-dropdown-item>
+          <el-dropdown-item command="void">作废</el-dropdown-item>
+        </chant-more-dropdown>
+      </template>
     </chant-column-operate>
   </chant-table>
   <!-- pagination -->
@@ -73,9 +86,21 @@ function getList() {
 function onDelete({ id }: any) {
   lister.remove('trade/delete', state, { id })
 }
+// 批量设置
+function onSet(val: string) {
+  console.log(val)
+}
 // 批量删除
 function onDeletes() {
   lister.removes('trade/deletes', state)
+}
+// 更多操作
+function onMore(type: string) {
+  console.log(type)
+}
+// 更多操作column
+function onMoreOperate(type: string, row: any) {
+  console.log(type, row)
 }
 </script>
 

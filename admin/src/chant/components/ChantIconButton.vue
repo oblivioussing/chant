@@ -11,6 +11,7 @@ import {
   Delete,
   Edit,
   Link,
+  More,
   Plus
 } from '@element-plus/icons-vue'
 
@@ -21,6 +22,7 @@ type IconType =
   | 'document'
   | 'edit'
   | 'link'
+  | 'more'
   | 'plus'
 // props
 const props = defineProps<{
@@ -34,6 +36,7 @@ const icon = computed(() => {
     document: Document,
     edit: Edit,
     link: Link,
+    more: More,
     plus: Plus
   }
   if (props.iconType) {

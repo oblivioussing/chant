@@ -12,12 +12,14 @@ export default {
     alter: 'alter',
     detail: 'detail',
     copy: 'copy',
+    copyAdd: 'copy add',
     close: 'close',
     cancel: 'cancel',
     confirm: 'confirm',
     edit: 'edit',
     delete: 'delete',
-    save: 'save'
+    save: 'save',
+    more: 'more operation'
   },
   tips: {
     copyFail: 'copy fail',

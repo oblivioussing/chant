@@ -31,8 +31,8 @@ const props = defineProps({
 
 <style lang="scss">
 .chant-button {
+  padding: 0;
   height: 28px;
   width: 28px;
-  padding: 0;
 }
 </style>

@@ -12,12 +12,14 @@ export default {
     alter: '修改',
     detail: '详情',
     copy: '复制',
+    copyAdd: '复制新增',
     close: '关闭',
     cancel: '取消',
     confirm: '确认',
     edit: '编辑',
     delete: '删除',
-    save: '保存'
+    save: '保存',
+    more: '更多操作'
   },
   tips: {
     copyFail: '复制失败',

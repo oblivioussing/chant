@@ -6,46 +6,17 @@
         class="all-box"
         @change="onChange">
         <span>{{ t('all') }}:</span>
-        <span style="padding-left: 5px">
-          {{ vModel.total }}{{ t('record') }}
-        </span>
+        <span class="p-l-5"> {{ vModel.total }}{{ t('record') }} </span>
       </el-checkbox>
     </div>
     <div class="button-box" ref="groupsRef">
-      <slot name="group"></slot>
+      <slot name="alone"></slot>
       <!-- 自定义按钮(组) -->
       <el-button-group class="m-l-10">
         <slot></slot>
       </el-button-group>
-      <!-- 批量编辑 -->
-      <div v-if="show('alter')" class="m-l-10">
-        <el-dropdown
-          v-if="slots['alter-option']"
-          :disabled="!isSelected"
-          :split-button="props.splitButton"
-          type="primary"
-          @click="emits('alter')"
-          @command="emits('command', $event)">
-          <template v-if="props.splitButton">
-            {{ t('batchEdit') }}
-          </template>
-          <el-button v-else type="primary">
-            {{ t('batchEdit') }}
-            <el-icon class="m-l-5"><arrow-down /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <slot name="alter-option"></slot>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <el-button v-else type="primary" @click="emits('alter')">
-          {{ t('batchEdit') }}
-        </el-button>
-      </div>
-      <!-- 新增,批量删除 -->
       <div :class="{ 'm-l-10': props.options?.length }">
-        <el-button-group>
+        <el-button-group class="flex">
           <!-- 新增 -->
           <chant-icon-button
             v-if="show('add')"
@@ -54,6 +25,23 @@
             type="primary"
             @click="emits('add')">
           </chant-icon-button>
+          <!-- 批量设置 -->
+          <el-dropdown
+            v-if="show('set')"
+            :disabled="!isSelected"
+            @command="emits('set', $event)">
+            <el-button
+              class="dropdown-button edit"
+              :disabled="!isSelected"
+              type="primary">
+              <el-icon><Setting /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <slot name="edit-option"></slot>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
           <!-- 批量删除 -->
           <chant-icon-button
             v-if="show('delete')"
@@ -63,6 +51,17 @@
             type="danger"
             @click="emits('delete')">
           </chant-icon-button>
+          <!-- 更多操作 -->
+          <el-dropdown v-if="show('more')" @command="emits('more', $event)">
+            <el-button class="dropdown-button" type="primary">
+              <el-icon><More /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <slot name="more-option"></slot>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </el-button-group>
       </div>
       <el-button-group class="m-l-10">
@@ -83,30 +82,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, useSlots, type ModelRef } from 'vue'
+import { computed, onMounted, ref, type ModelRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { Setting, More } from '@element-plus/icons-vue'
 import type { FormType, Lang, ListState } from '@/chant'
 import chantLang from '@/lang/chant'
 import { core } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
 // type
-type Option = 'add' | 'alter' | 'delete'
+type Option = 'add' | 'set' | 'delete' | 'more'
 interface Props {
   lang?: Lang // 国际化
   options?: Option[] // 按钮选项
   showCheckedAll?: boolean // 是否显示全选
   showFilter?: boolean // 是否显示过滤按钮
-  splitButton?: boolean // 下拉触发元素呈现为按钮组(仅批量修改按钮生效)
 }
 // props
 const props = withDefaults(defineProps<Props>(), {
   showFilter: true
 })
 // emits
-const emits = defineEmits(['add', 'alter', 'command', 'delete'])
+const emits = defineEmits(['add', 'set', 'delete', 'more'])
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
@@ -115,7 +113,6 @@ const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: tg } = useI18n({ useScope: 'global' })
 const route = useRoute()
-const slots = useSlots()
 // ref
 const groupsRef = ref()
 // computed
@@ -148,7 +145,7 @@ function buttonGroup() {
         item.removeAttribute('class')
       }
     })
-  }, 100)
+  }, 300)
 }
 // 获取缓存formType
 function getStorageFormType() {
@@ -194,6 +191,26 @@ function onFormType() {
   .button-box {
     display: flex;
     align-items: center;
+    .flex {
+      display: flex;
+    }
+    .dropdown-seat {
+      position: absolute;
+      top: 10px;
+      right: -5px;
+    }
+  }
+  :deep(.dropdown-button) {
+    &.edit {
+      border-radius: 0;
+    }
+    border-right: none;
+    padding: 0;
+    height: 28px;
+    width: 28px;
+  }
+  .p-l-5 {
+    padding-left: 5px;
   }
   .m-l-5 {
     margin-left: 5px;
