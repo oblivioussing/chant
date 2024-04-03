@@ -1,7 +1,6 @@
 <template>
   <el-dropdown>
-    <span class="dropdown">更多</span>
-    <el-icon><More /></el-icon>
+    <el-icon class="dropdown"><More /></el-icon>
     <template #dropdown>
       <el-dropdown-menu>
         <slot></slot>
@@ -14,11 +13,11 @@
 import { More } from '@element-plus/icons-vue'
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .dropdown {
   color: var(--main-color);
   cursor: pointer;
-  font-size: 12px;
-  padding-left: 5px;
+  font-size: 16px;
+  margin-left: 5px;
 }
 </style>

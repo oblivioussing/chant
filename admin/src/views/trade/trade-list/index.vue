@@ -22,6 +22,10 @@
       @edit="lister.edit(state, $event)"
       @copy="lister.copy(state, $event)"
       @delete="onDelete($event)">
+      <chant-more-dropdown>
+        <el-dropdown-item>状态</el-dropdown-item>
+        <el-dropdown-item>状态</el-dropdown-item>
+      </chant-more-dropdown>
     </chant-column-operate>
   </chant-table>
   <!-- pagination -->

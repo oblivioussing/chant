@@ -10,11 +10,18 @@ import {
   Document,
   Delete,
   Edit,
+  Link,
   Plus
 } from '@element-plus/icons-vue'
 
 // type
-type IconType = 'copyDocument' | 'delete' | 'document' | 'edit' | 'plus'
+type IconType =
+  | 'copyDocument'
+  | 'delete'
+  | 'document'
+  | 'edit'
+  | 'link'
+  | 'plus'
 // props
 const props = defineProps<{
   iconType?: IconType
@@ -26,10 +33,13 @@ const icon = computed(() => {
     delete: Delete,
     document: Document,
     edit: Edit,
+    link: Link,
     plus: Plus
   }
   if (props.iconType) {
     return map[props.iconType]
+  } else {
+    return undefined
   }
 })
 </script>

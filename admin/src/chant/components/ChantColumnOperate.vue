@@ -3,29 +3,38 @@
     :align="'center'"
     fixed="right"
     :label="t('operate')"
-    :width="widthCpd">
+    :min-width="widthCpd">
     <template #default="{ row, $index }">
       <div class="column-operate">
         <!-- 编辑 -->
-        <chant-button v-if="show('edit')" link @click="emits('edit', row)">
-          {{ tg('button.edit') }}
-        </chant-button>
+        <chant-icon-button
+          v-if="show('edit')"
+          icon-type="edit"
+          link
+          @click="emits('edit', row)">
+        </chant-icon-button>
         <!-- 复制 -->
-        <chant-button v-if="show('copy')" link @click="emits('copy', row)">
-          {{ tg('button.copy') }}
-        </chant-button>
+        <chant-icon-button
+          v-if="show('copy')"
+          icon-type="copyDocument"
+          link
+          @click="emits('copy', row)">
+        </chant-icon-button>
         <!-- 详情 -->
-        <chant-button v-if="show('detail')" link @click="emits('detail', row)">
-          {{ tg('button.detail') }}
-        </chant-button>
+        <chant-icon-button
+          v-if="show('detail')"
+          icon-type="link"
+          link
+          @click="emits('detail', row)">
+        </chant-icon-button>
         <!-- 删除 -->
-        <chant-button
+        <chant-icon-button
           v-if="show('delete')"
+          icon-type="delete"
           link
           type="danger"
           @click="emits('delete', row)">
-          {{ tg('button.delete') }}
-        </chant-button>
+        </chant-icon-button>
         <slot :index="$index" :row="row"></slot>
       </div>
     </template>
@@ -33,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
 import lang from '@/lang/chant'
 
@@ -44,17 +53,19 @@ const props = defineProps<{
   width?: string | number
 }>()
 // emits
-const emits = defineEmits(['edit','copy', 'detail', 'delete'])
+const emits = defineEmits(['edit', 'copy', 'detail', 'delete'])
 // use
 const { t } = useI18n({ messages: lang })
-const { t: tg } = useI18n({ useScope: 'global' })
+const slots = useSlots()
 // computed
 const widthCpd = computed(() => {
   if (props.width) {
     return props.width
   }
   const count = props.options?.length || 0
-  return count > 1 ? 50 * count : 60
+  let width = count > 1 ? 25 * count : 30
+  width = slots.default ? width + 25 : width
+  return width
 })
 // 显示按钮
 function show(type: Option) {
@@ -68,5 +79,11 @@ function show(type: Option) {
   align-items: center;
   justify-content: center;
   width: 100%;
+  :deep(.el-button.is-link) {
+    font-size: 16px;
+  }
+  :deep(.el-button + .el-button) {
+    margin-left: 0;
+  }
 }
 </style>
