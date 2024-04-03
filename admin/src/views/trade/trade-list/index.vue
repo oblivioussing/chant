@@ -34,7 +34,7 @@
       @delete="onDelete($event)">
       <template #default="{ row }">
         <!-- more -->
-        <chant-more-dropdown @command="onMoreOperate($event, row)">
+        <chant-more-dropdown @command="onColumnMore($event, row)">
           <el-dropdown-item command="status">状态</el-dropdown-item>
           <el-dropdown-item command="void">作废</el-dropdown-item>
         </chant-more-dropdown>
@@ -99,7 +99,7 @@ function onMore(type: string) {
   console.log(type)
 }
 // 更多操作column
-function onMoreOperate(type: string, row: any) {
+function onColumnMore(type: string, row: any) {
   console.log(type, row)
 }
 </script>
