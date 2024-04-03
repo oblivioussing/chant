@@ -25,7 +25,7 @@ export default {
     copyFail: 'copy fail',
     copySuccess: 'copy success',
     enter: 'Please enter',
-    required: ' can not be null',
+    required: 'can not be null',
     select: 'Please select',
     totalRecords: 'A total of {0} records',
     confirmDelete: 'Confirm delete?',

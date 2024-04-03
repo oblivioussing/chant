@@ -1,4 +1,4 @@
-import type { DatePickType, TagProps } from 'element-plus'
+import type { DatePickType, FormItemRule, TagProps } from 'element-plus'
 
 export type CustomPicker = 'user-picker'
 
@@ -52,7 +52,7 @@ export type FormColumn = {
   multiple?: boolean // 是否支持多选文件
   required?: boolean // 是否必填
   rows?: number // 输入框行数,仅type为Textarea时有效
-  rules?: any[] // 表单验证规则
+  rules?: FormItemRule[] // 表单验证规则
   selectMultiple?: boolean // select是否多选
   showCustom?: (row: any) => boolean // 自定义显示逻辑
   slotForm?: boolean // 表单slot

@@ -1,14 +1,16 @@
 <template>
   <!-- search -->
-  <chant-table-search v-model="state" :dict :lang @query="getList">
+  <chant-table-search
+    v-model="state"
+    :dict="dict"
+    :lang="lang"
+    @query="getList">
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate
     v-model="state"
     :lang
     :options="['add', 'delete']"
-    show-checked-all
-    split-button
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>

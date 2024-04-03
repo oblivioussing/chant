@@ -16,15 +16,10 @@
   <!-- table -->
   <chant-table v-model="state" :dict="dict">
     <!-- 操作 -->
-    <chant-column-operate :width="100">
-      <template #="{ row }">
-        <!-- 编辑 -->
-        <chant-button link @click="lister.edit(state, row)">编辑</chant-button>
-        <!-- 删除 -->
-        <chant-button link type="danger" @click="onDelete(row)">
-          删除
-        </chant-button>
-      </template>
+    <chant-column-operate
+      :options="['edit', 'delete']"
+      @edit="lister.edit(state, $event)"
+      @delete="onDelete($event)">
     </chant-column-operate>
   </chant-table>
   <!-- pagination -->
@@ -35,13 +30,13 @@
   </chant-pagination>
   <!-- 新增/编辑 -->
   <chant-dialog v-model="state.editVisible" :title="lister.title(state)">
-    <add-edit
-      v-if="state.editVisible"
+    <mix-form
+      v-if="state.mixForm"
       :copy-flag="state.copyFlag"
-      :page-type="state.editType"
+      :page-type="state.pageType"
       :selection="state.selection"
-      @close="state.editVisible = false">
-    </add-edit>
+      @close="state.mixForm = false">
+    </mix-form>
   </chant-dialog>
 </template>
 
@@ -49,7 +44,7 @@
 import { reactive } from 'vue'
 import { useLister } from '@/use'
 import { columns, dict } from './share'
-import AddEdit from './components/AddEdit.vue'
+import MixForm from './components/MixForm.vue'
 
 // use
 const lister = useLister()

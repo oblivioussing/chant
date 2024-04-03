@@ -304,15 +304,14 @@ function rangeField(column: Column, type: 'start' | 'end') {
 }
 // 校验规则
 function rules(column: Column) {
+  const rules = column.rules || []
   if (column.required) {
-    return [
-      {
-        required: true,
-        message: translate(column) + tg('tips.required')
-      }
-    ]
+    rules.push({
+      required: true,
+      message: core.i18nJoint(translate(column), tg('tips.required'))
+    })
   }
-  return column.rules || []
+  return rules
 }
 // change
 function onChange(column: Column) {

@@ -1,0 +1,14 @@
+.config-box {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  .config-item {
+    display: flex;
+    align-items: center;
+    margin: 3px 10px 3px 0;
+    .label {
+      margin-right: 10px;
+    }
+  }
+}

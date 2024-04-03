@@ -1,9 +1,9 @@
 <template>
-  <add-edit page-type="edit" type="page"></add-edit>
+  <mix-form page-type="edit" type="page"></mix-form>
 </template>
 
 <script setup lang="ts">
-import AddEdit from './components/AddEdit.vue'
+import MixForm from './components/MixForm.vue'
 </script>
 
 <style scoped lang="scss"></style>

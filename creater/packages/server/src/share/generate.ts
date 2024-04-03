@@ -11,7 +11,7 @@ const typeDict = {
 // 执行生成命令行所在的目录
 const cmdPath = process.argv.pop()!
 // 生成代码的目录
-const codeDir = `${cmdPath}/chant-generate-code`
+const codeDir = `${cmdPath}/chant-generate`
 
 // 生成代码
 export async function generate(data: Form) {

@@ -62,66 +62,9 @@
         align="center"
         label="配置">
         <template #="{ row }">
-          <div class="config-box">
-            <!-- required -->
-            <div class="config-item">
-              <div class="label">required:</div>
-              <el-select v-model="row.required" size="small">
-                <el-option label="true" :value="1"></el-option>
-                <el-option label="false" :value="0"></el-option>
-              </el-select>
-            </div>
-            <!-- search -->
-            <div class="config-item">
-              <div class="label">search:</div>
-              <el-select v-model="row.search" size="small">
-                <el-option label="true" :value="1"></el-option>
-                <el-option label="false" :value="0"></el-option>
-              </el-select>
-            </div>
-            <!-- hideInPages -->
-            <div class="config-item">
-              <div class="label">hideInPages:</div>
-              <el-select v-model="row.hideInPages" multiple size="small">
-                <el-option label="list" value="list"></el-option>
-                <el-option label="add" value="add"></el-option>
-                <el-option label="edit" value="edit"></el-option>
-              </el-select>
-            </div>
-            <!-- type -->
-            <div class="config-item">
-              <div class="label">type:</div>
-              <el-select v-model="row.type" size="small">
-                <el-option
-                  v-for="item in typeList"
-                  :key="item"
-                  :label="item"
-                  :value="item">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- datepickerType -->
-            <div v-if="row.type === 'date-picker'" class="config-item">
-              <div class="label">datepickerType:</div>
-              <el-select v-model="row.datepickerType" size="small">
-                <el-option
-                  v-for="item in datepickerTypeList"
-                  :key="item"
-                  :label="item"
-                  :value="item">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- inputType -->
-            <div v-if="row.type === 'input'" class="config-item">
-              <div class="label">inputType:</div>
-              <el-select v-model="row.inputType" size="small">
-                <el-option label="password" value="password"></el-option>
-                <el-option label="text" value="text"></el-option>
-                <el-option label="textarea" value="textarea"></el-option>
-              </el-select>
-            </div>
-          </div>
+          <!-- 前端配置 -->
+          <front-config v-show="state.form.type === '1'" :row="row">
+          </front-config>
         </template>
       </el-table-column>
     </el-table>
@@ -143,32 +86,11 @@ import { ElMessage, type TableInstance } from 'element-plus'
 import Sortable from 'sortablejs'
 import { computed, onMounted, reactive, ref } from 'vue'
 import Ryougi, { type RequestConfig } from './api/ryougi'
+import FrontConfig from './components/FrontConfig.vue'
 
 const ryougi = new Ryougi()
 ryougi.baseurl = 'http://127.0.0.1:7010/'
 
-// var
-const typeList = [
-  'date-picker',
-  'input',
-  'input-number',
-  'input-number-range',
-  'radio',
-  'select',
-  'time-picker',
-  'upload'
-]
-const datepickerTypeList = [
-  'year',
-  'month',
-  'date',
-  'dates',
-  'week',
-  'datetime',
-  'datetimerange',
-  'daterange',
-  'monthrange'
-]
 // ref
 const tableRef = ref<TableInstance>()
 // state
@@ -290,20 +212,6 @@ async function onStart() {
   justify-content: space-between;
   .minor {
     color: var(--el-text-color-secondary);
-  }
-}
-.config-box {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  .config-item {
-    display: flex;
-    align-items: center;
-    margin: 3px 10px 3px 0;
-    .label {
-      margin-right: 10px;
-    }
   }
 }
 .footer-box {

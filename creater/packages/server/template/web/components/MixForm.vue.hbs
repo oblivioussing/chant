@@ -42,7 +42,7 @@ function onSave() {
   const map = {
     add: '{{module}}/add',
     edit: '{{module}}/update'
-  }
+  } as any
   const path = map[props.pageType]
   former.save(path, state)
 }
