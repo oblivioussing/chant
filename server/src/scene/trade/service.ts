@@ -1,5 +1,3 @@
-import { I18nContext, I18nService } from 'nestjs-i18n'
-import { Inject } from '@nestjs/common'
 import type { Prisma, Trade } from '@prisma/client'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
@@ -8,8 +6,6 @@ import { StatusEnum } from './enum'
 import { tradeEntity, type TradeVo } from './model'
 
 export class TradeService extends BaseService {
-  @Inject(I18nService)
-  private readonly i18n: I18nService
   private trade: Prisma.TradeDelegate
 
   constructor() {
@@ -73,7 +69,6 @@ export class TradeService extends BaseService {
   }
   // 列表
   async list(trade: Trade, page: Page) {
-    console.log(this.i18n.t('trade.test', { lang: I18nContext.current().lang }))
     const pageData = new PageData<TradeVo>()
     const result = new Result<typeof pageData>()
     const rows = await this.trade.findMany({

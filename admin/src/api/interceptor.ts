@@ -13,6 +13,7 @@ shiki.interceptors.request.use((config: RequestConfig) => {
       config.headers = {}
     }
     config.headers!['token'] = token
+    config.headers!['lang'] = 'zh'
   }
   return config
 })

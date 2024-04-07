@@ -1,10 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
 import { PrismaClient } from '@prisma/client'
+import { I18nContext, I18nService } from 'nestjs-i18n'
 import { base } from '@/utils'
 
 @Injectable()
 export class BaseService {
+  @Inject(I18nService)
+  private readonly i18n: I18nService
   @Inject(REQUEST)
   private readonly request: Request // request
   prisma = new PrismaClient() // prisma
@@ -13,6 +16,11 @@ export class BaseService {
   getUid() {
     const token = this.request.headers['token']
     return base.getUidByToken(token)
+  }
+  // 国际化
+  t(text: string) {
+    const lang = I18nContext.current().lang
+    return this.i18n.t(text, { lang })
   }
   // 用户id转为name
   async userIdToName<T extends Record<string, any>>(
