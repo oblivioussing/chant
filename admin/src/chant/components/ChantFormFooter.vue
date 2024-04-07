@@ -13,14 +13,14 @@
       <slot></slot>
       <template v-if="!$slots.default">
         <!-- 关闭 -->
-        <el-button @click="onClose">{{ tg('button.close') }}</el-button>
+        <el-button @click="onClose">{{ gt('button.close') }}</el-button>
         <!-- 保存 -->
         <el-button
           v-if="vModel.pageType !== 'detail'"
           :loading="vModel.loading"
           type="primary"
           @click="emits('save')">
-          {{ tg('button.save') }}
+          {{ gt('button.save') }}
         </el-button>
       </template>
     </div>
@@ -46,7 +46,7 @@ const emits = defineEmits(['close', 'save'])
 const vModel = defineModel() as ModelRef<ModelValue>
 // use
 const { t } = useI18n({ messages: lang })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 // 关闭
 function onClose() {
   if (vModel.value.type === 'page') {

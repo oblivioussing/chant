@@ -46,7 +46,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="quit">
-              {{ tg('app.quit') }}
+              {{ gt('app.quit') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -70,7 +70,7 @@ import { storage } from '@/utils'
 const emits = defineEmits(['update:modelValue'])
 // i18n
 const { t } = useI18n({ messages: lang })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 // router
 const router = useRouter()
 // store

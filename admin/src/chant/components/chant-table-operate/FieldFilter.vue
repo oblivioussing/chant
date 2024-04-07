@@ -27,7 +27,7 @@
           {{ t('reset') }}
         </el-button>
         <el-button type="primary" @click="onSave">
-          {{ tg('button.save') }}
+          {{ gt('button.save') }}
         </el-button>
       </div>
     </div>
@@ -61,7 +61,7 @@ const vModel = defineModel() as ModelRef<ListState>
 const en = { ...props.lang?.en, ...chantLang.en }
 const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 // var
 const columnsBackups = base.clone(vModel.value.columns)

@@ -149,7 +149,7 @@ const vModel = defineModel<ListState>()
 // use
 const { toClipboard } = useClipboard()
 const { t } = useI18n({ messages: props?.lang })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // ref
 const tableRef = ref<TableInstance>()
@@ -273,7 +273,7 @@ function valueFmt(column: Column, value: any) {
   // format
   // if(column.format === 'xxx'){}
   // append
-  const append = column.append ? tg(column.append) : ''
+  const append = column.append ? gt(column.append) : ''
   return value + append
 }
 // 字典格式化
@@ -319,10 +319,10 @@ function onSelectChange(selection: any[]) {
 async function onCopy(text: string) {
   try {
     await toClipboard(text)
-    ElMessage.success(tg('tips.copySuccess'))
+    ElMessage.success(gt('tips.copySuccess'))
   } catch (e) {
     console.error(e)
-    ElMessage.error(tg('tips.copyFail'))
+    ElMessage.error(gt('tips.copyFail'))
   }
 }
 // 翻译

@@ -38,10 +38,10 @@
               :rows="item.rows || 3"
               :type="item.inputType">
               <template v-if="item.prepend" #prepend>
-                {{ tg(item.prepend) }}
+                {{ gt(item.prepend) }}
               </template>
               <template v-else-if="item.append" #append>
-                {{ tg(item.append) }}
+                {{ gt(item.append) }}
               </template>
             </el-input>
             <!-- select -->
@@ -195,7 +195,7 @@ const vModel = defineModel<{
 // use
 const appStore = useAppStore()
 const { t } = useI18n({ messages: props.lang })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 // ref
 const formRef = ref<FormInstance>()
 // state
@@ -308,7 +308,7 @@ function rules(column: Column) {
   if (column.required) {
     rules.push({
       required: true,
-      message: core.i18nJoint(translate(column), tg('tips.required'))
+      message: core.i18nJoint(translate(column), gt('tips.required'))
     })
   }
   return rules
@@ -331,8 +331,8 @@ function translate(column: Column, type?: 'enter' | 'select') {
   let label = column.label || column.prop || column.title!
   label = props.lang ? t(label) : label
   const map = {
-    enter: tg('tips.enter'),
-    select: tg('tips.select')
+    enter: gt('tips.enter'),
+    select: gt('tips.select')
   }
   const tips = type ? map[type] : ''
   if (tips) {

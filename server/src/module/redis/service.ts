@@ -4,10 +4,11 @@ import config from '@/config'
 type Prefix = 'token'
 
 export class RedisService {
+  private readonly redis: Redis
+
   constructor() {
     this.redis = new Redis(config.redisUrl)
   }
-  redis: Redis
 
   async set(prfix: Prefix, key: string, value: any) {
     return await this.redis.set(`${prfix}_${key}`, value)

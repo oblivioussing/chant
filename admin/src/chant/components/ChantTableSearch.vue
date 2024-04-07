@@ -27,10 +27,10 @@
             :clearable="item.clearable !== false"
             :placeholder="translate(item, 'enter')">
             <template v-if="item.prepend" #prepend>
-              {{ tg(item.prepend) }}
+              {{ gt(item.prepend) }}
             </template>
             <template v-else-if="item.append" #append>
-              {{ tg(item.append) }}
+              {{ gt(item.append) }}
             </template>
           </el-input>
           <!-- input-number -->
@@ -164,7 +164,7 @@ const vModel = defineModel<ListState>()
 const en = { ...props.lang?.en, ...chantLang.en }
 const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const resizeThrottle = useThrottleFn(containerAuto, 1000)
 // ref
 const formRef = ref<FormInstance>()
@@ -294,8 +294,8 @@ function translate(column: Column, type?: 'enter' | 'select') {
   let label = column.label || column.prop
   label = props.lang ? t(label) : label
   const map = {
-    enter: tg('tips.enter'),
-    select: tg('tips.select')
+    enter: gt('tips.enter'),
+    select: gt('tips.select')
   }
   const tips = type ? map[type] : ''
   return core.i18nJoint(tips, label)

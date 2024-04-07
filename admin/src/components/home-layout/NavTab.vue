@@ -18,17 +18,17 @@
           trigger="contextmenu"
           @command="onCommand($event, item.path)"
           @visible-change="onVisibleChange($event, item.path)">
-          <span>{{ tg(`router.${item?.title}`) }}</span>
+          <span>{{ gt(`router.${item?.title}`) }}</span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="close">
-                {{ tg('app.close') }}
+                {{ gt('app.close') }}
               </el-dropdown-item>
               <el-dropdown-item command="closeOther">
-                {{ tg('app.closeOther') }}
+                {{ gt('app.closeOther') }}
               </el-dropdown-item>
               <el-dropdown-item command="closeAll">
-                {{ tg('app.closeAll') }}
+                {{ gt('app.closeAll') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -56,7 +56,7 @@ type PathMapping = {
 const emits = defineEmits(['change'])
 // use
 const chaoser = useChaoser()
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
 // var

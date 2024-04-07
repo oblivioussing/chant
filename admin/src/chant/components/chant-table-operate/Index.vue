@@ -20,7 +20,7 @@
           <!-- 新增 -->
           <chant-icon-button
             v-if="show('add')"
-            :content="tg('button.add')"
+            :content="gt('button.add')"
             icon-type="plus"
             type="primary"
             @click="emits('add')">
@@ -111,7 +111,7 @@ const vModel = defineModel() as ModelRef<ListState>
 const en = { ...props.lang?.en, ...chantLang.en }
 const zh = { ...props.lang?.zh, ...chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 // ref
 const groupsRef = ref()

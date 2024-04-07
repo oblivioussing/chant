@@ -11,7 +11,7 @@ import { bus, core } from '@/utils'
 
 function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()
-  const { t: tg } = useI18n({ useScope: 'global' })
+  const { t: gt } = useI18n({ useScope: 'global' })
   const route = useRoute()
   const state = {
     allFlag: 0 as 0 | 1,
@@ -43,7 +43,7 @@ function useLister(config?: { type: FormType }) {
     const confirmTip = config.confirmTip
     const params = getListParams(state)
     const count = params.allFlag ? state.total : state.selections.length
-    const title = tg('tips.totalRecords', [count])
+    const title = gt('tips.totalRecords', [count])
     operate(path, state, { confirmTip, params, title })
   }
   // 绑定列表实例
@@ -186,13 +186,13 @@ function useLister(config?: { type: FormType }) {
   // 删除
   function remove(path: string, state: State, params: any) {
     operate(path, state, {
-      confirmTip: tg('tips.confirmDelete'),
+      confirmTip: gt('tips.confirmDelete'),
       params
     })
   }
   // 批量删除
   function removes(path: string, state: State) {
-    batch(path, state, { confirmTip: tg('tips.confirmBatchDelete') })
+    batch(path, state, { confirmTip: gt('tips.confirmBatchDelete') })
   }
   // 标题
   function title(state: State) {
@@ -200,13 +200,13 @@ function useLister(config?: { type: FormType }) {
     if (!meta?.title) {
       return ''
     }
-    const title = tg(`router.${meta?.title}`)
-      ?.replace(tg('app.list'), '')
+    const title = gt(`router.${meta?.title}`)
+      ?.replace(gt('app.list'), '')
       .trim()
     const map = {
-      add: tg('button.add'),
-      edit: tg('button.edit'),
-      detail: tg('button.detail')
+      add: gt('button.add'),
+      edit: gt('button.edit'),
+      detail: gt('button.detail')
     }
     const typeText = map[state.pageType]
     return core.i18nJoint(title, typeText)

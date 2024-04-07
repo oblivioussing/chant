@@ -11,7 +11,7 @@
       <template #="{ row }">
         <!-- 删除 -->
         <el-button link type="danger" @click="onDelete(row)">
-          {{ tg('button.delete') }}
+          {{ gt('button.delete') }}
         </el-button>
       </template>
     </chant-column-operate>
@@ -36,7 +36,7 @@ const props = defineProps<{
 // emits
 const emits = defineEmits(['delete'])
 // use
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 // 生成columns
 function createColumns() {
   return props.columnsSet.map((item) => {

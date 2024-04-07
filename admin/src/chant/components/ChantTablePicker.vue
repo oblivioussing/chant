@@ -47,10 +47,10 @@
     </div>
     <div v-if="isMultiple" class="button-box">
       <!-- 关闭 -->
-      <el-button @click="vModel = false">{{ tg('button.close') }}</el-button>
+      <el-button @click="vModel = false">{{ gt('button.close') }}</el-button>
       <!-- 保存 -->
       <el-button type="primary" @click="onSave">
-        {{ tg('button.save') }}
+        {{ gt('button.save') }}
       </el-button>
     </div>
   </chant-dialog>
@@ -69,7 +69,7 @@ const emits = defineEmits(['change'])
 // model
 const vModel = defineModel() as ModelRef<boolean>
 // use
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // state
 const state = reactive({

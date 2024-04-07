@@ -37,7 +37,7 @@
     </el-menu>
     <!-- 版本号 -->
     <div class="version">
-      <template v-if="!props.isCollapse">{{ tg('app.version') }}:</template>
+      <template v-if="!props.isCollapse">{{ gt('app.version') }}:</template>
       {{ appVersion }}
       <template v-if="isDev">({{ stage }})</template>
     </div>
@@ -54,7 +54,7 @@ const props = defineProps<{
   isCollapse: boolean
 }>()
 // use
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
 // var
@@ -91,7 +91,7 @@ watch(
 )
 // 标题
 function title(meta?: any) {
-  return tg(`router.${meta.title}`)
+  return gt(`router.${meta.title}`)
 }
 // 菜单切换
 function onTab(path: string) {

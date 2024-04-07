@@ -39,10 +39,10 @@ const id = defineModel<string>('id')
 const text = defineModel<string>('text')
 const visible = defineModel<boolean>()
 // use
-const { t: tg } = useI18n({ useScope: 'global' })
+const { t: gt } = useI18n({ useScope: 'global' })
 // computed
 const tips = computed(() => {
-  return core.i18nJoint(tg('tips.select'), props.placeholder || '')
+  return core.i18nJoint(gt('tips.select'), props.placeholder || '')
 })
 // 清空
 function onClear() {
