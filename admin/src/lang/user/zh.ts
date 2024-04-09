@@ -10,5 +10,6 @@ export default {
   name: '姓名',
   phone: '手机号',
   gender: '性别',
-  status: '状态'
+  status: '状态',
+  avatar: '头像'
 }

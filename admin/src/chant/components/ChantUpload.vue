@@ -44,10 +44,12 @@
 </template>
 
 <script setup lang="ts">
+import type { UploadFile, UploadRawFile } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
-import { type UploadType } from '@/chant'
+import { shiki, type UploadType } from '@/chant'
+import { type RequestConfig } from '@/api/ryougi'
 import lang from '@/lang/chant'
 
 // type
@@ -99,8 +101,9 @@ function movingElement() {
   }
 }
 // file change
-function onChange(row: any) {
-  console.log(row)
+function onChange(row: UploadFile) {
+  // 上传文件
+  upload(row.raw!)
 }
 // 按钮出发文件选择
 function onTrigger() {
@@ -114,6 +117,18 @@ function onPreview(row: any) {
     state.previewUrl = row.url
     state.previewVisible = true
   }
+}
+// 上传文件
+async function upload(file: UploadRawFile) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestConfig = {
+    url: 'fs/upload',
+    body: formData,
+    method: 'POST'
+  } as RequestConfig
+  const { data } = await shiki.request(requestConfig)
+  console.log(data)
 }
 </script>
 

@@ -48,7 +48,14 @@ class Shiki {
   }
   // post请求
   async post(url: string, body?: any, config?: Config) {
-    const requestConfig: RequestConfig = { url, body, method: 'POST' }
+    const requestConfig: RequestConfig = {
+      url,
+      body,
+      method: 'POST',
+      headers: {
+        'content-type': ContentTypeEnum.Json
+      }
+    }
     if (!config) {
       config = { successTip: true, failTip: true }
     }
@@ -82,7 +89,11 @@ class Shiki {
     return result
   }
   // 消息提示
-  private message(type: 'success' | 'error', message?: string, config?: Config) {
+  private message(
+    type: 'success' | 'error',
+    message?: string,
+    config?: Config
+  ) {
     const successStatus = type === 'success' && config?.successTip
     const errorStatus = type === 'error' && config?.failTip
     if (successStatus || errorStatus) {

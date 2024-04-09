@@ -160,6 +160,7 @@
           </el-form-item>
         </div>
       </template>
+      <slot></slot>
     </el-form>
   </div>
 </template>

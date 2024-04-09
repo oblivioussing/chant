@@ -38,6 +38,11 @@ export default () => {
         2: 'danger'
       },
       type: 'select'
+    },
+    {
+      prop: 'avatar', // 头像
+      type: 'upload',
+      uploadType: 'single-image'
     }
   ] as Column[]
 }

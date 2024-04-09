@@ -10,5 +10,6 @@ export default {
   name: 'name',
   phone: 'phone',
   gender: 'gender',
-  status: 'status'
+  status: 'status',
+  avatar: 'avatar'
 }

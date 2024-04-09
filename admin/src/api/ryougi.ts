@@ -49,7 +49,8 @@ class Ryougi {
     config: RequestConfig,
     signal: AbortSignal
   ): Promise<Response> {
-    let { url, headers = {}, body } = config
+    let { url, body } = config
+    const headers = config.headers || {}
     // 请求地址拼接
     if (!url.includes('http')) {
       url = `${this.baseurl}${url}`
@@ -62,18 +63,12 @@ class Ryougi {
         url = `${url}?${params}`
       }
     }
-    // post
-    if (config.method === 'POST') {
-      if (!headers['content-type']) {
-        headers['content-type'] = ContentTypeEnum.Json
-      }
-    }
     // 序列化JSON字符串
     if (headers['content-type'] === ContentTypeEnum.Json) {
       body = JSON.stringify(body)
     }
     // 请求配置
-    let requestInit: RequestInit = {
+    const requestInit: RequestInit = {
       body,
       headers,
       method: config.method,
