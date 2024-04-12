@@ -121,6 +121,7 @@ function onPreview(row: any) {
 // 上传文件
 async function upload(file: UploadRawFile) {
   const formData = new FormData()
+  formData.append('test', '123')
   formData.append('file', file)
   const requestConfig = {
     url: 'fs/upload',

@@ -24,7 +24,7 @@
       <!-- 保存 -->
       <div class="btn-box">
         <el-button @click="onReset">
-          {{ t('reset') }}
+          {{ t('chant.reset') }}
         </el-button>
         <el-button type="primary" @click="onSave">
           {{ gt('button.save') }}
@@ -33,7 +33,7 @@
     </div>
   </Teleport>
   <chant-button
-    :content="t('filter')"
+    :content="t('chant.filter')"
     :icon="Document"
     type="primary"
     @click.stop="onShowFilter">
@@ -58,8 +58,8 @@ const props = defineProps<{
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
-const en = { ...props.lang?.en, ...chantLang.en }
-const zh = { ...props.lang?.zh, ...chantLang.zh }
+const en = { ...props.lang?.en, chant: chantLang.en }
+const zh = { ...props.lang?.zh, chant: chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()

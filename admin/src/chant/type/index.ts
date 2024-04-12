@@ -118,19 +118,19 @@ export type ListState = {
   allFlag?: 0 | 1 // 全选
   columns: ListColumn[] // 列表字段
   copyFlag?: 0 | 1 // 复制flag
-
   mixForm?: boolean // mix-form是否显示
   extra: Record<string, any> // 页面额外数据
   formType: FormType // 表单操作方式
   keepQuery: Record<string, any> // 持续存在的查询条件
   list: any[] // 列表数据
   loading: boolean // loading
-  query: Record<string, any> // 查询条件
   pages: {
     pageNum: number
     pageSize: number
   } // 分页
   pageType: PageType // 页面类型
+  pickerText: Record<string, any> // 查找带回的text
+  query: Record<string, any> // 查询条件
   selection: any // 当前处理的一条数据
   selections: any[] // 列表选中的数据
   total: number // 总数

@@ -11,7 +11,6 @@ export default () => {
     {
       prop: 'password', // 密码
       hideInPages: ['list', 'edit'],
-      inputType: 'password',
       required: true
     },
     {

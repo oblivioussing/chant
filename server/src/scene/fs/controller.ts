@@ -10,7 +10,6 @@ export class FsController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
-    console.log(file)
     const result = await this.fsService.upload(file)
     return result
   }

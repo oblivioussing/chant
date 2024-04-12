@@ -5,8 +5,8 @@
         v-if="props.showCheckedAll"
         class="all-box"
         @change="onChange">
-        <span>{{ t('all') }}:</span>
-        <span class="p-l-5"> {{ vModel.total }}{{ t('record') }} </span>
+        <span>{{ t('chant.all') }}:</span>
+        <span class="p-l-5"> {{ vModel.total }}{{ t('chant.record') }} </span>
       </el-checkbox>
     </div>
     <div class="button-box" ref="groupsRef">
@@ -45,7 +45,7 @@
           <!-- 批量删除 -->
           <chant-icon-button
             v-if="show('delete')"
-            :content="t('batchDelete')"
+            :content="t('chant.batchDelete')"
             :disabled="!isSelected"
             icon-type="delete"
             type="danger"
@@ -66,7 +66,7 @@
       </div>
       <el-button-group class="m-l-10">
         <!-- 表单操作方式 -->
-        <chant-button :content="t('formType')" @click="onFormType">
+        <chant-button :content="t('chant.formType')" @click="onFormType">
           <chant-icon-font :icon="formTypeIcon"></chant-icon-font>
         </chant-button>
         <!-- 字段筛选 -->
@@ -108,8 +108,8 @@ const emits = defineEmits(['add', 'set', 'delete', 'more'])
 // model
 const vModel = defineModel() as ModelRef<ListState>
 // use
-const en = { ...props.lang?.en, ...chantLang.en }
-const zh = { ...props.lang?.zh, ...chantLang.zh }
+const en = { ...props.lang?.en, chant: chantLang.en }
+const zh = { ...props.lang?.zh, chant: chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()

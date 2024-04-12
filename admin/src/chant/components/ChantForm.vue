@@ -309,7 +309,7 @@ function rules(column: Column) {
   if (column.required) {
     rules.push({
       required: true,
-      message: core.i18nJoint(translate(column), gt('tips.required'))
+      message: core.i18nJoint([translate(column), gt('tips.required')])
     })
   }
   return rules
@@ -337,7 +337,7 @@ function translate(column: Column, type?: 'enter' | 'select') {
   }
   const tips = type ? map[type] : ''
   if (tips) {
-    return core.i18nJoint(tips, label)
+    return core.i18nJoint([tips, label])
   } else {
     return label
   }

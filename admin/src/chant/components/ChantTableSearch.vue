@@ -93,6 +93,7 @@
           <dynamic-picker
             v-if="item.type === 'custom-picker'"
             v-model:id="vModel.query[item.dynamicId || item.prop]"
+            v-model:text="vModel.pickerText[getDynamicText(item)]"
             :title="translate(item)"
             :type="item.customPicker!"
             @change="emits('query')">
@@ -103,27 +104,27 @@
     <!-- 展开搜索 -->
     <chant-button
       v-if="state.arrow === 'down'"
-      :content="t('spread')"
+      :content="t('chant.spread')"
       :icon="ArrowDown"
       @click="onCollapse('up')">
     </chant-button>
     <!-- 关闭搜索 -->
     <chant-button
       v-if="state.arrow === 'up'"
-      :content="t('fold')"
+      :content="t('chant.fold')"
       :icon="ArrowUp"
       @click="onCollapse('down')">
     </chant-button>
     <el-button-group style="margin-left: 10px">
       <!-- 查询 -->
       <chant-button
-        :content="t('query')"
+        :content="t('chant.query')"
         :icon="Search"
         @click="onSubmit('query')">
       </chant-button>
       <!-- 重置 -->
       <chant-button
-        :content="t('reset')"
+        :content="t('chant.reset')"
         :icon="Refresh"
         @click="onSubmit('reset')">
       </chant-button>
@@ -161,8 +162,8 @@ const emits = defineEmits(['query'])
 // model
 const vModel = defineModel<ListState>()
 // use
-const en = { ...props.lang?.en, ...chantLang.en }
-const zh = { ...props.lang?.zh, ...chantLang.zh }
+const en = { ...props.lang?.en, chant: chantLang.en }
+const zh = { ...props.lang?.zh, chant: chantLang.zh }
 const { t } = useI18n({ messages: { en, zh } })
 const { t: gt } = useI18n({ useScope: 'global' })
 const resizeThrottle = useThrottleFn(containerAuto, 1000)
@@ -253,6 +254,13 @@ function rangeField(column: Column, type: 'start' | 'end') {
   }
   return `${column.prop}${suffix}`
 }
+// 获取查找带回的text字段
+function getDynamicText(column: Column) {
+  if (column.dynamicText) {
+    return column.dynamicText
+  }
+  return column.prop.replace(/Id/, 'Name')
+}
 // 展开/关闭
 function onCollapse(type: 'down' | 'up') {
   state.arrow = type
@@ -280,6 +288,7 @@ async function onSubmit(type: 'query' | 'reset') {
   try {
     if (type === 'reset' && vModel.value) {
       vModel.value.pages.pageNum = 1
+      vModel.value.pickerText = {}
       vModel.value.query = {}
       bindQueryValue()
     }
@@ -298,7 +307,7 @@ function translate(column: Column, type?: 'enter' | 'select') {
     select: gt('tips.select')
   }
   const tips = type ? map[type] : ''
-  return core.i18nJoint(tips, label)
+  return core.i18nJoint([tips, label])
 }
 </script>
 

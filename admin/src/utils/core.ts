@@ -5,6 +5,7 @@ import bus from './bus'
 import storage from './storage'
 
 type Columns = FormColumn[] | ListColumn[]
+
 type PageStorage = {
   formType?: string
   tableFilter?: any
@@ -68,11 +69,11 @@ export function updateColumn<T extends Columns>(
   return list
 }
 // 国际化字符拼接
-export function i18nJoint(str1: string, str2: string) {
+export function i18nJoint(list: string[]) {
   const lang = storage.getLocal(StorageEnum.Lang) as LangEnum
+  let splicer = ''
   if ([LangEnum.En].includes(lang)) {
-    return `${str1} ${str2}`
-  } else {
-    return `${str1}${str2}`
+    splicer = ' '
   }
+  return list.join(splicer)
 }

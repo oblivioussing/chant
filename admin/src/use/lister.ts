@@ -25,6 +25,7 @@ function useLister(config?: { type: FormType }) {
     mixForm: false,
     pages: { pageNum: 1, pageSize: 20 },
     pageType: '' as PageType,
+    pickerText: {} as Record<string, any>,
     query: {} as Record<string, any>,
     selection: {} as any,
     selections: [] as any[],
@@ -209,7 +210,7 @@ function useLister(config?: { type: FormType }) {
       detail: gt('button.detail')
     }
     const typeText = map[state.pageType]
-    return core.i18nJoint(title, typeText)
+    return core.i18nJoint([title, typeText])
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected?: boolean) {

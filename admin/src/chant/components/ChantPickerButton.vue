@@ -42,7 +42,7 @@ const visible = defineModel<boolean>()
 const { t: gt } = useI18n({ useScope: 'global' })
 // computed
 const tips = computed(() => {
-  return core.i18nJoint(gt('tips.select'), props.placeholder || '')
+  return core.i18nJoint([gt('tips.select'), props.placeholder || ''])
 })
 // 清空
 function onClear() {
