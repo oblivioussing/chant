@@ -4,7 +4,7 @@ import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
-import { base, core, encrypt } from '@/utils'
+import { base, encrypt } from '@/utils'
 import { StatusEnum } from './enum'
 import { userEntity, userVo, type UserVo } from './model'
 
@@ -35,7 +35,7 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const data = core.toEntity(user, userEntity)
+    const data = base.toEntity(user, userEntity)
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -63,7 +63,7 @@ export class UserService extends BaseService {
   // 批量删除
   async deletes(params: Many<User>) {
     const result = new Result()
-    const where = core.manyWhere(params, userEntity)
+    const where = base.manyWhere(params, userEntity)
     const row = await this.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -77,7 +77,7 @@ export class UserService extends BaseService {
     const result = new Result<UserVo>()
     const row = await this.user.findUnique({ where: { id } })
     if (row) {
-      result.data = core.toEntity(row, userVo)
+      result.data = base.toEntity(row, userVo)
       result.success({ msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')
@@ -89,8 +89,8 @@ export class UserService extends BaseService {
     const pageData = new PageData<UserVo>()
     const result = new Result<typeof pageData>()
     const rows = await this.user.findMany({
-      ...core.pageHelper(page, 'desc'),
-      select: core.entityToSelect(userEntity),
+      ...base.pageHelper(page, 'desc'),
+      select: base.entityToSelect(userEntity),
       where: user
     })
     const total = await this.user.count({ where: user })
@@ -130,7 +130,7 @@ export class UserService extends BaseService {
   // 更新
   async update(user: User) {
     const result = new Result<User>()
-    const data = core.toEntity(user, user) as User
+    const data = base.toEntity(user, user) as User
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

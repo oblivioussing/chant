@@ -1,7 +1,7 @@
 import type { Prisma, Trade } from '@prisma/client'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
-import { base, core } from '@/utils'
+import { base } from '@/utils'
 import { StatusEnum } from './enum'
 import { tradeEntity, type TradeVo } from './model'
 
@@ -15,7 +15,7 @@ export class TradeService extends BaseService {
   // 新增
   async add(trade: Trade) {
     const result = new Result()
-    const data = core.toEntity(trade, tradeEntity)
+    const data = base.toEntity(trade, tradeEntity)
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
@@ -42,7 +42,7 @@ export class TradeService extends BaseService {
   // 批量删除
   async deletes(params: Many<Trade>) {
     const result = new Result()
-    const where = core.manyWhere(params, tradeEntity)
+    const where = base.manyWhere(params, tradeEntity)
     const data = await this.trade.deleteMany({ where })
     if (data.count) {
       result.success({ msg: '批量删除成功' })
@@ -55,11 +55,11 @@ export class TradeService extends BaseService {
   async detail(id: string) {
     const result = new Result<TradeVo>()
     let data = await this.trade.findUnique({
-      select: core.entityToSelect(tradeEntity),
+      select: base.entityToSelect(tradeEntity),
       where: { id }
     })
     if (data) {
-      data = core.toEntity(data, tradeEntity)
+      data = base.toEntity(data, tradeEntity)
       result.data = await this.userIdToName(data, ['belongId', 'userId'])
       result.success({ msg: '交易信息查询成功' })
     } else {
@@ -72,8 +72,8 @@ export class TradeService extends BaseService {
     const pageData = new PageData<TradeVo>()
     const result = new Result<typeof pageData>()
     const rows = await this.trade.findMany({
-      ...core.pageHelper(page, 'desc'),
-      select: core.entityToSelect(tradeEntity),
+      ...base.pageHelper(page, 'desc'),
+      select: base.entityToSelect(tradeEntity),
       where: trade
     })
     const total = await this.trade.count({ where: trade })
@@ -85,7 +85,7 @@ export class TradeService extends BaseService {
   // 更新
   async update(trade: Trade) {
     const result = new Result<Trade>()
-    const data = core.toEntity(trade, tradeEntity)
+    const data = base.toEntity(trade, tradeEntity)
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await this.trade.update({
