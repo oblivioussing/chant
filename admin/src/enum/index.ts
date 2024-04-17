@@ -7,10 +7,6 @@ export enum ApiCode {
 }
 
 export enum ContentTypeEnum {
-  Audio = 'audio/wav',
-  Excel = 'application/vnd.ms-excel',
-  Text = 'text/javascript',
-  Wrod = 'application/msword',
   Json = 'application/json'
 }
 

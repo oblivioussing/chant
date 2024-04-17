@@ -13,6 +13,8 @@ export type ElementType =
   | 'time-picker'
   | 'upload'
 
+export type FileBizType = 'avatar'
+
 export type PageType = 'add' | 'edit' | 'detail'
 
 export type FormType = 'dialog' | 'inline' | 'page'
@@ -58,6 +60,7 @@ export type FormColumn = {
   slotForm?: boolean // 表单slot
   tips?: string // 提示
   title?: string // 标题
+  fileBizType?: FileBizType // 文件业务类型,仅type为Upload时有效
   uploadType?: UploadType // 文件上传类型,仅type为Upload时有效
 } & BaseColumn
 

@@ -106,6 +106,7 @@
             <chant-upload
               v-else-if="item.type === 'upload'"
               :disabled="isDisabled(item)"
+              :file-biz-type="item.fileBizType"
               :limit="item.limit"
               :multiple="item.multiple"
               :type="item.uploadType">

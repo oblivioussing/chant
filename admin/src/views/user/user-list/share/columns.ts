@@ -41,6 +41,7 @@ export default () => {
     {
       prop: 'avatar', // 头像
       type: 'upload',
+      fileBizType: 'avatar',
       uploadType: 'single-image'
     }
   ] as Column[]

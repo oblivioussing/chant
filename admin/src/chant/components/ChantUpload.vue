@@ -48,14 +48,16 @@ import type { UploadFile, UploadRawFile } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
-import { shiki, type UploadType } from '@/chant'
+import { shiki, type FileBizType, type UploadType } from '@/chant'
 import { type RequestConfig } from '@/api/ryougi'
 import lang from '@/lang/chant'
 
 // type
+
 interface Props {
   buttonText?: string // 按钮文本
-  disabled?: boolean
+  disabled?: boolean // 禁用
+  fileBizType?: FileBizType // 文件业务类型
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
   type: UploadType // 文件上传类型
@@ -121,7 +123,7 @@ function onPreview(row: any) {
 // 上传文件
 async function upload(file: UploadRawFile) {
   const formData = new FormData()
-  formData.append('test', '123')
+  formData.append('fileBizType', props.fileBizType || '')
   formData.append('file', file)
   const requestConfig = {
     url: 'fs/upload',
