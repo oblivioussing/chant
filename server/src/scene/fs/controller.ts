@@ -19,13 +19,6 @@ export class FsController {
     let result = new Result<File>()
     try {
       const buffer = await data.toBuffer()
-      // 判断文件是否已经上传过
-      const md5 = data.fields.md5?.value || ''
-      const row = await this.fsService.rowByMd5(md5)
-      if (row) {
-        result.success({ data: row, msg: '文件上传成功' })
-        return result
-      }
       // 保存文件
       const fileBizType = data.fields.fileBizType.value || 'other'
       const filePath = `./files/${fileBizType}`
@@ -40,8 +33,7 @@ export class FsController {
         const params = {
           filename,
           filenameOriginal: data.filename,
-          filePath: filePath,
-          md5
+          filePath: filePath
         } as File
         result = await this.fsService.upload(params)
         return result

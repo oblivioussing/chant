@@ -4,7 +4,7 @@ export default {
   query: 'query',
   reset: 'reset',
   import: 'import',
-  upload: 'click upload',
+  upload: 'click to upload',
   continueAdd: 'continue add',
   operate: 'operate',
   all: 'all',

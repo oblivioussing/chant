@@ -1,7 +1,7 @@
 <template>
   <!-- pure-button -->
   <el-button
-    v-if="isPureButton"
+    v-if="props.type === 'pure-button'"
     :disabled="props.disabled"
     type="primary"
     @click="onTrigger">
@@ -9,18 +9,19 @@
   </el-button>
   <!-- upload -->
   <el-upload
-    v-model:file-list="state.fileList"
+    v-model:file-list="vModelCpd"
     action="/"
     :auto-upload="false"
     class="chant-upload"
     :class="[props.type]"
     :disabled="props.disabled"
-    :limit="props.limit"
+    :limit="props.type === 'single-image' ? 1 : props.limit"
     :list-type="props.type === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
     ref="uploadRef"
     :show-file-list="showFileList"
     :on-change="onChange"
+    :on-exceed="onExceed"
     :on-preview="onPreview">
     <!-- file-list -->
     <el-button v-if="props.type === 'file-list'" type="primary">
@@ -32,7 +33,11 @@
     </el-icon>
     <!-- single-image -->
     <template v-else-if="props.type === 'single-image'">
-      <el-image v-if="state.imageUrl" class="image" :src="state.imageUrl">
+      <el-image
+        v-if="state.imageUrl"
+        class="image"
+        fit="cover"
+        :src="state.imageUrl">
       </el-image>
       <el-icon v-else class="uploader-icon"><Plus /></el-icon>
     </template>
@@ -44,7 +49,13 @@
 </template>
 
 <script setup lang="ts">
-import type { UploadFile, UploadRawFile } from 'element-plus'
+import { genFileId } from 'element-plus'
+import type {
+  UploadFile,
+  UploadInstance,
+  UploadRawFile,
+  UploadUserFile
+} from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
@@ -53,7 +64,6 @@ import { type RequestConfig } from '@/api/ryougi'
 import lang from '@/lang/chant'
 
 // type
-
 interface Props {
   buttonText?: string // 按钮文本
   disabled?: boolean // 禁用
@@ -66,35 +76,52 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: 'pure-button'
 })
+// emits
+const emits = defineEmits(['upload'])
+// model
+const vModel = defineModel<string | UploadUserFile[]>()
 // use
 const { t } = useI18n({ messages: lang })
-// var
-const isPureButton = props.type === 'pure-button'
 // ref
-const uploadRef = ref()
+const uploadRef = ref<UploadInstance>()
 // state
 const state = reactive({
+  fileList: [] as UploadUserFile[], // 文件列表
   imageUrl: '', // 图片地址
-  fileList: [], // 文件列表
   previewUrl: '', // 预览图片地址
   previewVisible: false // 预览visible
 })
 // computed
 const showFileList = computed(() => {
   const list: UploadType[] = ['file-list', 'picture-card']
-  const status = list.includes(props.type)
-  return status
+  return list.includes(props.type)
+})
+const vModelCpd = computed({
+  get: () => {
+    if (props.type === 'single-image') {
+      return state.fileList
+    } else {
+      return vModel.value as UploadUserFile[]
+    }
+  },
+  set: (val) => {
+    if (props.type === 'single-image') {
+      vModel.value = ''
+    } else {
+      vModel.value = val
+    }
+  }
 })
 // onMounted
 onMounted(() => {
-  if (isPureButton) {
+  if (props.type === 'pure-button') {
     // 挪动元素
     movingElement()
   }
 })
 // 挪动元素(主要是解决el-button-group样式问题)
 function movingElement() {
-  const uploadEl = uploadRef.value.$el as HTMLElement
+  const uploadEl = uploadRef.value?.$el as HTMLElement
   const parentEl = uploadEl.parentElement
   const classList = parentEl?.classList
   const status = classList?.contains('el-button-group')
@@ -104,12 +131,22 @@ function movingElement() {
 }
 // file change
 function onChange(row: UploadFile) {
-  // 上传文件
-  upload(row.raw!)
+  if (props.type === 'single-image') {
+    state.imageUrl = URL.createObjectURL(row.raw!)
+  }
+}
+// 文件超出限制
+function onExceed(files: File[]) {
+  if (props.type === 'single-image') {
+    uploadRef.value!.clearFiles()
+    const file = files[0] as UploadRawFile
+    file.uid = genFileId()
+    uploadRef.value!.handleStart(file)
+  }
 }
 // 按钮出发文件选择
 function onTrigger() {
-  const el = uploadRef.value.$el as HTMLElement
+  const el = uploadRef.value?.$el as HTMLElement
   const uploadEL = el.querySelector('.el-upload') as HTMLElement
   uploadEL?.click()
 }
@@ -131,7 +168,8 @@ async function upload(file: UploadRawFile) {
     method: 'POST'
   } as RequestConfig
   const { data } = await shiki.request(requestConfig)
-  console.log(data)
+  emits('upload', data)
+  return data
 }
 </script>
 

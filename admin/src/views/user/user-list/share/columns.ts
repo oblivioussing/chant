@@ -43,6 +43,14 @@ export default () => {
       type: 'upload',
       fileBizType: 'avatar',
       uploadType: 'single-image'
+    },
+    {
+      prop: 'testList', // 测试
+      label: '测试',
+      type: 'upload',
+      fileBizType: 'avatar',
+      multiple: true,
+      uploadType: 'file-list'
     }
   ] as Column[]
 }

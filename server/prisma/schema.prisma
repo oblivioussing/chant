@@ -46,7 +46,6 @@ model File {
   filename         String   @db.VarChar(50)
   filenameOriginal String   @map("filename_original") @db.VarChar(50)
   filePath         String   @map("file_path") @db.VarChar(50)
-  md5              String   @unique(map: "md5_UNIQUE") @db.VarChar(32)
 
   @@map("file")
 }

@@ -105,11 +105,13 @@
             <!-- upload -->
             <chant-upload
               v-else-if="item.type === 'upload'"
+              v-model="vModel!.form[item.prop]"
               :disabled="isDisabled(item)"
               :file-biz-type="item.fileBizType"
               :limit="item.limit"
               :multiple="item.multiple"
-              :type="item.uploadType">
+              :type="item.uploadType"
+              @upload="onUpload">
             </chant-upload>
             <!-- range -->
             <div
@@ -327,6 +329,10 @@ function onDateRangeChange(column: Column) {
   }
   vModel.value!.form[rangeField(column, 'start')] = value[0]
   vModel.value!.form[rangeField(column, 'end')] = value[1]
+}
+// 文件上传
+function onUpload(data: any | any[]) {
+  console.log(data)
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
