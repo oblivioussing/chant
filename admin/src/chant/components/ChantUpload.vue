@@ -9,7 +9,7 @@
   </el-button>
   <!-- upload -->
   <el-upload
-    v-model:file-list="vModelCpd"
+    :file-list="fileList"
     action="/"
     :auto-upload="false"
     class="chant-upload"
@@ -79,38 +79,31 @@ const props = withDefaults(defineProps<Props>(), {
 // emits
 const emits = defineEmits(['upload'])
 // model
-const vModel = defineModel<string | UploadUserFile[]>()
+const vModel = defineModel<any>()
 // use
 const { t } = useI18n({ messages: lang })
 // ref
 const uploadRef = ref<UploadInstance>()
 // state
 const state = reactive({
-  fileList: [] as UploadUserFile[], // 文件列表
   imageUrl: '', // 图片地址
   previewUrl: '', // 预览图片地址
   previewVisible: false // 预览visible
 })
 // computed
+const fileList = computed(() => {
+  if (showFileList.value) {
+    return vModel.value?.map((item: any) => {
+      item.name = item.filenameOriginal
+      return item
+    }) as UploadUserFile[]
+  } else {
+    return []
+  }
+})
 const showFileList = computed(() => {
   const list: UploadType[] = ['file-list', 'picture-card']
   return list.includes(props.type)
-})
-const vModelCpd = computed({
-  get: () => {
-    if (props.type === 'single-image') {
-      return state.fileList
-    } else {
-      return vModel.value as UploadUserFile[]
-    }
-  },
-  set: (val) => {
-    if (props.type === 'single-image') {
-      vModel.value = ''
-    } else {
-      vModel.value = val
-    }
-  }
 })
 // onMounted
 onMounted(() => {
@@ -130,9 +123,13 @@ function movingElement() {
   }
 }
 // file change
-function onChange(row: UploadFile) {
+async function onChange(row: UploadFile) {
   if (props.type === 'single-image') {
     state.imageUrl = URL.createObjectURL(row.raw!)
+    const data = await upload(row.raw!)
+    if (data) {
+      vModel.value = data.filePath + data.fileName
+    }
   }
 }
 // 文件超出限制
@@ -168,7 +165,6 @@ async function upload(file: UploadRawFile) {
     method: 'POST'
   } as RequestConfig
   const { data } = await shiki.request(requestConfig)
-  emits('upload', data)
   return data
 }
 </script>

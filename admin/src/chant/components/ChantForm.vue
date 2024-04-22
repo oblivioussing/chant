@@ -110,8 +110,7 @@
               :file-biz-type="item.fileBizType"
               :limit="item.limit"
               :multiple="item.multiple"
-              :type="item.uploadType"
-              @upload="onUpload">
+              :type="item.uploadType">
             </chant-upload>
             <!-- range -->
             <div
@@ -329,10 +328,6 @@ function onDateRangeChange(column: Column) {
   }
   vModel.value!.form[rangeField(column, 'start')] = value[0]
   vModel.value!.form[rangeField(column, 'end')] = value[1]
-}
-// 文件上传
-function onUpload(data: any | any[]) {
-  console.log(data)
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {

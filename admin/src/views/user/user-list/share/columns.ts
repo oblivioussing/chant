@@ -48,6 +48,7 @@ export default () => {
       prop: 'testList', // 测试
       label: '测试',
       type: 'upload',
+      limit: 3,
       fileBizType: 'avatar',
       multiple: true,
       uploadType: 'file-list'

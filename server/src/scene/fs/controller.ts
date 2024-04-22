@@ -21,7 +21,7 @@ export class FsController {
       const buffer = await data.toBuffer()
       // 保存文件
       const fileBizType = data.fields.fileBizType.value || 'other'
-      const filePath = `./files/${fileBizType}`
+      const filePath = `./files/${fileBizType}/`
       try {
         await fs.stat(filePath)
       } catch (error) {

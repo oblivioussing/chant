@@ -6,7 +6,6 @@
     :lang="lang"
     @instance="former.bindInstance">
   </chant-form>
-  {{ state.form }}
   <chant-form-footer
     v-model="state"
     @close="former.close(state, emits)"
@@ -33,7 +32,11 @@ const state = reactive({
 })
 // create
 former.created((status) => {
-  state.form.testList = [{ filename: '123' }, { name: '456' }, { name: '789' }]
+  state.form.testList = [
+    { filenameOriginal: '123' },
+    { filenameOriginal: '456' },
+    { filenameOriginal: '789' }
+  ]
   // 获取详情
   status && getDetail()
 }, state)
