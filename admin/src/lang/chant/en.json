@@ -4,7 +4,7 @@
   "query": "query",
   "reset": "reset",
   "import": "import",
-  "upload": "click to upload",
+  "clickUpload": "click to upload",
   "continueAdd": "continue add",
   "operate": "operate",
   "all": "all",

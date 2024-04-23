@@ -6,7 +6,7 @@
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import lang from '@/lang/app'
+import { app as lang } from '@/lang'
 import { useAppStore } from '@/store'
 
 // use

@@ -7,7 +7,7 @@ import type { ListState as State, FormType, PageType } from '@/chant'
 import { ApiCode } from '@/enum'
 import { element } from '@/plugs'
 import { useChaoser } from '@/use'
-import { bus, core } from '@/utils'
+import { bus } from '@/utils'
 
 function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()
@@ -197,20 +197,13 @@ function useLister(config?: { type: FormType }) {
   }
   // 标题
   function title(state: State) {
-    const meta = chaoser.getMetaByPath(route.path) as any
-    if (!meta?.title) {
+    const path = `${route.path}/${state.pageType}`
+    const meta = chaoser.getMetaByPath(path)
+    if (meta?.title) {
+      return gt(`router.${meta?.title}`)
+    } else {
       return ''
     }
-    const title = gt(`router.${meta?.title}`)
-      ?.replace(gt('app.list'), '')
-      .trim()
-    const map = {
-      add: gt('button.add'),
-      edit: gt('button.edit'),
-      detail: gt('button.detail')
-    }
-    const typeText = map[state.pageType]
-    return core.i18nJoint([title, typeText])
   }
   // 切换某一行的选中状态
   function toggleRowSelection(row: any, selected?: boolean) {

@@ -25,7 +25,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { CircleClose, Search } from '@element-plus/icons-vue'
-import { core } from '@/chant'
+import { base } from '@/chant'
 
 // props
 const props = defineProps<{
@@ -42,7 +42,7 @@ const visible = defineModel<boolean>()
 const { t: gt } = useI18n({ useScope: 'global' })
 // computed
 const tips = computed(() => {
-  return core.i18nJoint([gt('tips.select'), props.placeholder || ''])
+  return base.i18nJoint([gt('tips.select'), props.placeholder || ''])
 })
 // 清空
 function onClear() {

@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import lang from '@/lang/user'
+import { user as lang } from '@/lang'
 import { columns, dict } from '@/views/user/user-list/share'
 
 // props

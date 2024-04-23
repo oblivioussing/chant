@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import shiki from '@/api/shiki'
 import type { FormProps, FormState as State } from '@/chant'
 import { ApiCode } from '@/enum'
-import { bus, core } from '@/utils'
+import { base, bus } from '@/utils'
 
 function useFormer(config: FormProps) {
   let formInstance: FormInstance
@@ -28,7 +28,7 @@ function useFormer(config: FormProps) {
   // 关闭
   function close(state: State, emits: (evt: 'close') => void) {
     if (state.type === 'page') {
-      core.closePage()
+      base.closePage()
     } else {
       emits('close')
     }
@@ -87,8 +87,8 @@ function useFormer(config: FormProps) {
       // 刷新列表
       bus.emit(route.path)
     } else if (state.type === 'page') {
-      core.closePage()
-      const parentPath = core.getParentPath(route?.path)
+      base.closePage()
+      const parentPath = base.getParentPath(route?.path)
       bus.emit(parentPath)
     } else {
       bus.emit(route.path)

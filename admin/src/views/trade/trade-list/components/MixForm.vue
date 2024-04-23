@@ -17,8 +17,7 @@
 import { reactive } from 'vue'
 import { useFormer } from '@/chant'
 import type { FormProps, FormEmits } from '@/chant/type'
-import lang from '@/lang/trade'
-import { columns, dict } from '../share'
+import { columns, dict, lang } from '../share'
 
 // props
 const props = defineProps<FormProps>()

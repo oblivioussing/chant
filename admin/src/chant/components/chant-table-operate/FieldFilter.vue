@@ -47,8 +47,8 @@ import { useRoute } from 'vue-router'
 import draggable from 'vuedraggable'
 import { Document, Sort } from '@element-plus/icons-vue'
 import type { Lang, ListColumn as Column, ListState } from '@/chant'
-import chantLang from '@/lang/chant'
-import { base, core } from '@/utils'
+import { chant as chantLang } from '@/lang'
+import { base } from '@/utils'
 
 // props
 const props = defineProps<{
@@ -89,7 +89,7 @@ onMounted(() => {
 })
 // 获取缓存columns
 function getStorageColumns() {
-  const obj = core.getPageStorage(route.path)
+  const obj = base.getPageStorage(route.path)
   const list = obj?.tableFilter as Column[]
   const columns = vModel.value.columns
   if (list?.length) {
@@ -117,9 +117,9 @@ function onChange(val: any, column: Column) {
 }
 // 默认
 function onReset() {
-  const obj = core.getPageStorage(route.path)
+  const obj = base.getPageStorage(route.path)
   if (obj) {
-    core.setPageStorage(route.path, 'tableFilter', undefined)
+    base.setPageStorage(route.path, 'tableFilter', undefined)
   }
   vModel.value.columns = base.clone(columnsBackups)
   state.visible = false
@@ -130,7 +130,7 @@ function onSave() {
     const { prop, hide } = item
     return { prop, hide }
   })
-  core.setPageStorage(route.path, 'tableFilter', columns)
+  base.setPageStorage(route.path, 'tableFilter', columns)
   state.visible = false
 }
 // 是否显示

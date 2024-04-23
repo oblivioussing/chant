@@ -87,8 +87,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Setting, More } from '@element-plus/icons-vue'
 import type { FormType, Lang, ListState } from '@/chant'
-import chantLang from '@/lang/chant'
-import { core } from '@/utils'
+import { chant as chantLang } from '@/lang'
+import { base } from '@/utils'
 import FieldFilter from './FieldFilter.vue'
 
 // type
@@ -149,7 +149,7 @@ function buttonGroup() {
 }
 // 获取缓存formType
 function getStorageFormType() {
-  const obj = core.getPageStorage(route.path)
+  const obj = base.getPageStorage(route.path)
   const formType = obj?.formType
   if (formType) {
     vModel.value.formType = formType as FormType
@@ -172,7 +172,7 @@ function onFormType() {
     formType = 'dialog'
   }
   vModel.value.formType = formType
-  core.setPageStorage(route.path, 'formType', formType)
+  base.setPageStorage(route.path, 'formType', formType)
 }
 </script>
 

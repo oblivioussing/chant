@@ -47,7 +47,7 @@ import { useI18n } from 'vue-i18n'
 import { Lock, User } from '@element-plus/icons-vue'
 import { shiki } from '@/api'
 import { StorageEnum } from '@/enum'
-import lang from '@/lang/app'
+import { app as lang } from '@/lang'
 import { useUserStore } from '@/store'
 import { storage } from '@/utils'
 

@@ -140,13 +140,12 @@ import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
 import { useThrottleFn } from '@vueuse/core'
 import {
   base,
-  core,
   formUtils,
   type Lang,
   type ListColumn as Column,
   type ListState
 } from '@/chant'
-import chantLang from '@/lang/chant'
+import { chant as chantLang } from '@/lang'
 
 // props
 const props = defineProps<{
@@ -307,7 +306,7 @@ function translate(column: Column, type?: 'enter' | 'select') {
     select: gt('tips.select')
   }
   const tips = type ? map[type] : ''
-  return core.i18nJoint([tips, label])
+  return base.i18nJoint([tips, label])
 }
 </script>
 

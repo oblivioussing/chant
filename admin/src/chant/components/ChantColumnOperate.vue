@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
-import lang from '@/lang/chant'
+import { chant as lang } from '@/lang'
 
 type Option = 'edit' | 'copy' | 'detail' | 'delete'
 // props

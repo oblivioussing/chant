@@ -1,12 +1,13 @@
 <template>
   <!-- upload -->
   <el-upload
-    :file-list="fileList"
     action="/"
+    :accept="props.accept"
     :auto-upload="false"
     class="chant-upload"
     :class="[props.type]"
     :disabled="props.disabled"
+    :file-list="fileList"
     :limit="props.type === 'single-image' ? 1 : props.limit"
     :list-type="props.type === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
@@ -17,7 +18,7 @@
     :on-preview="onPreview">
     <!-- file-list -->
     <el-button v-if="props.type === 'file-list'" type="primary">
-      {{ t('upload') }}
+      {{ t('clickUpload') }}
     </el-button>
     <!-- picture-card -->
     <el-icon v-else-if="props.type === 'picture-card'">
@@ -32,6 +33,10 @@
         :src="state.imageUrl">
       </el-image>
       <el-icon v-else class="uploader-icon"><Plus /></el-icon>
+    </template>
+    <!-- tip -->
+    <template #tip>
+      <div class="tip">limit 1 file, new file will cover the old file</div>
     </template>
   </el-upload>
   <!-- preview -->
@@ -53,7 +58,7 @@ import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
 import { shiki, type FileBizType, type UploadType } from '@/chant'
 import { type RequestConfig } from '@/api/ryougi'
-import lang from '@/lang/chant'
+import { chant as lang } from '@/lang'
 
 // type
 type DataItem = {
@@ -65,9 +70,10 @@ type DataItem = {
 }
 // props
 const props = defineProps<{
-  buttonText?: string // 按钮文本
+  accept?: string // 接受上传的文件类型
   disabled?: boolean // 禁用
   fileBizType?: FileBizType // 文件业务类型
+  fileSize?: number // 允许上传文件的大小(MB)
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
   type: UploadType // 文件上传类型
@@ -107,7 +113,7 @@ async function onChange(row: UploadFile) {
     state.imageUrl = URL.createObjectURL(row.raw!)
     const data = await upload(row.raw!)
     if (data) {
-      vModel.value = data.filePath + data.fileName
+      vModel.value = data.filePath + data.filename
     }
   }
 }
@@ -143,7 +149,7 @@ async function upload(file: UploadRawFile) {
     method: 'POST'
   } as RequestConfig
   const { data } = await shiki.request(requestConfig)
-  return data
+  return data as DataItem
 }
 </script>
 
@@ -189,6 +195,9 @@ async function upload(file: UploadRawFile) {
         width: var(--picture-size) !important;
       }
     }
+  }
+  .tip {
+    color: #f87171;
   }
 }
 @container (min-width: 600px) {

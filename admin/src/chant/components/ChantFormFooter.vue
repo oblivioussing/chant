@@ -30,8 +30,8 @@
 <script setup lang="ts">
 import { type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { core, type FormType, type PageType } from '@/chant'
-import lang from '@/lang/chant'
+import { base, type FormType, type PageType } from '@/chant'
+import { chant as lang } from '@/lang'
 
 // type
 type ModelValue = {
@@ -50,7 +50,7 @@ const { t: gt } = useI18n({ useScope: 'global' })
 // 关闭
 function onClose() {
   if (vModel.value.type === 'page') {
-    core.closePage()
+    base.closePage()
   } else {
     emits('close')
   }

@@ -172,7 +172,7 @@ import type { FormInstance } from 'element-plus'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  core,
+  base,
   formUtils,
   useAppStore,
   LangEnum,
@@ -311,7 +311,7 @@ function rules(column: Column) {
   if (column.required) {
     rules.push({
       required: true,
-      message: core.i18nJoint([translate(column), gt('tips.required')])
+      message: base.i18nJoint([translate(column), gt('tips.required')])
     })
   }
   return rules
@@ -339,7 +339,7 @@ function translate(column: Column, type?: 'enter' | 'select') {
   }
   const tips = type ? map[type] : ''
   if (tips) {
-    return core.i18nJoint([tips, label])
+    return base.i18nJoint([tips, label])
   } else {
     return label
   }

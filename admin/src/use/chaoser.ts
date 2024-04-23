@@ -21,7 +21,7 @@ function useChaoser() {
     path = path.replace(/\/$/g, '')
     const routes = router.getRoutes()
     const row = routes.find((item) => item.path === path)
-    return row?.meta
+    return row?.meta as any
   }
   // 修改页面url参数
   function updateUrlParams(query: Record<string, any>) {

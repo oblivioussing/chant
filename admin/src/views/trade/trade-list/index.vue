@@ -62,8 +62,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from '@/chant'
-import lang from '@/lang/trade'
-import { columns, dict } from './share'
+import { columns, dict, lang } from './share'
 import MixForm from './components/MixForm.vue'
 
 // use

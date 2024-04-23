@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import { LangEnum, StorageEnum } from '../enum'
-import globalLang from '../lang/global'
-import routerLang from '../lang/router'
+import { global as globalLang } from '../lang'
+import { router as routerLang } from '../lang'
 import storage from '../utils/storage'
 
 const lang = storage.getLocal(StorageEnum.Lang) as LangEnum

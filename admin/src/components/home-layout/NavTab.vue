@@ -44,7 +44,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { BusEnum, StorageEnum } from '@/enum'
 import { useChaoser } from '@/use'
-import { bus, core, storage } from '@/utils'
+import { base, bus, storage } from '@/utils'
 
 // type
 type PathMapping = {
@@ -140,9 +140,9 @@ function onTabRemove(path: any) {
   }
   state.tabs.splice(index, 1)
   // 移除路由参数
-  core.removeRouterQuery(path)
+  base.removeRouterQuery(path)
   // 跳转至父页面
-  const parentPath = core.getParentPath(path)
+  const parentPath = base.getParentPath(path)
   if (parentPath) {
     const inTab = state.tabs.some((item) => item.path === parentPath)
     if (inTab) {
