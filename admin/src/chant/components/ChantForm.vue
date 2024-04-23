@@ -110,7 +110,7 @@
               :file-biz-type="item.fileBizType"
               :limit="item.limit"
               :multiple="item.multiple"
-              :type="item.uploadType">
+              :type="item.uploadType!">
             </chant-upload>
             <!-- range -->
             <div

@@ -149,8 +149,4 @@ export type TablePickerProps = {
   width?: string | number // 宽度
 }
 
-export type UploadType =
-  | 'file-list'
-  | 'picture-card'
-  | 'pure-button'
-  | 'single-image'
+export type UploadType = 'file-list' | 'picture-card' | 'single-image'

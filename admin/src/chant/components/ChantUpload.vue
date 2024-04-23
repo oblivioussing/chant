@@ -1,12 +1,4 @@
 <template>
-  <!-- pure-button -->
-  <el-button
-    v-if="props.type === 'pure-button'"
-    :disabled="props.disabled"
-    type="primary"
-    @click="onTrigger">
-    {{ props.buttonText || t('import') }}
-  </el-button>
   <!-- upload -->
   <el-upload
     :file-list="fileList"
@@ -43,20 +35,20 @@
     </template>
   </el-upload>
   <!-- preview -->
-  <el-dialog v-model="state.previewVisible" append-to-body>
+  <el-dialog v-model="state.preview" append-to-body>
     <img style="width: 100%" :src="state.previewUrl" />
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { genFileId } from 'element-plus'
+import { genFileId, ElMessage } from 'element-plus'
 import type {
   UploadFile,
   UploadInstance,
   UploadRawFile,
   UploadUserFile
 } from 'element-plus'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
 import { shiki, type FileBizType, type UploadType } from '@/chant'
@@ -64,18 +56,22 @@ import { type RequestConfig } from '@/api/ryougi'
 import lang from '@/lang/chant'
 
 // type
-interface Props {
+type DataItem = {
+  id: string
+  filename: string
+  filenameOriginal: string
+  filePath: string
+  name?: string
+}
+// props
+const props = defineProps<{
   buttonText?: string // 按钮文本
   disabled?: boolean // 禁用
   fileBizType?: FileBizType // 文件业务类型
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
   type: UploadType // 文件上传类型
-}
-// props
-const props = withDefaults(defineProps<Props>(), {
-  type: 'pure-button'
-})
+}>()
 // emits
 const emits = defineEmits(['upload'])
 // model
@@ -87,13 +83,13 @@ const uploadRef = ref<UploadInstance>()
 // state
 const state = reactive({
   imageUrl: '', // 图片地址
-  previewUrl: '', // 预览图片地址
-  previewVisible: false // 预览visible
+  preview: false, // 预览
+  previewUrl: '' // 预览图片地址
 })
 // computed
 const fileList = computed(() => {
   if (showFileList.value) {
-    return vModel.value?.map((item: any) => {
+    return vModel.value?.map((item: DataItem) => {
       item.name = item.filenameOriginal
       return item
     }) as UploadUserFile[]
@@ -105,23 +101,6 @@ const showFileList = computed(() => {
   const list: UploadType[] = ['file-list', 'picture-card']
   return list.includes(props.type)
 })
-// onMounted
-onMounted(() => {
-  if (props.type === 'pure-button') {
-    // 挪动元素
-    movingElement()
-  }
-})
-// 挪动元素(主要是解决el-button-group样式问题)
-function movingElement() {
-  const uploadEl = uploadRef.value?.$el as HTMLElement
-  const parentEl = uploadEl.parentElement
-  const classList = parentEl?.classList
-  const status = classList?.contains('el-button-group')
-  if (status) {
-    parentEl?.parentElement?.appendChild(uploadEl)
-  }
-}
 // file change
 async function onChange(row: UploadFile) {
   if (props.type === 'single-image') {
@@ -139,19 +118,18 @@ function onExceed(files: File[]) {
     const file = files[0] as UploadRawFile
     file.uid = genFileId()
     uploadRef.value!.handleStart(file)
+    return
   }
-}
-// 按钮出发文件选择
-function onTrigger() {
-  const el = uploadRef.value?.$el as HTMLElement
-  const uploadEL = el.querySelector('.el-upload') as HTMLElement
-  uploadEL?.click()
+  const count = fileList.value.length + files.length
+  if (props.limit && count > props.limit) {
+    ElMessage.warning(t('limitTips'))
+  }
 }
 // 预览
 function onPreview(row: any) {
   if (row.url) {
     state.previewUrl = row.url
-    state.previewVisible = true
+    state.preview = true
   }
 }
 // 上传文件
