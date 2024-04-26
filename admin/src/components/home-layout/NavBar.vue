@@ -82,7 +82,7 @@ const langDict = new Map([
   [LangEnum.Zh, '中文']
 ])
 // state
-const state = reactive({
+let state = reactive({
   isCollapse: false
 })
 // computed

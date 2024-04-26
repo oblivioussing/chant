@@ -72,7 +72,7 @@ const tabs = (storage.getSession(StorageEnum.HomeNavTab) || [
 const dropdownRef = ref()
 const tabRef = ref()
 // state
-const state = reactive({
+let state = reactive({
   path: route?.path,
   tabs: tabs
 })

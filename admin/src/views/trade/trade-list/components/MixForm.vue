@@ -26,7 +26,7 @@ const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
 // state
-const state = reactive({
+let state = reactive({
   ...former.state
 })
 // create

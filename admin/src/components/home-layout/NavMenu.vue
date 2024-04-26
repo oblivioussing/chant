@@ -64,7 +64,7 @@ const isDev = import.meta.env.DEV
 const stage = import.meta.env.VITE_STAGE
 // state
 const menuRef = ref(null)
-const state = reactive({
+let state = reactive({
   path: route.path
 })
 // computed

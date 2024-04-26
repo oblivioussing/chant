@@ -204,7 +204,7 @@ const { t: gt } = useI18n({ useScope: 'global' })
 // ref
 const formRef = ref<FormInstance>()
 // state
-const state = reactive({
+let state = reactive({
   range: {} as any
 })
 // computed

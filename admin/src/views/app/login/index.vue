@@ -58,7 +58,7 @@ const { t } = useI18n({ messages: lang })
 // ref
 const formRef = ref<FormInstance>()
 // state
-const state = reactive({
+let state = reactive({
   form: {
     loginName: 'admin',
     password: '123456'

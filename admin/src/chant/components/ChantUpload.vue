@@ -86,7 +86,7 @@ const { t } = useI18n({ messages: lang })
 // ref
 const uploadRef = ref<UploadInstance>()
 // state
-const state = reactive({
+let state = reactive({
   preview: false, // 预览
   previewUrl: '' // 预览图片地址
 })

@@ -170,7 +170,7 @@ const resizeThrottle = useThrottleFn(containerAuto, 1000)
 const formRef = ref<FormInstance>()
 const searchRef = ref()
 // state
-const state = reactive({
+let state = reactive({
   arrow: props.unfold ? 'up' : 'down',
   range: {} as any
 })

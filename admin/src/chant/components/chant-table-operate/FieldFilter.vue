@@ -66,7 +66,7 @@ const route = useRoute()
 // var
 const columnsBackups = base.clone(vModel.value.columns)
 // state
-const state = reactive({
+let state = reactive({
   visible: false
 })
 // watch

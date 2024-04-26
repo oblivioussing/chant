@@ -68,7 +68,7 @@ import MixForm from './components/MixForm.vue'
 // use
 const lister = useLister()
 // state
-const state = reactive({
+let state = reactive({
   ...lister.state,
   columns: columns()
 })

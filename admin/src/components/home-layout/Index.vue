@@ -33,7 +33,7 @@ import NavTab from './NavTab.vue'
 // store
 const appStore = useAppStore()
 // state
-const state = reactive({
+let state = reactive({
   isCollapse: false, // 是否水平折叠收起菜单
   keeps: []
 })

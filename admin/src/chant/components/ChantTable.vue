@@ -157,7 +157,7 @@ const lister = useLister()
 // ref
 const tableRef = ref<TableInstance>()
 // state
-const state = reactive({
+let state = reactive({
   height: 0
 })
 // resize
