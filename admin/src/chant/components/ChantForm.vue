@@ -106,8 +106,10 @@
             <chant-upload
               v-else-if="item.type === 'upload'"
               v-model="vModel!.form[item.prop]"
+              :accept="item.accept"
               :disabled="isDisabled(item)"
               :file-biz-type="item.fileBizType"
+              :file-size="item.fileSize"
               :limit="item.limit"
               :multiple="item.multiple"
               :type="item.uploadType!">
@@ -147,7 +149,7 @@
             <dynamic-picker
               v-if="item.type === 'custom-picker'"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
-              v-model:text="vModel!.form[item.dynamicText || item.prop]"
+              v-model:text="vModel!.form[item.dynamicText || '']"
               :title="translate(item)"
               :type="item.customPicker!">
             </dynamic-picker>

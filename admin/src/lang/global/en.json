@@ -24,9 +24,9 @@
   "tips": {
     "copyFail": "copy fail",
     "copySuccess": "copy success",
-    "enter": "Please enter",
+    "enter": "Enter",
     "required": "can not be null",
-    "select": "Please select",
+    "select": "Select",
     "totalRecords": "A total of {0} records",
     "confirmDelete": "Confirm delete?",
     "confirmBatchDelete": "Confirm batch delete?"

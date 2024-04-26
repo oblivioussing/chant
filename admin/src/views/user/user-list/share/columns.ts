@@ -1,4 +1,4 @@
-import type { Column } from '@/chant'
+import { AcceptEnum, type Column } from '@/chant'
 
 export default () => {
   return [
@@ -41,15 +41,17 @@ export default () => {
     {
       prop: 'avatar', // 头像
       type: 'upload',
+      accept: AcceptEnum.Image,
       fileBizType: 'avatar',
       uploadType: 'single-image'
     },
     {
       prop: 'testList', // 测试
-      label: '测试',
+      label: 'avatar',
       type: 'upload',
-      limit: 3,
       fileBizType: 'avatar',
+      fileSize: 3,
+      limit: 5,
       multiple: true,
       uploadType: 'file-list'
     }

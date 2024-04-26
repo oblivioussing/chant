@@ -72,7 +72,7 @@ const vModel = defineModel() as ModelRef<boolean>
 const { t: gt } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // state
-const state = reactive({
+let state = reactive({
   ...lister.state,
   columns: props.columns
 })

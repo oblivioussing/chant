@@ -59,7 +59,9 @@ export type FormColumn = {
   slotForm?: boolean // 表单slot
   tips?: string // 提示
   title?: string // 标题
+  accept?: string // 接受上传的文件类型,仅type为Upload时有效
   fileBizType?: FileBizType // 文件业务类型,仅type为Upload时有效
+  fileSize?: number // 允许上传文件的大小(MB),仅type为Upload时有效
   limit?: number // 允许上传文件的最大数量,仅type为Upload时有效
   uploadType?: UploadType // 文件上传类型,仅type为Upload时有效
 } & BaseColumn

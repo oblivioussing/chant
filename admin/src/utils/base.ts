@@ -77,10 +77,6 @@ export function loadJs(url: string): Promise<void> {
     })
   })
 }
-// 简单数组去重
-export function sole(arr: any[]) {
-  return Array.from(new Set(arr))
-}
 // 获取父页面路径
 export function getParentPath(path: string) {
   const obj = storage.getSession(StorageEnum.PageParent)
@@ -119,6 +115,10 @@ export function setPageStorage(
   pageStorage[type] = data
   obj[path] = pageStorage
   storage.setLocal(StorageEnum.Page, obj)
+}
+// 简单数组去重
+export function sole(arr: any[]) {
+  return Array.from(new Set(arr))
 }
 // 修改字段
 export function updateColumn<T extends Columns>(

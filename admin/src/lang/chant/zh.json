@@ -12,5 +12,9 @@
   "formType": "表单类型",
   "record": "条记录",
   "filter": "过滤",
-  "limitTips": "文件数量超出限制"
+  "limitTips": "文件数量超出限制",
+  "sizeExceedsTips": "文件大小超出限制",
+  "sizeTips": "文件大小限制:{0}",
+  "countTips": "数量限制:{0}",
+  "acceptTips": "文件类型:{0}"
 }

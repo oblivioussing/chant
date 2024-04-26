@@ -1,3 +1,7 @@
+export enum AcceptEnum {
+  Image = '.gif,.jpg,.jpeg,.png'
+}
+
 export enum ApiCode {
   Success = '1', // 成功
   Fail = '2', // 失败

@@ -1,18 +1,12 @@
 <template>
-  <!-- upload -->
+  <!-- list upload -->
   <el-upload
-    action="/"
-    :accept="props.accept"
-    :auto-upload="false"
-    class="chant-upload"
-    :class="[props.type]"
-    :disabled="props.disabled"
-    :file-list="fileList"
-    :limit="props.type === 'single-image' ? 1 : props.limit"
+    v-if="showFileList"
+    v-model:file-list="vModel"
+    v-bind="uploadAttrs"
+    :limit="props.limit"
     :list-type="props.type === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
-    ref="uploadRef"
-    :show-file-list="showFileList"
     :on-change="onChange"
     :on-exceed="onExceed"
     :on-preview="onPreview">
@@ -24,19 +18,27 @@
     <el-icon v-else-if="props.type === 'picture-card'">
       <Plus />
     </el-icon>
+    <!-- tip -->
+    <template #tip>
+      <div class="tip">{{ tip }}</div>
+    </template>
+  </el-upload>
+  <!-- single upload -->
+  <el-upload
+    v-else
+    v-bind="uploadAttrs"
+    :show-file-list="false"
+    :on-change="onChange"
+    :on-exceed="onExceed">
     <!-- single-image -->
-    <template v-else-if="props.type === 'single-image'">
-      <el-image
-        v-if="state.imageUrl"
-        class="image"
-        fit="cover"
-        :src="state.imageUrl">
+    <template v-if="props.type === 'single-image'">
+      <el-image v-if="vModel" class="image" fit="cover" :src="vModel">
       </el-image>
       <el-icon v-else class="uploader-icon"><Plus /></el-icon>
     </template>
     <!-- tip -->
     <template #tip>
-      <div class="tip">limit 1 file, new file will cover the old file</div>
+      <div class="tip">{{ tip }}</div>
     </template>
   </el-upload>
   <!-- preview -->
@@ -47,12 +49,7 @@
 
 <script setup lang="ts">
 import { genFileId, ElMessage } from 'element-plus'
-import type {
-  UploadFile,
-  UploadInstance,
-  UploadRawFile,
-  UploadUserFile
-} from 'element-plus'
+import type { UploadFile, UploadInstance, UploadRawFile } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
@@ -66,10 +63,8 @@ type DataItem = {
   filename: string
   filenameOriginal: string
   filePath: string
-  name?: string
 }
-// props
-const props = defineProps<{
+type Props = {
   accept?: string // 接受上传的文件类型
   disabled?: boolean // 禁用
   fileBizType?: FileBizType // 文件业务类型
@@ -77,7 +72,11 @@ const props = defineProps<{
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
   type: UploadType // 文件上传类型
-}>()
+}
+// props
+const props = withDefaults(defineProps<Props>(), {
+  fileSize: 20
+})
 // emits
 const emits = defineEmits(['upload'])
 // model
@@ -88,29 +87,49 @@ const { t } = useI18n({ messages: lang })
 const uploadRef = ref<UploadInstance>()
 // state
 const state = reactive({
-  imageUrl: '', // 图片地址
   preview: false, // 预览
   previewUrl: '' // 预览图片地址
 })
 // computed
-const fileList = computed(() => {
-  if (showFileList.value) {
-    return vModel.value?.map((item: DataItem) => {
-      item.name = item.filenameOriginal
-      return item
-    }) as UploadUserFile[]
-  } else {
-    return []
-  }
-})
 const showFileList = computed(() => {
   const list: UploadType[] = ['file-list', 'picture-card']
   return list.includes(props.type)
 })
+const tip = computed(() => {
+  const list = []
+  if (props.limit) {
+    list.push(t('countTips', [props.limit]))
+  }
+  if (props.fileSize) {
+    const fileSize =
+      props.fileSize < 1
+        ? (props.fileSize * 1024).toFixed(0) + 'KB'
+        : props.fileSize + 'MB'
+    list.push(t('sizeTips', [fileSize]))
+  }
+  if (props.accept) {
+    list.push(t('acceptTips', [props.accept?.replace(/\./g, '')]))
+  }
+  return list.join(', ')
+})
+const uploadAttrs = computed(() => {
+  return {
+    action: '/',
+    accept: props.accept,
+    autoUpload: false,
+    class: ['chant-upload', props.type],
+    disabled: props.disabled,
+    ref: uploadRef
+  }
+})
 // file change
 async function onChange(row: UploadFile) {
+  if (row.size! / 1024 > props.fileSize * 1024) {
+    uploadRef.value!.handleRemove(row)
+    ElMessage.warning(t('sizeExceedsTips'))
+    return
+  }
   if (props.type === 'single-image') {
-    state.imageUrl = URL.createObjectURL(row.raw!)
     const data = await upload(row.raw!)
     if (data) {
       vModel.value = data.filePath + data.filename
@@ -119,17 +138,14 @@ async function onChange(row: UploadFile) {
 }
 // 文件超出限制
 function onExceed(files: File[]) {
-  if (props.type === 'single-image') {
+  if (props.type === 'single-image' || props.limit === 1) {
     uploadRef.value!.clearFiles()
     const file = files[0] as UploadRawFile
     file.uid = genFileId()
     uploadRef.value!.handleStart(file)
     return
   }
-  const count = fileList.value.length + files.length
-  if (props.limit && count > props.limit) {
-    ElMessage.warning(t('limitTips'))
-  }
+  ElMessage.warning(t('limitTips'))
 }
 // 预览
 function onPreview(row: any) {
@@ -158,6 +174,11 @@ async function upload(file: UploadRawFile) {
   --picture-size: 100px;
   container-type: inline-size;
   flex: 1;
+  &.file-list {
+    .el-upload-list {
+      margin-top: 0;
+    }
+  }
   &.pure-button {
     container-type: normal;
     display: inline-block;
