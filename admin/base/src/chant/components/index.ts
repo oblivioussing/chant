@@ -1,5 +1,5 @@
 import { defineAsyncComponent, type App } from 'vue'
-import './components.d'
+import './components.d.ts'
 
 const ChantBasePicker = defineAsyncComponent(
   () => import('./ChantBasePicker.vue')
