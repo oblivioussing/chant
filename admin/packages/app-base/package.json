@@ -1,0 +1,23 @@
+{
+  "name": "@app/base",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "vite --host --mode dev",
+    "start:test": "vite --host --mode test",
+    "start:prod": "vite --host --mode prod",
+    "build:dev": "vite build --mode dev",
+    "build:test": "vite build --mode test",
+    "build:prod": "vite build --mode prod"
+  },
+  "dependencies": {
+    "chant": "workspace:*"
+  },
+  "dependenciesMeta": {},
+  "devDependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

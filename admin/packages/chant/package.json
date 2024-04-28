@@ -1,0 +1,14 @@
+{
+  "name": "chant",
+  "version": "1.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
