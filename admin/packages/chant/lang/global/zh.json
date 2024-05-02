@@ -19,7 +19,8 @@
     "edit": "编辑",
     "delete": "删除",
     "save": "保存",
-    "more": "更多操作"
+    "more": "更多操作",
+    "selectAll": "全选"
   },
   "tips": {
     "copyFail": "复制失败",

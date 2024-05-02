@@ -46,4 +46,14 @@ export class FsController {
       return result
     }
   }
+  // 批量上传
+  @Post('uploads')
+  async uploads(@Request() req) {
+    const parts = req.files({ limits: { fileSize: 1024 * 1024 * 2 } })
+    const result = new Result<File[]>()
+    for await (const part of parts) {
+      console.log(part.fields.fileBizType.value)
+      const buffer = await part.toBuffer()
+    }
+  }
 }

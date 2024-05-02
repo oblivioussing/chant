@@ -19,7 +19,8 @@
     "edit": "edit",
     "delete": "delete",
     "save": "save",
-    "more": "more operation"
+    "more": "more operation",
+    "selectAll": "select all"
   },
   "tips": {
     "copyFail": "copy fail",

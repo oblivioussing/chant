@@ -3,6 +3,7 @@
   "include": [
     "auto-imports.d.ts",
     "components.d.ts",
+    "../chant/components/components.d.ts",
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue"

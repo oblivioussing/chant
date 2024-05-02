@@ -2,22 +2,25 @@ import type { FormInstance } from 'element-plus'
 import { getCurrentInstance, onActivated } from 'vue'
 import { useRoute } from 'vue-router'
 import { base, bus, shiki, ApiCode } from '@chant'
-import type { FormProps, FormState as State } from '@chant/type'
+import type { FormColumn, FormProps, FormState as State } from '@chant/type'
 
-function useFormer(config: FormProps) {
+function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   let formInstance: FormInstance
   const instance = getCurrentInstance()
   const route = useRoute()
-
+  const fileColumns = config?.columns?.filter((item) => {
+    return item.type === 'upload' && item.uploadType === 'file-list'
+  })
   const state = {
-    pageType: config.pageType,
     continueAdd: false,
-    copyFlag: config.copyFlag as 0 | 1,
+    copyFlag: props.copyFlag as 0 | 1,
     form: {} as any,
     formLoading: false,
+    hasFile: false,
     loading: false,
+    pageType: props.pageType,
     query: {} as any,
-    type: config.type || 'dialog'
+    type: props.type || 'dialog'
   }
   // 绑定表单实例
   function bindInstance(val: FormInstance) {
@@ -45,7 +48,7 @@ function useFormer(config: FormProps) {
         }
       })
     } else {
-      state.query = { id: config?.selection?.id }
+      state.query = { id: props?.selection?.id }
     }
     callback(_hasGetDetail(state))
   }
@@ -58,16 +61,30 @@ function useFormer(config: FormProps) {
     if (state.copyFlag) {
       state.form.id = undefined
     }
+    // 添加文件name属性
+    if (fileColumns) {
+      fileColumns.forEach((item) => {
+        state.form[item.prop]?.forEach((item: any) => {
+          item.name = item.filenameOriginal
+        })
+      })
+    }
   }
   // 保存
   async function save(path: string, state: State, row?: { params?: any }) {
     // 表单校验
-    const status = await validate()
-    if (!status) {
-      return false
-    }
+    // const status = await validate()
+    // if (!status) {
+    //   return false
+    // }
     const params = row?.params || state.form
     state.loading = true
+    // 上传文件
+    if (fileColumns) {
+      await _uploads(params)
+      state.loading = false
+      return
+    }
     const { code } = await shiki.post(path, params)
     state.loading = false
     if (code !== ApiCode.Success) {
@@ -102,6 +119,19 @@ function useFormer(config: FormProps) {
       console.error(error)
     }
     return status
+  }
+  // 上传文件
+  async function _uploads(params: any) {
+    for (const item of fileColumns!) {
+      const fileList = params[item.prop] as { raw?: any }[]
+      const formData = new FormData()
+      formData.append('fileBizType', item.fileBizType || '')
+      fileList.forEach((item) => {
+        item.raw && formData.append('file', item.raw)
+      })
+      const { data } = await shiki.post('fs/uploads', formData)
+      console.log(data)
+    }
   }
   // 路由参数是否变化
   function _isRouterQueryModify(state: State) {

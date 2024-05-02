@@ -24,17 +24,13 @@ const props = defineProps<FormProps>()
 // emits
 const emits = defineEmits<FormEmits>()
 // use
-const former = useFormer(props)
+const former = useFormer(props, { columns: columns() })
 // state
 let state = reactive({
   ...former.state
 })
 // create
 former.created((status) => {
-  state.form.testList = [
-    { filenameOriginal: '123' },
-    { filenameOriginal: '456' }
-  ]
   // 获取详情
   status && getDetail()
 }, state)

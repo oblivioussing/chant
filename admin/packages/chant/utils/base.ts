@@ -1,7 +1,7 @@
-import type { FormColumn, ListColumn } from '@chant/chant'
-import { BusEnum, ContentTypeEnum, LangEnum, StorageEnum } from '@chant/enum'
 import bus from './bus'
+import { BusEnum, ContentTypeEnum, LangEnum, StorageEnum } from '../enum'
 import storage from './storage'
+import type { FormColumn, ListColumn } from '../type'
 
 type Columns = FormColumn[] | ListColumn[]
 

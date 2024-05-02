@@ -47,12 +47,14 @@ class Shiki {
     return result
   }
   // post请求
-  async post(url: string, body?: any, config?: Config) {
+  async post(url: string, body?: object | FormData, config?: Config) {
     const requestConfig: RequestConfig = {
       url,
       body,
-      method: 'POST',
-      headers: {
+      method: 'POST'
+    }
+    if (!(body instanceof FormData)) {
+      requestConfig.headers = {
         'content-type': ContentTypeEnum.Json
       }
     }

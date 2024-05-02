@@ -37,6 +37,7 @@ type BaseColumn = {
   precision?: number // 数值精度,仅type为input-number时有效
   prepend?: string // 输入框前置内容
   prop: string // 字段值
+  selectMultiple?: boolean // select是否多选,仅type为select时有效
   type?: ElementType // 元素类型
   valueFormat?: string // 绑定值的格式,仅type为date-picker时有效
 }
@@ -54,7 +55,6 @@ export type FormColumn = {
   required?: boolean // 是否必填
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: FormItemRule[] // 表单验证规则
-  selectMultiple?: boolean // select是否多选
   showCustom?: (row: any) => boolean // 自定义显示逻辑
   slotForm?: boolean // 表单slot
   tips?: string // 提示
@@ -71,7 +71,6 @@ export type ListColumn = {
   editable?: boolean // 是否可编辑
   fixed?: 'left' | 'right' // 列是否固定在左侧或者右侧
   format?: string // 格式化
-  like?: boolean // 是否为模糊查询
   onlySearch?: boolean // 只作为搜索条件
   search?: boolean // 是否为搜索条件
   searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
@@ -83,7 +82,7 @@ export type ListColumn = {
   width?: number // 对应列的宽度
 } & BaseColumn
 
-export type Column = BaseColumn & FormColumn & ListColumn
+export type Column = FormColumn & ListColumn
 
 export type Lang = {
   en: Record<string, string | Record<string, string>>
@@ -91,8 +90,8 @@ export type Lang = {
 }
 
 export type FormState = {
-  copyFlag?: 0 | 1 // 是否复制新增
   continueAdd?: boolean // 是否继续新增
+  copyFlag?: 0 | 1 // 是否复制新增
   form: any // 表单数据
   formLoading: boolean // 表单加载loading
   loading: boolean // 保存loading

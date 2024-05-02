@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useLister } from '@app-base/use'
+import { useLister } from 'chant'
 import { columns } from './share'
 
 // use

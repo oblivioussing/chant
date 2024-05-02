@@ -2,12 +2,8 @@ import { type TableInstance } from 'element-plus'
 import { nextTick, onActivated, onScopeDispose } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { shiki } from '@chant/api'
-import type { ListState as State, FormType, PageType } from '@chant/chant'
-import { ApiCode } from '@chant/enum'
-import { element } from '@chant/plugs'
-import { useChaoser } from '@chant/use'
-import { bus } from '@chant/utils'
+import { bus, element, shiki, useChaoser, ApiCode } from '@chant'
+import type { ListState as State, FormType, PageType } from '@chant/type'
 
 function useLister(config?: { type: FormType }) {
   const chaoser = useChaoser()

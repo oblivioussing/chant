@@ -45,11 +45,8 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Lock, User } from '@element-plus/icons-vue'
-import { shiki } from '@app-base/api'
-import { StorageEnum } from '@app-base/enum'
+import { shiki, storage, useUserStore, StorageEnum } from 'chant'
 import { app as lang } from '@app-base/lang'
-import { useUserStore } from '@app-base/store'
-import { storage } from '@app-base/utils'
 
 // use
 const router = useRouter()

@@ -53,12 +53,7 @@ import type { UploadFile, UploadInstance, UploadRawFile } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
-import {
-  shiki,
-  type FileBizType,
-  type RequestConfig,
-  type UploadType
-} from '@chant'
+import { shiki, type FileBizType, type UploadType } from '@chant'
 import { chant as lang } from '@chant/lang'
 
 // type
@@ -133,11 +128,12 @@ async function onChange(row: UploadFile) {
     ElMessage.warning(t('sizeExceedsTips'))
     return
   }
-  if (props.type === 'single-image') {
+  if (!showFileList.value) {
     const data = await upload(row.raw!)
     if (data) {
       vModel.value = data.filePath + data.filename
     }
+    emits('upload', data)
   }
 }
 // 文件超出限制
@@ -163,12 +159,7 @@ async function upload(file: UploadRawFile) {
   const formData = new FormData()
   formData.append('fileBizType', props.fileBizType || '')
   formData.append('file', file)
-  const requestConfig = {
-    url: 'fs/upload',
-    body: formData,
-    method: 'POST'
-  } as RequestConfig
-  const { data } = await shiki.request(requestConfig)
+  const { data } = await shiki.post('fs/upload', formData)
   return data as DataItem
 }
 </script>

@@ -50,7 +50,6 @@ export default () => {
       label: 'avatar',
       type: 'upload',
       fileBizType: 'avatar',
-      fileSize: 3,
       limit: 5,
       multiple: true,
       uploadType: 'file-list'
