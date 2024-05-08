@@ -4,9 +4,9 @@ import { Auth, QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { getUidByToken } from '@/utils/base'
 import { IdVali } from '@/validator'
-import { userEntity } from './model'
+import { UserDto, userEntity } from './model'
 import { UserService } from './service'
-import { LoginVali, AddVali, UpdateVali } from './validator'
+import { LoginVali, AddVali } from './validator'
 
 @Controller('user')
 export class UserController {
@@ -58,7 +58,7 @@ export class UserController {
   }
   // 更新
   @Post('update')
-  async update(@Body() user: UpdateVali) {
+  async update(@Body() user: UserDto) {
     const result = await this.userService.update(user as User)
     return result
   }

@@ -19,6 +19,16 @@ export function createUid() {
   const nanoid = customAlphabet('1234567890', 20)
   return nanoid()
 }
+// 实体转select
+export function entityToSelect<T extends object>(
+  entity: T
+): Record<keyof T, boolean> {
+  const obj = {} as Record<keyof T, boolean>
+  for (const item in entity) {
+    obj[item] = true
+  }
+  return obj
+}
 // 根据token获取uid
 export function getUidByToken(token: string) {
   const [iv, hash] = token?.split('.') || []
@@ -32,15 +42,13 @@ export function getUidByToken(token: string) {
 export function isDate(value: any) {
   return value instanceof Date
 }
-// 实体转select
-export function entityToSelect<T extends object>(
-  entity: T
-): Record<keyof T, boolean> {
-  const obj = {} as Record<keyof T, boolean>
-  for (const item in entity) {
-    obj[item] = true
-  }
-  return obj
+// 是否为空
+export function isEmpty(value: any) {
+  return value === null || value === undefined || value === ''
+}
+// 是否不为空
+export function isNotEmpty(value: any) {
+  return value !== null && value !== undefined && value !== ''
 }
 // 批量操作查询条件
 export function manyWhere<T>(params: Many<T>, entity: object) {
@@ -73,22 +81,22 @@ export function toEntity<T>(data: Record<string, any>, entity: T): T {
   const obj = {} as T
   for (const item in data) {
     if (entity.hasOwnProperty(item)) {
+      const value = data[item]
       const entityValue = entity[item]
-      const dataValue = data[item]
       const isNumber = typeof entityValue === 'number'
       const isDecimal = entityValue instanceof Prisma.Decimal
       if (isDate(entityValue)) {
-        if (dataValue) {
-          obj[item] = new Date(dataValue)
+        if (value) {
+          obj[item] = new Date(value)
         } else {
           obj[item] = undefined
         }
       } else if (isNumber || isDecimal) {
-        obj[item] = Number(dataValue)
+        obj[item] = Number(value)
       } else if (typeof entityValue === 'string') {
-        obj[item] = String(dataValue)
+        obj[item] = isNotEmpty(value) ? String(value) : ''
       } else {
-        obj[item] = dataValue
+        obj[item] = value
       }
     }
   }

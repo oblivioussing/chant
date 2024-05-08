@@ -1,10 +1,14 @@
-import fs from 'fs/promises'
-import path from 'path'
 import type { File } from 'prisma/prisma-client'
 import { Controller, Post, Request } from '@nestjs/common'
-import { FsService } from './service'
+import { ApiCode } from '@/enum'
 import { Result } from '@/share'
-import { base } from '@/utils'
+import { FsService } from './service'
+import { saveFile } from './utils'
+
+import fs from 'node:fs'
+import util from 'node:util'
+import { pipeline } from 'node:stream'
+const pump = util.promisify(pipeline)
 
 @Controller('fs')
 export class FsController {
@@ -13,47 +17,35 @@ export class FsController {
   // 上传
   @Post('upload')
   async upload(@Request() req) {
-    const data = await req.file({
-      limits: { fileSize: 1024 * 1024 * 20 }
-    })
-    let result = new Result<File>()
-    try {
-      const buffer = await data.toBuffer()
-      // 保存文件
-      const fileBizType = data.fields.fileBizType.value || 'other'
-      const filePath = `./files/${fileBizType}/`
-      try {
-        await fs.stat(filePath)
-      } catch (error) {
-        await fs.mkdir(filePath, { recursive: true })
-      }
-      const filename = data.filename.replace(/(.*)\./, `${base.createId()}.`)
-      try {
-        await fs.writeFile(path.resolve(filePath, filename), buffer)
-        const params = {
-          filename,
-          filenameOriginal: data.filename,
-          filePath: filePath
-        } as File
-        result = await this.fsService.upload(params)
-        return result
-      } catch (error) {
-        result.fail('文件保存失败')
-        return result
-      }
-    } catch (err) {
-      result.msg = '文件不能超过20M'
-      return result
+    const part = await req.file({ limits: { fileSize: 1024 * 1024 * 20 } })
+    // 保存文件
+    let result = await saveFile(part)
+    if (result.code === ApiCode.Success) {
+      result = await this.fsService.upload(result.data)
     }
+    return result
   }
   // 批量上传
   @Post('uploads')
   async uploads(@Request() req) {
     const parts = req.files({ limits: { fileSize: 1024 * 1024 * 2 } })
-    const result = new Result<File[]>()
+    let result = new Result<File[]>()
+
+    const list = [] as File[]
     for await (const part of parts) {
-      console.log(part.fields.fileBizType.value)
-      const buffer = await part.toBuffer()
+      await pump(part.file, fs.createWriteStream(part.filename))
+      // 保存文件
+      // const result = await saveFile(part)
+      // if (result.code === ApiCode.Success) {
+      //   list.push(result.data)
+      // }
     }
+    console.log(list.length)
+    if (list.length) {
+      result = await this.fsService.uploads(list)
+    } else {
+      result.fail('上传失败')
+    }
+    return result
   }
 }

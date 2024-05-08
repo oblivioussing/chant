@@ -30,7 +30,7 @@ let state = reactive({
   ...former.state
 })
 // create
-former.created((status) => {
+former.created(async (status) => {
   // 获取详情
   status && getDetail()
 }, state)

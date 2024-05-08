@@ -7,14 +7,13 @@ import { base } from '@/utils'
 
 // 是否需要校验权限
 export const Auth = (isAuth: boolean) => SetMetadata('isAuth', isAuth)
-
 // 获取query参数根据model
 export const QueryModel = createParamDecorator(
   (entity: object, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest()
     const query = request.query
     for (const item in query) {
-      if (query[item] === '') {
+      if (base.isEmpty(query[item])) {
         Reflect.deleteProperty(query, item)
       }
     }
@@ -22,7 +21,6 @@ export const QueryModel = createParamDecorator(
     return data
   }
 )
-
 // 获取page分页
 export const QueryPage = createParamDecorator((_, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest()

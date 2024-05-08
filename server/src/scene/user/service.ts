@@ -130,7 +130,7 @@ export class UserService extends BaseService {
   // 更新
   async update(user: User) {
     const result = new Result<User>()
-    const data = base.toEntity(user, user) as User
+    const data = base.toEntity(user, userEntity) as User
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

@@ -5,6 +5,7 @@ import {
   ValidationArguments,
   ValidationOptions
 } from 'class-validator'
+import { base } from '@/utils'
 
 // 不能和另一个字段值相同
 export function IsNotEqualTo(
@@ -30,7 +31,7 @@ export function IsNotEqualTo(
 // 忽略null,undefined,''
 export function IsOptional(validationOptions?: ValidationOptions) {
   return ValidateIf((_, value) => {
-    return value !== null && value !== undefined && value !== ''
+    return base.isNotEmpty(value)
   }, validationOptions)
 }
 // id校验
