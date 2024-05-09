@@ -1,5 +1,5 @@
 import { compare, hash } from 'bcrypt'
-import type { Prisma, User } from '@prisma/client'
+import type { Prisma, File, User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { BaseService, PageData, Result } from '@/share'
@@ -88,12 +88,13 @@ export class UserService extends BaseService {
   async list(user: User, page: Page) {
     const pageData = new PageData<UserVo>()
     const result = new Result<typeof pageData>()
+    const where = user as Prisma.UserWhereInput
     const rows = await this.user.findMany({
       ...base.pageHelper(page, 'desc'),
       select: base.entityToSelect(userEntity),
-      where: user
+      where
     })
-    const total = await this.user.count({ where: user })
+    const total = await this.user.count({ where })
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
@@ -130,7 +131,9 @@ export class UserService extends BaseService {
   // 更新
   async update(user: User) {
     const result = new Result<User>()
-    const data = base.toEntity(user, userEntity) as User
+    const data = base.toEntity(user, userEntity)
+    const photoList = data.photoList as unknown as File[]
+    data.photoList = photoList.map((item) => item.id)
     data.updateTime = new Date()
     const row = await this.user.update({
       data,

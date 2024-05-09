@@ -11,5 +11,6 @@
   "phone": "手机号",
   "gender": "性别",
   "status": "状态",
-  "avatar": "头像"
+  "avatar": "头像",
+  "photoList": "照片列表"
 }

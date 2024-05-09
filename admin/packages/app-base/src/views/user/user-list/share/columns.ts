@@ -46,8 +46,7 @@ export default () => {
       uploadType: 'single-image'
     },
     {
-      prop: 'testList', // 测试
-      label: 'avatar',
+      prop: 'photoList', // 照片列表
       type: 'upload',
       fileBizType: 'avatar',
       limit: 5,

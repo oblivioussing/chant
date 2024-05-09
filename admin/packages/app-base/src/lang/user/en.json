@@ -11,5 +11,6 @@
   "phone": "phone",
   "gender": "gender",
   "status": "status",
-  "avatar": "avatar"
+  "avatar": "avatar",
+  "photoList": "photo list"
 }

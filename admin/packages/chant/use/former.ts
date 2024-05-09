@@ -9,7 +9,10 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   const instance = getCurrentInstance()
   const route = useRoute()
   const fileColumns = config?.columns?.filter((item) => {
-    return item.type === 'upload' && item.uploadType === 'file-list'
+    return (
+      item.type === 'upload' &&
+      ['file-list', 'picture-card'].includes(item.uploadType!)
+    )
   })
   const state = {
     continueAdd: false,
@@ -73,42 +76,41 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   // 保存
   async function save(path: string, state: State, row?: { params?: any }) {
     // 表单校验
-    // const status = await validate()
-    // if (!status) {
-    //   return false
-    // }
+    const status = await validate()
+    if (!status) {
+      return false
+    }
     const params = row?.params || state.form
     state.loading = true
     // 上传文件
     if (fileColumns) {
       await _uploads(params)
       state.loading = false
-      return
     }
     const { code } = await shiki.post(path, params)
     state.loading = false
-    if (code !== ApiCode.Success) {
-      return false
-    }
-    // 是否继续新增
-    if (state.continueAdd) {
-      state.form = {}
-      formInstance.resetFields()
-      return true
-    }
-    if (state.type === 'dialog') {
-      instance?.emit('update')
-      instance?.emit('close')
-      // 刷新列表
-      bus.emit(route.path)
-    } else if (state.type === 'page') {
-      base.closePage()
-      const parentPath = base.getParentPath(route?.path)
-      bus.emit(parentPath)
-    } else {
-      bus.emit(route.path)
-    }
-    return true
+    // if (code !== ApiCode.Success) {
+    //   return false
+    // }
+    // // 是否继续新增
+    // if (state.continueAdd) {
+    //   state.form = {}
+    //   formInstance.resetFields()
+    //   return true
+    // }
+    // if (state.type === 'dialog') {
+    //   instance?.emit('update')
+    //   instance?.emit('close')
+    //   // 刷新列表
+    //   bus.emit(route.path)
+    // } else if (state.type === 'page') {
+    //   base.closePage()
+    //   const parentPath = base.getParentPath(route?.path)
+    //   bus.emit(parentPath)
+    // } else {
+    //   bus.emit(route.path)
+    // }
+    // return true
   }
   // 表单校验
   async function validate() {
@@ -124,13 +126,20 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   async function _uploads(params: any) {
     for (const item of fileColumns!) {
       const fileList = params[item.prop] as { raw?: any }[]
+      const list = [] as any[]
       const formData = new FormData()
       formData.append('fileBizType', item.fileBizType || '')
       fileList.forEach((item) => {
-        item.raw && formData.append('file', item.raw)
+        if (item.raw) {
+          formData.append('file', item.raw)
+        } else {
+          list.push(item)
+        }
       })
-      const { data } = await shiki.post('fs/uploads', formData)
-      console.log(data)
+      if (formData.get('file')) {
+        const { data } = await shiki.post('fs/uploads', formData)
+        params[item.prop] = list.concat(data)
+      }
     }
   }
   // 路由参数是否变化

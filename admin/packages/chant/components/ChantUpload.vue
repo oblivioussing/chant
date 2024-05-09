@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { genFileId, ElMessage } from 'element-plus'
 import type { UploadFile, UploadInstance, UploadRawFile } from 'element-plus'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
 import { shiki, type FileBizType, type UploadType } from '@chant'
@@ -79,7 +79,11 @@ const props = withDefaults(defineProps<Props>(), {
 // emits
 const emits = defineEmits(['upload'])
 // model
-const vModel = defineModel<any>()
+const vModel = defineModel<any>({
+  get(value) {
+    return value === null ? undefined : value
+  }
+})
 // use
 const { t } = useI18n({ messages: lang })
 // ref

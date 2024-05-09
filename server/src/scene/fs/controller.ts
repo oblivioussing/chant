@@ -5,19 +5,17 @@ import { Result } from '@/share'
 import { FsService } from './service'
 import { saveFile } from './utils'
 
-import fs from 'node:fs'
-import util from 'node:util'
-import { pipeline } from 'node:stream'
-const pump = util.promisify(pipeline)
-
 @Controller('fs')
 export class FsController {
   constructor(private readonly fsService: FsService) {}
 
+  // 文件大小限制
+  private FileSize = 1024 * 1024 * 50
+
   // 上传
   @Post('upload')
   async upload(@Request() req) {
-    const part = await req.file({ limits: { fileSize: 1024 * 1024 * 20 } })
+    const part = await req.file({ limits: { fileSize: this.FileSize } })
     // 保存文件
     let result = await saveFile(part)
     if (result.code === ApiCode.Success) {
@@ -28,19 +26,16 @@ export class FsController {
   // 批量上传
   @Post('uploads')
   async uploads(@Request() req) {
-    const parts = req.files({ limits: { fileSize: 1024 * 1024 * 2 } })
+    const parts = req.files({ limits: { fileSize: this.FileSize } })
     let result = new Result<File[]>()
-
     const list = [] as File[]
     for await (const part of parts) {
-      await pump(part.file, fs.createWriteStream(part.filename))
       // 保存文件
-      // const result = await saveFile(part)
-      // if (result.code === ApiCode.Success) {
-      //   list.push(result.data)
-      // }
+      const result = await saveFile(part)
+      if (result.code === ApiCode.Success) {
+        list.push(result.data)
+      }
     }
-    console.log(list.length)
     if (list.length) {
       result = await this.fsService.uploads(list)
     } else {
