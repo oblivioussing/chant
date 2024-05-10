@@ -5,7 +5,7 @@
     v-model:id="id"
     v-model:text="text"
     :title="props.title"
-    @change="emits('change')">
+    @change="emits('change', $event)">
   </user-picker>
 </template>
 

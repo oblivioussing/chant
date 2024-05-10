@@ -54,7 +54,7 @@
               :lang="lang"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
-              @change="onChange(item)">
+              @change="onChange(item, $event)">
             </chant-select>
             <!-- timepicker -->
             <el-time-picker
@@ -149,9 +149,10 @@
             <dynamic-picker
               v-if="item.type === 'custom-picker'"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
-              v-model:text="vModel!.form[item.dynamicText || '']"
+              v-model:text="vModel!.form[getDynamicText(item)]"
               :title="translate(item)"
-              :type="item.customPicker!">
+              :type="item.customPicker!"
+              @change="item.change && onChange(item, $event)">
             </dynamic-picker>
             <!-- tips -->
             <el-tooltip
@@ -280,6 +281,13 @@ function disabledDate(column: Column) {
   return (date: Date) =>
     column?.disabledDate ? column?.disabledDate(date, vModel.value) : undefined
 }
+// 获取查找带回的text字段
+function getDynamicText(column: Column) {
+  if (column.dynamicText) {
+    return column.dynamicText
+  }
+  return column.prop.replace(/Id/, 'Name')
+}
 // 是否禁用
 function isDisabled(row: Column) {
   if (typeof row.disabled === 'function') {
@@ -320,8 +328,8 @@ function rules(column: Column) {
   return rules
 }
 // change
-function onChange(column: Column) {
-  return column.change && column.change(vModel.value!.form)
+function onChange(column: Column, row: any) {
+  return column.change && column.change(vModel.value!.form, row)
 }
 // 日期范围选择
 function onDateRangeChange(column: Column) {

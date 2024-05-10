@@ -109,12 +109,20 @@ function icon(icon?: unknown) {
 
 <style lang="scss">
 .home-nav-menu {
+  --light-black-color: #42485b;
+  --black-color: #333744;
+  --white-color: #fff;
+  background-color: var(--light-black-color);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   padding-right: 1px;
   .menu-box {
+    --el-menu-text-color: var(--white-color);
+    --el-menu-bg-color: var(--balck-color);
+    --el-menu-hover-bg-color: var(--main-color);
+    border-right: none;
     overflow: auto;
     flex: 1;
     &:not(.el-menu--collapse) {
@@ -148,10 +156,23 @@ function icon(icon?: unknown) {
         }
       }
     }
+    .el-menu-item-group {
+      background-color: var(--black-color);
+      .el-menu-item {
+        &:hover {
+          background-color: var(--main-color);
+          color: var(--white-color) !important;
+        }
+        &.is-active {
+          color: var(--main-color);
+        }
+      }
+    }
   }
   .version {
-    border-top: 1px solid #dcdfe6;
-    border-right: 1px solid #dcdfe6;
+    background-color: #42485b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 12px;
     padding: 5px 0;
     text-align: center;

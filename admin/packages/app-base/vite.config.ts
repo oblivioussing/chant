@@ -18,7 +18,7 @@ export default defineConfig(() => {
         resolvers: [ElementPlusResolver()]
       }),
       components({
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
       }),
       setupName(),
       vue()
@@ -27,6 +27,13 @@ export default defineConfig(() => {
       alias: {
         '@app-base': fileURLToPath(new URL('./src', import.meta.url)),
         '@chant': fileURLToPath(new URL('../chant', import.meta.url))
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@app-base/style/element-var.scss" as *;`
+        }
       }
     },
     server: {

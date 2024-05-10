@@ -28,7 +28,7 @@ const text = defineModel<string>('text')
 function onChange(row: any) {
   id.value = row.id
   text.value = row.name
-  emits('change')
+  emits('change', row)
 }
 </script>
 

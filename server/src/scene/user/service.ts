@@ -91,7 +91,7 @@ export class UserService extends BaseService {
     const where = user as Prisma.UserWhereInput
     const rows = await this.user.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.entityToSelect(userEntity),
+      select: base.entityToSelect(userEntity, ['photoList']),
       where
     })
     const total = await this.user.count({ where })

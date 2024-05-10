@@ -1,4 +1,4 @@
-import type { Column } from '@app-base/chant'
+import type { Column } from 'chant'
 
 export default () => {
   return [

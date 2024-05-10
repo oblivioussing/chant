@@ -6,7 +6,6 @@
     :lang="lang"
     @instance="former.bindInstance">
   </chant-form>
-  {{ state.form }}
   <chant-form-footer
     v-model="state"
     @close="former.close(state, emits)"

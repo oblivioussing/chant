@@ -21,11 +21,14 @@ export function createUid() {
 }
 // 实体转select
 export function entityToSelect<T extends object>(
-  entity: T
+  entity: T,
+  exclude?: (keyof T)[]
 ): Record<keyof T, boolean> {
   const obj = {} as Record<keyof T, boolean>
   for (const item in entity) {
-    obj[item] = true
+    if (!exclude?.includes(item)) {
+      obj[item] = true
+    }
   }
   return obj
 }

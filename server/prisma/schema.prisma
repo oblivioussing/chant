@@ -8,23 +8,14 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-  id         String    @id @db.VarChar(20)
-  avatar     String    @default("") @db.VarChar(200)
-  createId   String    @map("create_id") @db.VarChar(20)
-  createTime DateTime  @map("create_time") @db.DateTime(0)
-  gender     String    @default("") @db.VarChar(1)
-  loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
-  name       String    @default("") @db.VarChar(50)
-  password   String    @default("") @db.VarChar(100)
-  photoList  Json?     @map("photo_list")
-  phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
-  status     String    @default("") @db.VarChar(2)
-  updateId   String?   @map("update_id") @db.VarChar(20)
-  updateTime DateTime? @map("update_time") @db.DateTime(0)
-  files      File[]
+model File {
+  id               String   @id @db.VarChar(20)
+  createTime       DateTime @map("create_time") @db.DateTime(0)
+  filename         String   @db.VarChar(50)
+  filenameOriginal String   @map("filename_original") @db.VarChar(250)
+  filePath         String   @map("file_path") @db.VarChar(50)
 
-  @@map("user")
+  @@map("file")
 }
 
 model Trade {
@@ -43,15 +34,20 @@ model Trade {
   @@map("trade")
 }
 
-model File {
-  id               String   @id @db.VarChar(20)
-  createTime       DateTime @map("create_time") @db.DateTime(0)
-  filename         String   @db.VarChar(50)
-  filenameOriginal String   @map("filename_original") @db.VarChar(250)
-  filePath         String   @map("file_path") @db.VarChar(50)
-  User             User?    @relation(fields: [userId], references: [id])
-  userId           String?  @db.VarChar(20)
+model User {
+  id         String    @id @db.VarChar(20)
+  avatar     String    @default("") @db.VarChar(200)
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  gender     String    @default("") @db.VarChar(1)
+  loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
+  name       String    @default("") @db.VarChar(50)
+  password   String    @default("") @db.VarChar(100)
+  photoList  Json?     @map("photo_list")
+  phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
+  status     String    @default("") @db.VarChar(2)
+  updateId   String?   @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
 
-  @@index([userId])
-  @@map("file")
+  @@map("user")
 }

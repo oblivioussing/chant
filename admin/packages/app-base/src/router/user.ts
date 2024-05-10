@@ -2,11 +2,16 @@ export default [
   {
     path: '/user',
     component: () => import('@app-base/components/home-layout/Index.vue'),
-    meta: { title: 'userManager', icon: 'yonghu' }, // 用户管理
+    meta: { title: 'userManager', icon: 'user' }, // 用户管理
     children: [
       // 用户列表
       {
         path: 'user-list',
+        component: () => import('@app-base/views/user/user-list/index.vue'),
+        meta: { title: 'userList', menu: true }
+      },
+      {
+        path: 'user-list1',
         component: () => import('@app-base/views/user/user-list/index.vue'),
         meta: { title: 'userList', menu: true }
       },

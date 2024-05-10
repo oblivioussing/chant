@@ -40,6 +40,7 @@ export default () => {
     },
     {
       prop: 'avatar', // 头像
+      hideInPages: ['list'],
       type: 'upload',
       accept: AcceptEnum.Image,
       fileBizType: 'avatar',
@@ -47,6 +48,7 @@ export default () => {
     },
     {
       prop: 'photoList', // 照片列表
+      hideInPages: ['list'],
       type: 'upload',
       fileBizType: 'avatar',
       limit: 5,

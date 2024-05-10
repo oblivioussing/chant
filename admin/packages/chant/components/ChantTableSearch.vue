@@ -23,7 +23,7 @@
           <!-- input -->
           <el-input
             v-else-if="!item.type || item.type === 'input'"
-            v-model="vModel.query[item.like ? item.prop + 'Like' : item.prop]"
+            v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
             :placeholder="translate(item, 'enter')">
             <template v-if="item.prepend" #prepend>
