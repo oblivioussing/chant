@@ -147,11 +147,11 @@
             </el-radio-group>
             <!-- custom-picker -->
             <dynamic-picker
-              v-if="item.type === 'custom-picker'"
+              v-if="item.type === 'dynamic-picker'"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
               v-model:text="vModel!.form[getDynamicText(item)]"
               :title="translate(item)"
-              :type="item.customPicker!"
+              :type="item.dynamicPicker!"
               @change="item.change && onChange(item, $event)">
             </dynamic-picker>
             <!-- tips -->

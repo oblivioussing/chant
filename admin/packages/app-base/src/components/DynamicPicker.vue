@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { type CustomPicker } from 'chant'
+import { type DynamicPicker } from 'chant'
 import UserPicker from './UserPicker.vue'
 
 // props
 const props = defineProps<{
   title: string
-  type: CustomPicker
+  type: DynamicPicker
 }>()
 // emits
 const emits = defineEmits(['change'])
