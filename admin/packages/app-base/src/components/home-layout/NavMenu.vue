@@ -3,7 +3,7 @@
     <el-menu
       class="menu-box"
       :collapse="props.isCollapse"
-      :default-active="state.path"
+      :default-active="active"
       ref="menuRef"
       unique-opened
       @open="onMenuOpen">
@@ -24,15 +24,31 @@
             </div>
           </div>
         </template>
-        <el-menu-item-group>
+        <template v-for="item1 in item.children" :key="`${item1.path}`">
           <el-menu-item
-            v-for="child in item.children"
-            :key="`${child.path}`"
-            :index="`${item.path}/${child.path}`"
-            @click="onTab(`${item.path}/${child.path}`)">
-            <el-text truncated>{{ title(child.meta) }}</el-text>
+            v-if="!item1.meta?.subFlag"
+            :index="`${item.path}/${item1.path}`"
+            @click="onTab(`${item.path}/${item1.path}`)">
+            <el-text truncated>{{ title(item1.meta) }}</el-text>
           </el-menu-item>
-        </el-menu-item-group>
+          <el-sub-menu
+            v-else
+            class="nest"
+            :index="`${item.path}/${item1.path}`">
+            <template #title>
+              <el-text style="padding-left: 20px" truncated>
+                {{ title(item1.meta) }}
+              </el-text>
+            </template>
+            <el-menu-item
+              v-for="item2 in item1.children"
+              :key="item2.path"
+              :index="`${item.path}/${item1.path}/${item2.path}`"
+              @click="onTab(`${item.path}/${item1.path}/${item2.path}`)">
+              <el-text truncated>{{ title(item2.meta) }}</el-text>
+            </el-menu-item>
+          </el-sub-menu>
+        </template>
       </el-sub-menu>
     </el-menu>
     <!-- 版本号 -->
@@ -45,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -64,10 +80,10 @@ const isDev = import.meta.env.DEV
 const stage = import.meta.env.VITE_STAGE
 // state
 const menuRef = ref(null)
-let state = reactive({
-  path: route.path
-})
 // computed
+const active = computed(() => {
+  return route.path.replace(/\/(add|edit|detail)/, '')
+})
 const menus = computed(() => {
   const routes = router.options.routes
   return routes.filter((item) => {
@@ -81,9 +97,8 @@ const menus = computed(() => {
 watch(
   () => route.path,
   () => {
-    state.path = route.path
     // path为/折叠menu
-    if (state.path === '/' && subIndex) {
+    if (active.value === '/' && subIndex) {
       const menu = menuRef.value as any
       menu?.close(subIndex)
     }
@@ -125,46 +140,88 @@ function icon(icon?: unknown) {
     border-right: none;
     overflow: auto;
     flex: 1;
+    &.el-menu--collapse {
+      .menu-item-collapse-box {
+        transform: scale(0.8);
+      }
+    }
     &:not(.el-menu--collapse) {
       width: 160px;
+      .el-sub-menu.nest {
+        .el-sub-menu__title {
+          padding-left: 20px !important;
+        }
+      }
     }
     .el-text {
       color: inherit;
     }
-    .el-sub-menu__title {
-      padding: 0 10px !important;
-      .el-sub-menu__icon-arrow {
-        right: 10px;
+    .el-sub-menu {
+      &.is-active {
+        .el-sub-menu__title {
+          background-color: var(--main-color);
+          color: var(--white-color);
+        }
       }
-      .menu-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        .menu-item-collapse-box {
+      .el-sub-menu__title {
+        padding: 0 10px !important;
+        .el-sub-menu__icon-arrow {
+          right: 10px;
+        }
+        .menu-item {
           display: flex;
-          flex-direction: column;
           align-items: center;
-          font-size: 12px;
-          gap: 5px;
-          line-height: 1;
-        }
-        .menu-item-text {
-          flex: 1;
-          overflow: hidden;
-          padding-right: 30px;
+          justify-content: center;
+          width: 100%;
+          .menu-item-collapse-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            gap: 5px;
+            line-height: 1;
+          }
+          .menu-item-text {
+            flex: 1;
+            overflow: hidden;
+            padding-right: 30px;
+          }
         }
       }
-    }
-    .el-menu-item-group {
-      background-color: var(--black-color);
       .el-menu-item {
+        background-color: var(--black-color);
         &:hover {
           background-color: var(--main-color);
           color: var(--white-color) !important;
+          opacity: 0.8;
         }
         &.is-active {
           color: var(--main-color);
+        }
+      }
+    }
+    .el-sub-menu.nest {
+      &.is-active {
+        .el-sub-menu__title {
+          color: var(--main-color);
+        }
+      }
+      .el-sub-menu__title {
+        background-color: var(--black-color);
+        color: var(--white-color);
+        &:hover {
+          background-color: var(--main-color);
+          color: var(--white-color) !important;
+          opacity: 0.8;
+        }
+      }
+      .el-menu {
+        background-color: var(--black-color);
+        .el-menu-item {
+          padding-left: 50px;
+          &:hover {
+            opacity: 0.8;
+          }
         }
       }
     }

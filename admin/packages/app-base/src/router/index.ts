@@ -8,12 +8,12 @@ import { storage, StorageEnum } from 'chant'
 
 import app from './app' // app
 import trade from './trade' // 交易管理
-import user from './user' // 用户管理
 import salary from './salary' // 工资管理
+import auth from './auth' // 权限管理
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...app, ...trade, ...user, ...salary],
+  routes: [...app, ...trade, ...salary, ...auth],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition

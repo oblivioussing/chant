@@ -13,8 +13,8 @@ export default () => {
       dynamicId: 'userId',
       required: true,
       search: true,
-      type: 'custom-picker',
-      customPicker: 'user-picker'
+      type: 'dynamic-picker',
+      dynamicPicker: 'user-picker'
     },
     {
       prop: 'commission', // 提成

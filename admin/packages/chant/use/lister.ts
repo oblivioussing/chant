@@ -219,7 +219,8 @@ function useLister(config?: { type: FormType }) {
   }
   // 页面跳转
   function _jump(to: string, query?: any) {
-    chaoser.push({ path: route?.path + to, query })
+    const path = route.path.replace('/index', '') + to
+    chaoser.push({ path, query })
   }
   // 事件监听
   function _on(callback: () => any, name?: string) {

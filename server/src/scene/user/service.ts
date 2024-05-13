@@ -36,6 +36,8 @@ export class UserService extends BaseService {
       return result
     }
     const data = base.toEntity(user, userEntity)
+    const photoList = data.photoList as unknown as File[]
+    data.photoList = photoList.map((item) => item.id)
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -77,6 +79,8 @@ export class UserService extends BaseService {
     const result = new Result<UserVo>()
     const row = await this.user.findUnique({ where: { id } })
     if (row) {
+      const fileIds = row.photoList as string[]
+      row.photoList = await this.getFiles(fileIds)
       result.data = base.toEntity(row, userVo)
       result.success({ msg: '用户信息查询成功' })
     } else {

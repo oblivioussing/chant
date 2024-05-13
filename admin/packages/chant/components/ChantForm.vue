@@ -421,7 +421,7 @@ function dictTranslate(label: string) {
     }
   }
 }
-@container (min-width: 1000px) {
+@container (min-width: 900px) {
   .chant-form-item {
     width: 33.3333%;
     &.whole-box {
@@ -432,7 +432,7 @@ function dictTranslate(label: string) {
     }
   }
 }
-@container (min-width: 1300px) {
+@container (min-width: 1200px) {
   .chant-form-item {
     width: 25%;
     &.whole-box {

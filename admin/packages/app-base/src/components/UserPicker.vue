@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { user as lang } from '@app-base/lang'
-import { columns, dict } from '@app-base/views/user/user-list/share'
+import { columns, dict } from '@app-base/views/auth/user/share'
 
 // props
 const props = defineProps<{

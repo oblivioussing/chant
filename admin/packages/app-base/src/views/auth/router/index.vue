@@ -60,15 +60,15 @@ lister.created(() => {
 })
 // 获取列表
 function getList() {
-  lister.getData('{{module}}/list', state)
+  lister.getData('auth/list', state)
 }
 // 删除
 function onDelete({ id }: any) {
-  lister.remove('{{module}}/delete', state, { id })
+  lister.remove('auth/delete', state, { id })
 }
 // 批量删除
 function onDeletes() {
-  lister.removes('{{module}}/deletes', state)
+  lister.removes('auth/deletes', state)
 }
 </script>
 

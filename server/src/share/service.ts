@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { I18nContext, I18nService } from 'nestjs-i18n'
+import { fileEntity } from '@/scene/fs/model'
 import { base } from '@/utils'
 
 @Injectable()
@@ -12,6 +13,27 @@ export class BaseService {
   private readonly request: Request // request
   prisma = new PrismaClient() // prisma
 
+  // 获取文件
+  async getFiles(ids: string[]) {
+    if (ids?.length) {
+      const rows = await this.prisma.$queryRaw<File[]>`
+        SELECT 
+          id,
+          create_time AS createTime,
+          filename,
+          filename_original AS filenameOriginal,
+          file_path AS filePath
+        FROM
+          chant.file
+        WHERE
+          id IN (${Prisma.join(ids)})
+        ORDER BY FIELD(id, ${Prisma.join(ids)});
+      `
+      return rows as any[]
+    } else {
+      return []
+    }
+  }
   // 获取uid
   getUid() {
     const token = this.request.headers['token']

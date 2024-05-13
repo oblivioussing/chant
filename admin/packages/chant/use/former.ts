@@ -64,11 +64,16 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
     if (state.copyFlag) {
       state.form.id = undefined
     }
-    // 添加文件name属性
+    // 添加文件所需属性
     if (fileColumns) {
       fileColumns.forEach((item) => {
-        state.form[item.prop]?.forEach((item: any) => {
-          item.name = item.filenameOriginal
+        const type = item.uploadType
+        state.form[item.prop]?.forEach((item1: any) => {
+          if (type === 'file-list') {
+            item1.name = item1.filenameOriginal
+          } else {
+            item1.url = item1.filePath + item1.filename
+          }
         })
       })
     }
@@ -89,28 +94,28 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
     }
     const { code } = await shiki.post(path, params)
     state.loading = false
-    // if (code !== ApiCode.Success) {
-    //   return false
-    // }
-    // // 是否继续新增
-    // if (state.continueAdd) {
-    //   state.form = {}
-    //   formInstance.resetFields()
-    //   return true
-    // }
-    // if (state.type === 'dialog') {
-    //   instance?.emit('update')
-    //   instance?.emit('close')
-    //   // 刷新列表
-    //   bus.emit(route.path)
-    // } else if (state.type === 'page') {
-    //   base.closePage()
-    //   const parentPath = base.getParentPath(route?.path)
-    //   bus.emit(parentPath)
-    // } else {
-    //   bus.emit(route.path)
-    // }
-    // return true
+    if (code !== ApiCode.Success) {
+      return false
+    }
+    // 是否继续新增
+    if (state.continueAdd) {
+      state.form = {}
+      formInstance.resetFields()
+      return true
+    }
+    if (state.type === 'dialog') {
+      instance?.emit('update')
+      instance?.emit('close')
+      // 刷新列表
+      bus.emit(route.path)
+    } else if (state.type === 'page') {
+      base.closePage()
+      const parentPath = base.getParentPath(route?.path)
+      bus.emit(parentPath)
+    } else {
+      bus.emit(route.path)
+    }
+    return true
   }
   // 表单校验
   async function validate() {

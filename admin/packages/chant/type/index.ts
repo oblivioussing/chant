@@ -1,9 +1,9 @@
 import type { DatePickType, FormItemRule, TagProps } from 'element-plus'
 
-export type CustomPicker = 'user-picker'
+export type DynamicPicker = 'user-picker'
 
 export type ElementType =
-  | 'custom-picker'
+  | 'dynamic-picker'
   | 'date-picker'
   | 'input'
   | 'input-number'
@@ -24,12 +24,12 @@ export type ColumnPage = PageType | 'list'
 type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
-  customPicker?: CustomPicker // 自定义picker
   datepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
   dynamicId?: string // 动态id字段
   dynamicText?: string // 动态text字段
   dynamicStart?: string // 范围选择start字段
   dynamicEnd?: string // 动态范围选择end字段
+  dynamicPicker?: DynamicPicker // 自定义picker
   hide?: boolean // 是否隐藏
   hideInPages?: ColumnPage[] // 在特定页面类型中隐藏
   inputType?: 'password' | 'text' | 'textarea'

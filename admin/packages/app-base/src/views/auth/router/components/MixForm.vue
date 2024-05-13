@@ -35,13 +35,13 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('{{module}}/detail', state)
+  former.getData('auth/detail', state)
 }
 // 保存
 function onSave() {
   const map = {
-    add: '{{module}}/add',
-    edit: '{{module}}/update'
+    add: 'auth/add',
+    edit: 'auth/update'
   } as any
   const path = map[props.pageType]
   former.save(path, state)
