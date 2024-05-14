@@ -1,5 +1,5 @@
 <template>
-  <div class="chant-form">
+  <div v-loading="vModel!.formLoading" class="chant-form">
     <el-form
       :label-width="labelWidthCpd"
       :model="vModel?.form"
@@ -187,16 +187,17 @@ import DynamicPicker from '@app-base/components/DynamicPicker.vue'
 
 // props
 const props = defineProps<{
+  columns?: Column[] // model
   dict?: any // 字典
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
-  columns?: Column[] // model
 }>()
 // emits
 const emits = defineEmits(['instance'])
 // model
 const vModel = defineModel<{
   form: any
+  formLoading: boolean
   pageType?: PageType
 }>()
 // use

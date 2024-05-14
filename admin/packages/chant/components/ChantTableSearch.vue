@@ -91,11 +91,11 @@
           </div>
           <!-- custom-picker -->
           <dynamic-picker
-            v-if="item.type === 'custom-picker'"
+            v-if="item.type === 'dynamic-picker'"
             v-model:id="vModel.query[item.dynamicId || item.prop]"
             v-model:text="vModel.pickerText[getDynamicText(item)]"
             :title="translate(item)"
-            :type="item.customPicker!"
+            :type="item.dynamicPicker!"
             @change="emits('query')">
           </dynamic-picker>
         </el-form-item>

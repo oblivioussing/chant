@@ -9,7 +9,7 @@
   <!-- operate -->
   <chant-table-operate
     v-model="state"
-    :lang
+    :lang="lang"
     :options="['add', 'delete']"
     @add="lister.add(state)"
     @delete="onDeletes">
