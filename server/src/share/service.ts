@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { I18nContext, I18nService } from 'nestjs-i18n'
-import { fileEntity } from '@/scene/fs/model'
 import { base } from '@/utils'
 
 @Injectable()

@@ -55,7 +55,7 @@ export class TradeService extends BaseService {
   async detail(id: string) {
     const result = new Result<TradeVo>()
     let data = await this.trade.findUnique({
-      select: base.entityToSelect(tradeEntity),
+      select: base.toSelect(tradeEntity),
       where: { id }
     })
     if (data) {
@@ -73,7 +73,7 @@ export class TradeService extends BaseService {
     const result = new Result<typeof pageData>()
     const rows = await this.trade.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.entityToSelect(tradeEntity),
+      select: base.toSelect(tradeEntity),
       where: trade
     })
     const total = await this.trade.count({ where: trade })

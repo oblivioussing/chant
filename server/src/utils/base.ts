@@ -19,19 +19,6 @@ export function createUid() {
   const nanoid = customAlphabet('1234567890', 20)
   return nanoid()
 }
-// 实体转select
-export function entityToSelect<T extends object>(
-  entity: T,
-  exclude?: (keyof T)[]
-): Record<keyof T, boolean> {
-  const obj = {} as Record<keyof T, boolean>
-  for (const item in entity) {
-    if (!exclude?.includes(item)) {
-      obj[item] = true
-    }
-  }
-  return obj
-}
 // 根据token获取uid
 export function getUidByToken(token: string) {
   const [iv, hash] = token?.split('.') || []
@@ -79,6 +66,14 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
   }
   return config
 }
+// 模糊查询
+export function toContains<T>(data: T, keys: (keyof T)[]) {
+  for (const item in data) {
+    if (keys.includes(item)) {
+      data[item] = { contains: data[item] } as any
+    }
+  }
+}
 // 实体转化
 export function toEntity<T>(data: Record<string, any>, entity: T): T {
   const obj = {} as T
@@ -101,6 +96,19 @@ export function toEntity<T>(data: Record<string, any>, entity: T): T {
       } else {
         obj[item] = value
       }
+    }
+  }
+  return obj
+}
+// 查询字段
+export function toSelect<T>(
+  entity: T,
+  exclude?: (keyof T)[]
+): Record<keyof T, boolean> {
+  const obj = {} as Record<keyof T, boolean>
+  for (const item in entity) {
+    if (!exclude?.includes(item)) {
+      obj[item] = true
     }
   }
   return obj

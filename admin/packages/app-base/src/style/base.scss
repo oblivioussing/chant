@@ -1,13 +1,3 @@
-.flex-1 {
-  flex: 1;
-}
-
-.toolbar {
-  background-color: #f2f2f2;
-  line-height: 1;
-  padding: 10px;
-}
-
 .column-box {
   display: flex;
   flex: 1;
@@ -17,5 +7,28 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
+  }
+}
+.flex-1 {
+  flex: 1;
+}
+.toolbar {
+  background-color: #f2f2f2;
+  line-height: 1;
+  padding: 10px;
+}
+.tree-box {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  .toolbar {
+    padding: 12px 10px;
+  }
+  .tree-container {
+    flex: 1;
+    overflow: auto;
+    .el-tree {
+      height: 100%;
+    }
   }
 }

@@ -93,9 +93,11 @@ export class UserService extends BaseService {
     const pageData = new PageData<UserVo>()
     const result = new Result<typeof pageData>()
     const where = user as Prisma.UserWhereInput
+    // 模糊查询
+    base.toContains(where, ['name', 'phone'])
     const rows = await this.user.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.entityToSelect(userEntity, ['photoList']),
+      select: base.toSelect(userEntity, ['photoList']),
       where
     })
     const total = await this.user.count({ where })

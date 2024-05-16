@@ -90,7 +90,6 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
     // 上传文件
     if (fileColumns) {
       await _uploads(params)
-      state.loading = false
     }
     const { code } = await shiki.post(path, params)
     state.loading = false

@@ -81,8 +81,12 @@
           <!-- text -->
           <el-text
             v-else
-            :class="item.copy && row[item.prop] ? 'text-box' : ''"
-            truncated>
+            :class="{
+              'copy-text': item.copy && row[item.prop],
+              'link-text': item.link
+            }"
+            truncated
+            @click.stop="onLink(row)">
             {{ valueFmt(item, row[item.prop]) }}
           </el-text>
           <!-- copy -->
@@ -260,7 +264,7 @@ function tableAdapter() {
 }
 // value格式化
 function valueFmt(column: Column, value: any) {
-  if (!value) {
+  if (!value && value !== 0) {
     return '-'
   }
   // date
@@ -297,6 +301,10 @@ function dictFmt(prop: string, value: any) {
 // CheckBox是否可勾选
 function selectable() {
   return vModel.value?.allFlag === 0
+}
+// 链接
+function onLink(row: any) {
+  lister.detail(vModel.value!, row)
 }
 // 单元格点击
 function onRowClick(row: any) {
@@ -365,8 +373,13 @@ function translate(column: Column) {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    .text-box {
-      padding: 0 10px;
+    .copy-text {
+      padding: 0 18px 0 10px;
+    }
+    .link-text {
+      color: var(--main-color);
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
   .table-icon-copy {

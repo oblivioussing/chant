@@ -71,6 +71,7 @@ export type ListColumn = {
   editable?: boolean // 是否可编辑
   fixed?: 'left' | 'right' // 列是否固定在左侧或者右侧
   format?: string // 格式化
+  link?: boolean // 超链
   onlySearch?: boolean // 只作为搜索条件
   search?: boolean // 是否为搜索条件
   searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效

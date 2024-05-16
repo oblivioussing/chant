@@ -1,0 +1,13 @@
+{
+  "index": "index",
+  "salaryManager": "salary",
+  "bonusList": "bonus list",
+  "tradeManager": "trade",
+  "tradeList": "trade list",
+  "tradeAdd": "trade add",
+  "tradeEdit": "trade edit",
+  "auth": "auth",
+  "userList": "user list",
+  "userAdd": "user add",
+  "userEdit": "user edit"
+}

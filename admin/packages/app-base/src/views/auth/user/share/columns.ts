@@ -20,6 +20,7 @@ export default () => {
     },
     {
       prop: 'phone', // 手机号
+      copy: true,
       required: true,
       search: true
     },

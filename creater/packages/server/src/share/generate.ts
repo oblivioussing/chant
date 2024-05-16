@@ -20,7 +20,8 @@ export async function generate(data: Form) {
     item.search = !!item.search
   })
   const routePath = data.routePath?.replace(/^\/+|\/+$/g, '')
-  const [module, route] = routePath?.split('/') || []
+  const routes = routePath?.split('/') || []
+  const module = routes[routes.length - 1]
   // 前端/后端的文件夹名称
   const typeDir = typeDict[data.type]
   // 保存目录路径
@@ -44,7 +45,7 @@ export async function generate(data: Form) {
         dirRecursion(`${templateDir}/${item}`, `${codePath}/${item}`)
       } else {
         createFile({
-          data: { module: module || data.tableName, route, ...data },
+          data: { module: module || data.tableName, ...data },
           templateName: item,
           hbs,
           codePath

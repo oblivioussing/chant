@@ -1,0 +1,19 @@
+{
+  "index": "首页",
+  "salaryManager": "工资管理",
+  "bonusList": "奖金列表",
+  "tradeManager": "交易管理",
+  "tradeList": "交易列表",
+  "tradeAdd": "交易新增",
+  "tradeEdit": "交易编辑",
+  "auth": "权限管理",
+  "user": "用户",
+  "userAdd": "用户新增",
+  "userEdit": "用户编辑",
+  "dept": "部门",
+  "dept1": "部门1",
+  "dept2": "部门2",
+  "router": "路由",
+  "routerAdd": "路由新增",
+  "routerEdit": "路由编辑"
+}

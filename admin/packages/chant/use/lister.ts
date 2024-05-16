@@ -13,16 +13,16 @@ function useLister(config?: { type: FormType }) {
     allFlag: 0 as 0 | 1,
     columns: [],
     copyFlag: 0 as 0 | 1,
-    extra: {} as Record<string, any>,
+    extra: {} as any,
     formType: config?.type || 'dialog',
-    keepQuery: {} as Record<string, any>,
+    keepQuery: {} as any,
     list: [] as any[],
     loading: false,
     mixForm: false,
     pages: { pageNum: 1, pageSize: 20 },
     pageType: '' as PageType,
-    pickerText: {} as Record<string, any>,
-    query: {} as Record<string, any>,
+    pickerText: {} as any,
+    query: {} as any,
     selection: {} as any,
     selections: [] as any[],
     total: 0
@@ -219,7 +219,7 @@ function useLister(config?: { type: FormType }) {
   }
   // 页面跳转
   function _jump(to: string, query?: any) {
-    const path = route.path.replace('/index', '') + to
+    const path = route.path + to
     chaoser.push({ path, query })
   }
   // 事件监听
