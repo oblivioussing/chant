@@ -2,7 +2,7 @@ import type { Prisma, Router } from '@prisma/client'
 import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base } from '@/utils'
-import { routerEntity, type RouterVo } from './model'
+import { routerEntity, type RouterTree, type RouterVo } from './model'
 
 export class RouterService extends BaseService {
   private router: Prisma.RouterDelegate
@@ -75,6 +75,16 @@ export class RouterService extends BaseService {
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '路由列表查询成功' })
+    return result
+  }
+  // 树
+  async tree(router: Router) {
+    const result = new Result<RouterTree>()
+    const rows = await this.router.findMany({
+      select: { id: true, name: true },
+      where: router
+    })
+    result.success({ data: rows, msg: '路由列表查询成功' })
     return result
   }
   // 更新

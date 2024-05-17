@@ -7,14 +7,16 @@ export const routerEntity = {
   name: '', // 名称
   path: '' // 路径
 } as Router
-
 export const routerDto = {
   ...routerEntity
 }
-
 export const routerVo = {
   ...routerEntity
 }
-
 export type RouterDto = typeof routerDto
 export type RouterVo = typeof routerVo
+export type RouterTree = {
+  id: string
+  name: string
+  children: RouterTree[]
+}

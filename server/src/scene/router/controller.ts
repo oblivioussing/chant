@@ -44,6 +44,12 @@ export class RouterController {
     const result = await this.routerService.list(router, page)
     return result
   }
+  // 树
+  @Get('tree')
+  async tree(@QueryModel(routerEntity) router: Router) {
+    const result = await this.routerService.tree(router)
+    return result
+  }
   // 更新
   @Post('update')
   async update(@Body() router: UpdateVali) {

@@ -6,14 +6,11 @@ export const {{module}}Entity = {
   {{columnName}}: {{valueType columnType}}{{comma @last}} // {{columnComment}} {{dictNote dict}}
   {{/each}}
 } as {{upper module}}
-
 export const {{module}}Dto = {
   ...{{module}}Entity
 }
-
 export const {{module}}Vo = {
   ...{{module}}Entity
 }
-
 export type {{upper module}}Dto = typeof {{module}}Dto
 export type {{upper module}}Vo = typeof {{module}}Vo

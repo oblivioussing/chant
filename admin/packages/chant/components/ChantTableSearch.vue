@@ -7,7 +7,8 @@
       :label-width="props.labelWidth"
       :model="vModel?.query"
       ref="formRef"
-      @keyup.enter="onSubmit('query')">
+      @keyup.enter="onSubmit('query')"
+      @submit.prevent>
       <slot></slot>
       <!-- 查询条件 -->
       <template v-for="item in availableColumns">

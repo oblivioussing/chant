@@ -1,17 +1,33 @@
 <template>
   <div class="tree-box">
     <div class="toolbar">
-      <el-input v-model="state.name" clearable placeholder="路由名称">
+      <el-input
+        v-model="state.name"
+        clearable
+        placeholder="路由名称"
+        @keyup.enter="getList">
       </el-input>
     </div>
-    <div class="tree-container" ref="scrollRef">
-      <el-tree :data="state.list"></el-tree>
+    <div v-loading="state.loading" class="tree-container" ref="scrollRef">
+      <el-tree :data="state.list" node-key="id">
+        <template #default="{ data }">
+          <div class="tree-item">
+            <div>{{ data.name }}</div>
+            <div class="button-box">
+              <el-button :icon="Plus" link type="primary"></el-button>
+              <el-button :icon="Edit" link type="primary"></el-button>
+              <el-button :icon="Delete" link type="danger"></el-button>
+            </div>
+          </div>
+        </template>
+      </el-tree>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, ref, reactive } from 'vue'
+import { onActivated, onMounted, reactive, ref } from 'vue'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import { useScroll } from '@vueuse/core'
 import { shiki } from 'chant'
 
@@ -21,10 +37,10 @@ const scrollRef = ref<HTMLElement | null>()
 const { y } = useScroll(scrollRef)
 // state
 const state = reactive({
-  name: '',
-  list: []
+  name: undefined,
+  list: [],
+  loading: false
 })
-
 // onMounted
 onMounted(() => {
   // 获取列表
@@ -36,8 +52,11 @@ onActivated(() => {
 })
 // 获取列表
 async function getList() {
-  const { data } = await shiki.get('router/tree')
-  console.log(data)
+  const name = state.name
+  state.loading = true
+  const { data } = await shiki.get('router/tree', { name })
+  state.loading = false
+  state.list = data
 }
 </script>
 

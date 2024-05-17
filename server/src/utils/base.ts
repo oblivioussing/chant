@@ -66,7 +66,7 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
   }
   return config
 }
-// 模糊查询
+// 数据添加模糊查询
 export function toContains<T>(data: T, keys: (keyof T)[]) {
   for (const item in data) {
     if (keys.includes(item)) {
@@ -74,7 +74,7 @@ export function toContains<T>(data: T, keys: (keyof T)[]) {
     }
   }
 }
-// 实体转化
+// 数据转实体
 export function toEntity<T>(data: Record<string, any>, entity: T): T {
   const obj = {} as T
   for (const item in data) {
@@ -100,7 +100,7 @@ export function toEntity<T>(data: Record<string, any>, entity: T): T {
   }
   return obj
 }
-// 查询字段
+// 实体转查询字段
 export function toSelect<T>(
   entity: T,
   exclude?: (keyof T)[]
@@ -112,4 +112,22 @@ export function toSelect<T>(
     }
   }
   return obj
+}
+// 列表转树
+export function toTree(data: any[]) {
+  const obj = {} as any
+  data.forEach((item: any) => {
+    obj[item.id] = item
+  })
+  const list = [] as any
+  data.forEach((item: any) => {
+    const parent = obj[item.pId]
+    if (parent) {
+      parent.children = parent.children || []
+      parent.children.push(item)
+    } else {
+      list.push(item)
+    }
+  })
+  return list
 }

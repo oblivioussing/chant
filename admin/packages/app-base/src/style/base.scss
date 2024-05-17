@@ -20,6 +20,7 @@
 .tree-box {
   display: flex;
   flex-direction: column;
+  gap: 5px;
   width: 200px;
   .toolbar {
     padding: 12px 10px;
@@ -28,7 +29,19 @@
     flex: 1;
     overflow: auto;
     .el-tree {
+      font-size: 12px;
       height: 100%;
+      .tree-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        .button-box {
+          .el-button + .el-button {
+            margin-left: 3px;
+          }
+        }
+      }
     }
   }
 }
