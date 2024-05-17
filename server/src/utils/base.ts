@@ -114,14 +114,19 @@ export function toSelect<T>(
   return obj
 }
 // 列表转树
-export function toTree(data: any[]) {
+export function toTree(
+  data: any[],
+  config?: { idKey?: string; parentKey?: string }
+) {
+  const idKey = config?.idKey || 'id'
+  const parentKey = config?.parentKey || 'parentId'
   const obj = {} as any
   data.forEach((item: any) => {
-    obj[item.id] = item
+    obj[item[idKey]] = item
   })
   const list = [] as any
   data.forEach((item: any) => {
-    const parent = obj[item.pId]
+    const parent = obj[item[parentKey]]
     if (parent) {
       parent.children = parent.children || []
       parent.children.push(item)
