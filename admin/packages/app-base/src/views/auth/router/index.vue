@@ -31,18 +31,18 @@
         :total="state.total"
         @change="getList">
       </chant-pagination>
-      <!-- 新增/编辑 -->
-      <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
-        <mix-form
-          v-if="state.mixForm"
-          :copy-flag="state.copyFlag"
-          :page-type="state.pageType"
-          :selection="state.selection"
-          @close="state.mixForm = false">
-        </mix-form>
-      </chant-dialog>
     </div>
   </div>
+  <!-- 新增/编辑 -->
+  <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
+    <mix-form
+      v-if="state.mixForm"
+      :copy-flag="state.copyFlag"
+      :page-type="state.pageType"
+      :selection="state.selection"
+      @close="state.mixForm = false">
+    </mix-form>
+  </chant-dialog>
 </template>
 
 <script setup lang="ts">

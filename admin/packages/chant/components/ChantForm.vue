@@ -10,7 +10,9 @@
         <el-divider v-if="item.title" content-position="left">
           {{ translate(item) }}
         </el-divider>
-        <!-- chant-form-item -->
+        <!-- slot -->
+        <slot v-else-if="item.slot" :name="item.prop" :row="item"></slot>
+        <!-- form-item -->
         <div
           v-else
           class="chant-form-item"
@@ -307,6 +309,7 @@ function isWhole(column: Column) {
   if (column.inputType === 'textarea') {
     return true
   }
+  return column.whole
 }
 // range field
 function rangeField(column: Column, type: 'start' | 'end') {

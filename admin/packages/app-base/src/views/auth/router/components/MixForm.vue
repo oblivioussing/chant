@@ -4,6 +4,10 @@
     :dict="dict"
     :columns="columns()"
     @instance="former.bindInstance">
+    <!-- 图标 -->
+    <template #icon>
+      <chant-icon-picker v-model="state.form.icon"></chant-icon-picker>
+    </template>
   </chant-form>
   <chant-form-footer
     v-model="state"
@@ -16,7 +20,7 @@
 import { reactive } from 'vue'
 import { useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
-import { columns, dict } from '../share'
+import { columns, dict, type Model } from '../share'
 
 // props
 const props = defineProps<FormProps>()
@@ -26,10 +30,15 @@ const emits = defineEmits<FormEmits>()
 const former = useFormer(props)
 // state
 let state = reactive({
-  ...former.state
+  ...former.state,
+  form: {} as Model
 })
 // create
 former.created((status) => {
+  // 新增
+  if (state.pageType === 'add') {
+    state.form.level = Number(state.selection.level)
+  }
   // 获取详情
   status && getDetail()
 }, state)

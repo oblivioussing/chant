@@ -56,7 +56,8 @@ export type FormColumn = {
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: FormItemRule[] // 表单验证规则
   showCustom?: (row: any) => boolean // 自定义显示逻辑
-  slotForm?: boolean // 表单slot
+  slot?: boolean // slot
+  slotForm?: boolean // slot(会显示label)
   tips?: string // 提示
   title?: string // 标题
   accept?: string // 接受上传的文件类型,仅type为Upload时有效
@@ -64,6 +65,7 @@ export type FormColumn = {
   fileSize?: number // 允许上传文件的大小(MB),仅type为Upload时有效
   limit?: number // 允许上传文件的最大数量,仅type为Upload时有效
   uploadType?: UploadType // 文件上传类型,仅type为Upload时有效
+  whole?: boolean // 是否显示为一整行
 } & BaseColumn
 
 export type ListColumn = {
@@ -98,6 +100,7 @@ export type FormState = {
   loading: boolean // 保存loading
   pageType?: PageType // 页面类型
   query: any // 查询条件
+  selection: any // 携带的数据
   type: FormType // 页面类型
 }
 

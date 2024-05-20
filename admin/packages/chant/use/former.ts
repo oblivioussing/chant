@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { base, bus, shiki, ApiCode } from '@chant'
 import type { FormColumn, FormProps, FormState as State } from '@chant/type'
 
-function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
+function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   let formInstance: FormInstance
   const instance = getCurrentInstance()
   const route = useRoute()
@@ -16,14 +16,15 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   })
   const state = {
     continueAdd: false,
-    copyFlag: props.copyFlag as 0 | 1,
+    copyFlag: props?.copyFlag as 0 | 1,
     form: {} as any,
     formLoading: false,
     hasFile: false,
     loading: false,
-    pageType: props.pageType,
+    pageType: props?.pageType,
     query: {} as any,
-    type: props.type || 'dialog'
+    selection: {} as any,
+    type: props?.type || 'dialog'
   }
   // 绑定表单实例
   function bindInstance(val: FormInstance) {
@@ -40,7 +41,8 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
   // 初始化
   function created(callback: (_: boolean) => void, state: State) {
     if (state.type === 'page') {
-      state.query = route?.query
+      state.selection = route?.query
+      state.query = { id: props?.selection?.id }
       // onActivated
       onActivated(() => {
         // 路由参数是否变化
@@ -51,6 +53,7 @@ function useFormer(props: FormProps, config?: { columns?: FormColumn[] }) {
         }
       })
     } else {
+      state.selection = props?.selection
       state.query = { id: props?.selection?.id }
     }
     callback(_hasGetDetail(state))
