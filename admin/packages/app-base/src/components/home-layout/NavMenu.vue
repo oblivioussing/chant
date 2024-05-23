@@ -156,6 +156,11 @@ function icon(icon?: unknown) {
     .el-text {
       color: inherit;
     }
+    .el-menu-item {
+      font-size: 12px;
+      height: 40px;
+      line-height: 40px;
+    }
     .el-sub-menu {
       &.is-active {
         .el-sub-menu__title {
@@ -164,7 +169,9 @@ function icon(icon?: unknown) {
         }
       }
       .el-sub-menu__title {
-        padding: 0 10px !important;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
         .el-sub-menu__icon-arrow {
           right: 10px;
         }

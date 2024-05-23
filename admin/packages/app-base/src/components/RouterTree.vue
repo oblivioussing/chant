@@ -9,22 +9,33 @@
       </el-input>
     </div>
     <div v-loading="state.loading" class="tree-container" ref="scrollRef">
-      <el-tree :data="state.list" node-key="id">
+      <el-tree
+        :expand-on-click-node="false"
+        :data="state.list"
+        default-expand-all
+        highlight-current
+        node-key="id">
         <template #default="{ data }">
           <div class="tree-item">
             <div>{{ data.name }}</div>
             <div class="button-box">
               <!-- 新增 -->
-              <el-button
-                :icon="Plus"
-                link
-                type="primary"
-                @click="onAdd(data, 'add')">
+              <el-button :icon="Plus" link type="primary" @click="onAdd(data)">
               </el-button>
               <!-- 编辑 -->
-              <el-button :icon="Edit" link type="primary"></el-button>
+              <el-button
+                :icon="Edit"
+                link
+                type="primary"
+                @click="lister.edit(state, data)">
+              </el-button>
               <!-- 删除 -->
-              <el-button :icon="Delete" link type="danger"></el-button>
+              <el-button
+                :icon="Delete"
+                link
+                type="danger"
+                @click="onDelete(data)">
+              </el-button>
             </div>
           </div>
         </template>
@@ -43,24 +54,24 @@
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, reactive, ref } from 'vue'
+import { onActivated, reactive, ref } from 'vue'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import { useScroll } from '@vueuse/core'
-import { useLister, type PageType } from 'chant'
+import { useLister } from 'chant'
 import { type Model } from '@app-base/views/auth/router/share'
 import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
 
 // ref
 const scrollRef = ref<HTMLElement | null>()
 // use
-const lister = useLister()
+const lister = useLister({ method: getList })
 const { y } = useScroll(scrollRef)
 // state
 const state = reactive({
   ...lister.state
 })
 // onMounted
-onMounted(() => {
+lister.created(() => {
   // 获取列表
   getList()
 })
@@ -73,11 +84,19 @@ function getList() {
   lister.getData('router/tree', state, { limit: false })
 }
 // 新增
-function onAdd(row: Model, type: PageType) {
+function onAdd(row: Model) {
   state.selection = row
-  state.pageType = type
+  state.pageType = 'add'
   state.mixForm = true
+}
+// 删除
+function onDelete(row: Model) {
+  lister.remove('router/delete', state, { id: row.id })
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.tree-container {
+  width: 300px;
+}
+</style>

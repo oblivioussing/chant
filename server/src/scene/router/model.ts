@@ -5,7 +5,9 @@ export const routerEntity = {
   icon: '', // 图标
   level: 0, // 等级
   name: '', // 名称
-  path: '' // 路径
+  path: '', // 路径
+  parentId: '', // 父节点id
+  sequence: 0 // 序号
 } as Router
 export const routerDto = {
   ...routerEntity
@@ -18,5 +20,6 @@ export type RouterVo = typeof routerVo
 export type RouterTree = {
   id: string
   name: string
+  level: number
   children: RouterTree[]
 }

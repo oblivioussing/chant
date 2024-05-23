@@ -4,8 +4,11 @@
       :label-width="labelWidthCpd"
       :model="vModel?.form"
       :disabled="vModel?.pageType === 'detail'"
-      ref="formRef">
+      ref="formRef"
+      @submit.prevent>
       <template v-for="item in availableColumns" :key="item.prop">
+        <!-- newline -->
+        <div v-if="item.newline" style="width: 100%"></div>
         <!-- divider -->
         <el-divider v-if="item.title" content-position="left">
           {{ translate(item) }}
@@ -16,7 +19,9 @@
         <div
           v-else
           class="chant-form-item"
-          :class="{ 'whole-box': isWhole(item) }">
+          :class="{
+            'full-box': isFull(item)
+          }">
           <el-form-item :prop="item.prop" :rules="rules(item)">
             <!-- label -->
             <template #label>
@@ -222,7 +227,7 @@ const availableColumns = computed(() => {
       return false
     }
     if (item.showCustom) {
-      return item?.showCustom(vModel.value)
+      return item?.showCustom(vModel.value?.form)
     }
     return true
   })
@@ -302,14 +307,14 @@ function isDisabled(row: Column) {
   return row.disabled
 }
 // 是否显示一整行
-function isWhole(column: Column) {
+function isFull(column: Column) {
   if (column.type === 'upload') {
     return true
   }
   if (column.inputType === 'textarea') {
     return true
   }
-  return column.whole
+  return column.newlineFull
 }
 // range field
 function rangeField(column: Column, type: 'start' | 'end') {
@@ -420,7 +425,7 @@ function dictTranslate(label: string) {
 @container (min-width: 600px) {
   .chant-form-item {
     width: 50%;
-    &.whole-box {
+    &.full-box {
       width: 100%;
     }
   }
@@ -428,7 +433,7 @@ function dictTranslate(label: string) {
 @container (min-width: 900px) {
   .chant-form-item {
     width: 33.3333%;
-    &.whole-box {
+    &.full-box {
       width: 100%;
       .el-form-item {
         width: 66.6666%;
@@ -439,7 +444,7 @@ function dictTranslate(label: string) {
 @container (min-width: 1200px) {
   .chant-form-item {
     width: 25%;
-    &.whole-box {
+    &.full-box {
       width: 100%;
       .el-form-item {
         width: 50%;

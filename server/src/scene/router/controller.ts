@@ -3,7 +3,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { IdVali } from '@/validator'
-import { routerEntity } from './model'
+import { routerEntity, type RouterDto } from './model'
 import { RouterService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -14,7 +14,7 @@ export class RouterController {
   // 新增
   @Post('add')
   async add(@Body() router: AddVali) {
-    const result = await this.routerService.add(router as Router)
+    const result = await this.routerService.add(router as RouterDto)
     return result
   }
   // 删除

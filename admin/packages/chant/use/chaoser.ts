@@ -1,7 +1,6 @@
 import { useRoute, useRouter } from 'vue-router'
 import qs from 'qs'
-import { StorageEnum } from '@chant/enum'
-import { storage } from '@chant/utils'
+import { storage, StorageEnum } from '@chant'
 
 function useChaoser() {
   const route = useRoute()

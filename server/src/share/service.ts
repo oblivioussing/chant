@@ -4,13 +4,15 @@ import { Prisma, PrismaClient } from '@prisma/client'
 import { I18nContext, I18nService } from 'nestjs-i18n'
 import { base } from '@/utils'
 
+const prismaInstance = new PrismaClient() // prisma
+
 @Injectable()
 export class BaseService {
   @Inject(I18nService)
   private readonly i18n: I18nService
   @Inject(REQUEST)
   private readonly request: Request // request
-  prisma = new PrismaClient() // prisma
+  prisma = prismaInstance
 
   // 获取文件
   async getFiles(ids: string[]) {

@@ -14,7 +14,7 @@ export class {{upper module}}Service extends BaseService {
   // 新增
   async add({{module}}: {{upper module}}) {
     const result = new Result()
-    const data = base.toEntity({{module}}, {{module}}Entity)
+    const data = base.toEntity({{module}}, {{module}}Entity, true)
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
@@ -29,8 +29,8 @@ export class {{upper module}}Service extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const data = await this.{{module}}.delete({ where: { id } })
-    if (data) {
+    const row = await this.{{module}}.delete({ where: { id } })
+    if (row) {
       result.success({ msg: '{{tableComment}}删除成功' })
     } else {
       result.fail('{{tableComment}}删除失败')
@@ -41,8 +41,8 @@ export class {{upper module}}Service extends BaseService {
   async deletes(params: Many<{{upper module}}>) {
     const result = new Result()
     const where = base.manyWhere(params, {{module}}Entity)
-    const data = await this.{{module}}.deleteMany({ where })
-    if (data.count) {
+    const row = await this.{{module}}.deleteMany({ where })
+    if (row.count) {
       result.success({ msg: '{{tableComment}}批量删除成功' })
     } else {
       result.fail('{{tableComment}}批量删除失败')
@@ -52,12 +52,12 @@ export class {{upper module}}Service extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<{{upper module}}Vo>()
-    const data = await this.{{module}}.findUnique({
+    const row = await this.{{module}}.findUnique({
       select: base.toSelect({{module}}Entity),
       where: { id }
     })
-    if (data) {
-      result.data = data
+    if (row) {
+      result.row = row
       result.success({ msg: '{{tableComment}}查询成功' })
     } else {
       result.fail('{{tableComment}}查询失败')

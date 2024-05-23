@@ -36,8 +36,9 @@ let state = reactive({
 // create
 former.created((status) => {
   // 新增
-  if (state.pageType === 'add') {
-    state.form.level = Number(state.selection.level)
+  if (props.pageType === 'add') {
+    state.form.parentId = state.selection.id
+    state.form.level = Number(state.selection.level) + 1
   }
   // 获取详情
   status && getDetail()

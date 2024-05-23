@@ -3,7 +3,7 @@
     :align="'center'"
     fixed="right"
     :label="t('operate')"
-    :min-width="widthCpd">
+    :width="widthCpd">
     <template #default="{ row, $index }">
       <div class="column-operate">
         <!-- 编辑 -->

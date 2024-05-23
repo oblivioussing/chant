@@ -6,7 +6,7 @@ import { BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
 import { StatusEnum } from './enum'
-import { userEntity, userVo, type UserVo } from './model'
+import { userEntity, type UserVo } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -76,12 +76,12 @@ export class UserService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<UserVo>()
+    const result = new Result<User>()
     const row = await this.user.findUnique({ where: { id } })
     if (row) {
       const fileIds = row.photoList as string[]
       row.photoList = await this.getFiles(fileIds)
-      result.data = base.toEntity(row, userVo)
+      result.data = base.toEntity(row, userEntity)
       result.success({ msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')

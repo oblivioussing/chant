@@ -21,7 +21,6 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     formLoading: false,
     hasFile: false,
     loading: false,
-    pageType: props?.pageType,
     query: {} as any,
     selection: {} as any,
     type: props?.type || 'dialog'
@@ -42,7 +41,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   function created(callback: (_: boolean) => void, state: State) {
     if (state.type === 'page') {
       state.selection = route?.query
-      state.query = { id: props?.selection?.id }
+      state.query = { id: state.selection?.id }
       // onActivated
       onActivated(() => {
         // 路由参数是否变化
@@ -82,13 +81,17 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     }
   }
   // 保存
-  async function save(path: string, state: State, row?: { params?: any }) {
+  async function save(
+    path: string,
+    state: State,
+    config?: { params?: any; refresh?: boolean }
+  ) {
     // 表单校验
     const status = await validate()
     if (!status) {
       return false
     }
-    const params = row?.params || state.form
+    const params = config?.params || state.form
     state.loading = true
     // 上传文件
     if (fileColumns) {
@@ -105,17 +108,16 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
       formInstance.resetFields()
       return true
     }
+    let busName = route.path
     if (state.type === 'dialog') {
       instance?.emit('update')
       instance?.emit('close')
-      // 刷新列表
-      bus.emit(route.path)
     } else if (state.type === 'page') {
       base.closePage()
-      const parentPath = base.getParentPath(route?.path)
-      bus.emit(parentPath)
-    } else {
-      bus.emit(route.path)
+      busName = base.getParentPath(route?.path)
+    }
+    if (config?.refresh !== false) {
+      bus.emit(busName)
     }
     return true
   }
@@ -167,7 +169,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     if (state.type === 'page') {
       copyFlag = Number(route.query.copyFlag)
     }
-    return copyFlag || ['detail', 'edit'].includes(state.pageType as string)
+    return copyFlag || ['detail', 'edit'].includes(props?.pageType as string)
   }
 
   return {

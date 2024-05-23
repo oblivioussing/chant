@@ -53,20 +53,14 @@ model User {
 }
 
 model Router {
-  id    String @id @db.VarChar(20)
-  icon  String @db.VarChar(45)
-  level Int
-  name  String @db.VarChar(50)
-  path  String @db.VarChar(150)
+  id       String @id @db.VarChar(20)
+  icon     String @db.VarChar(45)
+  level    Int
+  name     String @db.VarChar(50)
+  parentId String @map("parent_id") @db.VarChar(20)
+  path     String @db.VarChar(150)
+  sequence Int
 
   @@index([name, path, level], map: "INDEX")
   @@map("router")
-}
-
-model RouterRelation {
-  ancestorId   String @id @map("ancestor_id") @db.VarChar(20)
-  descendantId String @map("descendant_id") @db.VarChar(20)
-
-  @@index([descendantId], map: "INDEX")
-  @@map("router_relation")
 }

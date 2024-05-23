@@ -75,27 +75,32 @@ export function toContains<T>(data: T, keys: (keyof T)[]) {
   }
 }
 // 数据转实体
-export function toEntity<T>(data: Record<string, any>, entity: T): T {
-  const obj = {} as T
-  for (const item in data) {
-    if (entity.hasOwnProperty(item)) {
-      const value = data[item]
-      const entityValue = entity[item]
-      const isNumber = typeof entityValue === 'number'
-      const isDecimal = entityValue instanceof Prisma.Decimal
-      if (isDate(entityValue)) {
-        if (value) {
-          obj[item] = new Date(value)
-        } else {
-          obj[item] = undefined
-        }
-      } else if (isNumber || isDecimal) {
-        obj[item] = Number(value)
-      } else if (typeof entityValue === 'string') {
-        obj[item] = isNotEmpty(value) ? String(value) : ''
+export function toEntity<T>(
+  data: Record<string, any>,
+  entity: T,
+  fill?: boolean
+): T {
+  const obj = {} as any
+  for (const item in entity) {
+    if (!fill && isEmpty(data[item])) {
+      continue
+    }
+    const value = data[item]
+    const entityValue = entity[item]
+    const isNumber = typeof entityValue === 'number'
+    const isDecimal = entityValue instanceof Prisma.Decimal
+    if (isDate(entityValue)) {
+      if (value) {
+        obj[item] = new Date(value)
       } else {
-        obj[item] = value
+        obj[item] = undefined
       }
+    } else if (isNumber || isDecimal) {
+      obj[item] = Number(value)
+    } else if (typeof entityValue === 'string') {
+      obj[item] = isNotEmpty(value) ? String(value) : ''
+    } else {
+      obj[item] = value
     }
   }
   return obj
@@ -124,8 +129,12 @@ export function toTree(
   data.forEach((item: any) => {
     obj[item[idKey]] = item
   })
-  const list = [] as any
+  const list = [] as any[]
   data.forEach((item: any) => {
+    if (item[idKey] === item[parentKey]) {
+      list.push(item)
+      return
+    }
     const parent = obj[item[parentKey]]
     if (parent) {
       parent.children = parent.children || []

@@ -5,4 +5,5 @@ export type Model = {
   name: string
   level: number
   icon: string
+  parentId: string
 }

@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 import { bus, element, shiki, useChaoser, ApiCode } from '@chant'
 import type { ListState as State, FormType, PageType } from '@chant/type'
 
-function useLister(config?: { type: FormType }) {
+function useLister(config?: { method?: Function; type?: FormType }) {
   const chaoser = useChaoser()
   const { t: gt } = useI18n({ useScope: 'global' })
   const route = useRoute()
@@ -27,6 +27,7 @@ function useLister(config?: { type: FormType }) {
     selections: [] as any[],
     total: 0
   }
+  const method = config?.method
   let tableInstance: TableInstance
 
   // 批量操作
@@ -177,7 +178,7 @@ function useLister(config?: { type: FormType }) {
     const { code } = await shiki.post(path, config?.params)
     state.loading = false
     if (code === ApiCode.Success) {
-      bus.emit(route.path)
+      method ? method() : bus.emit(route.path)
     }
   }
   // 删除

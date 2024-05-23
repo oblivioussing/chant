@@ -31,8 +31,8 @@ export class TradeService extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const data = await this.trade.delete({ where: { id } })
-    if (data) {
+    const row = await this.trade.delete({ where: { id } })
+    if (row) {
       result.success({ msg: '交易删除成功' })
     } else {
       result.fail('交易删除失败')
@@ -43,8 +43,8 @@ export class TradeService extends BaseService {
   async deletes(params: Many<Trade>) {
     const result = new Result()
     const where = base.manyWhere(params, tradeEntity)
-    const data = await this.trade.deleteMany({ where })
-    if (data.count) {
+    const row = await this.trade.deleteMany({ where })
+    if (row.count) {
       result.success({ msg: '批量删除成功' })
     } else {
       result.fail('批量删除失败')
@@ -54,12 +54,12 @@ export class TradeService extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<TradeVo>()
-    let data = await this.trade.findUnique({
+    const row = await this.trade.findUnique({
       select: base.toSelect(tradeEntity),
       where: { id }
     })
-    if (data) {
-      data = base.toEntity(data, tradeEntity)
+    if (row) {
+      const data = base.toEntity(row, tradeEntity)
       result.data = await this.userIdToName(data, ['belongId', 'userId'])
       result.success({ msg: '交易信息查询成功' })
     } else {

@@ -86,7 +86,7 @@
               'link-text': item.link
             }"
             truncated
-            @click.stop="onLink(row)">
+            @click="item.link && onLink(row)">
             {{ valueFmt(item, row[item.prop]) }}
           </el-text>
           <!-- copy -->
