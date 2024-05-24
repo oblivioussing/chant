@@ -1,15 +1,12 @@
-import type { Prisma, {{upper module}} } from '@prisma/client'
-import { BaseService, PageData, Result } from '@/share'
+import type { {{upper module}} } from '@prisma/client'
+import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base } from '@/utils'
 import { {{module}}Entity, type {{upper module}}Vo } from './model'
 
 export class {{upper module}}Service extends BaseService {
-  private {{module}}: Prisma.{{upper module}}Delegate
-
   constructor() {
     super()
-    this.{{module}} = this.prisma.{{module}}
   }
   // 新增
   async add({{module}}: {{upper module}}) {
@@ -18,7 +15,7 @@ export class {{upper module}}Service extends BaseService {
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
-    const row = await this.{{module}}.create({ data })
+    const row = await prisma.{{module}}.create({ data })
     if (row) {
       result.success({ msg: '{{tableComment}}新增成功' })
     } else {
@@ -29,7 +26,7 @@ export class {{upper module}}Service extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = await this.{{module}}.delete({ where: { id } })
+    const row = await prisma.{{module}}.delete({ where: { id } })
     if (row) {
       result.success({ msg: '{{tableComment}}删除成功' })
     } else {
@@ -41,7 +38,7 @@ export class {{upper module}}Service extends BaseService {
   async deletes(params: Many<{{upper module}}>) {
     const result = new Result()
     const where = base.manyWhere(params, {{module}}Entity)
-    const row = await this.{{module}}.deleteMany({ where })
+    const row = await prisma.{{module}}.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '{{tableComment}}批量删除成功' })
     } else {
@@ -52,7 +49,7 @@ export class {{upper module}}Service extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<{{upper module}}Vo>()
-    const row = await this.{{module}}.findUnique({
+    const row = await prisma.{{module}}.findUnique({
       select: base.toSelect({{module}}Entity),
       where: { id }
     })
@@ -68,12 +65,12 @@ export class {{upper module}}Service extends BaseService {
   async list({{module}}: {{upper module}}, page: Page) {
     const pageData = new PageData<{{upper module}}Vo>()
     const result = new Result<typeof pageData>()
-    const rows = await this.{{module}}.findMany({
+    const rows = await prisma.{{module}}.findMany({
       ...base.pageHelper(page, 'desc'),
       select: base.toSelect({{module}}Entity),
       where: {{module}}
     })
-    const total = await this.{{module}}.count({ where: {{module}} })
+    const total = await prisma.{{module}}.count({ where: {{module}} })
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '{{tableComment}}列表查询成功' })
@@ -85,7 +82,7 @@ export class {{upper module}}Service extends BaseService {
     const data = base.toEntity({{module}}, {{module}}Entity) as {{upper module}}
     data.updateId = this.getUid()
     data.updateTime = new Date()
-    const row = await this.{{module}}.update({
+    const row = await prisma.{{module}}.update({
       data,
       where: { id: {{module}}.id }
     })

@@ -25,12 +25,6 @@
           @delete="onDelete($event)">
         </chant-column-operate>
       </chant-table>
-      <!-- pagination -->
-      <chant-pagination
-        v-model="state.pages"
-        :total="state.total"
-        @change="getList">
-      </chant-pagination>
     </div>
   </div>
   <!-- 新增/编辑 -->

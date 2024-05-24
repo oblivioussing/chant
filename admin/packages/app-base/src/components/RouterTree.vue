@@ -34,14 +34,14 @@
                 :icon="Edit"
                 link
                 type="primary"
-                @click="lister.edit(state, data)">
+                @click.stop="lister.edit(state, data)">
               </el-button>
               <!-- 删除 -->
               <el-button
                 :icon="Delete"
                 link
                 type="danger"
-                @click="onDelete(data)">
+                @click.stop="onDelete(data)">
               </el-button>
             </div>
           </div>

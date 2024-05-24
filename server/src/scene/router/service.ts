@@ -73,8 +73,7 @@ export class RouterService extends BaseService {
   }
   // 列表
   async list(router: Router) {
-    const pageData = new Result<RouterVo[]>()
-    const result = new Result<typeof pageData>()
+    const result = new Result<RouterVo[]>()
     const rows = await queryRaw.getList(router)
     result.success({ data: rows, msg: '路由列表查询成功' })
     return result
@@ -82,14 +81,8 @@ export class RouterService extends BaseService {
   // 树
   async tree(router: Router) {
     const result = new Result<RouterTree>()
-    const rows = await prisma.router.findMany({
-      select: { id: true, name: true, level: true, parentId: true },
-      where: router,
-      orderBy: {
-        sequence: 'asc'
-      }
-    })
-    result.success({ data: base.toTree(rows), msg: '路由列表查询成功' })
+    const rows = await queryRaw.getTreeList(router)
+    result.success({ data: base.toTree(rows), msg: '路由树查询成功' })
     return result
   }
   // 更新
