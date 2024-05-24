@@ -5,6 +5,7 @@ export default () => {
     {
       prop: 'loginName', // 登录账号
       disabledInPage: 'edit',
+      link: true,
       required: true,
       search: true
     },

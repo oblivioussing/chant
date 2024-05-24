@@ -74,7 +74,10 @@ const lister = useLister()
 // state
 let state = reactive({
   ...lister.state,
-  columns: props.columns
+  columns: props.columns.map((item) => {
+    item.link = false
+    return item
+  })
 })
 // computed
 const isMultiple = computed(() => {
