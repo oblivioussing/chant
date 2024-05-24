@@ -1,12 +1,12 @@
 import { Prisma } from '@prisma/client'
-import { BaseService, Result } from '@/share'
+import { prisma, BaseService, Result } from '@/share'
 import { type Bonus, type BonusVo } from './model'
 
 export class BonusService extends BaseService {
   // 列表
   async list(salary: Bonus) {
     const result = new Result<BonusVo[]>()
-    let rows = await this.prisma.$queryRaw<Bonus[]>`
+    let rows = await prisma.$queryRaw<Bonus[]>`
       SELECT 
           user_id AS userId,
           SUM(CAST(amount * commission AS DECIMAL (10 , 2 ))) AS bonus,

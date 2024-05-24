@@ -2,7 +2,7 @@ import { compare, hash } from 'bcrypt'
 import type { Prisma, File, User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
-import { BaseService, PageData, Result } from '@/share'
+import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
 import { StatusEnum } from './enum'
@@ -11,18 +11,16 @@ import { userEntity, type UserVo } from './model'
 export class UserService extends BaseService {
   @Inject(RedisService)
   private redisService: RedisService
-  private user: Prisma.UserDelegate
 
   constructor() {
     super()
-    this.user = this.prisma.user
   }
 
   // 新增
   async add(user: User) {
     const result = new Result()
     const { loginName, phone } = user
-    const userData = await this.user.findFirst({
+    const userData = await prisma.user.findFirst({
       where: {
         OR: [{ loginName }, { phone }]
       }
@@ -43,7 +41,7 @@ export class UserService extends BaseService {
     data.createTime = new Date()
     data.password = await hash(user.password, 10)
     data.status = StatusEnum.Normal
-    const row = await this.user.create({ data })
+    const row = await prisma.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
     } else {
@@ -54,7 +52,7 @@ export class UserService extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = await this.user.delete({ where: { id } })
+    const row = await prisma.user.delete({ where: { id } })
     if (row) {
       result.success({ msg: '用户删除成功' })
     } else {
@@ -66,7 +64,7 @@ export class UserService extends BaseService {
   async deletes(params: Many<User>) {
     const result = new Result()
     const where = base.manyWhere(params, userEntity)
-    const row = await this.user.deleteMany({ where })
+    const row = await prisma.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
     } else {
@@ -77,7 +75,7 @@ export class UserService extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<User>()
-    const row = await this.user.findUnique({ where: { id } })
+    const row = await prisma.user.findUnique({ where: { id } })
     if (row) {
       const fileIds = row.photoList as string[]
       row.photoList = await this.getFiles(fileIds)
@@ -95,12 +93,12 @@ export class UserService extends BaseService {
     const where = user as Prisma.UserWhereInput
     // 模糊查询
     base.toContains(where, ['name', 'phone'])
-    const rows = await this.user.findMany({
+    const rows = await prisma.user.findMany({
       ...base.pageHelper(page, 'desc'),
       select: base.toSelect(userEntity, ['photoList']),
       where
     })
-    const total = await this.user.count({ where })
+    const total = await prisma.user.count({ where })
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
@@ -109,7 +107,7 @@ export class UserService extends BaseService {
   // 登陆
   async login(user: User) {
     const result = new Result<string>()
-    const row = await this.user.findUnique({
+    const row = await prisma.user.findUnique({
       where: { loginName: user.loginName },
       select: { id: true, password: true }
     })
@@ -141,7 +139,7 @@ export class UserService extends BaseService {
     const photoList = data.photoList as unknown as File[]
     data.photoList = photoList.map((item) => item.id)
     data.updateTime = new Date()
-    const row = await this.user.update({
+    const row = await prisma.user.update({
       data,
       where: { id: user.id }
     })

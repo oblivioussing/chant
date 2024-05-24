@@ -1,16 +1,13 @@
 import type { Prisma, Router } from '@prisma/client'
-import { BaseService, Result } from '@/share'
+import { prisma, BaseService, Result } from '@/share'
 import { Many } from '@/type'
 import { base } from '@/utils'
 import { routerEntity, type RouterTree, type RouterVo } from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
-  private router: Prisma.RouterDelegate
-
   constructor() {
     super()
-    this.router = this.prisma.router
   }
   // 新增
   async add(router: Router) {
@@ -23,10 +20,10 @@ export class RouterService extends BaseService {
     data.id = base.createId()
     // 获取序号
     const level = data.level
-    const count = await this.router.count({ where: { level } })
+    const count = await prisma.router.count({ where: { level } })
     data.sequence = count
     // create
-    const row = await this.router.create({ data })
+    const row = await prisma.router.create({ data })
     if (row) {
       result.success({ msg: '路由新增成功' })
     } else {
@@ -37,7 +34,7 @@ export class RouterService extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = this.router.deleteMany({
+    const row = prisma.router.deleteMany({
       where: { id: { in: [id] } }
     })
     if (row) {
@@ -51,7 +48,7 @@ export class RouterService extends BaseService {
   async deletes(params: Many<Router>) {
     const result = new Result()
     const where = base.manyWhere(params, routerEntity)
-    const row = await this.router.deleteMany({ where })
+    const row = await prisma.router.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '路由批量删除成功' })
     } else {
@@ -62,7 +59,7 @@ export class RouterService extends BaseService {
   // 详情
   async detail(id: string) {
     const result = new Result<RouterVo>()
-    const row = await this.router.findUnique({
+    const row = await prisma.router.findUnique({
       select: base.toSelect(routerEntity),
       where: { id }
     })
@@ -85,7 +82,7 @@ export class RouterService extends BaseService {
   // 树
   async tree(router: Router) {
     const result = new Result<RouterTree>()
-    const rows = await this.router.findMany({
+    const rows = await prisma.router.findMany({
       select: { id: true, name: true, level: true, parentId: true },
       where: router,
       orderBy: {
@@ -99,7 +96,7 @@ export class RouterService extends BaseService {
   async update(router: Router) {
     const result = new Result<Router>()
     const data = base.toEntity(router, routerEntity) as Router
-    const row = await this.router.update({
+    const row = await prisma.router.update({
       data,
       where: { id: router.id }
     })

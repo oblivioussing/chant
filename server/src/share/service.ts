@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
 import { Prisma } from '@prisma/client'
 import { I18nContext, I18nService } from 'nestjs-i18n'
-import { base, prismaUtil } from '@/utils'
+import { base } from '@/utils'
+import { prisma } from './prisma'
 
 @Injectable()
 export class BaseService {
@@ -10,12 +11,11 @@ export class BaseService {
   private readonly i18n: I18nService
   @Inject(REQUEST)
   private readonly request: Request // request
-  prisma = prismaUtil.getInstance()
 
   // 获取文件
   async getFiles(ids: string[]) {
     if (ids?.length) {
-      const rows = await this.prisma.$queryRaw<File[]>`
+      const rows = await prisma.$queryRaw<File[]>`
         SELECT 
           id,
           create_time AS createTime,
@@ -80,7 +80,7 @@ export class BaseService {
   }
   // 获取用户姓名
   private async getUserName(ids: string[]) {
-    const data = await this.prisma.user.findMany({
+    const data = await prisma.user.findMany({
       select: { id: true, name: true },
       where: { id: { in: ids } }
     })

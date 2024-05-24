@@ -1,7 +1,5 @@
 import { type Router } from '@prisma/client'
-import { prismaUtil } from '@/utils'
-
-const prisma = prismaUtil.getInstance()
+import { prisma } from '@/share'
 
 export default {
   // 获取路由列表
