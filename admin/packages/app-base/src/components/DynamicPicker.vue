@@ -1,7 +1,7 @@
 <template>
   <!-- user-picker -->
   <user-picker
-    v-if="props.type === 'user-picker'"
+    v-if="props.type === 'user'"
     v-model:id="id"
     v-model:text="text"
     :title="props.title"

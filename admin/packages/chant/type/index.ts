@@ -1,6 +1,6 @@
 import type { DatePickType, FormItemRule, TagProps } from 'element-plus'
 
-export type DynamicPicker = 'user-picker'
+export type DynamicPicker = 'user'
 
 export type ElementType =
   | 'dynamic-picker'

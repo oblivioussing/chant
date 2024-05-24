@@ -14,7 +14,7 @@ export default () => {
       required: true,
       search: true,
       type: 'dynamic-picker',
-      dynamicPicker: 'user-picker'
+      dynamicPicker: 'user'
     },
     {
       prop: 'commission', // 提成
@@ -26,7 +26,7 @@ export default () => {
       dynamicId: 'belongId',
       search: true,
       type: 'dynamic-picker',
-      dynamicPicker: 'user-picker'
+      dynamicPicker: 'user'
     },
     {
       prop: 'status', // 状态 1-正常 2-作废

@@ -13,7 +13,7 @@ export default () => {
       required: true,
       search: true,
       type: 'custom-picker',
-      customPicker: 'user-picker'
+      customPicker: 'user'
     },
     {
       prop: 'date',
