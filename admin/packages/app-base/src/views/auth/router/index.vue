@@ -1,6 +1,6 @@
 <template>
   <div class="column-box">
-    <router-tree></router-tree>
+    <router-tree @node-click="onNode"></router-tree>
     <div class="column-item flex-1">
       <!-- search -->
       <chant-table-search
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from 'chant'
-import { columns, dict } from './share'
+import { columns, dict, type Model } from './share'
 import MixForm from './components/MixForm.vue'
 import RouterTree from '@app-base/components/RouterTree.vue'
 
@@ -61,20 +61,28 @@ let state = reactive({
 })
 // created
 lister.created(() => {
-  // 获取列表
-  getList()
+  if (state.query.id) {
+    // 获取列表
+    getList()
+  }
 })
 // 获取列表
 function getList() {
-  lister.getData('router/list', state)
+  lister.getData('router/list', state, { limit: false })
 }
 // 删除
-function onDelete({ id }: any) {
+function onDelete({ id }: Model) {
   lister.remove('router/delete', state, { id })
 }
 // 批量删除
 function onDeletes() {
   lister.removes('router/deletes', state)
+}
+// tree节点
+function onNode(row: Model) {
+  state.query.id = row.id
+  // 获取列表
+  getList()
 }
 </script>
 

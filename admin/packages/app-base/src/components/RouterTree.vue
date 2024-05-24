@@ -10,17 +10,24 @@
     </div>
     <div v-loading="state.loading" class="tree-container" ref="scrollRef">
       <el-tree
+        v-bind="$attrs"
         :expand-on-click-node="false"
         :data="state.list"
         default-expand-all
         highlight-current
-        node-key="id">
+        node-key="id"
+        @node-click="emits('node-click', $event)">
         <template #default="{ data }">
           <div class="tree-item">
             <div>{{ data.name }}</div>
             <div class="button-box">
               <!-- 新增 -->
-              <el-button :icon="Plus" link type="primary" @click="onAdd(data)">
+              <el-button
+                v-if="data.level !== 3"
+                :icon="Plus"
+                link
+                type="primary"
+                @click="onAdd(data)">
               </el-button>
               <!-- 编辑 -->
               <el-button
@@ -61,6 +68,8 @@ import { useLister } from 'chant'
 import { type Model } from '@app-base/views/auth/router/share'
 import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
 
+// emits
+const emits = defineEmits(['node-click'])
 // ref
 const scrollRef = ref<HTMLElement | null>()
 // use
@@ -80,8 +89,11 @@ onActivated(() => {
   scrollRef.value!.scrollTo({ top: y.value })
 })
 // 获取列表
-function getList() {
-  lister.getData('router/tree', state, { limit: false })
+async function getList() {
+  await lister.getData('router/tree', state, { limit: false })
+  if (state.list.length) {
+    emits('node-click', state.list[0])
+  }
 }
 // 新增
 function onAdd(row: Model) {

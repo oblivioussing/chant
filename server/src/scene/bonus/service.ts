@@ -6,7 +6,7 @@ export class BonusService extends BaseService {
   // 列表
   async list(salary: Bonus) {
     const result = new Result<BonusVo[]>()
-    let data = await this.prisma.$queryRaw<Bonus[]>`
+    let rows = await this.prisma.$queryRaw<Bonus[]>`
       SELECT 
           user_id AS userId,
           SUM(CAST(amount * commission AS DECIMAL (10 , 2 ))) AS bonus,
@@ -23,9 +23,9 @@ export class BonusService extends BaseService {
         ${salary.date ? Prisma.sql`HAVING date=${salary.date}` : Prisma.empty}
       ORDER BY date DESC;
     `
-    if (data) {
-      data = await this.userIdsToName(data, ['userId'])
-      result.success({ data, msg: '奖金列表查询成功' })
+    if (rows) {
+      rows = await this.userIdsToName(rows, ['userId'])
+      result.success({ data: rows, msg: '奖金列表查询成功' })
     } else {
       result.fail('奖金列表查询失败')
     }

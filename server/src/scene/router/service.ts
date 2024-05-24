@@ -1,8 +1,9 @@
 import type { Prisma, Router } from '@prisma/client'
-import { BaseService, PageData, Result } from '@/share'
-import { Many, Page } from '@/type'
+import { BaseService, Result } from '@/share'
+import { Many } from '@/type'
 import { base } from '@/utils'
 import { routerEntity, type RouterTree, type RouterVo } from './model'
+import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
   private router: Prisma.RouterDelegate
@@ -74,18 +75,11 @@ export class RouterService extends BaseService {
     return result
   }
   // 列表
-  async list(router: Router, page: Page) {
-    const pageData = new PageData<RouterVo>()
+  async list(router: Router) {
+    const pageData = new Result<RouterVo[]>()
     const result = new Result<typeof pageData>()
-    const rows = await this.router.findMany({
-      ...base.pageHelper(page),
-      select: base.toSelect(routerEntity),
-      where: router
-    })
-    const total = await this.router.count({ where: router })
-    pageData.list = rows
-    pageData.total = total
-    result.success({ data: pageData, msg: '路由列表查询成功' })
+    const rows = await queryRaw.getList(router)
+    result.success({ data: rows, msg: '路由列表查询成功' })
     return result
   }
   // 树

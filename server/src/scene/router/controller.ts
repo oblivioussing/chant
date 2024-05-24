@@ -1,7 +1,7 @@
 import type { Router } from 'prisma/prisma-client'
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
-import { QueryModel, QueryPage } from '@/decorator'
-import type { Many, Page } from '@/type'
+import { QueryModel } from '@/decorator'
+import type { Many } from '@/type'
 import { IdVali } from '@/validator'
 import { routerEntity, type RouterDto } from './model'
 import { RouterService } from './service'
@@ -37,11 +37,8 @@ export class RouterController {
   }
   // 列表
   @Get('list')
-  async list(
-    @QueryModel(routerEntity) router: Router,
-    @QueryPage() page: Page
-  ) {
-    const result = await this.routerService.list(router, page)
+  async list(@QueryModel(routerEntity) router: Router) {
+    const result = await this.routerService.list(router)
     return result
   }
   // 树
