@@ -39,6 +39,7 @@ former.created((status) => {
   if (props.pageType === 'add') {
     state.form.parentId = state.selection.id
     state.form.level = Number(state.selection.level) + 1
+    state.form.threeLevel = state.selection.threeLevel
   }
   // 获取详情
   status && getDetail()

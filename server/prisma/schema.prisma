@@ -53,13 +53,15 @@ model User {
 }
 
 model Router {
-  id       String @id @db.VarChar(20)
-  icon     String @db.VarChar(45)
-  level    Int
-  name     String @db.VarChar(50)
-  parentId String @map("parent_id") @db.VarChar(20)
-  path     String @db.VarChar(150)
-  sequence Int
+  id         String @id @db.VarChar(20)
+  icon       String @db.VarChar(45)
+  level      Int
+  menu       String @db.VarChar(1)
+  name       String @db.VarChar(50)
+  parentId   String @map("parent_id") @db.VarChar(20)
+  path       String @db.VarChar(150)
+  sequence   Int
+  threeLevel String @map("three_level") @db.VarChar(1)
 
   @@index([name, path, level], map: "INDEX")
   @@map("router")

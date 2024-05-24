@@ -23,6 +23,12 @@ export class RouterController {
     const result = await this.routerService.delete(router.id)
     return result
   }
+  // 删除树
+  @Post('deleteTree')
+  async deleteTree(@Body() router: IdVali) {
+    const result = await this.routerService.deleteTree(router.id)
+    return result
+  }
   // 批量删除
   @Post('deletes')
   async deletes(@Body() params: Many<Router>) {

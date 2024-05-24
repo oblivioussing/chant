@@ -22,6 +22,14 @@ export class RouterService extends BaseService {
     const level = data.level
     const count = await prisma.router.count({ where: { level } })
     data.sequence = count
+    // 菜单
+    if (level <= 2) {
+      data.menu = '1'
+    }
+    if (level === 3 && data.threeLevel) {
+      data.menu = '1'
+      data.threeLevel = ''
+    }
     // create
     const row = await prisma.router.create({ data })
     if (row) {
@@ -38,6 +46,21 @@ export class RouterService extends BaseService {
       where: { id: { in: [id] } }
     })
     if (row) {
+      result.success({ msg: '路由删除成功' })
+    } else {
+      result.fail('路由删除失败')
+    }
+    return result
+  }
+  // 删除树
+  async deleteTree(id: string) {
+    const result = new Result()
+    const rows = await queryRaw.getDescendantIds(id)
+    const ids = rows.map((item) => item.id)
+    const row = await prisma.router.deleteMany({
+      where: { id: { in: ids } }
+    })
+    if (row.count) {
       result.success({ msg: '路由删除成功' })
     } else {
       result.fail('路由删除失败')

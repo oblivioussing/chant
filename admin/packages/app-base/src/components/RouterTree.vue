@@ -16,14 +16,15 @@
         default-expand-all
         highlight-current
         node-key="id"
-        @node-click="emits('node-click', $event)">
+        ref="treeRef"
+        @node-click="onNode">
         <template #default="{ data }">
           <div class="tree-item">
             <div>{{ data.name }}</div>
             <div class="button-box">
               <!-- 新增 -->
               <el-button
-                v-if="data.level !== 3"
+                v-if="showAdd(data)"
                 :icon="Plus"
                 link
                 type="primary"
@@ -72,12 +73,14 @@ import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
 const emits = defineEmits(['node-click'])
 // ref
 const scrollRef = ref<HTMLElement | null>()
+const treeRef = ref()
 // use
 const lister = useLister({ method: getList })
 const { y } = useScroll(scrollRef)
 // state
-const state = reactive({
-  ...lister.state
+let state = reactive({
+  ...lister.state,
+  node: {} as Model
 })
 // onMounted
 lister.created(() => {
@@ -91,9 +94,24 @@ onActivated(() => {
 // 获取列表
 async function getList() {
   await lister.getData('router/tree', state, { limit: false })
-  if (state.list.length) {
-    emits('node-click', state.list[0])
+  const list = state.list
+  if (list.length) {
+    const row = state.node.id ? state.node : list[0]
+    emits('node-click', row)
+    treeRef.value?.setCurrentNode(row)
   }
+}
+// 是否显示新增按钮
+function showAdd(row: Model) {
+  if (row.level === 2) {
+    return row.threeLevel === '1'
+  }
+  return row.level !== 3
+}
+// 节点点击
+function onNode(row: Model) {
+  state.node = row
+  emits('node-click', row)
 }
 // 新增
 function onAdd(row: Model) {
@@ -103,7 +121,8 @@ function onAdd(row: Model) {
 }
 // 删除
 function onDelete(row: Model) {
-  lister.remove('router/delete', state, { id: row.id })
+  state.node = {} as Model
+  lister.remove('router/deleteTree', state, { id: row.id })
 }
 </script>
 

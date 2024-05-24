@@ -99,7 +99,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   // 新增
   function add(state: State) {
     if (state.formType === 'page') {
-      _jump('/add')
+      jump('/add')
     } else {
       state.pageType = 'add'
       state.mixForm = true
@@ -156,6 +156,11 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   // 是否选中数据
   function isSelected(state: State) {
     return state.selections.length > 0 || state.allFlag === 1
+  }
+  // 页面跳转
+  function jump(to: string, query?: any) {
+    const path = route.path + to
+    chaoser.push({ path, query })
   }
   // 操作
   async function operate(
@@ -218,11 +223,6 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     }
     return status
   }
-  // 页面跳转
-  function _jump(to: string, query?: any) {
-    const path = route.path + to
-    chaoser.push({ path, query })
-  }
   // 事件监听
   function _on(callback: () => any, name?: string) {
     name = name || route?.path
@@ -243,7 +243,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   ) {
     if (state.formType === 'page') {
       const copyFlag = config.copyFlag
-      _jump(`/${config.type}`, { id: row.id, copyFlag })
+      jump(`/${config.type}`, { id: row.id, copyFlag })
     } else {
       state.selection = row
       state.pageType = config.type
@@ -271,6 +271,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     getData,
     getListParams,
     isSelected,
+    jump,
     operate,
     remove,
     removes,

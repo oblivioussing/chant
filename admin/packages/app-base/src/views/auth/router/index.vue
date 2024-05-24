@@ -13,7 +13,7 @@
       <chant-table-operate
         v-model="state"
         :options="['add', 'delete']"
-        @add="lister.add(state)"
+        @add="onAdd"
         @delete="onDeletes">
       </chant-table-operate>
       <!-- table -->
@@ -51,7 +51,8 @@ const lister = useLister()
 // state
 let state = reactive({
   ...lister.state,
-  columns: columns()
+  columns: columns(),
+  node: {} as Model
 })
 // created
 lister.created(() => {
@@ -64,6 +65,11 @@ lister.created(() => {
 function getList() {
   lister.getData('router/list', state, { limit: false })
 }
+// 新增
+function onAdd() {
+  const { id, level, threeLevel } = state.node
+  lister.jump('/add', { id, level, threeLevel })
+}
 // 删除
 function onDelete({ id }: Model) {
   lister.remove('router/delete', state, { id })
@@ -74,6 +80,7 @@ function onDeletes() {
 }
 // tree节点
 function onNode(row: Model) {
+  state.node = row
   state.query.id = row.id
   // 获取列表
   getList()

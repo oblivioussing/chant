@@ -1,4 +1,5 @@
 import type { Column } from 'chant'
+import { type Model } from './index'
 
 export default () => {
   return [
@@ -11,11 +12,14 @@ export default () => {
     {
       prop: 'path',
       label: '路径',
+      newlineFull: true,
       required: true,
       search: true,
-      whole: true,
-      showCustom(row) {
-        return [2, 4].includes(row.level)
+      showCustom(row: Model) {
+        if (row.threeLevel === '1') {
+          return row.level === 3
+        }
+        return row.level >= 2
       }
     },
     {
@@ -24,8 +28,17 @@ export default () => {
       hideInPages: ['list'],
       required: true,
       slotForm: true,
-      showCustom(row) {
+      showCustom(row: Model) {
         return row.level === 1
+      }
+    },
+    {
+      prop: 'threeLevel',
+      label: '三级菜单',
+      hideInPages: ['list'],
+      type: 'radio',
+      showCustom(row: Model) {
+        return row.level === 2
       }
     }
   ] as Column[]

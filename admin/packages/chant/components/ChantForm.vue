@@ -148,7 +148,7 @@
               <el-radio
                 v-for="(val, key) in props.dict?.[item.prop]"
                 :key="key"
-                :label="key">
+                :value="key">
                 {{ dictTranslate(val) }}
               </el-radio>
             </el-radio-group>
