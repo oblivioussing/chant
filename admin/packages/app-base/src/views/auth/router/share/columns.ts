@@ -16,7 +16,7 @@ export default () => {
       required: true,
       search: true,
       showCustom(row: Model) {
-        if (row.threeLevel === '1') {
+        if (row.threeLevel) {
           return row.level === 3
         }
         return row.level >= 2

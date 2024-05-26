@@ -6,5 +6,5 @@ export type Model = {
   level: number
   icon: string
   parentId: string
-  threeLevel: '0' | '1'
+  threeLevel: 0 | 1
 }

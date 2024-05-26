@@ -140,18 +140,14 @@
               </el-input-number>
             </div>
             <!-- radio -->
-            <el-radio-group
+            <chant-radio
               v-else-if="item.type === 'radio'"
               v-model="vModel!.form[item.prop]"
               :disabled="isDisabled(item)"
-              :placeholder="translate(item, 'select')">
-              <el-radio
-                v-for="(val, key) in props.dict?.[item.prop]"
-                :key="key"
-                :value="key">
-                {{ dictTranslate(val) }}
-              </el-radio>
-            </el-radio-group>
+              :data="props?.dict?.[item.prop]"
+              :lang="lang"
+              @change="onChange(item, $event)">
+            </chant-radio>
             <!-- custom-picker -->
             <dynamic-picker
               v-if="item.type === 'dynamic-picker'"
@@ -363,10 +359,6 @@ function translate(column: Column, type?: 'enter' | 'select') {
   } else {
     return label
   }
-}
-// 字典翻译
-function dictTranslate(label: string) {
-  return label.indexOf('dict.') >= 0 ? t(label) : label
 }
 </script>
 

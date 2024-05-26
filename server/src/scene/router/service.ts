@@ -5,6 +5,8 @@ import { base } from '@/utils'
 import { routerEntity, type RouterTree, type RouterVo } from './model'
 import queryRaw from './query-raw'
 
+console.log(base.createId())
+
 export class RouterService extends BaseService {
   constructor() {
     super()
@@ -18,18 +20,13 @@ export class RouterService extends BaseService {
       true
     ) as Prisma.RouterCreateInput
     data.id = base.createId()
+    // 数据处理
+    this.dataDeal(data)
     // 获取序号
-    const level = data.level
-    const count = await prisma.router.count({ where: { level } })
+    const count = await prisma.router.count({
+      where: { level: data.level }
+    })
     data.sequence = count
-    // 菜单
-    if (level <= 2) {
-      data.menu = '1'
-    }
-    if (level === 3 && data.threeLevel) {
-      data.menu = '1'
-      data.threeLevel = ''
-    }
     // create
     const row = await prisma.router.create({ data })
     if (row) {
@@ -38,6 +35,44 @@ export class RouterService extends BaseService {
       result.fail('路由新增失败')
     }
     return result
+  }
+  // 更新
+  async update(router: Router) {
+    const result = new Result<Router>()
+    const data = base.toEntity(router, routerEntity) as Router
+    // 数据处理
+    this.dataDeal(data)
+    const row = await prisma.router.update({
+      data,
+      where: { id: data.id }
+    })
+    if (row) {
+      result.success({ msg: '路由更新成功' })
+    } else {
+      result.fail('路由更新失败')
+    }
+    return result
+  }
+  // 数据处理
+  private dataDeal(data: Router) {
+    const level = data.level
+    if (data.path) {
+      data.path = '/' + data.path.replace(/^\/|\/$/g, '')
+    }
+    // 菜单
+    if (level <= 2) {
+      data.menu = 1
+    }
+    // 三级菜单
+    if (data.threeLevel === 1) {
+      data.menu = 1
+      if (level === 2) {
+        data.path = ''
+      }
+      if (level === 3) {
+        data.threeLevel = 0
+      }
+    }
   }
   // 删除
   async delete(id: string) {
@@ -101,26 +136,28 @@ export class RouterService extends BaseService {
     result.success({ data: rows, msg: '路由列表查询成功' })
     return result
   }
+  // 排序
+  async sort(ids: string[]) {
+    const result = new Result()
+    const updates = ids.map((item, index) => {
+      return prisma.router.update({
+        data: { sequence: index },
+        where: { id: item }
+      })
+    })
+    const rows = await prisma.$transaction(updates)
+    if (rows.length) {
+      result.success({ msg: '排序成功' })
+    } else {
+      result.fail('排序失败')
+    }
+    return result
+  }
   // 树
   async tree(router: Router) {
     const result = new Result<RouterTree>()
     const rows = await queryRaw.getTreeList(router)
     result.success({ data: base.toTree(rows), msg: '路由树查询成功' })
-    return result
-  }
-  // 更新
-  async update(router: Router) {
-    const result = new Result<Router>()
-    const data = base.toEntity(router, routerEntity) as Router
-    const row = await prisma.router.update({
-      data,
-      where: { id: router.id }
-    })
-    if (row) {
-      result.success({ msg: '路由更新成功' })
-    } else {
-      result.fail('路由更新失败')
-    }
     return result
   }
 }

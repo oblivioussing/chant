@@ -26,7 +26,7 @@
         </template>
         <template v-for="item1 in item.children" :key="`${item1.path}`">
           <el-menu-item
-            v-if="!item1.meta?.subFlag"
+            v-if="!item1.meta?.sub"
             :index="`${item.path}/${item1.path}`"
             @click="onTab(`${item.path}/${item1.path}`)">
             <el-text truncated>{{ title(item1.meta) }}</el-text>

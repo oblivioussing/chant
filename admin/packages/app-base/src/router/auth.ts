@@ -1,19 +1,25 @@
 // 部门
 const dept = {
   path: 'dept',
-  meta: { title: 'dept', menu: true, subFlag: 1 },
+  meta: { title: 'dept', menu: 1, sub: 1 },
   children: [
     // 部门1
     {
       path: 'dept1',
       component: () => import('@app-base/views/auth/user/index.vue'),
-      meta: { title: 'dept1', menu: true }
+      meta: { title: 'dept1', menu: 1 }
+    },
+    // 部门1新增
+    {
+      path: 'dept1/add',
+      component: () => import('@app-base/views/auth/user/add.vue'),
+      meta: { title: 'dept1Add' }
     },
     // 部门2
     {
       path: 'dept2',
       component: () => import('@app-base/views/auth/user/index.vue'),
-      meta: { title: 'dept2', menu: true }
+      meta: { title: 'dept2', menu: 1 }
     }
   ]
 }
@@ -28,7 +34,7 @@ export default [
       {
         path: 'user',
         component: () => import('@app-base/views/auth/user/index.vue'),
-        meta: { title: 'user', menu: true }
+        meta: { title: 'user', menu: 1 }
       },
       // 用户新增
       {
@@ -46,7 +52,7 @@ export default [
       {
         path: 'router',
         component: () => import('@app-base/views/auth/router/index.vue'),
-        meta: { title: 'router', menu: true }
+        meta: { title: 'router', menu: 1 }
       },
       // 路由新增
       {

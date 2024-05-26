@@ -17,6 +17,12 @@ export class RouterController {
     const result = await this.routerService.add(router as RouterDto)
     return result
   }
+  // 更新
+  @Post('update')
+  async update(@Body() router: UpdateVali) {
+    const result = await this.routerService.update(router as Router)
+    return result
+  }
   // 删除
   @Post('delete')
   async delete(@Body() router: IdVali) {
@@ -47,16 +53,16 @@ export class RouterController {
     const result = await this.routerService.list(router)
     return result
   }
+  // 排序
+  @Post('sort')
+  async sort(@Body() ids: string[]) {
+    const result = await this.routerService.sort(ids)
+    return result
+  }
   // 树
   @Get('tree')
   async tree(@QueryModel(routerEntity) router: Router) {
     const result = await this.routerService.tree(router)
-    return result
-  }
-  // 更新
-  @Post('update')
-  async update(@Body() router: UpdateVali) {
-    const result = await this.routerService.update(router as Router)
     return result
   }
 }

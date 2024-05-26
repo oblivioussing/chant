@@ -23,6 +23,23 @@ export class {{upper module}}Service extends BaseService {
     }
     return result
   }
+  // 更新
+  async update({{module}}: {{upper module}}) {
+    const result = new Result<{{upper module}}>()
+    const data = base.toEntity({{module}}, {{module}}Entity) as {{upper module}}
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
+    const row = await prisma.{{module}}.update({
+      data,
+      where: { id: {{module}}.id }
+    })
+    if (row) {
+      result.success({ msg: '{{tableComment}}更新成功' })
+    } else {
+      result.fail('{{tableComment}}更新失败')
+    }
+    return result
+  }
   // 删除
   async delete(id: string) {
     const result = new Result()
@@ -74,23 +91,6 @@ export class {{upper module}}Service extends BaseService {
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '{{tableComment}}列表查询成功' })
-    return result
-  }
-  // 更新
-  async update({{module}}: {{upper module}}) {
-    const result = new Result<{{upper module}}>()
-    const data = base.toEntity({{module}}, {{module}}Entity) as {{upper module}}
-    data.updateId = this.getUid()
-    data.updateTime = new Date()
-    const row = await prisma.{{module}}.update({
-      data,
-      where: { id: {{module}}.id }
-    })
-    if (row) {
-      result.success({ msg: '{{tableComment}}更新成功' })
-    } else {
-      result.fail('{{tableComment}}更新失败')
-    }
     return result
   }
 }

@@ -20,7 +20,8 @@
     "delete": "delete",
     "save": "save",
     "more": "more operation",
-    "selectAll": "select all"
+    "selectAll": "select all",
+    "sort": "save sort"
   },
   "tips": {
     "copyFail": "copy fail",

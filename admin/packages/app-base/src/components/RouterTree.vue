@@ -69,6 +69,10 @@ import { useLister } from 'chant'
 import { type Model } from '@app-base/views/auth/router/share'
 import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
 
+// defineExpose
+defineExpose({
+  getList // 获取列表
+})
 // emits
 const emits = defineEmits(['node-click'])
 // ref
@@ -104,7 +108,7 @@ async function getList() {
 // 是否显示新增按钮
 function showAdd(row: Model) {
   if (row.level === 2) {
-    return row.threeLevel === '1'
+    return row.threeLevel
   }
   return row.level !== 3
 }

@@ -17,6 +17,12 @@ export class {{upper module}}Controller {
     const result = await this.{{module}}Service.add({{module}} as {{upper module}})
     return result
   }
+  // 更新
+  @Post('update')
+  async update(@Body() {{module}}: UpdateVali) {
+    const result = await this.{{module}}Service.update({{module}} as {{upper module}})
+    return result
+  }
   // 删除
   @Post('delete')
   async delete(@Body() {{module}}: IdVali) {
@@ -39,12 +45,6 @@ export class {{upper module}}Controller {
   @Get('list')
   async list(@QueryModel({{module}}Entity) {{module}}: {{upper module}}, @QueryPage() page: Page) {
     const result = await this.{{module}}Service.list({{module}}, page)
-    return result
-  }
-  // 更新
-  @Post('update')
-  async update(@Body() {{module}}: UpdateVali) {
-    const result = await this.{{module}}Service.update({{module}} as {{upper module}})
     return result
   }
 }

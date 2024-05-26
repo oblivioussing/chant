@@ -148,7 +148,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   // 获取列表参数
   function getListParams(state: State) {
     return {
-      idList: state.selections.map((item) => item.id),
+      ids: state.selections.map((item) => item.id),
       allFlag: state.allFlag,
       search: getQuery(state)
     }

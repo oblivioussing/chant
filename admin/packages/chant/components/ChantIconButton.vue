@@ -12,7 +12,8 @@ import {
   Edit,
   Link,
   More,
-  Plus
+  Plus,
+  Sort
 } from '@element-plus/icons-vue'
 
 // type
@@ -24,6 +25,7 @@ type IconType =
   | 'link'
   | 'more'
   | 'plus'
+  | 'sort'
 // props
 const props = defineProps<{
   iconType?: IconType
@@ -37,7 +39,8 @@ const icon = computed(() => {
     edit: Edit,
     link: Link,
     more: More,
-    plus: Plus
+    plus: Plus,
+    sort: Sort
   }
   if (props.iconType) {
     return map[props.iconType]

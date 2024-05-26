@@ -1,7 +1,7 @@
 export type Many<T> = {
   allFlag?: 0 | 1
   extra?: Record<string, any>
-  idList?: string[]
+  ids?: string[]
   search?: T
 }
 export type Page = {

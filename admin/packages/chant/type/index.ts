@@ -117,7 +117,7 @@ export type FormEmits = {
 }
 
 export type ListParams = {
-  idList?: string[]
+  ids?: string[]
   allFlag?: number
   searchForm?: Record<string, any>
 }

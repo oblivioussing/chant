@@ -7,7 +7,7 @@
     :multiple="props.multiple"
     :placeholder="props.placeholder"
     @change="emits('change')">
-    <template v-if="props.multiple" #header>
+    <template v-if="props.multiple && options.length" #header>
       <el-checkbox
         v-model="checkAll"
         :indeterminate="indeterminate"

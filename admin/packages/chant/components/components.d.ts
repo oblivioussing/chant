@@ -9,6 +9,7 @@ import ChantIconFont from './ChantIconFont.vue'
 import ChantMoreDropdown from './ChantMoreDropdown.vue'
 import ChantPagination from './ChantPagination.vue'
 import ChantPickerButton from './ChantPickerButton.vue'
+import ChantRadio from './ChantRadio.vue'
 import ChantSelect from './ChantSelect.vue'
 import ChantSelectedTable from './ChantSelectedTable.vue'
 import ChantTable from './ChantTable.vue'
@@ -33,6 +34,7 @@ declare module '@vue/runtime-core' {
     ChantMoreDropdown: typeof ChantMoreDropdown
     ChantPagination: typeof ChantPagination
     ChantPickerButton: typeof ChantPickerButton
+    ChantRadio: typeof ChantRadio
     ChantSelect: typeof ChantSelect
     ChantSelectedTable: typeof ChantSelectedTable
     ChantTable: typeof ChantTable

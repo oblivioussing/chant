@@ -51,7 +51,7 @@ export function manyWhere<T>(params: Many<T>, entity: object) {
     }
     return toEntity(search, entity)
   } else {
-    return { id: { in: params.idList } }
+    return { id: { in: params.ids } }
   }
 }
 // 分页
