@@ -90,7 +90,7 @@ export class RouterService extends BaseService {
     }
     if (data.path) {
       const row = await prisma.router.findFirst({ where: { path: data.path } })
-      if (row) {
+      if (row && row.id !== data.id) {
         result.fail('路由已经存在')
         return result
       }

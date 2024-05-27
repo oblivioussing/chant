@@ -38,6 +38,17 @@ export default () => {
       }
     },
     {
+      prop: 'code',
+      label: '编号',
+      required: true,
+      showCustom(row: Model) {
+        if (row.threeMenu) {
+          return row.level === 4
+        }
+        return row.level === 3
+      }
+    },
+    {
       prop: 'icon',
       label: '图标',
       hideInPages: ['list'],

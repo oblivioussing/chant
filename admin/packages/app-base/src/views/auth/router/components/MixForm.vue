@@ -1,7 +1,7 @@
 <template>
   <chant-form
     v-model="state"
-    :dict="dict"
+    :dict="newDict"
     :columns="columns()"
     @instance="former.bindInstance">
     <!-- 图标 -->
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { shiki, useFormer } from 'chant'
+import { base, shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict, type Model } from '../share'
 
@@ -29,7 +29,8 @@ const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
 // var
-dict.type = { 4: '页面', 5: '功能' } as any
+const newDict = base.clone(dict)
+newDict.type = { 4: '页面', 5: '功能' } as any
 // state
 let state = reactive({
   ...former.state,
