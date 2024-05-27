@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { base, shiki, useFormer } from 'chant'
+import { shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict, type Model } from '../share'
 
@@ -29,7 +29,7 @@ const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
 // var
-const newDict = base.clone(dict)
+const newDict = structuredClone(dict)
 newDict.type = { 4: '页面', 5: '功能' } as any
 // state
 let state = reactive({
