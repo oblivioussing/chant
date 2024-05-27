@@ -1,5 +1,6 @@
 import { Prisma, type Router } from '@prisma/client'
-import { prisma } from '@/share'
+import { prisma, toSelect } from '@/share'
+import { routerEntity } from './model'
 
 function like(val = '') {
   return Prisma.raw(`'%${val}%'`)
@@ -10,13 +11,13 @@ export default {
   async getList(router: Router) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
-        SELECT id, level, name, parent_id as parentId, path, sequence
+        SELECT ${toSelect(routerEntity)}
         FROM router
         WHERE parent_id = ${router.id} 
         AND name LIKE ${like(router.name)}
         AND path LIKE ${like(router.path)}
         UNION ALL
-        SELECT r.id, r.level, r.name, r.parent_id as parentId, r.path, r.sequence
+        SELECT ${toSelect(routerEntity, { alias: 'r' })}
         FROM router r 
         INNER JOIN descendants d ON r.parent_id = d.id and r.level = d.level
       )
@@ -28,7 +29,7 @@ export default {
   async getTreeList(router?: Router) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
-        SELECT id, level, name, parent_id as parentId, path, sequence, three_level as threeLevel
+        SELECT ${toSelect(routerEntity)}
         FROM router
         WHERE id = (
 			    SELECT id 
@@ -39,11 +40,11 @@ export default {
           LIMIT 1
 		    )
         UNION ALL
-        SELECT r.id, r.level, r.name, r.parent_id as parentId, r.path, r.sequence, three_level
+        SELECT ${toSelect(routerEntity, { alias: 'r' })}
         FROM router r 
         INNER JOIN descendants d 
         ON r.parent_id = d.id
-        AND menu = '1'
+        AND r.menu = '1'
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
