@@ -1,12 +1,11 @@
 import { compare, hash } from 'bcrypt'
-import type { Prisma, File, User } from '@prisma/client'
+import type { Prisma, File } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
-import { StatusEnum } from './enum'
-import { userEntity, type UserVo } from './model'
+import { userEntity, type User } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -40,7 +39,7 @@ export class UserService extends BaseService {
     data.createId = this.getUid()
     data.createTime = new Date()
     data.password = await hash(user.password, 10)
-    data.status = StatusEnum.Normal
+    data.status = '1'
     const row = await prisma.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
@@ -88,7 +87,7 @@ export class UserService extends BaseService {
   }
   // 列表
   async list(user: User, page: Page) {
-    const pageData = new PageData<UserVo>()
+    const pageData = new PageData<User>()
     const result = new Result<typeof pageData>()
     const where = user as Prisma.UserWhereInput
     // 模糊查询
@@ -99,7 +98,7 @@ export class UserService extends BaseService {
       where
     })
     const total = await prisma.user.count({ where })
-    pageData.list = rows
+    pageData.list = rows as User[]
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
     return result

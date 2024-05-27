@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useFormer } from 'chant'
+import { shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict, type Model } from '../share'
 
@@ -28,6 +28,8 @@ const props = defineProps<FormProps>()
 const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
+// var
+dict.type = { 4: '页面', 5: '功能' } as any
 // state
 let state = reactive({
   ...former.state,
@@ -37,10 +39,8 @@ let state = reactive({
 former.created((status) => {
   // 新增
   if (props.pageType === 'add') {
-    const { id, level, threeLevel } = state.selection
-    state.form.parentId = id
-    state.form.level = Number(level) + 1
-    state.form.threeLevel = Number(threeLevel) as 0 | 1
+    // 获取父节点
+    getParentNode()
   }
   // 获取详情
   status && getDetail()
@@ -48,6 +48,22 @@ former.created((status) => {
 // 获取详情
 function getDetail() {
   former.getData('router/detail', state)
+}
+// 获取父节点
+async function getParentNode() {
+  const id = state.selection.id
+  state.formLoading = true
+  const { data } = await shiki.get('router/detail', { id })
+  state.formLoading = false
+  const { level, threeLevel } = data || {}
+  state.form.parentId = id
+  state.form.level = level + 1
+  state.form.threeLevel = threeLevel
+  if ((state.form.level === 3 && !threeLevel) || state.form.level === 4) {
+    state.form.name = data.name
+    state.form.path = data.path
+    state.form.type = '4'
+  }
 }
 // 保存
 function onSave() {

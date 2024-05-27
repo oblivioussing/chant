@@ -19,8 +19,8 @@
     <!-- 操作 -->
     <chant-column-operate
       :options="['edit', 'delete']"
-      @edit="lister.edit(state, $event)"
-      @delete="onDelete($event)">
+      @edit="lister.edit(state, { id: $event.id })"
+      @delete="onDelete($event.id)">
     </chant-column-operate>
   </chant-table>
   <!-- pagination -->
@@ -64,7 +64,7 @@ function getList() {
   lister.getData('user/list', state)
 }
 // 删除
-function onDelete({ id }: any) {
+function onDelete(id: string) {
   lister.remove('user/delete', state, { id })
 }
 // 批量删除

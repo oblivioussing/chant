@@ -97,25 +97,20 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     })
   }
   // 新增
-  function add(state: State) {
-    if (state.formType === 'page') {
-      jump('/add')
-    } else {
-      state.pageType = 'add'
-      state.mixForm = true
-    }
+  function add(state: State, row?: any) {
+    _pageHandle(state, { type: 'add' }, row)
   }
   // 复制新增
   function copy(state: State, row: any) {
-    _pageHandle(state, row, { type: 'add', copyFlag: 1 })
+    _pageHandle(state, { type: 'add', copyFlag: 1 }, row)
   }
   // 编辑
   function edit(state: State, row: any) {
-    _pageHandle(state, row, { type: 'edit' })
+    _pageHandle(state, { type: 'edit' }, row)
   }
   // 详情
   function detail(state: State, row: any) {
-    _pageHandle(state, row, { type: 'detail' })
+    _pageHandle(state, { type: 'detail' }, row)
   }
   // 获取数据
   async function getData(
@@ -235,17 +230,17 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   // 页面处理
   function _pageHandle(
     state: State,
-    row: any,
     config: {
       type: PageType
       copyFlag?: 0 | 1
-    }
+    },
+    params = {}
   ) {
     if (state.formType === 'page') {
       const copyFlag = config.copyFlag
-      jump(`/${config.type}`, { id: row.id, copyFlag })
+      jump(`/${config.type}`, { ...params, copyFlag })
     } else {
-      state.selection = row
+      state.selection = params
       state.pageType = config.type
       state.mixForm = true
       state.copyFlag = config.copyFlag

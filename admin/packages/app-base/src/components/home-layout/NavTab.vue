@@ -120,10 +120,13 @@ function routerChange() {
 }
 // 通知外部keeps发生了变化
 function busKeeps() {
-  let keeps = state.tabs.map((item) => {
+  const keeps = state.tabs.map((item) => {
     return item.name
   })
-  emits('change', keeps)
+  // 不加延迟会导致打开页面时onActivated每次都执行
+  setTimeout(() => {
+    emits('change', keeps)
+  }, 100)
 }
 // tab切换
 function onTab(row: any) {

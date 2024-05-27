@@ -73,7 +73,7 @@
           </template>
           <!-- tag -->
           <el-tag
-            v-else-if="item.type === 'select'"
+            v-else-if="showTag(item)"
             :effect="item.tagType ? 'dark' : 'plain'"
             :type="item.tagType?.[row[item.prop]]">
             {{ dictFmt(item.prop, row[item.prop]) }}
@@ -261,6 +261,10 @@ function tableAdapter() {
     const el = tableRef.value?.$el as HTMLElement
     state.height = el?.offsetHeight
   }, 300)
+}
+// 显示tag
+function showTag(column: Column) {
+  return ['radio', 'select'].includes(column.type as any)
 }
 // value格式化
 function valueFmt(column: Column, value: any) {

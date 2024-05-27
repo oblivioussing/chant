@@ -1,8 +1,13 @@
-import type { Prisma, Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
+import { ApiCode } from '@/enum'
 import { Many } from '@/type'
 import { base } from '@/utils'
-import { routerEntity, type RouterTree, type RouterVo } from './model'
+import {
+  routerEntity,
+  type Router,
+  type RouterTree,
+  type RouterVo
+} from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
@@ -11,18 +16,17 @@ export class RouterService extends BaseService {
   }
   // 新增
   async add(router: Router) {
-    const result = new Result()
-    const data = base.toEntity(
-      router,
-      routerEntity,
-      true
-    ) as Prisma.RouterCreateInput
+    let result = new Result()
+    const data = base.toEntity(router, routerEntity, true)
     data.id = base.createId()
     // 数据处理
-    this.dataDeal(data)
+    result = await this.dataDeal(data)
+    if (result.code !== ApiCode.Success) {
+      return result
+    }
     // 获取序号
     const count = await prisma.router.count({
-      where: { level: data.level }
+      where: { level: data.level, parentId: router.id }
     })
     data.sequence = count
     // create
@@ -36,10 +40,13 @@ export class RouterService extends BaseService {
   }
   // 更新
   async update(router: Router) {
-    const result = new Result<Router>()
+    let result = new Result()
     const data = base.toEntity(router, routerEntity) as Router
     // 数据处理
-    this.dataDeal(data)
+    result = await this.dataDeal(data)
+    if (result.code !== ApiCode.Success) {
+      return result
+    }
     const row = await prisma.router.update({
       data,
       where: { id: data.id }
@@ -52,33 +59,46 @@ export class RouterService extends BaseService {
     return result
   }
   // 数据处理
-  private dataDeal(data: Router) {
-    const level = data.level
-    if (data.path) {
-      data.path = '/' + data.path.replace(/^\/|\/$/g, '')
-    }
-    // 菜单
+  private async dataDeal(data: Router) {
+    const result = new Result()
+    const { level } = data
+    // 等级校验
     if (level <= 2) {
       data.menu = 1
-    } else {
-      data.menu = 0
+      if (level <= 1) {
+        data.path = ''
+      }
+      data.type = level.toString() as '1' | '2'
     }
     // 三级菜单
-    if (data.threeLevel === 1) {
-      data.menu = 1
+    if (data.threeMenu === 1) {
       if (level === 2) {
         data.path = ''
       }
       if (level === 3) {
-        data.threeLevel = 0
+        data.menu = 1
+        data.type = '3'
       }
     }
+    // path
+    if (data.path) {
+      data.path = '/' + data.path.replace(/^\/|\/$/g, '')
+    }
+    if (data.path) {
+      const row = await prisma.router.findFirst({ where: { path: data.path } })
+      if (row) {
+        result.fail('路由已经存在')
+        return result
+      }
+    }
+    result.code = ApiCode.Success
+    return result
   }
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = prisma.router.deleteMany({
-      where: { id: { in: [id] } }
+    const row = await prisma.router.delete({
+      where: { id }
     })
     if (row) {
       result.success({ msg: '路由删除成功' })
@@ -122,7 +142,7 @@ export class RouterService extends BaseService {
       where: { id }
     })
     if (row) {
-      result.data = row
+      result.data = row as Router
       result.success({ msg: '路由查询成功' })
     } else {
       result.fail('路由查询失败')

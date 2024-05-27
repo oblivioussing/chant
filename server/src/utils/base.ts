@@ -96,9 +96,9 @@ export function toEntity<T>(
         obj[item] = undefined
       }
     } else if (isNumber || isDecimal) {
-      obj[item] = Number(value)
+      obj[item] = isNotEmpty(value) ? Number(value) : entityValue
     } else if (typeof entityValue === 'string') {
-      obj[item] = isNotEmpty(value) ? String(value) : ''
+      obj[item] = isNotEmpty(value) ? String(value) : entityValue
     } else {
       obj[item] = value
     }

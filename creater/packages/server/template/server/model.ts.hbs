@@ -1,16 +1,22 @@
-import { type {{upper module}} } from '@prisma/client'
+import { type {{upper module}} as {{upper module}}Orig } from '@prisma/client'
+
+type Extend = {}
 
 export const {{module}}Entity = {
   id: '', // id
   {{#each list}}
   {{columnName}}: {{valueType columnType}}{{comma @last}} // {{columnComment}} {{dictNote dict}}
   {{/each}}
-} as {{upper module}}
+} as {{upper module}}Orig & Extend
+
 export const {{module}}Dto = {
   ...{{module}}Entity
 }
+
 export const {{module}}Vo = {
   ...{{module}}Entity
 }
+
+export type {{upper module}} = typeof {{module}}Entity
 export type {{upper module}}Dto = typeof {{module}}Dto
 export type {{upper module}}Vo = typeof {{module}}Vo

@@ -15,10 +15,24 @@ export default () => {
       required: true,
       search: true,
       showCustom(row: Model) {
-        if (row.threeLevel) {
+        if (row.threeMenu) {
           return row.level === 3
         }
-        return row.level >= 2
+        if (row.level >= 3) {
+          return row.type === '4'
+        }
+        return row.level === 2
+      }
+    },
+    {
+      prop: 'type',
+      label: '类型',
+      type: 'radio',
+      showCustom(row: Model) {
+        if (row.threeMenu) {
+          return false
+        }
+        return row.level >= 3
       }
     },
     {
@@ -32,7 +46,7 @@ export default () => {
       }
     },
     {
-      prop: 'threeLevel',
+      prop: 'threeMenu',
       label: '三级菜单',
       hideInPages: ['list'],
       type: 'radio',

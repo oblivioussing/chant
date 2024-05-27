@@ -33,8 +33,8 @@
         <!-- 操作 -->
         <chant-column-operate
           :options="['edit', 'delete']"
-          @edit="lister.edit(state, $event)"
-          @delete="onDelete($event)">
+          @edit="lister.edit(state, { id: $event.id })"
+          @delete="onDelete($event.id)">
         </chant-column-operate>
       </chant-table>
     </div>
@@ -90,11 +90,10 @@ function getList() {
 }
 // 新增
 function onAdd() {
-  const { id, level, threeLevel } = state.node
-  lister.jump('/add', { id, level, threeLevel })
+  lister.add(state, { id: state.node.id })
 }
 // 删除
-function onDelete({ id }: Model) {
+function onDelete(id: string) {
   lister.remove('router/delete', state, { id })
 }
 // 批量删除

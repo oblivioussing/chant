@@ -1,8 +1,7 @@
-import type { {{upper module}} } from '@prisma/client'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base } from '@/utils'
-import { {{module}}Entity, type {{upper module}}Vo } from './model'
+import { {{module}}Entity, type {{upper module}} } from './model'
 
 export class {{upper module}}Service extends BaseService {
   constructor() {
@@ -65,7 +64,7 @@ export class {{upper module}}Service extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<{{upper module}}Vo>()
+    const result = new Result<{{upper module}}>()
     const row = await prisma.{{module}}.findUnique({
       select: base.toSelect({{module}}Entity),
       where: { id }
@@ -80,7 +79,7 @@ export class {{upper module}}Service extends BaseService {
   }
   // 列表
   async list({{module}}: {{upper module}}, page: Page) {
-    const pageData = new PageData<{{upper module}}Vo>()
+    const pageData = new PageData<{{upper module}}>()
     const result = new Result<typeof pageData>()
     const rows = await prisma.{{module}}.findMany({
       ...base.pageHelper(page, 'desc'),

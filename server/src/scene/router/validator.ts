@@ -1,9 +1,15 @@
 import { ArrayNotEmpty, IsArray, IsNotEmpty } from 'class-validator'
 
 class Base {
-  // name
+  // 名称
   @IsNotEmpty({ message: '名称不能为空' })
   name: string
+  // 父节点id
+  @IsNotEmpty({ message: '父节点id不能为空' })
+  parentId: string
+  // 等级
+  @IsNotEmpty({ message: '等级不能为空' })
+  level: number
 }
 // 新增
 export class AddVali extends Base {}
