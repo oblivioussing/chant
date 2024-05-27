@@ -5,7 +5,7 @@ import type { Many } from '@/type'
 import { IdVali } from '@/validator'
 import { routerEntity, type RouterDto } from './model'
 import { RouterService } from './service'
-import { AddVali, UpdateVali } from './validator'
+import { AddVali, TransferVali, UpdateVali } from './validator'
 
 @Controller('router')
 export class RouterController {
@@ -63,6 +63,24 @@ export class RouterController {
   @Get('tree')
   async tree(@QueryModel(routerEntity) router: Router) {
     const result = await this.routerService.tree(router)
+    return result
+  }
+  // 源
+  @Get('source')
+  async source() {
+    const result = await this.routerService.source()
+    return result
+  }
+  // 目标
+  @Get('target')
+  async target() {
+    const result = await this.routerService.target()
+    return result
+  }
+  // 转移
+  @Post('transfer')
+  async transfer(@Body() params: TransferVali) {
+    const result = await this.routerService.transfer(params as any)
     return result
   }
 }

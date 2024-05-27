@@ -86,10 +86,12 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     state: State,
     config?: { params?: any; refresh?: boolean }
   ) {
-    // 表单校验
-    const status = await validate()
-    if (!status) {
-      return false
+    if (formInstance) {
+      // 表单校验
+      const status = await validate()
+      if (!status) {
+        return false
+      }
     }
     const params = config?.params || state.form
     state.loading = true

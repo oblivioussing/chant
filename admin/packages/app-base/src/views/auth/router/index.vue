@@ -15,6 +15,12 @@
         :options="['add', 'delete']"
         @add="onAdd"
         @delete="onDeletes">
+        <!-- 转移 -->
+        <chant-icon-button
+          content="转移"
+          icon-type="switch"
+          @click="state.transfer = true">
+        </chant-icon-button>
         <!-- 保存排序 -->
         <chant-icon-button
           :content="gt('button.sort')"
@@ -43,6 +49,11 @@
       @close="state.mixForm = false">
     </mix-form>
   </chant-dialog>
+  <!-- 转移 -->
+  <chant-dialog v-model="state.transfer" style="width: 600px" title="路由转移">
+    <router-transfer v-if="state.transfer" @close="state.transfer = false">
+    </router-transfer>
+  </chant-dialog>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +63,7 @@ import { shiki, useLister, ApiCode } from 'chant'
 import { columns, dict, type Model } from './share'
 import MixForm from './components/MixForm.vue'
 import RouterTree from '@app-base/components/RouterTree.vue'
+import RouterTransfer from './components/RouterTransfer.vue'
 
 // use
 const { t: gt } = useI18n({ useScope: 'global' })
@@ -62,7 +74,8 @@ const treeRef = ref()
 let state = reactive({
   ...lister.state,
   columns: columns(),
-  node: {} as Model
+  node: {} as Model,
+  transfer: false
 })
 // created
 lister.created(() => {

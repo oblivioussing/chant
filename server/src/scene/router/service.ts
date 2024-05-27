@@ -5,8 +5,6 @@ import { base } from '@/utils'
 import { routerEntity, type RouterTree, type RouterVo } from './model'
 import queryRaw from './query-raw'
 
-console.log(base.createId())
-
 export class RouterService extends BaseService {
   constructor() {
     super()
@@ -62,6 +60,8 @@ export class RouterService extends BaseService {
     // 菜单
     if (level <= 2) {
       data.menu = 1
+    } else {
+      data.menu = 0
     }
     // 三级菜单
     if (data.threeLevel === 1) {
@@ -153,11 +153,53 @@ export class RouterService extends BaseService {
     }
     return result
   }
+  // 转移
+  async transfer(params: { id: string; ids: string[] }) {
+    const result = new Result()
+    const row = await prisma.router.updateMany({
+      data: { parentId: params.id },
+      where: { id: { in: params.ids } }
+    })
+    if (row.count) {
+      result.success({ msg: '转移成功' })
+    } else {
+      result.fail('转移失败')
+    }
+    return result
+  }
   // 树
   async tree(router: Router) {
     const result = new Result<RouterTree>()
     const rows = await queryRaw.getTreeList(router)
     result.success({ data: base.toTree(rows), msg: '路由树查询成功' })
+    return result
+  }
+  // 源
+  async source() {
+    const result = new Result<RouterTree>()
+    const rows = await prisma.router.findMany({
+      select: base.toSelect(routerEntity),
+      where: {
+        parentId: { not: '' },
+        level: { not: 3 },
+        menu: 1
+      }
+    })
+    result.success({ data: base.toTree(rows), msg: '路由源查询成功' })
+    return result
+  }
+  // 目标
+  async target() {
+    const result = new Result<RouterTree>()
+    const rows = await prisma.router.findMany({
+      select: base.toSelect(routerEntity),
+      where: {
+        parentId: { not: '' },
+        level: 1,
+        menu: 1
+      }
+    })
+    result.success({ data: base.toTree(rows), msg: '路由目标查询成功' })
     return result
   }
 }

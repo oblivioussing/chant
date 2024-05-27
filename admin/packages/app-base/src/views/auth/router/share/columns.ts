@@ -12,7 +12,6 @@ export default () => {
     {
       prop: 'path',
       label: '路径',
-      newlineFull: true,
       required: true,
       search: true,
       showCustom(row: Model) {

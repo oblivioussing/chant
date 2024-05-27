@@ -25,7 +25,7 @@ export default {
     return rows
   },
   // 获取路由树列表
-  async getTreeList(router: Router) {
+  async getTreeList(router?: Router) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
         SELECT id, level, name, parent_id as parentId, path, sequence, three_level as threeLevel
@@ -34,7 +34,7 @@ export default {
 			    SELECT id 
           FROM 
           chant.router 
-          WHERE name LIKE ${like(router.name)}
+          WHERE name LIKE ${like(router?.name)}
           ORDER By level ASC, sequence ASC 
           LIMIT 1
 		    )
