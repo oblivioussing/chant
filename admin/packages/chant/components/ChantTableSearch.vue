@@ -179,7 +179,7 @@ let state = reactive({
 // computed
 const availableColumns = computed(() => {
   const columns = vModel.value?.columns
-  const searchOrder = base.clone(props.searchOrder)?.reverse()
+  const searchOrder = structuredClone(props.searchOrder)?.reverse()
   return columns?.reduce((acc: Column[], cur: Column) => {
     const status = !cur.hide && (cur.search || cur.onlySearch || cur.slotSearch)
     if (!status) {

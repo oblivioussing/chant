@@ -20,19 +20,6 @@ export function clearUrlQuery(path: string) {
 export function closePage(path?: string) {
   bus.emit(BusEnum.ClosePage, path || '')
 }
-// 克隆
-export function clone<T>(obj: T): T {
-  let newobj: any
-  if (typeof obj == 'object' && obj !== null) {
-    newobj = obj instanceof Array ? [] : {}
-    for (const i in obj) {
-      newobj[i] = clone(obj[i])
-    }
-  } else {
-    newobj = obj
-  }
-  return newobj
-}
 // 对象数组去重
 export function distinct(arr: any[], field = 'id') {
   const res = new Map()
@@ -126,7 +113,7 @@ export function updateColumn<T extends Columns>(
   row: FormColumn | ListColumn,
   config?: { delete?: boolean; merge?: boolean }
 ): T {
-  list = clone(list)
+  list = structuredClone(list)
   const index = list.findIndex((item) => item.prop === row.prop)
   if (config?.merge) {
     list[index] = Object.assign(list[index], row)

@@ -64,7 +64,7 @@ const { t } = useI18n({ messages: { en, zh } })
 const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 // var
-const columnsBackups = base.clone(vModel.value.columns)
+const columnsBackups = structuredClone(vModel.value.columns)
 // state
 let state = reactive({
   visible: false
@@ -121,7 +121,7 @@ function onReset() {
   if (obj) {
     base.setPageStorage(route.path, 'tableFilter', undefined)
   }
-  vModel.value.columns = base.clone(columnsBackups)
+  vModel.value.columns = structuredClone(columnsBackups)
   state.visible = false
 }
 // 保存
