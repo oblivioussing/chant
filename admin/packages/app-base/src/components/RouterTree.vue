@@ -108,7 +108,7 @@ async function getList() {
 // 是否显示新增按钮
 function showAdd(row: Model) {
   if (row.level === 2) {
-    return row.threeLevel
+    return row.threeMenu
   }
   return row.level !== 3
 }

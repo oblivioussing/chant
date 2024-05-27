@@ -15,13 +15,15 @@ export default () => {
       required: true,
       search: true,
       showCustom(row: Model) {
-        if (row.threeMenu) {
-          return row.level === 3
+        if (row.type === '4') {
+          return true
         }
-        if (row.level >= 3) {
-          return row.type === '4'
+        if (row.level === 2) {
+          return !row.threeMenu
         }
-        return row.level === 2
+        if (row.level === 3) {
+          return row.threeMenu
+        }
       }
     },
     {
@@ -30,9 +32,9 @@ export default () => {
       type: 'radio',
       showCustom(row: Model) {
         if (row.threeMenu) {
-          return false
+          return row.level === 4
         }
-        return row.level >= 3
+        return row.level === 3
       }
     },
     {

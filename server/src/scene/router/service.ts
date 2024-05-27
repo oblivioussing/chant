@@ -80,6 +80,10 @@ export class RouterService extends BaseService {
         data.type = '3'
       }
     }
+    // 类型
+    if (data.type === '5') {
+      data.path = ''
+    }
     // path
     if (data.path) {
       data.path = '/' + data.path.replace(/^\/|\/$/g, '')

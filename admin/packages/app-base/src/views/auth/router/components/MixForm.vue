@@ -55,11 +55,13 @@ async function getParentNode() {
   state.formLoading = true
   const { data } = await shiki.get('router/detail', { id })
   state.formLoading = false
-  const { level, threeLevel } = data || {}
-  state.form.parentId = id
-  state.form.level = level + 1
-  state.form.threeLevel = threeLevel
-  if ((state.form.level === 3 && !threeLevel) || state.form.level === 4) {
+  if (data) {
+    state.form.parentId = id
+    state.form.level = data.level + 1
+    state.form.threeMenu = data.threeMenu || 0
+  }
+  const { level, threeMenu } = state.form
+  if ((level === 3 && !threeMenu) || level === 4) {
     state.form.name = data.name
     state.form.path = data.path
     state.form.type = '4'
