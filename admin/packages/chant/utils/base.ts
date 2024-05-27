@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import bus from './bus'
 import { BusEnum, ContentTypeEnum, LangEnum, StorageEnum } from '../enum'
 import storage from './storage'
@@ -113,7 +114,7 @@ export function updateColumn<T extends Columns>(
   row: FormColumn | ListColumn,
   config?: { delete?: boolean; merge?: boolean }
 ): T {
-  list = structuredClone(list)
+  list = cloneDeep(list)
   const index = list.findIndex((item) => item.prop === row.prop)
   if (config?.merge) {
     list[index] = Object.assign(list[index], row)

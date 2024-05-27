@@ -135,6 +135,7 @@
 
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
+import { cloneDeep } from 'lodash'
 import { computed, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowDown, ArrowUp, Refresh, Search } from '@element-plus/icons-vue'
@@ -179,7 +180,7 @@ let state = reactive({
 // computed
 const availableColumns = computed(() => {
   const columns = vModel.value?.columns
-  const searchOrder = structuredClone(props.searchOrder)?.reverse()
+  const searchOrder = cloneDeep(props.searchOrder)?.reverse()
   return columns?.reduce((acc: Column[], cur: Column) => {
     const status = !cur.hide && (cur.search || cur.onlySearch || cur.slotSearch)
     if (!status) {

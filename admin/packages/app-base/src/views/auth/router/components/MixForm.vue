@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import { cloneDeep } from 'lodash'
 import { reactive } from 'vue'
 import { shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
@@ -29,7 +30,7 @@ const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
 // var
-const newDict = structuredClone(dict)
+const newDict = cloneDeep(dict)
 newDict.type = { 4: '页面', 5: '功能' } as any
 // state
 let state = reactive({

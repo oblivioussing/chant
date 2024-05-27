@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { cloneDeep } from 'lodash'
 import { onMounted, reactive, watch, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -64,7 +65,7 @@ const { t } = useI18n({ messages: { en, zh } })
 const { t: gt } = useI18n({ useScope: 'global' })
 const route = useRoute()
 // var
-const columnsBackups = structuredClone(vModel.value.columns)
+const columnsBackups = cloneDeep(vModel.value.columns)
 // state
 let state = reactive({
   visible: false
@@ -121,7 +122,7 @@ function onReset() {
   if (obj) {
     base.setPageStorage(route.path, 'tableFilter', undefined)
   }
-  vModel.value.columns = structuredClone(columnsBackups)
+  vModel.value.columns = cloneDeep(columnsBackups)
   state.visible = false
 }
 // 保存
