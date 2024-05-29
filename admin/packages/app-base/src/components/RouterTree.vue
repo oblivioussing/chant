@@ -10,6 +10,7 @@
     </div>
     <div v-loading="state.loading" class="tree-container" ref="scrollRef">
       <el-tree
+        v-if="state.list.length"
         v-bind="$attrs"
         :expand-on-click-node="false"
         :data="state.list"
@@ -48,6 +49,13 @@
           </div>
         </template>
       </el-tree>
+      <el-button
+        v-else-if="!state.loading"
+        type="primary"
+        class="gravity-center"
+        @click="onRoot">
+        初始化
+      </el-button>
     </div>
   </div>
   <!-- 新增/编辑 -->
@@ -65,7 +73,7 @@
 import { onActivated, reactive, ref } from 'vue'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import { useScroll } from '@vueuse/core'
-import { useLister } from 'chant'
+import { shiki, useLister } from 'chant'
 import { type Model } from '@app-base/views/auth/router/share'
 import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
 
@@ -103,6 +111,15 @@ async function getList() {
     const row = state.node.id ? state.node : list[0]
     emits('node-click', row)
     treeRef.value?.setCurrentNode(row)
+  }
+}
+// 初始化
+async function onRoot() {
+  state.loading = true
+  const { code } = await shiki.post('router/root', {})
+  state.loading = false
+  if (code === '1') {
+    getList()
   }
 }
 // 是否显示新增按钮

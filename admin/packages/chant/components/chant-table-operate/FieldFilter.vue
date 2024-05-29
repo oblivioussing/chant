@@ -93,7 +93,7 @@ function getStorageColumns() {
   const obj = base.getPageStorage(route.path)
   const list = obj?.tableFilter as Column[]
   const columns = vModel.value.columns
-  if (list?.length) {
+  if (arraysEqual(list, columns)) {
     list.forEach((item, index) => {
       const row = columns.find((column) => column.prop === item.prop)
       if (row) {
@@ -102,7 +102,18 @@ function getStorageColumns() {
       }
     })
     vModel.value.columns = list
+  } else {
+    base.setPageStorage(route.path, 'tableFilter')
   }
+}
+// 判断两个数组是否一致
+function arraysEqual(list: Column[], columns: Column[]) {
+  const arr1 = list?.map((item) => item.prop)
+  const arr2 = columns?.map((item) => item.prop)
+  return (
+    new Set(arr1).size === new Set(arr2).size &&
+    [...new Set(arr1)].every((value) => arr2.includes(value))
+  )
 }
 // 空白区点击
 function blankClick() {
@@ -120,7 +131,7 @@ function onChange(val: any, column: Column) {
 function onReset() {
   const obj = base.getPageStorage(route.path)
   if (obj) {
-    base.setPageStorage(route.path, 'tableFilter', undefined)
+    base.setPageStorage(route.path, 'tableFilter')
   }
   vModel.value.columns = cloneDeep(columnsBackups)
   state.visible = false
@@ -141,11 +152,7 @@ function show(column: Column) {
 // 翻译
 function translate(column: Column) {
   let label = column.label || column.prop
-  var pattern = new RegExp('[\u4E00-\u9FA5]+')
-  if (pattern.test(label)) {
-    return label
-  }
-  return t(label)
+  return props.lang ? t(label) : label
 }
 </script>
 

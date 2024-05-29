@@ -79,7 +79,7 @@
                 v-model="state.range[item.prop]"
                 :clearable="item.clearable !== false"
                 :disabled="isDisabled(item)"
-                :disabled-date="disabledDate(item)"
+                :disabled-date="item.disabledDate"
                 :placeholder="translate(item, 'select')"
                 :start-placeholder="translate(item)"
                 :end-placeholder="translate(item)"
@@ -92,7 +92,7 @@
                 v-model="vModel!.form[item.prop]"
                 :clearable="item.clearable !== false"
                 :disabled="isDisabled(item)"
-                :disabled-date="disabledDate(item)"
+                :disabled-date="item.disabledDate"
                 :placeholder="translate(item, 'select')"
                 :type="item.datepickerType"
                 :value-format="item.valueFormat">
@@ -279,11 +279,6 @@ function dateRangeVoluation(column: Column) {
   if (!startTime && !endTime) {
     state.range[column.prop] = [null, null]
   }
-}
-// 日期禁用
-function disabledDate(column: Column) {
-  return (date: Date) =>
-    column?.disabledDate ? column?.disabledDate(date, vModel.value) : undefined
 }
 // 获取查找带回的text字段
 function getDynamicText(column: Column) {

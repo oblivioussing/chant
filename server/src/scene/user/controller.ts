@@ -17,6 +17,12 @@ export class UserController {
     const result = await this.userService.add(user as User)
     return result
   }
+  // 更新
+  @Post('update')
+  async update(@Body() user: UserDto) {
+    const result = await this.userService.update(user as User)
+    return result
+  }
   // 删除
   @Post('delete')
   async delete(@Body() user: IdVali) {
@@ -35,6 +41,18 @@ export class UserController {
     const result = await this.userService.detail(user.id)
     return result
   }
+  // 列表
+  @Get('list')
+  async list(@QueryModel(userEntity) user: User, @QueryPage() page: Page) {
+    const result = await this.userService.list(user, page)
+    return result
+  }
+  // 菜单
+  @Get('menu')
+  async menu() {
+    const result = await this.userService.menu()
+    return result
+  }
   // 用户信息
   @Get('info')
   async info(@Headers('token') token: string) {
@@ -42,23 +60,11 @@ export class UserController {
     const result = await this.userService.detail(uid)
     return result
   }
-  // 列表
-  @Get('list')
-  async list(@QueryModel(userEntity) user: User, @QueryPage() page: Page) {
-    const result = await this.userService.list(user, page)
-    return result
-  }
   // 登陆
   @Auth(false)
   @Post('login')
   async login(@Body() user: LoginVali) {
     const result = await this.userService.login(user as User)
-    return result
-  }
-  // 更新
-  @Post('update')
-  async update(@Body() user: UserDto) {
-    const result = await this.userService.update(user as User)
     return result
   }
 }

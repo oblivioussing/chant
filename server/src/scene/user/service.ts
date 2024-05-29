@@ -5,6 +5,7 @@ import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
+import { routerEntity } from '../router/model'
 import { userEntity, type User } from './model'
 
 export class UserService extends BaseService {
@@ -32,7 +33,7 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const data = base.toEntity(user, userEntity)
+    const data = base.toEntity(user, userEntity, true)
     const photoList = data.photoList as unknown as File[]
     data.photoList = photoList.map((item) => item.id)
     data.id = base.createUid()
@@ -45,6 +46,24 @@ export class UserService extends BaseService {
       result.success({ msg: '用户新增成功' })
     } else {
       result.fail('用户新增失败')
+    }
+    return result
+  }
+  // 更新
+  async update(user: User) {
+    const result = new Result<User>()
+    const data = base.toEntity(user, userEntity)
+    const photoList = data.photoList as unknown as File[]
+    data.photoList = photoList.map((item) => item.id)
+    data.updateTime = new Date()
+    const row = await prisma.user.update({
+      data,
+      where: { id: user.id }
+    })
+    if (row) {
+      result.success({ msg: '更新成功' })
+    } else {
+      result.fail('更新失败')
     }
     return result
   }
@@ -103,6 +122,22 @@ export class UserService extends BaseService {
     result.success({ data: pageData, msg: '查询用户列表成功' })
     return result
   }
+  // 菜单
+  async menu() {
+    const result = new Result<{ menu: any[] }>()
+    const rows = await prisma.router.findMany({
+      select: base.toSelect(routerEntity),
+      where: { parentId: { not: '' } },
+      orderBy: { sequence: 'asc' }
+    })
+    if (rows) {
+      result.data = { menu: base.toTree(rows) }
+      result.success({ msg: '权限信息查询成功' })
+    } else {
+      result.fail('权限信息查询失败')
+    }
+    return result
+  }
   // 登陆
   async login(user: User) {
     const result = new Result<string>()
@@ -128,24 +163,6 @@ export class UserService extends BaseService {
       }
     } else {
       result.fail('密码错误')
-    }
-    return result
-  }
-  // 更新
-  async update(user: User) {
-    const result = new Result<User>()
-    const data = base.toEntity(user, userEntity)
-    const photoList = data.photoList as unknown as File[]
-    data.photoList = photoList.map((item) => item.id)
-    data.updateTime = new Date()
-    const row = await prisma.user.update({
-      data,
-      where: { id: user.id }
-    })
-    if (row) {
-      result.success({ msg: '更新成功' })
-    } else {
-      result.fail('更新失败')
     }
     return result
   }

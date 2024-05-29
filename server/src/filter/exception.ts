@@ -5,7 +5,6 @@ import {
   HttpException
 } from '@nestjs/common'
 import { FastifyReply } from 'fastify'
-import { ApiCode } from '@/enum'
 import { Result } from '@/share'
 import { base, logger } from '@/utils'
 
@@ -27,7 +26,7 @@ message:${exception?.message}
     logger.error(content)
     console.error(exception?.message)
     const result = new Result()
-    result.code = ApiCode.Exception
+    result.code = '5'
     result.msg = exception?.message
     response.status(200).send(result)
   }
@@ -43,7 +42,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse()
     if (status === 400) {
       const message = exceptionResponse['message']
-      result.code = ApiCode.ParamError
+      result.code = '4'
       result.msg = Array.isArray(message) ? message[0] : message
       response.status(200).send(result)
     } else {

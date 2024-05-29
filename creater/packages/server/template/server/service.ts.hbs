@@ -70,7 +70,7 @@ export class {{upper module}}Service extends BaseService {
       where: { id }
     })
     if (row) {
-      result.row = row
+      result.data = row as {{upper module}}
       result.success({ msg: '{{tableComment}}查询成功' })
     } else {
       result.fail('{{tableComment}}查询失败')
@@ -87,7 +87,7 @@ export class {{upper module}}Service extends BaseService {
       where: {{module}}
     })
     const total = await prisma.{{module}}.count({ where: {{module}} })
-    pageData.list = rows
+    pageData.list = rows as {{upper module}}[]
     pageData.total = total
     result.success({ data: pageData, msg: '{{tableComment}}列表查询成功' })
     return result

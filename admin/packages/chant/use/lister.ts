@@ -2,7 +2,7 @@ import { type TableInstance } from 'element-plus'
 import { nextTick, onActivated, onScopeDispose } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { bus, element, shiki, useChaoser, ApiCode } from '@chant'
+import { bus, element, shiki, useChaoser } from '@chant'
 import type { ListState as State, FormType, PageType } from '@chant/type'
 
 function useLister(config?: { method?: Function; type?: FormType }) {
@@ -177,7 +177,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     state.loading = true
     const { code } = await shiki.post(path, config?.params)
     state.loading = false
-    if (code === ApiCode.Success) {
+    if (code === '1') {
       method ? method() : bus.emit(route.path)
     }
   }
@@ -197,7 +197,8 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     const path = `${route.path}/${state.pageType}`
     const meta = chaoser.getMetaByPath(path)
     if (meta?.title) {
-      return gt(`router.${meta?.title}`)
+      return meta.title
+      // return gt(`router.${meta?.title}`)
     } else {
       return ''
     }

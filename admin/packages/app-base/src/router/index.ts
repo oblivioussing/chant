@@ -47,3 +47,5 @@ function isEmptyObject(data: object) {
 }
 
 export default router
+
+export { default as factory } from './factory'

@@ -106,7 +106,8 @@ watch(
 )
 // 标题
 function title(meta?: any) {
-  return gt(`router.${meta.title}`)
+  return meta?.title
+  // return gt(`router.${meta.title}`)
 }
 // 菜单切换
 function onTab(path: string) {

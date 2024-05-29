@@ -5,21 +5,29 @@ import { routerEntity } from './model'
 function like(val = '') {
   return Prisma.raw(`'%${val}%'`)
 }
+function getSelect(alias?: string) {
+  return toSelect(routerEntity, {
+    exclude: ['icon', 'isDelete'],
+    alias
+  })
+}
 
 export default {
   // 获取路由列表
   async getList(router: Router) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
-        SELECT ${toSelect(routerEntity)}
+        SELECT ${getSelect()}
         FROM router
         WHERE parent_id = ${router.id} 
         AND name LIKE ${like(router.name)}
         AND path LIKE ${like(router.path)}
         UNION ALL
-        SELECT ${toSelect(routerEntity, { alias: 'r' })}
+        SELECT ${getSelect('r')}
         FROM router r 
-        INNER JOIN descendants d ON r.parent_id = d.id and r.level = d.level
+        INNER JOIN descendants d ON r.parent_id = d.id 
+        AND r.level = d.level
+        AND r.menu = '1'
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
@@ -29,7 +37,7 @@ export default {
   async getTreeList(router?: Router) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
-        SELECT ${toSelect(routerEntity)}
+        SELECT ${getSelect()}
         FROM router
         WHERE id = (
 			    SELECT id 
@@ -39,8 +47,9 @@ export default {
           ORDER By level ASC, sequence ASC 
           LIMIT 1
 		    )
+        AND is_delete = 0
         UNION ALL
-        SELECT ${toSelect(routerEntity, { alias: 'r' })}
+        SELECT ${getSelect('r')}
         FROM router r 
         INNER JOIN descendants d 
         ON r.parent_id = d.id

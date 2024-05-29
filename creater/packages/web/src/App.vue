@@ -89,7 +89,7 @@ import Ryougi, { type RequestConfig } from './api/ryougi'
 import FrontConfig from './components/FrontConfig.vue'
 
 const ryougi = new Ryougi()
-ryougi.baseurl = 'http://10.168.1.194:7010/'
+ryougi.baseurl = 'http://127.0.0.1:7010/'
 
 // ref
 const tableRef = ref<TableInstance>()

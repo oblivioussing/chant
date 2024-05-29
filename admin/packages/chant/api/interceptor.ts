@@ -1,10 +1,4 @@
-import {
-  shiki,
-  useUserStore,
-  ApiCode,
-  type RequestConfig,
-  type Result
-} from '@chant'
+import { shiki, useUserStore, type RequestConfig, type Result } from '@chant'
 import router from '@app-base/router'
 
 // 请求拦截器
@@ -23,7 +17,7 @@ shiki.interceptors.request.use((config: RequestConfig) => {
 // 响应拦截器
 shiki.interceptors.response.use((result: Result) => {
   // 登录
-  if (result.code === ApiCode.AuthFailed) {
+  if (result.code === '3') {
     router.push({ path: '/login' })
   }
   return result

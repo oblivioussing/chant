@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { ApiCode } from '@/enum'
 import { Result } from '@/share'
 import { base } from '@/utils'
 import { RedisService } from '@/module/redis/service'
@@ -26,14 +25,14 @@ export class AuthGuard implements CanActivate {
     // token
     const token = request.headers.token
     if (!token) {
-      result.code = ApiCode.AuthFailed
+      result.code = '3'
       result.msg = '请先登陆'
       response.status(200).send(result)
       return false
     }
     const uid = base.getUidByToken(token)
     if (!uid) {
-      result.code = ApiCode.AuthFailed
+      result.code = '3'
       result.msg = '权限校验失败,请重新登陆'
       response.status(200).send(result)
       return false
@@ -43,7 +42,7 @@ export class AuthGuard implements CanActivate {
       // 重置token过期时间
       this.redisService.expire('token', uid, 60 * 60 * 24 * 30)
     } else {
-      result.code = ApiCode.AuthFailed
+      result.code = '3'
       result.msg = '登陆失效,请重新登陆'
       response.status(200).send(result)
       return false

@@ -1,6 +1,5 @@
 import type { File } from 'prisma/prisma-client'
 import { Controller, Post, Request } from '@nestjs/common'
-import { ApiCode } from '@/enum'
 import { Result } from '@/share'
 import { FsService } from './service'
 import { saveFile } from './utils'
@@ -18,7 +17,7 @@ export class FsController {
     const part = await req.file({ limits: { fileSize: this.FileSize } })
     // 保存文件
     let result = await saveFile(part)
-    if (result.code === ApiCode.Success) {
+    if (result.code === '1') {
       result = await this.fsService.upload(result.data)
     }
     return result
@@ -32,7 +31,7 @@ export class FsController {
     for await (const part of parts) {
       // 保存文件
       const result = await saveFile(part)
-      if (result.code === ApiCode.Success) {
+      if (result.code === '1') {
         list.push(result.data)
       }
     }

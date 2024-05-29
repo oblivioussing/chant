@@ -96,7 +96,7 @@ export function removeRouterQuery(path: string) {
 export function setPageStorage(
   path: string,
   type: keyof PageStorage,
-  data: any
+  data?: any
 ) {
   const obj = storage.getLocal(StorageEnum.Page) || {}
   const pageStorage = getPageStorage(path) || {}

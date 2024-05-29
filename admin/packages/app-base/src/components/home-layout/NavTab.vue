@@ -18,7 +18,8 @@
           trigger="contextmenu"
           @command="onCommand($event, item.path)"
           @visible-change="onVisibleChange($event, item.path)">
-          <span>{{ gt(`router.${item?.title}`) }}</span>
+          <!-- <span>{{ gt(`router.${item.title}`) }}</span> -->
+          <span>{{ item.title }}</span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="close">
@@ -61,7 +62,7 @@ const router = useRouter()
 const indexRaw = {
   name: '/',
   path: '/',
-  title: 'index'
+  title: '首页'
 }
 const tabs = (storage.getSession(StorageEnum.HomeNavTab) || [
   indexRaw

@@ -25,6 +25,7 @@ type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
   datepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
+  disabledDate?: (data: Date) => boolean // 日期是否禁用,仅type为date-picker时有效
   dynamicId?: string // 动态id字段
   dynamicText?: string // 动态text字段
   dynamicStart?: string // 范围选择start字段
@@ -47,7 +48,6 @@ export type FormColumn = {
   default?: any // 默认值
   defaultTime?: Date | [Date, Date] // 范围选择时选中日期所使用的当日内具体时刻
   disabled?: boolean | ((row: any) => boolean) // 是否禁用
-  disabledDate?: (data: Date, form: any) => boolean //  用来判断该日期是否被禁用的函数,仅type为date-picker时有效
   disabledInPage?: ColumnPage // 在特定页面类型中禁用
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效

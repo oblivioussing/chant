@@ -1,11 +1,19 @@
 import { ElMessage } from 'element-plus'
-import { ApiCode, ContentTypeEnum } from '../enum'
+import { ContentTypeEnum } from '../enum'
 import Ryougi, { type RequestConfig } from './ryougi'
 
 type Config = {
   successTip?: boolean
   failTip?: boolean
 }
+
+type ApiCode =
+  | '1' // 成功
+  | '2' // 失败
+  | '3' // 权限校验失败
+  | '4' // 参数错误
+  | '5' // 系统异常
+
 export type Result = {
   code?: ApiCode
   data?: any
@@ -85,7 +93,7 @@ class Shiki {
       this.responseInterceptors.forEach((callback) => {
         result = callback(result)
       })
-      const type = result.code === ApiCode.Success ? 'success' : 'error'
+      const type = result.code === '1' ? 'success' : 'error'
       this.message(type, result.msg, config)
     }
     return result

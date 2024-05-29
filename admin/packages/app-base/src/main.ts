@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import chant, { vuei18n } from 'chant'
-import router from './router'
+import router, { factory } from './router'
 
 // element css
 import 'element-plus/theme-chalk/el-message.css'
@@ -19,3 +19,5 @@ app.use(router)
 app.use(vuei18n)
 
 app.mount('#app')
+
+factory()

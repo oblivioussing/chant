@@ -57,6 +57,7 @@
               v-if="isDateRange(item)"
               v-model="state.range[item.prop]"
               :clearable="item.clearable !== false"
+              :disabled-date="item.disabledDate"
               :placeholder="translate(item, 'select')"
               :start-placeholder="translate(item)"
               :end-placeholder="translate(item)"
@@ -68,6 +69,7 @@
               v-else
               v-model="vModel.query[item.prop]"
               :clearable="item.clearable !== false"
+              :disabled-date="item.disabledDate"
               :placeholder="translate(item, 'select')"
               :type="item.searchDatepickerType || item.datepickerType"
               :value-format="item.valueFormat"

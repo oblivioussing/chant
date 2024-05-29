@@ -37,8 +37,6 @@ model Trade {
 model User {
   id         String    @id @db.VarChar(20)
   avatar     String    @default("") @db.VarChar(200)
-  createId   String    @map("create_id") @db.VarChar(20)
-  createTime DateTime  @map("create_time") @db.DateTime(0)
   gender     String    @default("") @db.VarChar(1)
   loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
   name       String    @default("") @db.VarChar(50)
@@ -46,6 +44,8 @@ model User {
   photoList  Json?     @map("photo_list")
   phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
   status     String    @default("") @db.VarChar(2)
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
 
@@ -53,18 +53,37 @@ model User {
 }
 
 model Router {
-  id        String @id @db.VarChar(20)
-  code      String @db.VarChar(20)
-  icon      String @db.VarChar(45)
-  level     Int
-  menu      Int
-  name      String @db.VarChar(50)
-  parentId  String @map("parent_id") @db.VarChar(20)
-  path      String @db.VarChar(150)
-  sequence  Int
-  threeMenu Int    @map("three_menu")
-  type      String @db.VarChar(2)
+  id         String    @id @db.VarChar(20)
+  code       String    @db.VarChar(20)
+  icon       String    @db.VarChar(45)
+  level      Int
+  menu       Int
+  name       String    @db.VarChar(50)
+  parentId   String    @map("parent_id") @db.VarChar(20)
+  path       String    @db.VarChar(150)
+  sequence   Int
+  threeMenu  Int       @map("three_menu")
+  type       String    @db.VarChar(2)
+  isDelete   Int       @map("is_delete")
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  updateId   String?   @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
 
-  @@index([name, path, level], map: "INDEX")
+  @@index([isDelete], map: "INDEX")
   @@map("router")
+}
+
+model Org {
+  id         String    @id @db.VarChar(20)
+  name       String    @db.VarChar(50)
+  parentId   String    @map("parent_id") @db.VarChar(20)
+  sequence   Int
+  isDelete   Int       @map("is_delete")
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  updateId   String?   @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
+
+  @@map("org")
 }

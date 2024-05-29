@@ -26,5 +26,7 @@ export const userVo = {
 }
 
 export type User = typeof userEntity
+
 export type UserDto = typeof userDto
+
 export type UserVo = typeof userVo

@@ -1,7 +1,7 @@
 import type { FormInstance } from 'element-plus'
 import { getCurrentInstance, onActivated } from 'vue'
 import { useRoute } from 'vue-router'
-import { base, bus, shiki, ApiCode } from '@chant'
+import { base, bus, shiki } from '@chant'
 import type { FormColumn, FormProps, FormState as State } from '@chant/type'
 
 function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
@@ -101,7 +101,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     }
     const { code } = await shiki.post(path, params)
     state.loading = false
-    if (code !== ApiCode.Success) {
+    if (code !== '1') {
       return false
     }
     // 是否继续新增

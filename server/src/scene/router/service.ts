@@ -1,5 +1,4 @@
 import { prisma, BaseService, Result } from '@/share'
-import { ApiCode } from '@/enum'
 import { Many } from '@/type'
 import { base } from '@/utils'
 import {
@@ -14,14 +13,33 @@ export class RouterService extends BaseService {
   constructor() {
     super()
   }
+  // 根节点初始化
+  async root() {
+    const result = new Result()
+    const data = structuredClone(routerEntity)
+    data.name = '系统'
+    data.id = base.createId()
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    // create
+    const row = await prisma.router.create({ data })
+    if (row) {
+      result.success({ msg: '根节点初始化成功' })
+    } else {
+      result.fail('根节点初始化失败')
+    }
+    return result
+  }
   // 新增
   async add(router: Router) {
     let result = new Result()
     const data = base.toEntity(router, routerEntity, true)
     data.id = base.createId()
+    data.createId = this.getUid()
+    data.createTime = new Date()
     // 数据处理
     result = await this.dataDeal(data)
-    if (result.code !== ApiCode.Success) {
+    if (result.code !== '1') {
       return result
     }
     // 获取序号
@@ -42,9 +60,11 @@ export class RouterService extends BaseService {
   async update(router: Router) {
     let result = new Result()
     const data = base.toEntity(router, routerEntity) as Router
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
     // 数据处理
     result = await this.dataDeal(data)
-    if (result.code !== ApiCode.Success) {
+    if (result.code !== '1') {
       return result
     }
     const row = await prisma.router.update({
@@ -95,31 +115,17 @@ export class RouterService extends BaseService {
         return result
       }
     }
-    result.code = ApiCode.Success
+    result.code = '1'
     return result
   }
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = await prisma.router.delete({
+    const row = await prisma.router.update({
+      data: this.getDeleteData(),
       where: { id }
     })
     if (row) {
-      result.success({ msg: '路由删除成功' })
-    } else {
-      result.fail('路由删除失败')
-    }
-    return result
-  }
-  // 删除树
-  async deleteTree(id: string) {
-    const result = new Result()
-    const rows = await queryRaw.getDescendantIds(id)
-    const ids = rows.map((item) => item.id)
-    const row = await prisma.router.deleteMany({
-      where: { id: { in: ids } }
-    })
-    if (row.count) {
       result.success({ msg: '路由删除成功' })
     } else {
       result.fail('路由删除失败')
@@ -130,13 +136,40 @@ export class RouterService extends BaseService {
   async deletes(params: Many<Router>) {
     const result = new Result()
     const where = base.manyWhere(params, routerEntity)
-    const row = await prisma.router.deleteMany({ where })
+    const row = await prisma.router.updateMany({
+      data: this.getDeleteData(),
+      where
+    })
     if (row.count) {
       result.success({ msg: '路由批量删除成功' })
     } else {
       result.fail('路由批量删除失败')
     }
     return result
+  }
+  // 删除树
+  async deleteTree(id: string) {
+    const result = new Result()
+    const rows = await queryRaw.getDescendantIds(id)
+    const ids = rows.map((item) => item.id)
+    const row = await prisma.router.updateMany({
+      data: this.getDeleteData(),
+      where: { id: { in: ids } }
+    })
+    if (row.count) {
+      result.success({ msg: '路由删除成功' })
+    } else {
+      result.fail('路由删除失败')
+    }
+    return result
+  }
+  // 获取删除data
+  private getDeleteData() {
+    return {
+      isDelete: 1,
+      updateId: this.getUid(),
+      updateTime: new Date()
+    } as Router
   }
   // 详情
   async detail(id: string) {
@@ -207,7 +240,8 @@ export class RouterService extends BaseService {
         parentId: { not: '' },
         level: { not: 3 },
         menu: 1
-      }
+      },
+      orderBy: { sequence: 'asc' }
     })
     result.success({ data: base.toTree(rows), msg: '路由源查询成功' })
     return result
@@ -221,7 +255,8 @@ export class RouterService extends BaseService {
         parentId: { not: '' },
         level: 1,
         menu: 1
-      }
+      },
+      orderBy: { sequence: 'asc' }
     })
     result.success({ data: base.toTree(rows), msg: '路由目标查询成功' })
     return result

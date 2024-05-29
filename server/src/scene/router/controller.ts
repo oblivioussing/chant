@@ -10,6 +10,12 @@ import { AddVali, TransferVali, UpdateVali } from './validator'
 export class RouterController {
   constructor(private readonly routerService: RouterService) {}
 
+  // 根节点初始化
+  @Post('root')
+  async root() {
+    const result = await this.routerService.root()
+    return result
+  }
   // 新增
   @Post('add')
   async add(@Body() router: AddVali) {
