@@ -18,7 +18,8 @@
           :label="translate(item) + ':'"
           :prop="item.prop"
           :required="item.searchRequired"
-          :rules="[{ required: item.searchRequired, message: '' }]">
+          :rules="[{ required: item.searchRequired, message: '' }]"
+          style="min-width: 205px">
           <!-- slot -->
           <slot v-if="item.slotSearch" :name="item.prop" :row="item"></slot>
           <!-- input -->

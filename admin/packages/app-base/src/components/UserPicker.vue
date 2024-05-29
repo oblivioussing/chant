@@ -2,11 +2,11 @@
   <chant-base-picker
     v-model:id="id"
     v-model:text="text"
+    v-bind="$attrs"
     api-path="user/list"
     :columns="columns()"
     :dict="dict"
     :lang="lang"
-    :title="props.title"
     @change="onChange">
   </chant-base-picker>
 </template>
@@ -14,10 +14,6 @@
 <script setup lang="ts">
 import { columns, dict, lang } from '@app-base/views/auth/user/share'
 
-// props
-const props = defineProps<{
-  title: string
-}>()
 // emits
 const emits = defineEmits(['change'])
 // model

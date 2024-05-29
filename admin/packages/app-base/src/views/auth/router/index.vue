@@ -39,7 +39,7 @@
       </chant-table>
     </div>
   </div>
-  <!-- 新增/编辑 -->
+  <!-- mix-form -->
   <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
     <mix-form
       v-if="state.mixForm"
@@ -79,7 +79,7 @@ let state = reactive({
 })
 // created
 lister.created(() => {
-  if (state.query.id) {
+  if (state.keepQuery.id) {
     // 获取列表
     getList()
   }

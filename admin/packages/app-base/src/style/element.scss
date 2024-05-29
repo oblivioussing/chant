@@ -24,6 +24,18 @@
     min-width: 20px;
   }
 }
+// message-box
+.el-message-box {
+  .el-message-box__header {
+    padding-bottom: 0;
+  }
+  .el-message-box__input {
+    padding-top: 5px;
+  }
+  .el-message-box__btns {
+    padding-top: 10px;
+  }
+}
 // select-dropdown
 .el-select-dropdown {
   .el-select-dropdown__item {

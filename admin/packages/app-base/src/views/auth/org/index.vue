@@ -1,6 +1,6 @@
 <template>
   <div class="column-box">
-    <router-tree ref="treeRef" @node-click="onNode"></router-tree>
+    <org-tree ref="treeRef" @node-click="onNode"></org-tree>
     <div class="column-item flex-1">
       <!-- search -->
       <chant-table-search
@@ -15,18 +15,6 @@
         :options="['add', 'delete']"
         @add="onAdd"
         @delete="onDeletes">
-        <!-- 转移 -->
-        <chant-icon-button
-          content="转移"
-          icon-type="switch"
-          @click="state.transfer = true">
-        </chant-icon-button>
-        <!-- 保存排序 -->
-        <chant-icon-button
-          :content="gt('button.sort')"
-          icon-type="sort"
-          @click="onSort">
-        </chant-icon-button>
       </chant-table-operate>
       <!-- table -->
       <chant-table v-model="state" :dict="dict" sort>
@@ -39,7 +27,7 @@
       </chant-table>
     </div>
   </div>
-  <!-- 新增/编辑 -->
+  <!-- mix-form -->
   <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
     <mix-form
       v-if="state.mixForm"
@@ -49,24 +37,16 @@
       @close="state.mixForm = false">
     </mix-form>
   </chant-dialog>
-  <!-- 转移 -->
-  <chant-dialog v-model="state.transfer" style="width: 600px" title="路由转移">
-    <router-transfer v-if="state.transfer" @close="state.transfer = false">
-    </router-transfer>
-  </chant-dialog>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { shiki, useLister } from 'chant'
+import { useLister } from 'chant'
 import { columns, dict, type Model } from './share'
 import MixForm from './components/MixForm.vue'
-import RouterTree from '@app-base/components/RouterTree.vue'
-import RouterTransfer from './components/RouterTransfer.vue'
+import OrgTree from '@app-base/components/OrgTree.vue'
 
 // use
-const { t: gt } = useI18n({ useScope: 'global' })
 const lister = useLister()
 // ref
 const treeRef = ref()
@@ -79,14 +59,14 @@ let state = reactive({
 })
 // created
 lister.created(() => {
-  if (state.query.id) {
+  if (state.keepQuery.id) {
     // 获取列表
     getList()
   }
 })
 // 获取列表
 function getList() {
-  lister.getData('router/list', state, { limit: false })
+  lister.getData('org/list', state, { limit: false })
 }
 // 新增
 function onAdd() {
@@ -94,25 +74,17 @@ function onAdd() {
 }
 // 删除
 function onDelete(id: string) {
-  lister.remove('router/delete', state, { id })
+  lister.remove('org/delete', state, { id })
 }
 // 批量删除
 function onDeletes() {
-  lister.removes('router/deletes', state)
-}
-// 保存排序
-async function onSort() {
-  const ids = state.list.map((item) => item.id)
-  const { code } = await shiki.post('router/sort', ids)
-  if (code === '1') {
-    treeRef.value?.getList()
-  }
+  lister.removes('org/deletes', state)
 }
 // tree节点
 function onNode(row: Model) {
   state.node = row
   state.keepQuery.id = row.id
-  // 获取列表
+  // // 获取列表
   getList()
 }
 </script>

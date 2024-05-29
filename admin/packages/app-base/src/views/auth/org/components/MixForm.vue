@@ -1,13 +1,8 @@
 <template>
   <chant-form
     v-model="state"
-    :dict="newDict"
     :columns="columns()"
     @instance="former.bindInstance">
-    <!-- 图标 -->
-    <template #icon>
-      <chant-icon-picker v-model="state.form.icon"></chant-icon-picker>
-    </template>
   </chant-form>
   <chant-form-footer
     v-model="state"
@@ -17,11 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import { cloneDeep } from 'lodash'
 import { reactive } from 'vue'
 import { shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
-import { columns, dict, type Model } from '../share'
+import { columns, type Model } from '../share'
 
 // props
 const props = defineProps<FormProps>()
@@ -29,9 +23,6 @@ const props = defineProps<FormProps>()
 const emits = defineEmits<FormEmits>()
 // use
 const former = useFormer(props)
-// var
-const newDict = cloneDeep(dict)
-newDict.type = { 4: '页面', 5: '功能' } as any
 // state
 let state = reactive({
   ...former.state,
@@ -49,31 +40,24 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('router/detail', state)
+  former.getData('org/detail', state)
 }
 // 获取父节点
 async function getParentNode() {
   const id = state.selection.id
   state.formLoading = true
-  const { data } = await shiki.get('router/detail', { id })
+  const { data } = await shiki.get('org/detail', { id })
   state.formLoading = false
   if (data) {
     state.form.parentId = id
     state.form.level = data.level + 1
-    state.form.threeMenu = data.threeMenu || 0
-  }
-  const { level, threeMenu } = state.form
-  if ((level === 3 && !threeMenu) || level === 4) {
-    state.form.name = data.name
-    state.form.path = data.path
-    state.form.type = '4'
   }
 }
 // 保存
 function onSave() {
   const map = {
-    add: 'router/add',
-    edit: 'router/update'
+    add: 'org/add',
+    edit: 'org/update'
   } as any
   const path = map[props.pageType]
   former.save(path, state)

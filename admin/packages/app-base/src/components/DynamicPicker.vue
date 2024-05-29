@@ -4,6 +4,7 @@
     v-if="props.type === 'user'"
     v-model:id="id"
     v-model:text="text"
+    :disabled="props.disabled"
     :title="props.title"
     @change="emits('change', $event)">
   </user-picker>
@@ -15,6 +16,7 @@ import UserPicker from './UserPicker.vue'
 
 // props
 const props = defineProps<{
+  disabled?: boolean
   title: string
   type: DynamicPicker
 }>()

@@ -1,15 +1,21 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
-import { QueryModel, QueryPage } from '@/decorator'
-import type { Many, Page } from '@/type'
+import { QueryModel } from '@/decorator'
+import type { Many } from '@/type'
 import { IdVali } from '@/validator'
 import { orgEntity, type Org } from './model'
 import { OrgService } from './service'
-import { AddVali, UpdateVali } from './validator'
+import { AddVali, RootVali, UpdateVali } from './validator'
 
 @Controller('org')
 export class OrgController {
   constructor(private readonly orgService: OrgService) {}
 
+  // 根节点初始化
+  @Post('root')
+  async root(@Body() org: RootVali) {
+    const result = await this.orgService.root(org as Org)
+    return result
+  }
   // 新增
   @Post('add')
   async add(@Body() org: AddVali) {
@@ -42,8 +48,14 @@ export class OrgController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(orgEntity) org: Org, @QueryPage() page: Page) {
-    const result = await this.orgService.list(org, page)
+  async list(@QueryModel(orgEntity) org: Org) {
+    const result = await this.orgService.list(org)
+    return result
+  }
+  // 树
+  @Get('tree')
+  async tree(@QueryModel(orgEntity) router: Org) {
+    const result = await this.orgService.tree(router)
     return result
   }
 }

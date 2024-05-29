@@ -153,6 +153,7 @@
               v-if="item.type === 'dynamic-picker'"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
               v-model:text="vModel!.form[getDynamicText(item)]"
+              :disabled="isDisabled(item)"
               :title="translate(item)"
               :type="item.dynamicPicker!"
               @change="item.change && onChange(item, $event)">

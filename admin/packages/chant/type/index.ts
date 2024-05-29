@@ -148,6 +148,7 @@ export type TablePickerProps = {
   apiPath: string // 接口地址
   columns: ListColumn[] // 列表字段
   columnsSet?: ListColumn['prop'][] // 将columns中的字段显示在右侧
+  disabled?: boolean // 禁用
   dict?: any // 字典
   lang?: any // 国际化
   title: string // 显示的标题

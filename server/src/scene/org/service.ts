@@ -1,11 +1,30 @@
-import { prisma, BaseService, PageData, Result } from '@/share'
-import { Many, Page } from '@/type'
+import { prisma, BaseService, Result } from '@/share'
+import { Many } from '@/type'
 import { base } from '@/utils'
-import { orgEntity, type Org } from './model'
+import { orgEntity, type Org, type OrgTree } from './model'
+import queryRaw from './query-raw'
 
 export class OrgService extends BaseService {
   constructor() {
     super()
+  }
+
+  // 根节点初始化
+  async root(org: Org) {
+    const result = new Result()
+    const data = base.toEntity(org, orgEntity, true)
+    data.level = 0
+    data.id = base.createId()
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    // create
+    const row = await prisma.org.create({ data })
+    if (row) {
+      result.success({ msg: '组织架构新增成功' })
+    } else {
+      result.fail('组织架构新增失败')
+    }
+    return result
   }
   // 新增
   async add(org: Org) {
@@ -78,18 +97,17 @@ export class OrgService extends BaseService {
     return result
   }
   // 列表
-  async list(org: Org, page: Page) {
-    const pageData = new PageData<Org>()
-    const result = new Result<typeof pageData>()
-    const rows = await prisma.org.findMany({
-      ...base.pageHelper(page, 'desc'),
-      select: base.toSelect(orgEntity),
-      where: org
-    })
-    const total = await prisma.org.count({ where: org })
-    pageData.list = rows as Org[]
-    pageData.total = total
-    result.success({ data: pageData, msg: '组织架构列表查询成功' })
+  async list(org: Org) {
+    const result = new Result<Org[]>()
+    const rows = await queryRaw.getList(org)
+    result.success({ data: rows, msg: '组织架构列表查询成功' })
+    return result
+  }
+  // 树
+  async tree(org: Org) {
+    const result = new Result<OrgTree>()
+    const rows = await queryRaw.getTreeList(org)
+    result.success({ data: base.toTree(rows), msg: '组织架构树查询成功' })
     return result
   }
 }

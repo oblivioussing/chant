@@ -48,11 +48,11 @@ export default [
         component: () => import('@app-base/views/auth/org/edit.vue'),
         meta: { title: '组织架构编辑' }
       },
-      // 用户列表
+      // 用户
       {
         path: 'user',
         component: () => import('@app-base/views/auth/user/index.vue'),
-        meta: { title: '用户列表', menu: 1 }
+        meta: { title: '用户', menu: 1 }
       },
       // 用户新增
       {

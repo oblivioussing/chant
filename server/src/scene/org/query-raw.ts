@@ -1,59 +1,56 @@
-import { Prisma, type Router } from '@prisma/client'
+import { Prisma, type Org } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { routerEntity } from './model'
+import { orgEntity } from './model'
 
 function like(val = '') {
   return Prisma.raw(`'%${val}%'`)
 }
 function getSelect(alias?: string) {
-  return toSelect(routerEntity, {
-    exclude: ['icon', 'isDelete'],
+  return toSelect(orgEntity, {
+    exclude: ['isDelete'],
     alias
   })
 }
 
 export default {
   // 获取列表
-  async getList(router: Router) {
-    const rows = await prisma.$queryRaw<Router[]>`
+  async getList(org: Org) {
+    const rows = await prisma.$queryRaw<Org[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
-        FROM router
-        WHERE parent_id = ${router.id} 
-        AND name LIKE ${like(router.name)}
-        AND path LIKE ${like(router.path)}
+        FROM org
+        WHERE parent_id = ${org.id} 
+        AND name LIKE ${like(org.name)}
         UNION ALL
         SELECT ${getSelect('r')}
-        FROM router r 
+        FROM org r 
         INNER JOIN descendants d ON r.parent_id = d.id 
         AND r.level = d.level
-        AND r.menu = '1'
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
     return rows
   },
   // 获取树列表
-  async getTreeList(router?: Router) {
-    const rows = await prisma.$queryRaw<Router[]>`
+  async getTreeList(org?: Org) {
+    const rows = await prisma.$queryRaw<Org[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
-        FROM router
+        FROM org
         WHERE id = (
 			    SELECT id 
           FROM 
-          chant.router 
-          WHERE name LIKE ${like(router?.name)}
+          chant.org 
+          WHERE name LIKE ${like(org?.name)}
           ORDER By level ASC, sequence ASC 
           LIMIT 1
 		    )
         AND is_delete = 0
         UNION ALL
         SELECT ${getSelect('r')}
-        FROM router r 
+        FROM org r 
         INNER JOIN descendants d 
         ON r.parent_id = d.id
-        AND r.menu = '1'
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
@@ -61,14 +58,14 @@ export default {
   },
   // 获取后代id
   async getDescendantIds(id: string) {
-    const rows = await prisma.$queryRaw<Router[]>`
+    const rows = await prisma.$queryRaw<Org[]>`
       WITH RECURSIVE descendants AS (
         SELECT id
-        FROM router
+        FROM org
         WHERE id = ${id}
         UNION ALL
         SELECT r.id
-        FROM router r 
+        FROM org r 
         INNER JOIN descendants d ON r.parent_id = d.id
       )
       SELECT * FROM descendants;

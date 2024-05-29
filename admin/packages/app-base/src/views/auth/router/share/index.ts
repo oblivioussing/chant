@@ -4,8 +4,8 @@ export type Model = {
   id: string
   code: string
   icon: string
-  name: string
   level: number
+  name: string
   parentId: string
   path: string
   threeMenu: 0 | 1

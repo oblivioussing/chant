@@ -76,6 +76,7 @@ model Router {
 
 model Org {
   id         String    @id @db.VarChar(20)
+  level      Int
   name       String    @db.VarChar(50)
   parentId   String    @map("parent_id") @db.VarChar(20)
   sequence   Int
@@ -85,5 +86,6 @@ model Org {
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
 
+  @@index([isDelete], map: "index")
   @@map("org")
 }

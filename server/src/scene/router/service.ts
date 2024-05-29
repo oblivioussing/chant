@@ -1,12 +1,7 @@
 import { prisma, BaseService, Result } from '@/share'
 import { Many } from '@/type'
 import { base } from '@/utils'
-import {
-  routerEntity,
-  type Router,
-  type RouterTree,
-  type RouterVo
-} from './model'
+import { routerEntity, type Router, type RouterTree } from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
@@ -173,7 +168,7 @@ export class RouterService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<RouterVo>()
+    const result = new Result<Router>()
     const row = await prisma.router.findUnique({
       select: base.toSelect(routerEntity),
       where: { id }
@@ -188,7 +183,7 @@ export class RouterService extends BaseService {
   }
   // 列表
   async list(router: Router) {
-    const result = new Result<RouterVo[]>()
+    const result = new Result<Router[]>()
     const rows = await queryRaw.getList(router)
     result.success({ data: rows, msg: '路由列表查询成功' })
     return result
