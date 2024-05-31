@@ -13,6 +13,7 @@ import ChantRadio from './ChantRadio.vue'
 import ChantSelect from './ChantSelect.vue'
 import ChantSelectedTable from './ChantSelectedTable.vue'
 import ChantTable from './ChantTable.vue'
+import ChantTable2 from './ChantTable2.vue'
 import ChantTableOperate from './chant-table-operate/Index.vue'
 import ChantTablePicker from './ChantTablePicker.vue'
 import ChantTableSearch from './ChantTableSearch.vue'
@@ -38,6 +39,7 @@ declare module '@vue/runtime-core' {
     ChantSelect: typeof ChantSelect
     ChantSelectedTable: typeof ChantSelectedTable
     ChantTable: typeof ChantTable
+    ChantTable2: typeof ChantTable2
     ChantTableOperate: typeof ChantTableOperate
     ChantTablePicker: typeof ChantTablePicker
     ChantTableSearch: typeof ChantTableSearch

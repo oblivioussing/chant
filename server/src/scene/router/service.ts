@@ -1,5 +1,4 @@
 import { prisma, BaseService, Result } from '@/share'
-import { Many } from '@/type'
 import { base } from '@/utils'
 import { routerEntity, type Router, type RouterTree } from './model'
 import queryRaw from './query-raw'
@@ -11,7 +10,7 @@ export class RouterService extends BaseService {
   // 根节点初始化
   async root() {
     const result = new Result()
-    const data = structuredClone(routerEntity)
+    const data = base.toEntity({}, routerEntity, true)
     data.name = '系统'
     data.id = base.createId()
     data.createId = this.getUid()
@@ -116,39 +115,14 @@ export class RouterService extends BaseService {
   // 删除
   async delete(id: string) {
     const result = new Result()
-    const row = await prisma.router.update({
-      data: this.getDeleteData(),
-      where: { id }
-    })
-    if (row) {
-      result.success({ msg: '路由删除成功' })
-    } else {
-      result.fail('路由删除失败')
-    }
-    return result
-  }
-  // 批量删除
-  async deletes(params: Many<Router>) {
-    const result = new Result()
-    const where = base.manyWhere(params, routerEntity)
-    const row = await prisma.router.updateMany({
-      data: this.getDeleteData(),
-      where
-    })
-    if (row.count) {
-      result.success({ msg: '路由批量删除成功' })
-    } else {
-      result.fail('路由批量删除失败')
-    }
-    return result
-  }
-  // 删除树
-  async deleteTree(id: string) {
-    const result = new Result()
     const rows = await queryRaw.getDescendantIds(id)
     const ids = rows.map((item) => item.id)
     const row = await prisma.router.updateMany({
-      data: this.getDeleteData(),
+      data: {
+        isDelete: 1,
+        updateId: this.getUid(),
+        updateTime: new Date()
+      },
       where: { id: { in: ids } }
     })
     if (row.count) {
@@ -157,14 +131,6 @@ export class RouterService extends BaseService {
       result.fail('路由删除失败')
     }
     return result
-  }
-  // 获取删除data
-  private getDeleteData() {
-    return {
-      isDelete: 1,
-      updateId: this.getUid(),
-      updateTime: new Date()
-    } as Router
   }
   // 详情
   async detail(id: string) {

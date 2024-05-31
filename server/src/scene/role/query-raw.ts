@@ -1,12 +1,12 @@
-import { Prisma, type Org } from '@prisma/client'
+import { Prisma, type Role } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { orgEntity } from './model'
+import { roleEntity } from './model'
 
 function like(val = '') {
   return Prisma.raw(`'%${val}%'`)
 }
 function getSelect(alias?: string) {
-  return toSelect(orgEntity, {
+  return toSelect(roleEntity, {
     exclude: ['isDelete'],
     alias
   })
@@ -14,45 +14,45 @@ function getSelect(alias?: string) {
 
 export default {
   // 获取列表
-  async getList(org: Org) {
-    const rows = await prisma.$queryRaw<Org[]>`
+  async getList(role: Role) {
+    const rows = await prisma.$queryRaw<Role[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
-        FROM org
-        WHERE parent_id = ${org.id} 
-        AND name LIKE ${like(org.name)}
+        FROM role
+        WHERE parent_id = ${role.id} 
+        AND name LIKE ${like(role.name)}
         AND is_delete = 0
         UNION ALL
-        SELECT ${getSelect('o')}
-        FROM org o 
-        INNER JOIN descendants d ON o.parent_id = d.id 
-        AND o.level = d.level
-        AND o.is_delete = 0
+        SELECT ${getSelect('r')}
+        FROM role r 
+        INNER JOIN descendants d ON r.parent_id = d.id 
+        AND r.level = d.level
+        AND r.is_delete = 0
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
     return rows
   },
   // 获取树列表
-  async getTreeList(org?: Org) {
-    const rows = await prisma.$queryRaw<Org[]>`
+  async getTreeList(role?: Role) {
+    const rows = await prisma.$queryRaw<Role[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
-        FROM org
+        FROM role
         WHERE id = (
 			    SELECT id 
           FROM 
-          org 
-          WHERE name LIKE ${like(org?.name)}
+          role 
+          WHERE name LIKE ${like(role?.name)}
           ORDER By level ASC, sequence ASC 
           LIMIT 1
 		    )
         UNION ALL
-        SELECT ${getSelect('o')}
-        FROM org o 
+        SELECT ${getSelect('r')}
+        FROM role r 
         INNER JOIN descendants d 
-        ON o.parent_id = d.id
-        AND o.is_delete = 0
+        ON r.parent_id = d.id
+        AND r.is_delete = 0
       )
       SELECT * FROM descendants ORDER BY sequence ASC;
     `
@@ -60,15 +60,15 @@ export default {
   },
   // 获取后代id
   async getDescendantIds(id: string) {
-    const rows = await prisma.$queryRaw<Org[]>`
+    const rows = await prisma.$queryRaw<Role[]>`
       WITH RECURSIVE descendants AS (
         SELECT id
-        FROM org
+        FROM role
         WHERE id = ${id}
         UNION ALL
-        SELECT o.id
-        FROM org o 
-        INNER JOIN descendants d ON o.parent_id = d.id
+        SELECT r.id
+        FROM role r 
+        INNER JOIN descendants d ON r.parent_id = d.id
       )
       SELECT * FROM descendants;
     `

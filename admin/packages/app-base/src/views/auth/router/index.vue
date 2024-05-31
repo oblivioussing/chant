@@ -10,11 +10,7 @@
         @reset="getList">
       </chant-table-search>
       <!-- operate -->
-      <chant-table-operate
-        v-model="state"
-        :options="['add', 'delete']"
-        @add="onAdd"
-        @delete="onDeletes">
+      <chant-table-operate v-model="state" :options="['add']" @add="onAdd">
         <!-- 转移 -->
         <chant-icon-button
           content="转移"
@@ -95,10 +91,6 @@ function onAdd() {
 // 删除
 function onDelete(id: string) {
   lister.remove('router/delete', state, { id })
-}
-// 批量删除
-function onDeletes() {
-  lister.removes('router/deletes', state)
 }
 // 保存排序
 async function onSort() {

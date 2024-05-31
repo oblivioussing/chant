@@ -10,14 +10,10 @@
         @reset="getList">
       </chant-table-search>
       <!-- operate -->
-      <chant-table-operate
-        v-model="state"
-        :options="['add', 'delete']"
-        @add="onAdd"
-        @delete="onDeletes">
+      <chant-table-operate v-model="state" :options="['add']" @add="onAdd">
       </chant-table-operate>
       <!-- table -->
-      <chant-table v-model="state" :dict="dict" sort>
+      <chant-table v-model="state" :dict="dict" :show-selection="false">
         <!-- 操作 -->
         <chant-column-operate
           :options="['edit', 'delete']"
@@ -54,8 +50,7 @@ const treeRef = ref()
 let state = reactive({
   ...lister.state,
   columns: columns(),
-  node: {} as Model,
-  transfer: false
+  node: {} as Model
 })
 // created
 lister.created(() => {
@@ -75,10 +70,6 @@ function onAdd() {
 // 删除
 function onDelete(id: string) {
   lister.remove('org/delete', state, { id })
-}
-// 批量删除
-function onDeletes() {
-  lister.removes('org/deletes', state)
 }
 // tree节点
 function onNode(row: Model) {

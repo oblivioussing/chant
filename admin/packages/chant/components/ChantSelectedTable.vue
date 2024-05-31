@@ -8,7 +8,7 @@
     :show-selection="false">
     <!-- 操作 -->
     <chant-column-operate :width="60">
-      <template #="{ row }">
+      <template #default="{ row }">
         <!-- 删除 -->
         <el-button link type="danger" @click="onDelete(row)">
           {{ gt('button.delete') }}

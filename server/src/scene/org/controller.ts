@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { QueryModel } from '@/decorator'
-import type { Many } from '@/type'
 import { IdVali } from '@/validator'
 import { orgEntity, type Org } from './model'
 import { OrgService } from './service'
@@ -32,12 +31,6 @@ export class OrgController {
   @Post('delete')
   async delete(@Body() org: IdVali) {
     const result = await this.orgService.delete(org.id)
-    return result
-  }
-  // 批量删除
-  @Post('deletes')
-  async deletes(@Body() params: Many<Org>) {
-    const result = await this.orgService.deletes(params)
     return result
   }
   // 详情

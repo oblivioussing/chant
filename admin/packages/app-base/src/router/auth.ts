@@ -48,6 +48,12 @@ export default [
         component: () => import('@app-base/views/auth/org/edit.vue'),
         meta: { title: '组织架构编辑' }
       },
+      // 角色
+      {
+        path: 'role',
+        component: () => import('@app-base/views/auth/role/index.vue'),
+        meta: { title: '角色', menu: 1 }
+      },
       // 用户
       {
         path: 'user',

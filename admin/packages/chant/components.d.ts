@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ElAutoResizer: (typeof import('element-plus/es'))['ElAutoResizer']
     ElAvatar: (typeof import('element-plus/es'))['ElAvatar']
     ElButton: (typeof import('element-plus/es'))['ElButton']
     ElButtonGroup: (typeof import('element-plus/es'))['ElButtonGroup']
@@ -33,6 +34,7 @@ declare module 'vue' {
     ElSelect: (typeof import('element-plus/es'))['ElSelect']
     ElSubMenu: (typeof import('element-plus/es'))['ElSubMenu']
     ElTable: (typeof import('element-plus/es'))['ElTable']
+    ElTableV2: (typeof import('element-plus/es'))['ElTableV2']
     ElTableColumn: (typeof import('element-plus/es'))['ElTableColumn']
     ElTabPane: (typeof import('element-plus/es'))['ElTabPane']
     ElTabs: (typeof import('element-plus/es'))['ElTabs']

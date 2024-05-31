@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { QueryModel } from '@/decorator'
-import type { Many } from '@/type'
 import { IdVali } from '@/validator'
 import { routerEntity, type Router } from './model'
 import { RouterService } from './service'
@@ -32,18 +31,6 @@ export class RouterController {
   @Post('delete')
   async delete(@Body() router: IdVali) {
     const result = await this.routerService.delete(router.id)
-    return result
-  }
-  // 删除树
-  @Post('deleteTree')
-  async deleteTree(@Body() router: IdVali) {
-    const result = await this.routerService.deleteTree(router.id)
-    return result
-  }
-  // 批量删除
-  @Post('deletes')
-  async deletes(@Body() params: Many<Router>) {
-    const result = await this.routerService.deletes(params)
     return result
   }
   // 详情

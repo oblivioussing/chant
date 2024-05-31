@@ -4,7 +4,7 @@
       <el-input
         v-model="state.query.name"
         clearable
-        placeholder="组织名称"
+        placeholder="角色名称"
         @keyup.enter="getList">
       </el-input>
     </div>
@@ -31,7 +31,7 @@
                 :icon="Edit"
                 link
                 type="primary"
-                @click.stop="lister.edit(state, data)">
+                @click.stop="onEdit(data)">
               </el-button>
               <!-- 删除 -->
               <el-button
@@ -49,12 +49,12 @@
         type="primary"
         class="gravity-center"
         @click="onRoot">
-        新增
+        初始化
       </el-button>
     </div>
   </div>
   <!-- mix-form -->
-  <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
+  <chant-dialog v-model="state.mixForm" :title="state.title">
     <mix-form
       v-if="state.mixForm"
       :page-type="state.pageType"
@@ -69,9 +69,8 @@ import { type TreeInstance } from 'element-plus'
 import { onActivated, reactive, ref } from 'vue'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import { useScroll } from '@vueuse/core'
-import { element, shiki, useLister } from 'chant'
-import { type Model } from '@app-base/views/auth/org/share'
-import MixForm from '@app-base/views/auth/org/components/MixForm.vue'
+import { shiki, useLister } from 'chant'
+import MixForm from './MixForm.vue'
 
 // defineExpose
 defineExpose({
@@ -88,7 +87,8 @@ const { y } = useScroll(scrollRef)
 // state
 let state = reactive({
   ...lister.state,
-  node: {} as Model
+  node: {} as any,
+  title: ''
 })
 // onMounted
 lister.created(() => {
@@ -101,7 +101,7 @@ onActivated(() => {
 })
 // 获取列表
 async function getList() {
-  await lister.getData('org/tree', state, { limit: false })
+  await lister.getData('role/tree', state, { limit: false })
   const list = state.list
   if (list.length) {
     const row = state.node.id ? state.node : list[0]
@@ -111,35 +111,34 @@ async function getList() {
 }
 // 初始化
 async function onRoot() {
-  element.prompt(
-    async (instance, done) => {
-      const name = instance.inputValue
-      instance.confirmButtonLoading = true
-      const { code } = await shiki.post('org/root', { name })
-      instance.confirmButtonLoading = false
-      if (code === '1') {
-        done()
-        getList()
-      }
-    },
-    { title: '组织名称', required: true }
-  )
+  state.loading = true
+  const { code } = await shiki.post('role/root', {})
+  state.loading = false
+  if (code === '1') {
+    getList()
+  }
 }
 // 节点点击
-function onNode(row: Model) {
+function onNode(row: any) {
   state.node = row
   emits('node-click', row)
 }
 // 新增
-function onAdd(row: Model) {
+function onAdd(row: any) {
+  state.title = '角色新增'
   state.selection = row
   state.pageType = 'add'
   state.mixForm = true
 }
+// 编辑
+function onEdit(row: any) {
+  state.title = '角色编辑'
+  lister.edit(state, row)
+}
 // 删除
-function onDelete(row: Model) {
-  state.node = {} as Model
-  lister.remove('org/delete', state, { id: row.id })
+function onDelete(row: any) {
+  state.node = {}
+  lister.remove('role/delete', state, { id: row.id })
 }
 </script>
 

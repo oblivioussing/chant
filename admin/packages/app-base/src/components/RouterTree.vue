@@ -143,7 +143,7 @@ function onAdd(row: Model) {
 // 删除
 function onDelete(row: Model) {
   state.node = {} as Model
-  lister.remove('router/deleteTree', state, { id: row.id })
+  lister.remove('router/delete', state, { id: row.id })
 }
 </script>
 

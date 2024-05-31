@@ -31,6 +31,7 @@ const ChantSelectedTable = defineAsyncComponent(
   () => import('./ChantSelectedTable.vue')
 )
 const ChantTable = defineAsyncComponent(() => import('./ChantTable.vue'))
+const ChantTable2 = defineAsyncComponent(() => import('./ChantTable2.vue'))
 const ChantTableOperate = defineAsyncComponent(
   () => import('./chant-table-operate/Index.vue')
 )
@@ -59,6 +60,7 @@ function components(app: App<Element>) {
   app.component('ChantSelect', ChantSelect)
   app.component('ChantSelectedTable', ChantSelectedTable)
   app.component('ChantTable', ChantTable)
+  app.component('ChantTable2', ChantTable2)
   app.component('ChantTableOperate', ChantTableOperate)
   app.component('ChantTablePicker', ChantTablePicker)
   app.component('ChantTableSearch', ChantTableSearch)

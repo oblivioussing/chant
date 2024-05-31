@@ -25,7 +25,7 @@
       align="center"
       :fixed="item.fixed"
       :label="translate(item)"
-      :min-width="item.width || columnWidth || 144"
+      :min-width="item.width || columnWidth"
       :prop="item.prop"
       show-overflow-tooltip
       :sortable="item.sortable">
@@ -107,7 +107,6 @@
 <script setup lang="ts">
 import { ElMessage, type TableInstance } from 'element-plus'
 import dayjs from 'dayjs'
-// @ts-ignore
 import Sortable from 'sortablejs'
 import {
   computed,
@@ -145,6 +144,7 @@ interface Props {
 }
 // props
 const props = withDefaults(defineProps<Props>(), {
+  columnWidth: 144,
   dbEdit: true,
   rowKey: 'id',
   showSelection: true
@@ -342,7 +342,7 @@ async function onCopy(text: string) {
 }
 // 翻译
 function translate(column: Column) {
-  let label = column.label || column.prop
+  const label = column.label || column.prop
   if (!props.lang) {
     return label
   }
@@ -360,17 +360,18 @@ function translate(column: Column) {
   :deep(.el-button + .el-button) {
     margin-left: 3px;
   }
-  .cell {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center;
-    padding: 0 5px;
-    .table-header {
-      border: 1px solid transparent;
-      box-sizing: border-box;
-      display: inline-block;
-      white-space: nowrap;
+  .el-table__inner-wrapper {
+    height: 100% !important;
+  }
+  .el-table__header-wrapper {
+    height: 38px;
+    line-height: 38px;
+    .el-table__cell {
+      background-color: var(--gray-color) !important;
     }
+  }
+  .cell {
+    padding: 0 5px;
   }
   .content-box {
     display: flex;
