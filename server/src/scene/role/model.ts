@@ -31,8 +31,15 @@ export type RoleTree = Role & {
   children: RoleTree[]
 }
 
-export type RouteItem = {
-  first: string
-  second: string
-  third: string
+export type MenuItem = {
+  id: string
+  name: string
+  checked: 0 | 1
+}
+export type RouterItem = {
+  id: string
+  first: MenuItem
+  second: MenuItem
+  third: MenuItem
+  funs: MenuItem[]
 }

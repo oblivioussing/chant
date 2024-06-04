@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { shiki, useLister } from 'chant'
 import { columns, dict, type Model } from './share'
@@ -73,8 +73,8 @@ let state = reactive({
   node: {} as Model,
   transfer: false
 })
-// created
-lister.created(() => {
+// onMounted
+onMounted(() => {
   if (state.keepQuery.id) {
     // 获取列表
     getList()

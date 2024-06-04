@@ -3,23 +3,23 @@ import type { Column } from 'chant'
 export default () => {
   return [
     {
-      prop: 'name',
+      prop: 'first',
       label: '一级菜单',
       width: 144
     },
     {
-      prop: 'two',
+      prop: 'second',
       label: '二级菜单',
       width: 144
     },
     {
-      prop: 'three',
+      prop: 'third',
       label: '三级菜单',
       width: 144
     },
     {
-      prop: 'auth',
-      label: '权限'
+      prop: 'funs',
+      label: '功能'
     }
   ] as Column[]
 }

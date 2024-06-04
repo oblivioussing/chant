@@ -3,6 +3,7 @@
     <el-auto-resizer>
       <template #default="{ height, width }">
         <el-table-v2
+          v-loading="vModel!.loading"
           :columns="createColumns(width)"
           :data="list"
           :header-height="38"

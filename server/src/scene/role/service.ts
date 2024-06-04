@@ -1,6 +1,12 @@
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
-import { roleEntity, type Role, type RoleTree } from './model'
+import {
+  roleEntity,
+  type MenuItem,
+  type Role,
+  type RoleTree,
+  type RouterItem
+} from './model'
 import queryRaw from './query-raw'
 
 export class RoleService extends BaseService {
@@ -101,12 +107,57 @@ export class RoleService extends BaseService {
   // 路由列表
   async router(id: string) {
     const result = new Result()
-    const rows = await prisma.router.findMany()
-    const list = rows.map((item) => {
-      const row = {}
-      return row
+    const rows = await prisma.router.findMany({
+      select: {
+        id: true,
+        level: true,
+        name: true,
+        parentId: true,
+        threeMenu: true
+      },
+      where: { isDelete: 0, level: { gt: 0 } },
+      orderBy: [{ level: 'asc' }, { sequence: 'asc' }]
     })
-    result.success({ data: rows, msg: '路由列表查询成功' })
+    // 一级菜单Map
+    const firstMap = {} as any
+    // 二级菜单Map
+    const secondMap = {} as any
+    // 三级菜单Map
+    const thirdMap = {} as any
+    // 功能菜单Map
+    const funsMap = {} as any
+    // list
+    const list = rows.reduce((acc: RouterItem[], cur) => {
+      const { id, level, name, parentId, threeMenu } = cur
+      const routerItem = { id: base.createId() } as RouterItem
+      const row = { id, name, checked: 0 } as MenuItem
+      if (level === 1) {
+        firstMap[id] = cur
+        routerItem.first = row
+        acc.push(routerItem)
+      }
+      if (level === 2) {
+        secondMap[id] = cur
+        routerItem.second = row
+        acc.push(routerItem)
+      }
+      if (level === 3 && threeMenu === 1) {
+        thirdMap[id] = cur
+        routerItem.third = row
+        acc.push(routerItem)
+      }
+      if (level === 3 && threeMenu === 0) {
+      }
+      if (level === 4) {
+        if (funsMap[parentId]) {
+          funsMap[parentId].push(cur)
+        } else {
+          funsMap[parentId] = [cur]
+        }
+      }
+      return acc
+    }, [])
+    result.success({ data: list, msg: '路由列表查询成功' })
     return result
   }
   // 树
