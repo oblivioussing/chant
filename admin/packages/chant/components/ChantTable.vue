@@ -39,7 +39,7 @@
         <div class="content-box">
           <!-- prop slot -->
           <slot
-            v-if="item.slotList"
+            v-if="item.slot?.includes('list')"
             :index="$index"
             :item="item"
             :name="item.prop"
@@ -172,6 +172,9 @@ window.addEventListener('resize', () => {
 // computed
 const availableColumns = computed(() => {
   return columns.value?.filter((item) => {
+    if (!item) {
+      return false
+    }
     const hideInList = item.hideInPages?.includes('list')
     if (item.onlySearch || item.hide || hideInList) {
       return false

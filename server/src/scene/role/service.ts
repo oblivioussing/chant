@@ -139,14 +139,24 @@ export class RoleService extends BaseService {
       if (level === 2) {
         secondMap[id] = cur
         routerItem.second = row
+        const first = firstMap[cur.parentId]
+        routerItem.first = { id: first.id, name: first.name, checked: 0 }
         acc.push(routerItem)
       }
       if (level === 3 && threeMenu === 1) {
         thirdMap[id] = cur
         routerItem.third = row
+        const second = secondMap[cur.parentId]
+        routerItem.second = { id: second.id, name: second.name, checked: 0 }
+        routerItem.first = firstMap[routerItem.second.id]
         acc.push(routerItem)
       }
       if (level === 3 && threeMenu === 0) {
+        const second = secondMap[cur.parentId]
+        routerItem.second = { id: second.id, name: second.name, checked: 0 }
+        const first = firstMap[second.parentId]
+        routerItem.first = { id: first.id, name: first.name, checked: 0 }
+        acc.push(routerItem)
       }
       if (level === 4) {
         if (funsMap[parentId]) {

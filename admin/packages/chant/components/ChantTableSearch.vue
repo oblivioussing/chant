@@ -21,7 +21,10 @@
           :rules="[{ required: item.searchRequired, message: '' }]"
           style="min-width: 205px">
           <!-- slot -->
-          <slot v-if="item.slotSearch" :name="item.prop" :row="item"></slot>
+          <slot
+            v-if="item.slot?.includes('search')"
+            :name="item.prop"
+            :row="item"></slot>
           <!-- input -->
           <el-input
             v-else-if="!item.type || item.type === 'input'"
@@ -184,8 +187,12 @@ let state = reactive({
 const availableColumns = computed(() => {
   const columns = vModel.value?.columns
   const searchOrder = cloneDeep(props.searchOrder)?.reverse()
-  return columns?.reduce((acc: Column[], cur: Column) => {
-    const status = !cur.hide && (cur.search || cur.onlySearch || cur.slotSearch)
+  return columns?.reduce((acc: Column[], cur) => {
+    if (!cur) {
+      return acc
+    }
+    const { hide, search, onlySearch, slot } = cur
+    const status = !hide && (search || onlySearch || slot?.includes('search'))
     if (!status) {
       return acc
     }

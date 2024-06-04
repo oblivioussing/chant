@@ -39,9 +39,12 @@ type BaseColumn = {
   prepend?: string // 输入框前置内容
   prop: string // 字段值
   selectMultiple?: boolean // select是否多选,仅type为select时有效
+  slot?: SlotType[] // slot
   type?: ElementType // 元素类型
   valueFormat?: string // 绑定值的格式,仅type为date-picker时有效
 }
+
+type SlotType = 'form' | 'form-item' | 'list' | 'search'
 
 export type FormColumn = {
   change?: (form: any, row?: any) => void // 值变更事件
@@ -58,8 +61,6 @@ export type FormColumn = {
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: FormItemRule[] // 表单验证规则
   showCustom?: (row: any) => boolean // 自定义显示逻辑
-  slot?: boolean // slot
-  slotForm?: boolean // slot(会显示label)
   tips?: string // 提示
   title?: string // 标题
   accept?: string // 接受上传的文件类型,仅type为Upload时有效
@@ -79,8 +80,6 @@ export type ListColumn = {
   search?: boolean // 是否为搜索条件
   searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
   searchRequired?: boolean // 搜索条件是否为必填
-  slotList?: boolean // 列表slot
-  slotSearch?: boolean // 搜索slot
   sortable?: boolean // 对应列是否可以排序
   tagType?: Record<string, TagProps['type']> // tag类型
   width?: number // 对应列的宽度
@@ -88,10 +87,11 @@ export type ListColumn = {
 
 export type ListColumn2 = {
   align: 'center' | 'right' // 文本对齐方式
-  dataKey: string // data key
-  key: string | number // key
+  dataKey?: string // data key
+  key?: string | number // key
   fixedWidth?: number // table2固定的宽度
-  title: string // Header 头部单元格中的默认文本
+  title?: string // Header 头部单元格中的默认文本
+  cellRenderer?: (data: any) => void // 自定义渲染cell
 } & ListColumn
 
 export type Column = FormColumn & ListColumn2

@@ -48,6 +48,9 @@ const columns = computed(() => {
 })
 const availableColumns = computed(() => {
   return columns.value?.filter((item) => {
+    if (!item) {
+      return false
+    }
     const hideInList = item.hideInPages?.includes('list')
     if (item.onlySearch || item.hide || hideInList) {
       return false

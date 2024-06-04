@@ -14,7 +14,10 @@
           {{ translate(item) }}
         </el-divider>
         <!-- slot -->
-        <slot v-else-if="item.slot" :name="item.prop" :row="item"></slot>
+        <slot
+          v-else-if="item.slot?.includes('form-item')"
+          :name="item.prop"
+          :row="item"></slot>
         <!-- form-item -->
         <div
           v-else
@@ -29,7 +32,7 @@
             </template>
             <!-- slot -->
             <slot
-              v-if="item.slotForm"
+              v-if="item?.slot?.includes('form')"
               :name="item.prop"
               :label="translate(item)"
               :row="item"
@@ -217,7 +220,7 @@ let state = reactive({
 // computed
 const availableColumns = computed(() => {
   return props.columns?.filter((item) => {
-    if (item.hide) {
+    if (!item || item.hide) {
       return false
     }
     if (item.hideInPages?.includes(vModel.value?.pageType!)) {

@@ -11,7 +11,7 @@ export default (): Plugin => {
         !/\/components\//.test(id)
       ) {
         const { descriptor } = parse(src)
-        if (descriptor.script) {
+        if (descriptor.scriptSetup) {
           const { attrs } = compileScript(descriptor, { id })
           const regex = /\/views(\/[^.]+)\.vue$/
           let name = id.match(regex)?.[1]
