@@ -92,6 +92,7 @@ export type ListColumn2 = {
   fixedWidth?: number // table2固定的宽度
   title?: string // Header 头部单元格中的默认文本
   cellRenderer?: (data: any) => void // 自定义渲染cell
+  rowSpan?: (row: { rowIndex: number }) => number
 } & ListColumn
 
 export type Column = FormColumn & ListColumn2

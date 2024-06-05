@@ -118,57 +118,73 @@ export class RoleService extends BaseService {
       where: { isDelete: 0, level: { gt: 0 } },
       orderBy: [{ level: 'asc' }, { sequence: 'asc' }]
     })
-    // 一级菜单Map
-    const firstMap = {} as any
-    // 二级菜单Map
+    // 一级菜单列表
+    const firstList = [] as typeof rows
+    // 二级菜单map
     const secondMap = {} as any
-    // 三级菜单Map
+    // 三级菜单map
     const thirdMap = {} as any
-    // 功能菜单Map
-    const funsMap = {} as any
-    // list
-    const list = rows.reduce((acc: RouterItem[], cur) => {
-      const { id, level, name, parentId, threeMenu } = cur
-      const routerItem = { id: base.createId() } as RouterItem
-      const row = { id, name, checked: 0 } as MenuItem
+    // 子菜单map
+    const childrenMap = {} as Record<string, typeof rows>
+    // 给map赋值
+    rows.forEach((item) => {
+      const { level, threeMenu } = item
       if (level === 1) {
-        firstMap[id] = cur
-        routerItem.first = row
-        acc.push(routerItem)
+        firstList.push(item)
+        return
       }
       if (level === 2) {
-        secondMap[id] = cur
-        routerItem.second = row
-        const first = firstMap[cur.parentId]
-        routerItem.first = { id: first.id, name: first.name, checked: 0 }
-        acc.push(routerItem)
+        secondMap[item.id] = item
       }
       if (level === 3 && threeMenu === 1) {
-        thirdMap[id] = cur
-        routerItem.third = row
-        const second = secondMap[cur.parentId]
-        routerItem.second = { id: second.id, name: second.name, checked: 0 }
-        routerItem.first = firstMap[routerItem.second.id]
-        acc.push(routerItem)
+        thirdMap[item.id] = item
       }
-      if (level === 3 && threeMenu === 0) {
-        const second = secondMap[cur.parentId]
-        routerItem.second = { id: second.id, name: second.name, checked: 0 }
-        const first = firstMap[second.parentId]
-        routerItem.first = { id: first.id, name: first.name, checked: 0 }
-        acc.push(routerItem)
+      if (childrenMap[item.parentId]) {
+        childrenMap[item.parentId].push(item)
+      } else {
+        childrenMap[item.parentId] = [item]
       }
-      if (level === 4) {
-        if (funsMap[parentId]) {
-          funsMap[parentId].push(cur)
+    })
+    // list
+    const list = [] as RouterItem[]
+    firstList.forEach((item) => {
+      const first = this.toMenuItem(item)
+      let childrens = childrenMap[item.id]
+      // 添加功能
+      const addFuns = (childrens: typeof rows, row: RouterItem) => {
+        if (childrens) {
+          row.funs = childrens.map((item) => this.toMenuItem(item))
+          list.push(row)
         } else {
-          funsMap[parentId] = [cur]
+          list.push(row)
         }
       }
-      return acc
-    }, [])
+      // 二级菜单
+      childrens.forEach((item1) => {
+        const second = this.toMenuItem(item1)
+        const row = { first, second } as RouterItem
+        childrens = childrenMap[second.id]
+        if (item1.threeMenu === 1) {
+          // 三级菜单
+          childrens.forEach((item2) => {
+            const third = this.toMenuItem(item2)
+            const row = { first, second, third } as RouterItem
+            childrens = childrenMap[third.id]
+            // 添加功能
+            addFuns(childrens, row)
+          })
+        } else {
+          // 添加功能
+          addFuns(childrens, row)
+        }
+      })
+    })
     result.success({ data: list, msg: '路由列表查询成功' })
     return result
+  }
+  // 转化为menuItem对象
+  toMenuItem(data: any): MenuItem {
+    return { id: data.id, name: data.name, checked: 0 }
   }
   // 树
   async tree(role: Role) {
