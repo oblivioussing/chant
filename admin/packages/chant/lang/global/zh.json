@@ -31,7 +31,8 @@
     "select": "请选择",
     "totalRecords": "总共{0}条记录",
     "confirmDelete": "确认删除?",
-    "confirmBatchDelete": "确认批量删除?"
+    "confirmBatchDelete": "确认批量删除?",
+    "empty": "暂无数据"
   },
   "unit": {
     "minute": "分钟"

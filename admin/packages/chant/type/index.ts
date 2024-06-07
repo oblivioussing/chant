@@ -85,17 +85,7 @@ export type ListColumn = {
   width?: number // 对应列的宽度
 } & BaseColumn
 
-export type ListColumn2 = {
-  align: 'center' | 'right' // 文本对齐方式
-  dataKey?: string // data key
-  key?: string | number // key
-  fixedWidth?: number // table2固定的宽度
-  title?: string // Header 头部单元格中的默认文本
-  cellRenderer?: (data: any) => void // 自定义渲染cell
-  rowSpan?: (row: { rowIndex: number }) => number
-} & ListColumn
-
-export type Column = FormColumn & ListColumn2
+export type Column = FormColumn & ListColumn
 
 export type Lang = {
   en: Record<string, string | Record<string, string>>

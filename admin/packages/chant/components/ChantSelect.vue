@@ -69,10 +69,10 @@ const options = computed(() => {
 })
 // watch
 watch(vModel, (val) => {
-  if (val.length === 0) {
+  if (val?.length === 0) {
     checkAll.value = false
     indeterminate.value = false
-  } else if (val.length === options.value.length) {
+  } else if (val?.length === options.value.length) {
     checkAll.value = true
     indeterminate.value = false
   } else {

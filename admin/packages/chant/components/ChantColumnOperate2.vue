@@ -1,10 +1,6 @@
 <template>
-  <el-table-column
-    :align="'center'"
-    fixed="right"
-    :label="t('operate')"
-    :width="widthCpd">
-    <template #default="{ row, $index }">
+  <ColumnBox>
+    <template #default="{ row }">
       <div class="column-operate">
         <!-- 编辑 -->
         <chant-icon-button
@@ -20,6 +16,13 @@
           link
           @click="emits('copy', row)">
         </chant-icon-button>
+        <!-- 详情 -->
+        <chant-icon-button
+          v-if="show('detail')"
+          icon-type="link"
+          link
+          @click="emits('detail', row)">
+        </chant-icon-button>
         <!-- 删除 -->
         <chant-icon-button
           v-if="show('delete')"
@@ -28,25 +31,26 @@
           type="danger"
           @click="emits('delete', row)">
         </chant-icon-button>
-        <slot :index="$index" :row="row"></slot>
+        <slot :row="row"></slot>
       </div>
     </template>
-  </el-table-column>
+  </ColumnBox>
 </template>
 
-<script setup lang="ts">
-import { computed, useSlots } from 'vue'
+<script setup lang="tsx">
+import { computed, defineComponent, useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { chant as lang } from '@chant/lang'
 
-type Option = 'edit' | 'copy' | 'delete'
+type Option = 'edit' | 'copy' | 'detail' | 'delete'
 // props
 const props = defineProps<{
   options?: Option[]
+  vxe?: boolean
   width?: string | number
 }>()
 // emits
-const emits = defineEmits(['edit', 'copy', 'delete'])
+const emits = defineEmits(['edit', 'copy', 'detail', 'delete'])
 // use
 const { t } = useI18n({ messages: lang })
 const slots = useSlots()
@@ -64,6 +68,43 @@ const widthCpd = computed(() => {
 function show(type: Option) {
   return props.options?.includes(type)
 }
+// column box
+const ColumnBox = defineComponent({
+  setup() {
+    const slots = useSlots()
+    return () => {
+      if (props.vxe) {
+        return (
+          <vxe-column
+            align="center"
+            fixed="right"
+            title={t('operate')}
+            width={widthCpd.value}>
+            {{
+              default: ({ row }: any) => {
+                return slots.default ? slots.default({ row }) : null
+              }
+            }}
+          </vxe-column>
+        )
+      } else {
+        return (
+          <el-table-column
+            align="center"
+            fixed="right"
+            label={t('operate')}
+            width={widthCpd.value}>
+            {{
+              default: ({ row }: any) => {
+                return slots.default ? slots.default({ row }) : null
+              }
+            }}
+          </el-table-column>
+        )
+      }
+    }
+  }
+})
 </script>
 
 <style scoped lang="scss">
