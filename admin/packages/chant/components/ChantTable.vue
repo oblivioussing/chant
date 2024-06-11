@@ -25,7 +25,8 @@
       align="center"
       :fixed="item.fixed"
       :label="translate(item)"
-      :min-width="item.width || columnWidth"
+      :width="item.width ? item.width : undefined"
+      :min-width="item.width ? undefined : columnWidth"
       :prop="item.prop"
       show-overflow-tooltip
       :sortable="item.sortable">
@@ -380,7 +381,7 @@ function translate(column: Column) {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    flex-wrap: wrap;
     .copy-text {
       padding: 0 18px 0 10px;
     }

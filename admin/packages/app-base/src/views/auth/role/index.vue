@@ -8,19 +8,46 @@
         :span-method="spanMerge">
         <!-- 一级菜单 -->
         <template #first="{ row }">
-          {{ row.first?.name }}
+          <el-checkbox
+            v-model="row.first.checked"
+            :label="row.first.name"
+            :false-value="0"
+            :true-value="1"
+            @change="onFun(row, 'first')">
+          </el-checkbox>
         </template>
         <!-- 二级级菜单 -->
         <template #second="{ row }">
-          {{ row.second?.name }}
+          <el-checkbox
+            v-model="row.second.checked"
+            :label="row.second.name"
+            :false-value="0"
+            :true-value="1"
+            @change="onFun(row, 'second')">
+          </el-checkbox>
         </template>
         <!-- 三级级菜单 -->
         <template #third="{ row }">
-          {{ row.third?.name }}
+          <el-checkbox
+            v-if="row.third?.id"
+            v-model="row.third.checked"
+            :label="row.third.name"
+            :false-value="0"
+            :true-value="1"
+            @change="onFun(row, 'third')">
+          </el-checkbox>
         </template>
         <!-- 功能 -->
         <template #funs="{ row }">
-          {{ row.funs?.map((item:any) => item.name).toString() }}
+          <div v-for="item in row.funs" :key="item.id" class="fun-item">
+            <el-checkbox
+              v-model="item.checked"
+              :label="item.name"
+              :false-value="0"
+              :true-value="1"
+              @change="onFun(row, 'funs')">
+            </el-checkbox>
+          </div>
         </template>
       </chant-table>
     </div>
@@ -33,6 +60,19 @@ import { useLister } from 'chant'
 import { columns } from './share'
 import RoleTree from '@app-base/components/role-tree/index.vue'
 
+type Fun = {
+  checked: 0 | 1
+  id: string
+  name: string
+}
+type Item = {
+  first: Fun
+  second: Fun
+  third?: Fun
+  funs?: Fun[]
+}
+type Type = keyof Item
+
 // use
 const lister = useLister()
 // ref
@@ -40,6 +80,7 @@ const treeRef = ref()
 // state
 let state = reactive({
   ...lister.state,
+  list: [] as Item[],
   columns: columns(),
   span1Arr: [] as number[], // 第一列合并规则
   span2Arr: [] as number[] // 第二列合并规则
@@ -53,27 +94,30 @@ async function getList() {
 // tree节点
 function onNode(row: { id: string }) {
   state.keepQuery.id = row.id
-  // // 获取列表
+  // 获取列表
   getList()
 }
 // 获取合并数
 function getSpanArr() {
   let pos1 = 0
   let pos2 = 0
+  state.span1Arr = []
+  state.span2Arr = []
   state.list.forEach((item, index) => {
     if (index === 0) {
       state.span1Arr.push(1)
       state.span2Arr.push(1)
       return
     }
-    if (item.first.id === state.list[index - 1].first.id) {
+    const pre = state.list[index - 1]
+    if (item.first.id === pre.first.id) {
       state.span1Arr[pos1] += 1
       state.span1Arr.push(0)
     } else {
       pos1 = index
       state.span1Arr.push(1)
     }
-    if (item.second.id === state.list[index - 1].second.id) {
+    if (item.second.id === pre.second.id) {
       state.span2Arr[pos2] += 1
       state.span2Arr.push(0)
     } else {
@@ -84,16 +128,17 @@ function getSpanArr() {
 }
 // 行合并
 function spanMerge({ rowIndex, columnIndex }: any) {
-  if (state.span1Arr.length && columnIndex === 0) {
-    const rowspan = state.span1Arr[rowIndex]
+  const { span1Arr, span2Arr } = state
+  if (span1Arr.length && columnIndex === 0) {
+    const rowspan = span1Arr[rowIndex]
     const colspan = rowspan > 0 ? 1 : 0
     if (rowspan) {
       return { rowspan, colspan }
     }
     return { rowspan: 0, colspan: 0 }
   }
-  if (state.span2Arr.length && columnIndex === 1) {
-    const rowspan = state.span2Arr[rowIndex]
+  if (span2Arr.length && columnIndex === 1) {
+    const rowspan = span2Arr[rowIndex]
     const colspan = rowspan > 0 ? 1 : 0
     if (rowspan) {
       return { rowspan, colspan }
@@ -101,10 +146,76 @@ function spanMerge({ rowIndex, columnIndex }: any) {
     return { rowspan: 0, colspan: 0 }
   }
 }
+// 功能change
+function onFun(row: Item, type: Type) {
+  let checked = 0 as 0 | 1
+  if (type === 'funs') {
+    const status = row.funs?.some((item) => item.checked)
+    checked = status ? 1 : 0
+  } else {
+    checked = row[type]?.checked ? 1 : 0
+  }
+  state.list.forEach((item) => {
+    // funs
+    if (type === 'funs') {
+      if (item.first && item.first.id === row.first?.id) {
+        item.first.checked = 1
+      }
+      if (item.second && item.second.id === row.second.id) {
+        item.second.checked = 1
+      }
+      if (item.third && item.third.id === row.third?.id) {
+        item.third.checked = 1
+      }
+    }
+    // third
+    if (type === 'third') {
+      if (item.first && item.first.id === row.first?.id) {
+        item.first.checked = 1
+      }
+      if (item.second && item.second.id === row.second.id) {
+        item.second.checked = 1
+      }
+      if (item.third && item.third.id === row.third?.id) {
+        item.funs?.forEach((item1) => {
+          item1.checked = checked
+        })
+      }
+    }
+    // second
+    if (type === 'second') {
+      if (checked && item.first.id === row.first?.id) {
+        item.first.checked = 1
+      }
+      if (item.second && item.second.id === row.second.id) {
+        item.second.checked = checked
+        if (item.third) {
+          item.third.checked = checked
+        }
+        item.funs?.forEach((item1) => {
+          item1.checked = checked
+        })
+      }
+    }
+    // first
+    if (type === 'first') {
+      if (item.first && item.first.id === row.first?.id) {
+        item.first.checked = checked
+        item.second.checked = checked
+        if (item.third) {
+          item.third.checked = checked
+        }
+        item.funs?.forEach((item1) => {
+          item1.checked = checked
+        })
+      }
+    }
+  })
+}
 </script>
 
 <style scoped lang="scss">
-.cell-box {
-  min-height: 32px;
+.fun-item + .fun-item {
+  margin-left: 10px;
 }
 </style>
