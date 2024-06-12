@@ -22,6 +22,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     hasFile: false,
     loading: false,
     query: {} as any,
+    pageType: props?.pageType,
     selection: {} as any,
     type: props?.type || 'dialog'
   }

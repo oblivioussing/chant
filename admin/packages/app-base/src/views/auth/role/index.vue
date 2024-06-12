@@ -70,7 +70,7 @@
 import { reactive, ref } from 'vue'
 import { base, shiki, useLister } from 'chant'
 import { columns } from './share'
-import RoleTree from '@app-base/components/role-tree/index.vue'
+import RoleTree from './components/RoleTree.vue'
 
 type Fun = {
   checked: 0 | 1

@@ -27,7 +27,7 @@
             :row="item"></slot>
           <!-- input -->
           <el-input
-            v-else-if="!item.type || item.type === 'input'"
+            v-else-if="!item.type && !item.dynamicPicker && !item.datepicker"
             v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
             :placeholder="translate(item, 'enter')">
@@ -56,7 +56,7 @@
             @change="emits('query')">
           </chant-select>
           <!-- date-picker -->
-          <template v-else-if="item.type === 'date-picker'">
+          <template v-else-if="item.datepicker">
             <el-date-picker
               v-if="isDateRange(item)"
               v-model="state.range[item.prop]"
@@ -65,7 +65,7 @@
               :placeholder="translate(item, 'select')"
               :start-placeholder="translate(item)"
               :end-placeholder="translate(item)"
-              :type="item.searchDatepickerType || item.datepickerType"
+              :type="item.searchDatepicker || item.datepicker"
               :value-format="item.valueFormat"
               @change="onDateRangeChange(item)">
             </el-date-picker>
@@ -75,7 +75,7 @@
               :clearable="item.clearable !== false"
               :disabled-date="item.disabledDate"
               :placeholder="translate(item, 'select')"
-              :type="item.searchDatepickerType || item.datepickerType"
+              :type="item.searchDatepicker || item.datepicker"
               :value-format="item.valueFormat"
               @change="emits('query')">
             </el-date-picker>
@@ -98,11 +98,11 @@
           </div>
           <!-- custom-picker -->
           <dynamic-picker
-            v-if="item.type === 'dynamic-picker'"
+            v-if="item.dynamicPicker"
             v-model:id="vModel.query[item.dynamicId || item.prop]"
             v-model:text="vModel.pickerText[getDynamicText(item)]"
             :title="translate(item)"
-            :type="item.dynamicPicker!"
+            :type="item.dynamicPicker"
             @change="emits('query')">
           </dynamic-picker>
         </el-form-item>
@@ -254,7 +254,7 @@ function containerAuto() {
 }
 // 是否为date range
 function isDateRange(column: Column) {
-  const dateType = column.searchDatepickerType || column.datepickerType
+  const dateType = column.searchDatepicker || column.datepicker
   return formUtils.isDateRange(dateType)
 }
 // range field

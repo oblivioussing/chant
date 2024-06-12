@@ -58,8 +58,8 @@ import { useI18n } from 'vue-i18n'
 import { shiki, useLister } from 'chant'
 import { columns, dict, type Model } from './share'
 import MixForm from './components/MixForm.vue'
-import RouterTree from '@app-base/components/RouterTree.vue'
 import RouterTransfer from './components/RouterTransfer.vue'
+import RouterTree from './components/RouterTree.vue'
 
 // use
 const { t: gt } = useI18n({ useScope: 'global' })

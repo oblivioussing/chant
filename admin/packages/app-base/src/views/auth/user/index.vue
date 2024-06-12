@@ -1,21 +1,16 @@
 <template>
   <!-- search -->
-  <chant-table-search
-    v-model="state"
-    :dict="dict"
-    :lang="lang"
-    @query="getList">
+  <chant-table-search v-model="state" :dict="dict" @query="getList">
   </chant-table-search>
   <!-- operate -->
   <chant-table-operate
     v-model="state"
-    :lang="lang"
     :options="['add', 'delete']"
     @add="lister.add(state)"
     @delete="onDeletes">
   </chant-table-operate>
   <!-- table -->
-  <chant-table v-model="state" :dict="dict" :lang="lang">
+  <chant-table v-model="state" :dict="dict">
     <!-- 操作 -->
     <chant-column-operate
       :options="['edit', 'delete']"
@@ -44,7 +39,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useLister } from 'chant'
-import { columns, dict, lang } from './share'
+import { columns, dict } from './share'
 import MixForm from './components/MixForm.vue'
 
 // use

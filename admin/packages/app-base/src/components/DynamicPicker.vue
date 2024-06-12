@@ -8,11 +8,14 @@
     :title="props.title"
     @change="emits('change', $event)">
   </user-picker>
+  <!-- org-tree -->
+  <org-tree-select v-model="id"></org-tree-select>
 </template>
 
 <script setup lang="ts">
 import { type DynamicPicker } from 'chant'
 import UserPicker from './UserPicker.vue'
+import OrgTreeSelect from './OrgTreeSelect.vue'
 
 // props
 const props = defineProps<{

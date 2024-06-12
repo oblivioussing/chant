@@ -88,7 +88,7 @@
             }"
             truncated
             @click="item.link && onLink(row)">
-            {{ valueFmt(item, row[item.prop]) }}
+            {{ valueFmt(item, row[item.propList || item.prop]) }}
           </el-text>
           <!-- copy -->
           <el-icon
@@ -325,7 +325,7 @@ function onRowClick(row: any) {
 // 单元格双击
 function onRowDbClick(row: any) {
   if (vModel.value && props.dbEdit) {
-    lister.edit(vModel.value, row)
+    lister.edit(vModel.value, { id: row.id })
   }
 }
 // 选择项发生变化时

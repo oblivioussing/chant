@@ -6,13 +6,12 @@
     api-path="user/list"
     :columns="columns()"
     :dict="dict"
-    :lang="lang"
     @change="onChange">
   </chant-base-picker>
 </template>
 
 <script setup lang="ts">
-import { columns, dict, lang } from '@app-base/views/auth/user/share'
+import { columns, dict } from '@app-base/views/auth/user/share'
 
 // emits
 const emits = defineEmits(['change'])

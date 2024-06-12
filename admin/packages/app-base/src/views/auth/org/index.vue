@@ -40,7 +40,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { useLister } from 'chant'
 import { columns, dict, type Model } from './share'
 import MixForm from './components/MixForm.vue'
-import OrgTree from '@app-base/components/OrgTree.vue'
+import OrgTree from './components/OrgTree.vue'
 
 // use
 const lister = useLister()

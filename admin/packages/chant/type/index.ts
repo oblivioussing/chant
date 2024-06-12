@@ -1,11 +1,8 @@
 import type { DatePickType, FormItemRule, TagProps } from 'element-plus'
 
-export type DynamicPicker = 'user'
+export type DynamicPicker = 'user' | 'org-tree'
 
 export type ElementType =
-  | 'dynamic-picker'
-  | 'date-picker'
-  | 'input'
   | 'input-number'
   | 'input-number-range'
   | 'radio'
@@ -24,8 +21,8 @@ export type ColumnPage = PageType | 'list'
 type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
-  datepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
-  disabledDate?: (data: Date) => boolean // 日期是否禁用,仅type为date-picker时有效
+  datepicker?: DatePickType // date-picker显示类型
+  disabledDate?: (data: Date) => boolean // 日期是否禁用,仅date-picker时有效
   dynamicId?: string // 动态id字段
   dynamicText?: string // 动态text字段
   dynamicStart?: string // 范围选择start字段
@@ -41,7 +38,7 @@ type BaseColumn = {
   selectMultiple?: boolean // select是否多选,仅type为select时有效
   slot?: SlotType[] // slot
   type?: ElementType // 元素类型
-  valueFormat?: string // 绑定值的格式,仅type为date-picker时有效
+  valueFormat?: string // 绑定值的格式,仅date-picker时有效
 }
 
 type SlotType = 'form' | 'form-item' | 'list' | 'search'
@@ -77,8 +74,9 @@ export type ListColumn = {
   format?: string // 格式化
   link?: boolean // 超链
   onlySearch?: boolean // 只作为搜索条件
+  propList?: string // 列表显示的字段
   search?: boolean // 是否为搜索条件
-  searchDatepickerType?: DatePickType // date-picker显示类型,仅type为date-picker时有效
+  searchDatepicker?: DatePickType // date-picker显示类型,仅date-picker时有效
   searchRequired?: boolean // 搜索条件是否为必填
   sortable?: boolean // 对应列是否可以排序
   tagType?: Record<string, TagProps['type']> // tag类型

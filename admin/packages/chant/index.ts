@@ -1,6 +1,9 @@
 import { type App } from 'vue'
 import components from './components/index'
 
+// shiki 拦截器
+import './api/interceptor'
+
 function install(app: App<Element>) {
   components(app)
 }

@@ -3,7 +3,6 @@
     v-model="state"
     :columns="columns()"
     :dict="dict"
-    :lang="lang"
     @instance="former.bindInstance">
   </chant-form>
   <chant-form-footer
@@ -17,7 +16,7 @@
 import { reactive } from 'vue'
 import { useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
-import { columns, dict, lang } from '../share'
+import { columns, dict } from '../share'
 
 // props
 const props = defineProps<FormProps>()
@@ -27,7 +26,8 @@ const emits = defineEmits<FormEmits>()
 const former = useFormer(props, { columns: columns() })
 // state
 let state = reactive({
-  ...former.state
+  ...former.state,
+  orgTree: []
 })
 // create
 former.created(async (status) => {

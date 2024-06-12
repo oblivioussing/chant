@@ -1,5 +1,7 @@
-import { shiki, useUserStore, type RequestConfig, type Result } from '@chant'
 import router from '@app-base/router'
+import { useUserStore } from '../store'
+import { type RequestConfig } from './ryougi'
+import shiki, { type Result } from './shiki'
 
 // 请求拦截器
 shiki.interceptors.request.use((config: RequestConfig) => {

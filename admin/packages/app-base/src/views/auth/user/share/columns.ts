@@ -3,35 +3,48 @@ import { AcceptEnum, type Column } from 'chant'
 export default () => {
   return [
     {
-      prop: 'loginName', // 登录账号
+      prop: 'loginName',
+      label: '登录账号',
       disabledInPage: 'edit',
-      link: true,
       required: true,
       search: true
     },
     {
-      prop: 'password', // 密码
-      hideInPages: ['list', 'edit'],
+      prop: 'password',
+      label: '密码',
+      hideInPages: ['list', 'edit', 'detail'],
       required: true
     },
     {
-      prop: 'name', // 姓名
+      prop: 'name',
+      label: '姓名',
       required: true,
       search: true
     },
     {
-      prop: 'phone', // 手机号
+      prop: 'phone',
+      label: '手机号',
       copy: true,
       required: true,
       search: true
     },
     {
-      prop: 'gender', // 性别
+      prop: 'orgId',
+      propList: 'orgName',
+      label: '部门',
+      dynamicPicker: 'org-tree',
+      required: true,
+      search: true
+    },
+    {
+      prop: 'gender',
+      label: '性别',
       search: true,
       type: 'select'
     },
     {
-      prop: 'status', // 状态
+      prop: 'status',
+      label: '状态',
       hideInPages: ['add'],
       search: true,
       tagType: {
@@ -41,21 +54,13 @@ export default () => {
       type: 'select'
     },
     {
-      prop: 'avatar', // 头像
+      prop: 'avatar',
+      label: '头像',
       hideInPages: ['list'],
       type: 'upload',
       accept: AcceptEnum.Image,
       fileBizType: 'avatar',
       uploadType: 'single-image'
-    },
-    {
-      prop: 'photoList', // 照片列表
-      hideInPages: ['list'],
-      type: 'upload',
-      fileBizType: 'avatar',
-      limit: 5,
-      multiple: true,
-      uploadType: 'file-list'
     }
   ] as Column[]
 }

@@ -19,8 +19,7 @@ export default () => {
       prop: 'date',
       label: '日期',
       search: true,
-      type: 'date-picker',
-      datepickerType: 'month',
+      datepicker: 'month',
       valueFormat: 'YYYY-MM'
     }
   ] as Column[]

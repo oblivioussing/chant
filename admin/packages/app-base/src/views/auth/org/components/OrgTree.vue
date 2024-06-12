@@ -4,7 +4,7 @@
       <el-input
         v-model="state.query.name"
         clearable
-        placeholder="路由名称"
+        placeholder="组织名称"
         @keyup.enter="getList">
       </el-input>
     </div>
@@ -24,12 +24,7 @@
             <div>{{ data.name }}</div>
             <div class="button-box">
               <!-- 新增 -->
-              <el-button
-                v-if="showAdd(data)"
-                :icon="Plus"
-                link
-                type="primary"
-                @click="onAdd(data)">
+              <el-button :icon="Plus" link type="primary" @click="onAdd(data)">
               </el-button>
               <!-- 编辑 -->
               <el-button
@@ -54,7 +49,7 @@
         type="primary"
         class="gravity-center"
         @click="onRoot">
-        初始化
+        新增
       </el-button>
     </div>
   </div>
@@ -70,12 +65,13 @@
 </template>
 
 <script setup lang="ts">
+import { type TreeInstance } from 'element-plus'
 import { onActivated, reactive, ref } from 'vue'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import { useScroll } from '@vueuse/core'
-import { shiki, useLister } from 'chant'
-import { type Model } from '@app-base/views/auth/router/share'
-import MixForm from '@app-base/views/auth/router/components/MixForm.vue'
+import { element, shiki, useLister } from 'chant'
+import { type Model } from '../share'
+import MixForm from './MixForm.vue'
 
 // defineExpose
 defineExpose({
@@ -85,7 +81,7 @@ defineExpose({
 const emits = defineEmits(['node-click'])
 // ref
 const scrollRef = ref<HTMLElement | null>()
-const treeRef = ref()
+const treeRef = ref<TreeInstance>()
 // use
 const lister = useLister({ method: getList })
 const { y } = useScroll(scrollRef)
@@ -105,7 +101,7 @@ onActivated(() => {
 })
 // 获取列表
 async function getList() {
-  await lister.getData('router/tree', state, { limit: false })
+  await lister.getData('org/tree', state, { limit: false })
   const list = state.list
   if (list.length) {
     const row = state.node.id ? state.node : list[0]
@@ -115,19 +111,19 @@ async function getList() {
 }
 // 初始化
 async function onRoot() {
-  state.loading = true
-  const { code } = await shiki.post('router/root', {})
-  state.loading = false
-  if (code === '1') {
-    getList()
-  }
-}
-// 是否显示新增按钮
-function showAdd(row: Model) {
-  if (row.level === 2) {
-    return row.threeMenu
-  }
-  return row.level !== 3
+  element.prompt(
+    async (instance, done) => {
+      const name = instance.inputValue
+      instance.confirmButtonLoading = true
+      const { code } = await shiki.post('org/root', { name })
+      instance.confirmButtonLoading = false
+      if (code === '1') {
+        done()
+        getList()
+      }
+    },
+    { title: '组织名称', required: true }
+  )
 }
 // 节点点击
 function onNode(row: Model) {
@@ -143,7 +139,7 @@ function onAdd(row: Model) {
 // 删除
 function onDelete(row: Model) {
   state.node = {} as Model
-  lister.remove('router/delete', state, { id: row.id })
+  lister.remove('org/delete', state, { id: row.id })
 }
 </script>
 

@@ -40,7 +40,7 @@
             </slot>
             <!-- input -->
             <el-input
-              v-else-if="!item.type || item.type === 'input'"
+              v-else-if="!item.type && !item.dynamicPicker && !item.datepicker"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
@@ -76,9 +76,9 @@
               :value-format="item.valueFormat || 'HH:mm:ss'">
             </el-time-picker>
             <!-- date-picker -->
-            <template v-else-if="item.type === 'date-picker'">
+            <template v-else-if="item.datepicker">
               <el-date-picker
-                v-if="formUtils.isDateRange(item.datepickerType)"
+                v-if="formUtils.isDateRange(item.datepicker)"
                 v-model="state.range[item.prop]"
                 :clearable="item.clearable !== false"
                 :disabled="isDisabled(item)"
@@ -86,7 +86,7 @@
                 :placeholder="translate(item, 'select')"
                 :start-placeholder="translate(item)"
                 :end-placeholder="translate(item)"
-                :type="item.datepickerType"
+                :type="item.datepicker"
                 :value-format="item.valueFormat"
                 @change="onDateRangeChange(item)">
               </el-date-picker>
@@ -97,7 +97,7 @@
                 :disabled="isDisabled(item)"
                 :disabled-date="item.disabledDate"
                 :placeholder="translate(item, 'select')"
-                :type="item.datepickerType"
+                :type="item.datepicker"
                 :value-format="item.valueFormat">
               </el-date-picker>
             </template>
@@ -153,12 +153,12 @@
             </chant-radio>
             <!-- custom-picker -->
             <dynamic-picker
-              v-if="item.type === 'dynamic-picker'"
+              v-if="item.dynamicPicker"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
               v-model:text="vModel!.form[getDynamicText(item)]"
               :disabled="isDisabled(item)"
               :title="translate(item)"
-              :type="item.dynamicPicker!"
+              :type="item.dynamicPicker"
               @change="item.change && onChange(item, $event)">
             </dynamic-picker>
             <!-- tips -->
@@ -258,7 +258,7 @@ function init() {
       vModel.value!.form[item.prop] = item.default
     }
     // date range
-    if (formUtils.isDateRange(item.datepickerType)) {
+    if (formUtils.isDateRange(item.datepicker)) {
       const start = rangeField(item, 'start')
       // watch
       watch(
