@@ -191,7 +191,7 @@ const list = computed(() => {
 })
 // watch
 watch(
-  () => vModel.value?.allFlag,
+  () => vModel.value?.all,
   () => {
     // 全选按钮禁用状态
     allCheckedStatus()
@@ -221,14 +221,14 @@ function allCheckedStatus() {
   const inputEl = spanEl?.querySelector(
     '.el-checkbox__original'
   ) as InputHTMLAttributes
-  if (vModel.value?.allFlag === 1) {
+  if (vModel.value?.all === 1) {
     labelEl?.classList.add('is-disabled')
     spanEl?.classList.add('is-disabled')
   } else {
     labelEl?.classList.remove('is-disabled')
     spanEl?.classList.remove('is-disabled')
   }
-  inputEl.disabled = !!vModel.value?.allFlag
+  inputEl.disabled = !!vModel.value?.all
 }
 // 初始化拖拽
 function initSortable() {
@@ -308,7 +308,7 @@ function dictFmt(prop: string, value: any) {
 }
 // CheckBox是否可勾选
 function selectable() {
-  return vModel.value?.allFlag === 0
+  return vModel.value?.all === 0
 }
 // 链接
 function onLink(row: any) {

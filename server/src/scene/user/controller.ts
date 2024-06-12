@@ -1,9 +1,10 @@
 import { Body, Controller, Headers, Get, Post, Query } from '@nestjs/common'
+import type { User } from '@prisma/client'
 import { Auth, QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { getUidByToken } from '@/utils/base'
 import { IdVali } from '@/validator'
-import { userEntity, type User, type UserDto } from './model'
+import { userEntity, type UserDto } from './model'
 import { UserService } from './service'
 import { LoginVali, AddVali } from './validator'
 

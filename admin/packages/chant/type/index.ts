@@ -117,12 +117,12 @@ export type FormEmits = {
 
 export type ListParams = {
   ids?: string[]
-  allFlag?: number
+  all?: number
   searchForm?: Record<string, any>
 }
 
 export type ListState = {
-  allFlag?: 0 | 1 // 全选
+  all?: 0 | 1 // 全选
   columns: ListColumn[] // 列表字段
   copyFlag?: 0 | 1 // 复制flag
   mixForm?: boolean // mix-form是否显示

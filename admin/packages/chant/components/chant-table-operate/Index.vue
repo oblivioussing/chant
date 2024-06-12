@@ -124,8 +124,8 @@ const formTypeIcon = computed(() => {
   return map[vModel.value.formType]
 })
 const isSelected = computed(() => {
-  const { selections, allFlag } = vModel.value
-  return selections.length > 0 || allFlag === 1
+  const { selections, all } = vModel.value
+  return selections.length > 0 || all === 1
 })
 // onMounted
 onMounted(() => {
@@ -161,7 +161,7 @@ function show(type: Option) {
 }
 // checkbox change
 function onChange(val: any) {
-  vModel.value.allFlag = val ? 1 : 0
+  vModel.value.all = val ? 1 : 0
 }
 // 表单操作方式
 function onFormType() {

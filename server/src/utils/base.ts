@@ -42,7 +42,7 @@ export function isNotEmpty(value: any) {
 }
 // 批量操作查询条件
 export function manyWhere<T>(params: Many<T>, entity: object) {
-  if (params.allFlag === 1) {
+  if (params.all === 1) {
     const search = params.search || {}
     for (const item in search) {
       if (!search[item]) {

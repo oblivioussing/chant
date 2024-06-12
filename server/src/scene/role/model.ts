@@ -1,17 +1,14 @@
-import { type Role as RoleOrig } from '@prisma/client'
-
-type Extend = {
-  isDelete: 0 | 1
-}
+import { type Role } from '@prisma/client'
 
 export const roleEntity = {
   id: '', // id
   level: 0, // 等级
   name: '', // 名称
   parentId: '', // 父节点id
+  routerIds: [], // 路由ids
   sequence: 0, // 序号
   isDelete: 0 // 删除 0-否 1-是
-} as RoleOrig & Extend
+} as Role
 
 export const roleDto = {
   ...roleEntity
@@ -20,8 +17,6 @@ export const roleDto = {
 export const roleVo = {
   ...roleEntity
 }
-
-export type Role = typeof roleEntity
 
 export type RoleDto = typeof roleDto
 
@@ -36,6 +31,7 @@ export type MenuItem = {
   name: string
   checked: 0 | 1
 }
+
 export type RouterItem = {
   id: string
   first: MenuItem

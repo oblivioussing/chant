@@ -1,6 +1,7 @@
+import { type Org } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
-import { orgEntity, type Org, type OrgTree } from './model'
+import { orgEntity, type OrgTree } from './model'
 import queryRaw from './query-raw'
 
 export class OrgService extends BaseService {

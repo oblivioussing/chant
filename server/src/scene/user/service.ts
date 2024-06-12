@@ -1,12 +1,13 @@
 import { compare, hash } from 'bcrypt'
-import type { Prisma, File } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
 import { routerEntity } from '../router/model'
-import { userEntity, type User } from './model'
+import { StatusEnum } from './enum'
+import { userEntity } from './model'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -34,13 +35,11 @@ export class UserService extends BaseService {
       return result
     }
     const data = base.toEntity(user, userEntity, true)
-    const photoList = data.photoList as unknown as File[]
-    data.photoList = photoList.map((item) => item.id)
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
     data.password = await hash(user.password, 10)
-    data.status = '1'
+    data.status = StatusEnum.Normal
     const row = await prisma.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
@@ -53,8 +52,6 @@ export class UserService extends BaseService {
   async update(user: User) {
     const result = new Result<User>()
     const data = base.toEntity(user, userEntity)
-    const photoList = data.photoList as unknown as File[]
-    data.photoList = photoList.map((item) => item.id)
     data.updateTime = new Date()
     const row = await prisma.user.update({
       data,
@@ -95,8 +92,6 @@ export class UserService extends BaseService {
     const result = new Result<User>()
     const row = await prisma.user.findUnique({ where: { id } })
     if (row) {
-      const fileIds = row.photoList as string[]
-      row.photoList = await this.getFiles(fileIds)
       result.data = base.toEntity(row, userEntity)
       result.success({ msg: '用户信息查询成功' })
     } else {
@@ -113,7 +108,7 @@ export class UserService extends BaseService {
     base.toContains(where, ['name', 'phone'])
     const rows = await prisma.user.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.toSelect(userEntity, ['photoList']),
+      select: base.toSelect(userEntity),
       where
     })
     const total = await prisma.user.count({ where })

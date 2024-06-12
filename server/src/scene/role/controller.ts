@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import type { Role } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { roleEntity, type Role } from './model'
+import { roleEntity } from './model'
 import { RoleService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -25,6 +26,12 @@ export class RoleController {
   @Post('update')
   async update(@Body() role: UpdateVali) {
     const result = await this.roleService.update(role as Role)
+    return result
+  }
+  // 更新路由
+  @Post('updateRouter')
+  async updateRouter(@Body() role: IdVali) {
+    const result = await this.roleService.updateRouter(role as Role)
     return result
   }
   // 删除

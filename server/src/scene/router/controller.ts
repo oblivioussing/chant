@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { type Router } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { routerEntity, type Router } from './model'
+import { routerEntity } from './model'
 import { RouterService } from './service'
 import { AddVali, TransferVali, UpdateVali } from './validator'
 

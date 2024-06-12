@@ -10,7 +10,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   const { t: gt } = useI18n({ useScope: 'global' })
   const route = useRoute()
   const state = {
-    allFlag: 0 as 0 | 1,
+    all: 0 as 0 | 1,
     columns: [],
     copyFlag: 0 as 0 | 1,
     extra: {} as any,
@@ -40,7 +40,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   ) {
     const confirmTip = config.confirmTip
     const params = getListParams(state)
-    const count = params.allFlag ? state.total : state.selections.length
+    const count = params.all ? state.total : state.selections.length
     const title = gt('tips.totalRecords', [count])
     operate(path, state, { confirmTip, params, title })
   }
@@ -144,13 +144,13 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   function getListParams(state: State) {
     return {
       ids: state.selections.map((item) => item.id),
-      allFlag: state.allFlag,
+      all: state.all,
       search: getQuery(state)
     }
   }
   // 是否选中数据
   function isSelected(state: State) {
-    return state.selections.length > 0 || state.allFlag === 1
+    return state.selections.length > 0 || state.all === 1
   }
   // 页面跳转
   function jump(to: string, query?: any) {

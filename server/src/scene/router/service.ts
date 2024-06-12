@@ -1,6 +1,8 @@
+import { type Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
-import { routerEntity, type Router, type RouterTree } from './model'
+import { TypeEnum } from './enum'
+import { routerEntity, type RouterTree } from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
@@ -95,7 +97,7 @@ export class RouterService extends BaseService {
       }
     }
     // 类型
-    if (data.type === '5') {
+    if (data.type === TypeEnum.Fun) {
       data.path = ''
     }
     // path

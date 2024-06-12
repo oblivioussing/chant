@@ -1,12 +1,13 @@
+import type { Role, Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
 import {
   roleEntity,
   type MenuItem,
-  type Role,
   type RoleTree,
   type RouterItem
 } from './model'
+import { routerEntity } from '../router/model'
 import queryRaw from './query-raw'
 
 export class RoleService extends BaseService {
@@ -22,7 +23,6 @@ export class RoleService extends BaseService {
     data.id = base.createId()
     data.createId = this.getUid()
     data.createTime = new Date()
-    console.log(data)
     // create
     const row = await prisma.role.create({ data })
     if (row) {
@@ -69,6 +69,23 @@ export class RoleService extends BaseService {
     }
     return result
   }
+  // 更新路由
+  async updateRouter(role: Role) {
+    const result = new Result<Role>()
+    const data = base.toEntity(role, roleEntity) as Role
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
+    const row = await prisma.role.update({
+      data,
+      where: { id: role.id }
+    })
+    if (row) {
+      result.success({ msg: '角色路由更新成功' })
+    } else {
+      result.fail('角色路由更新失败')
+    }
+    return result
+  }
   // 删除
   async delete(id: string) {
     const result = new Result()
@@ -107,27 +124,27 @@ export class RoleService extends BaseService {
   // 路由列表
   async router(id: string) {
     const result = new Result()
+    const role = await prisma.role.findUnique({
+      select: { routerIds: true },
+      where: { id }
+    })
     const rows = await prisma.router.findMany({
-      select: {
-        id: true,
-        level: true,
-        name: true,
-        parentId: true,
-        threeMenu: true
-      },
+      select: base.toSelect(routerEntity),
       where: { isDelete: 0, level: { gt: 0 } },
       orderBy: [{ level: 'asc' }, { sequence: 'asc' }]
     })
+    // 角色的路由ids
+    const routerIds = role.routerIds as string[]
     // 一级菜单列表
-    const firstList = [] as typeof rows
+    const firstList = [] as Router[]
     // 二级菜单map
     const secondMap = {} as any
     // 三级菜单map
     const thirdMap = {} as any
     // 子菜单map
-    const childrenMap = {} as Record<string, typeof rows>
+    const childrenMap = {} as Record<string, Router[]>
     // 给map赋值
-    rows.forEach((item) => {
+    rows.forEach((item: Router) => {
       const { level, threeMenu } = item
       if (level === 1) {
         firstList.push(item)
@@ -148,12 +165,12 @@ export class RoleService extends BaseService {
     // list
     const list = [] as RouterItem[]
     firstList.forEach((item) => {
-      const first = this.toMenuItem(item)
+      const first = this.toMenuItem(item, routerIds)
       let childrens = childrenMap[item.id]
       // 添加功能
-      const addFuns = (childrens: typeof rows, row: RouterItem) => {
+      const addFuns = (childrens: Router[], row: RouterItem) => {
         if (childrens) {
-          row.funs = childrens.map((item) => this.toMenuItem(item))
+          row.funs = childrens.map((item) => this.toMenuItem(item, routerIds))
           list.push(row)
         } else {
           list.push(row)
@@ -161,13 +178,13 @@ export class RoleService extends BaseService {
       }
       // 二级菜单
       childrens.forEach((item1) => {
-        const second = this.toMenuItem(item1)
+        const second = this.toMenuItem(item1, routerIds)
         const row = { first, second } as RouterItem
         childrens = childrenMap[second.id]
         if (item1.threeMenu === 1) {
           // 三级菜单
           childrens.forEach((item2) => {
-            const third = this.toMenuItem(item2)
+            const third = this.toMenuItem(item2, routerIds)
             const row = { first, second, third } as RouterItem
             childrens = childrenMap[third.id]
             // 添加功能
@@ -183,8 +200,12 @@ export class RoleService extends BaseService {
     return result
   }
   // 转化为menuItem对象
-  toMenuItem(data: any): MenuItem {
-    return { id: data.id, name: data.name, checked: 0 }
+  private toMenuItem(data: Router, routerIds: string[]): MenuItem {
+    return {
+      id: data.id,
+      name: data.name,
+      checked: routerIds?.includes(data.id) ? 1 : 0
+    }
   }
   // 树
   async tree(role: Role) {

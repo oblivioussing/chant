@@ -1,8 +1,4 @@
-import { type Org as OrgOrig } from '@prisma/client'
-
-type Extend = {
-  isDelete: 0 | 1
-}
+import { type Org } from '@prisma/client'
 
 export const orgEntity = {
   id: '', // id
@@ -11,7 +7,7 @@ export const orgEntity = {
   parentId: '', // 父节点id
   sequence: 0, // 序号
   isDelete: 0 // 删除 0-否 1-是
-} as OrgOrig & Extend
+} as Org
 
 export const orgDto = {
   ...orgEntity
@@ -20,8 +16,6 @@ export const orgDto = {
 export const orgVo = {
   ...orgEntity
 }
-
-export type Org = typeof orgEntity
 
 export type OrgDto = typeof orgDto
 

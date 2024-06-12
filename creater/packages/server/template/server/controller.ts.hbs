@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import type { {{upper module}} } from '@prisma/client'
 import { QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { IdVali } from '@/validator'
-import { {{module}}Entity, type {{upper module}} } from './model'
+import { {{module}}Entity } from './model'
 import { {{upper module}}Service } from './service'
 import { AddVali, UpdateVali } from './validator'
 

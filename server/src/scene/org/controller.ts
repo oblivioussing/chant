@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { type Org } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { orgEntity, type Org } from './model'
+import { orgEntity } from './model'
 import { OrgService } from './service'
 import { AddVali, RootVali, UpdateVali } from './validator'
 
