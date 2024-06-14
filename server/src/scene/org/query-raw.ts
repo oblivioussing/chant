@@ -43,7 +43,7 @@ export default {
 			    SELECT id 
           FROM 
           org 
-          WHERE name LIKE ${like(org?.name)}
+          WHERE name LIKE ${like(org.name)}
           ORDER By level ASC, sequence ASC 
           LIMIT 1
 		    )

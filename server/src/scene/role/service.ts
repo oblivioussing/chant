@@ -38,7 +38,7 @@ export class RoleService extends BaseService {
     const data = base.toEntity(role, roleEntity, true)
     data.createId = this.getUid()
     data.createTime = new Date()
-    data.id = base.createUid()
+    data.id = base.createId()
     // 获取序号
     const count = await prisma.role.count({
       where: { level: data.level, parentId: role.id }

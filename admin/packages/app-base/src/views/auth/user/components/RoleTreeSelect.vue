@@ -1,14 +1,17 @@
 <template>
   <el-tree-select
     v-model="vModel"
+    check-on-click-node
     check-strictly
     clearable
     :data="state.data"
     default-expand-all
     filterable
+    multiple
     node-key="id"
-    placeholder="请选择部门"
-    :props="{ label: 'name' }">
+    placeholder="请选择角色"
+    :props="{ label: 'name' }"
+    show-checkbox>
   </el-tree-select>
 </template>
 
@@ -29,7 +32,7 @@ onMounted(() => {
 })
 // 获取树列表
 async function getList() {
-  const { data } = await shiki.get('org/tree')
+  const { data } = await shiki.get('role/tree')
   state.data = data
 }
 </script>

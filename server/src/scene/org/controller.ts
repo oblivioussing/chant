@@ -48,8 +48,8 @@ export class OrgController {
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(orgEntity) router: Org) {
-    const result = await this.orgService.tree(router)
+  async tree(@QueryModel(orgEntity) org: Org) {
+    const result = await this.orgService.tree(org)
     return result
   }
 }

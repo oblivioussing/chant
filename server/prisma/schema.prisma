@@ -18,37 +18,38 @@ model File {
   @@map("file")
 }
 
-model Trade {
+model Org {
   id         String    @id @db.VarChar(20)
-  amount     Decimal   @db.Decimal(10, 2)
-  belongId   String    @default("") @map("belong_id") @db.VarChar(20)
-  commission Float     @db.Float
-  createId   String    @map("create_id") @db.VarChar(20)
-  createTime DateTime  @map("create_time") @db.DateTime(0)
-  remark     String    @default("") @db.VarChar(255)
-  status     String    @default("") @db.VarChar(2)
-  updateId   String    @default("") @map("update_id") @db.VarChar(20)
-  updateTime DateTime? @map("update_time") @db.DateTime(0)
-  userId     String    @map("user_id") @db.VarChar(20)
-
-  @@map("trade")
-}
-
-model User {
-  id         String    @id @db.VarChar(20)
-  avatar     String    @default("") @db.VarChar(200)
-  gender     String    @default("") @db.VarChar(1)
-  loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
-  name       String    @default("") @db.VarChar(50)
-  password   String    @default("") @db.VarChar(100)
-  phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
-  status     String    @default("") @db.VarChar(2)
+  level      Int
+  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
+  parentId   String    @map("parent_id") @db.VarChar(20)
+  sequence   Int
+  isDelete   Int       @map("is_delete")
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  User       User[]
 
-  @@map("user")
+  @@index([isDelete], map: "index")
+  @@map("org")
+}
+
+model Role {
+  id         String    @id @db.VarChar(20)
+  level      Int
+  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
+  parentId   String    @map("parent_id") @db.VarChar(20)
+  routerIds  Json?     @map("router_ids")
+  sequence   Int
+  isDelete   Int       @map("is_delete")
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  updateId   String?   @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
+  User       User[]
+
+  @@map("role")
 }
 
 model Router {
@@ -73,34 +74,41 @@ model Router {
   @@map("router")
 }
 
-model Org {
+model Trade {
   id         String    @id @db.VarChar(20)
-  level      Int
-  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
-  parentId   String    @map("parent_id") @db.VarChar(20)
-  sequence   Int
-  isDelete   Int       @map("is_delete")
+  amount     Decimal   @db.Decimal(10, 2)
+  belongId   String    @default("") @map("belong_id") @db.VarChar(20)
+  commission Float     @db.Float
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
-  updateId   String?   @map("update_id") @db.VarChar(20)
+  remark     String    @default("") @db.VarChar(255)
+  status     String    @default("") @db.VarChar(2)
+  updateId   String    @default("") @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  userId     String    @map("user_id") @db.VarChar(20)
 
-  @@index([isDelete], map: "index")
-  @@map("org")
+  @@map("trade")
 }
 
-model Role {
+model User {
   id         String    @id @db.VarChar(20)
-  level      Int
-  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
-  parentId   String    @map("parent_id") @db.VarChar(20)
-  routerIds  Json?     @map("router_ids")
-  sequence   Int
-  isDelete   Int       @map("is_delete")
+  avatar     String    @default("") @db.VarChar(200)
+  gender     String    @default("") @db.VarChar(1)
+  loginName  String    @unique(map: "login_name_UNIQUE") @default("") @map("login_name") @db.VarChar(50)
+  name       String    @default("") @db.VarChar(50)
+  orgId      String    @map("org_id") @db.VarChar(20)
+  password   String    @default("") @db.VarChar(100)
+  phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
+  roleId     String    @map("role_id") @db.VarChar(20)
+  roleIds    Json      @map("role_ids")
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  Org        Org       @relation(fields: [orgId], references: [id])
+  Role       Role      @relation(fields: [roleId], references: [id])
 
-  @@map("role")
+  @@index([orgId])
+  @@index([roleId])
+  @@map("user")
 }

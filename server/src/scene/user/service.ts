@@ -6,8 +6,8 @@ import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
 import { routerEntity } from '../router/model'
-import { StatusEnum } from './enum'
 import { userEntity } from './model'
+import queryRaw from './query-raw'
 
 export class UserService extends BaseService {
   @Inject(RedisService)
@@ -39,7 +39,7 @@ export class UserService extends BaseService {
     data.createId = this.getUid()
     data.createTime = new Date()
     data.password = await hash(user.password, 10)
-    data.status = StatusEnum.Normal
+    data.roleId = data.roleIds[0]
     const row = await prisma.user.create({ data })
     if (row) {
       result.success({ msg: '用户新增成功' })
@@ -105,12 +105,20 @@ export class UserService extends BaseService {
     const result = new Result<typeof pageData>()
     const where = user as Prisma.UserWhereInput
     // 模糊查询
-    base.toContains(where, ['name', 'phone'])
-    const rows = await prisma.user.findMany({
-      ...base.pageHelper(page, 'desc'),
-      select: base.toSelect(userEntity),
-      where
-    })
+    base.toContains(where, ['loginName', 'name', 'phone'])
+    const rows = await queryRaw.getList(user)
+    // const rows = await prisma.user.findMany({
+    //   ...base.pageHelper(page, 'desc'),
+    //   select: {
+    //     ...base.toSelect(userEntity),
+    //     Org: {
+    //       select: {
+    //         name: true
+    //       }
+    //     }
+    //   },
+    //   where
+    // })
     const total = await prisma.user.count({ where })
     pageData.list = rows as User[]
     pageData.total = total

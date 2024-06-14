@@ -8,9 +8,9 @@ export class BonusService extends BaseService {
     const result = new Result<BonusVo[]>()
     let rows = await prisma.$queryRaw<Bonus[]>`
       SELECT 
-          user_id AS userId,
-          SUM(CAST(amount * commission AS DECIMAL (10 , 2 ))) AS bonus,
-          DATE_FORMAT(create_time, '%Y-%m') AS date
+        user_id AS userId,
+        SUM(CAST(amount * commission AS DECIMAL (10 , 2 ))) AS bonus,
+        DATE_FORMAT(create_time, '%Y-%m') AS date
       FROM
           chant.trade
       WHERE status = 1 

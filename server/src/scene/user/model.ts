@@ -6,8 +6,10 @@ export const userEntity = {
   gender: '', // 性别
   loginName: '', // 用户名
   name: '', // 姓名
+  orgId: '', // 部门id
   phone: '', // 手机号
-  status: '' // 状态
+  roleId: '', // 角色id
+  roleIds: [] // 角色ids
 } as User
 
 export const userDto = {

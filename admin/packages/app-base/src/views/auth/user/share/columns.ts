@@ -37,20 +37,17 @@ export default () => {
       search: true
     },
     {
+      prop: 'roleIds',
+      propList: 'roleNames',
+      label: '角色',
+      newlineFull: true,
+      required: true,
+      slot: ['form']
+    },
+    {
       prop: 'gender',
       label: '性别',
       search: true,
-      type: 'select'
-    },
-    {
-      prop: 'status',
-      label: '状态',
-      hideInPages: ['add'],
-      search: true,
-      tagType: {
-        1: 'success',
-        2: 'danger'
-      },
       type: 'select'
     },
     {

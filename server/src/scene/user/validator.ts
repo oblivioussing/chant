@@ -1,4 +1,4 @@
-import { IsMobilePhone, IsNotEmpty } from 'class-validator'
+import { ArrayNotEmpty, IsMobilePhone, IsNotEmpty } from 'class-validator'
 
 class Base {
   // 用户名
@@ -7,10 +7,16 @@ class Base {
   // 姓名
   @IsNotEmpty({ message: '姓名不能为空' })
   name: string
+  // 部门
+  @IsNotEmpty({ message: '部门不能为空' })
+  orgId: string
   // 电话号码
   @IsMobilePhone('zh-CN', {}, { message: '手机号码格式不正确' })
   @IsNotEmpty({ message: '电话号码不能为空' })
   phone: string
+  // 角色组
+  @ArrayNotEmpty({ message: '角色组不能为空' })
+  roleIds: string[]
 }
 // 登陆
 export class LoginVali {

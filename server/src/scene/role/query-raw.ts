@@ -7,7 +7,7 @@ function like(val = '') {
 }
 function getSelect(alias?: string) {
   return toSelect(roleEntity, {
-    exclude: ['isDelete'],
+    exclude: ['isDelete', 'routerIds'],
     alias
   })
 }
