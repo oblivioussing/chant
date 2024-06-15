@@ -68,11 +68,15 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
 }
 // 数据添加模糊查询
 export function toContains<T>(data: T, keys: (keyof T)[]) {
+  const obj = {} as any
   for (const item in data) {
     if (keys.includes(item)) {
-      data[item] = { contains: data[item] } as any
+      obj[item] = { contains: data[item] } as any
+    } else {
+      obj[item] = data[item]
     }
   }
+  return obj
 }
 // 数据转实体
 export function toEntity<T>(

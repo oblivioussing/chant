@@ -6,8 +6,8 @@ export const prisma = new PrismaClient()
 export function toSelect<T>(
   entity: T,
   config?: {
-    exclude?: (keyof T)[]
     alias?: string
+    exclude?: (keyof T)[]
   }
 ) {
   const exclude = config?.exclude
@@ -26,4 +26,32 @@ export function toSelect<T>(
     }
   }
   return Prisma.raw(list.join(','))
+}
+// 实体转查询条件
+export function toWhere<T extends Record<string, any>>(
+  entity: T,
+  config?: {
+    alias?: string
+    like?: (keyof T)[]
+  }
+) {
+  const keys = Object.keys(entity)
+  if (!keys.length) {
+    return Prisma.empty
+  }
+  const alias = config?.alias
+  return keys.reduce((acc: any, cur, index) => {
+    let field = cur.replace(/([A-Z])/g, '_$1').toLowerCase()
+    if (alias) {
+      field = `${alias}.${field}`
+    }
+    const column = Prisma.raw(field)
+    let value
+    if (config?.like.includes(cur)) {
+      value = Prisma.sql`${Prisma.raw('LIKE')} '%${entity[cur]}%'`
+    } else {
+      value = Prisma.sql`= ${entity[cur]}`
+    }
+    return Prisma.sql`${acc} ${column} ${value}`
+  }, Prisma.sql`WHERE`)
 }

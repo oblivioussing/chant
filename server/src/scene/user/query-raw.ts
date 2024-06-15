@@ -1,11 +1,17 @@
 import { type User } from '@prisma/client'
-import { prisma, toSelect } from '@/share'
+import { prisma, toSelect, toWhere } from '@/share'
 import { userEntity } from './model'
 
 function getSelect() {
   return toSelect(userEntity, {
-    exclude: ['avatar', 'roleIds'],
-    alias: 'u'
+    alias: 'u',
+    exclude: ['avatar', 'roleIds']
+  })
+}
+function getWhere(user: User) {
+  return toWhere(user, {
+    alias: 'u',
+    like: ['loginName', 'name', 'phone']
   })
 }
 
@@ -23,8 +29,9 @@ export default {
         org o ON u.org_id = o.id
       JOIN 
         JSON_TABLE(u.role_ids, '$[*]' COLUMNS (roleId varchar(20) PATH '$')) AS jt
-      INNER JOIN 
+      JOIN 
         role r ON jt.roleId = r.id COLLATE utf8mb4_unicode_ci
+      ${getWhere(user)}
       GROUP BY 
         u.id, u.name, o.name
       ORDER BY

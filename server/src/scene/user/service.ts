@@ -103,9 +103,6 @@ export class UserService extends BaseService {
   async list(user: User, page: Page) {
     const pageData = new PageData<User>()
     const result = new Result<typeof pageData>()
-    const where = user as Prisma.UserWhereInput
-    // 模糊查询
-    base.toContains(where, ['loginName', 'name', 'phone'])
     const rows = await queryRaw.getList(user)
     // const rows = await prisma.user.findMany({
     //   ...base.pageHelper(page, 'desc'),
@@ -119,6 +116,8 @@ export class UserService extends BaseService {
     //   },
     //   where
     // })
+    // 模糊查询
+    const where = base.toContains(user, ['loginName', 'name', 'phone'])
     const total = await prisma.user.count({ where })
     pageData.list = rows as User[]
     pageData.total = total
