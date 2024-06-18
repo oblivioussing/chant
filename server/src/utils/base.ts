@@ -66,18 +66,6 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
   }
   return config
 }
-// 数据添加模糊查询
-export function toContains<T>(data: T, keys: (keyof T)[]) {
-  const obj = {} as any
-  for (const item in data) {
-    if (keys.includes(item)) {
-      obj[item] = { contains: data[item] } as any
-    } else {
-      obj[item] = data[item]
-    }
-  }
-  return obj
-}
 // 数据转实体
 export function toEntity<T>(
   data: Record<string, any>,
@@ -148,4 +136,21 @@ export function toTree(
     }
   })
   return list
+}
+// 数据转查询条件
+export function toWhere<T>(
+  data: T,
+  config: {
+    like: (keyof T)[]
+  }
+) {
+  const obj = {} as any
+  for (const item in data) {
+    if (config.like.includes(item)) {
+      obj[item] = { contains: data[item] } as any
+    } else {
+      obj[item] = data[item]
+    }
+  }
+  return obj
 }

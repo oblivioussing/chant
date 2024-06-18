@@ -3,11 +3,7 @@
     <router-tree ref="treeRef" @node-click="onNode"></router-tree>
     <div class="column-item flex-1">
       <!-- search -->
-      <chant-table-search
-        v-model="state"
-        :dict="dict"
-        @query="getList"
-        @reset="getList">
+      <chant-table-search v-model="state" :dict="dict" @query="getList">
       </chant-table-search>
       <!-- operate -->
       <chant-table-operate v-model="state" :options="['add']" @add="onAdd">

@@ -1,7 +1,6 @@
 <template>
   <chant-form
     v-model="state"
-    :dict="dict"
     :columns="columns()"
     @instance="former.bindInstance">
   </chant-form>
@@ -16,7 +15,7 @@
 import { reactive } from 'vue'
 import { useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
-import { columns, dict } from '../share'
+import { columns } from '../share'
 
 // props
 const props = defineProps<FormProps>()
@@ -35,11 +34,14 @@ former.created((status) => {
 }, state)
 // 获取详情
 function getDetail() {
-  former.getData('{{module}}/detail', state)
+  former.getData('position/detail', state)
 }
 // 保存
 function onSave() {
-  former.save(`{{module}}/${former.api}`, state)
+  if (props.pageType === 'add') {
+    state.form.orgId = state.selection.orgId
+  }
+  former.save(`position/${former.api}`, state)
 }
 </script>
 

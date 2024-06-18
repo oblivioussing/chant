@@ -29,7 +29,7 @@
       v-if="state.mixForm"
       :copy-flag="state.copyFlag"
       :page-type="state.pageType"
-      :selection="state.selection"
+      :selection="{ ...state.selection, orgId: state.node.id }"
       @close="state.mixForm = false">
     </mix-form>
   </chant-dialog>
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useLister } from 'chant'
-import { columns, dict, type Model } from './share'
+import { columns, dict } from './share'
 import MixForm from './components/MixForm.vue'
 import OrgTree from './components/OrgTree.vue'
 
@@ -50,7 +50,7 @@ const treeRef = ref()
 let state = reactive({
   ...lister.state,
   columns: columns(),
-  node: {} as Model
+  node: {} as any
 })
 // onMounted
 onMounted(() => {
@@ -61,24 +61,24 @@ onMounted(() => {
 })
 // 获取列表
 function getList() {
-  lister.getData('org/list', state, { limit: false })
+  lister.getData('position/list', state, { limit: false })
 }
 // 新增
 function onAdd() {
-  lister.add(state, { id: state.node.id })
+  lister.add(state, { orgId: state.node.id })
 }
 // 删除
 function onDelete(id: string) {
-  lister.remove('org/delete', state, { id })
+  lister.remove('position/delete', state, { id })
 }
 // 批量删除
 function onDeletes() {
-  lister.removes('org/deletes', state)
+  lister.removes('position/deletes', state)
 }
 // tree节点
-function onNode(row: Model) {
+function onNode(row: any) {
   state.node = row
-  state.keepQuery.id = row.id
+  state.keepQuery.orgId = row.id
   // 获取列表
   getList()
 }

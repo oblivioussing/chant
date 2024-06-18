@@ -1,5 +1,6 @@
 import { type Org } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
+import type { Many } from '@/type'
 import { base } from '@/utils'
 import { orgEntity, type OrgTree } from './model'
 import queryRaw from './query-raw'
@@ -80,6 +81,18 @@ export class OrgService extends BaseService {
       result.success({ msg: '组织架构删除成功' })
     } else {
       result.fail('组织架构删除失败')
+    }
+    return result
+  }
+  // 批量删除
+  async deletes(params: Many<Org>) {
+    const result = new Result()
+    const where = base.manyWhere(params, orgEntity)
+    const row = await prisma.org.deleteMany({ where })
+    if (row.count) {
+      result.success({ msg: '组织架构批量删除成功' })
+    } else {
+      result.fail('组织架构批量删除失败')
     }
     return result
   }

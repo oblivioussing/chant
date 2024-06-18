@@ -1,5 +1,5 @@
 import { type TableInstance } from 'element-plus'
-import { nextTick, onActivated, onScopeDispose } from 'vue'
+import { onActivated, onScopeDispose } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { bus, element, shiki, useChaoser } from '@chant'
@@ -79,23 +79,6 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     // callback
     callback()
   }
-  // 数据处理
-  function dataDeal(state: State, data?: any, limit?: boolean) {
-    if (data) {
-      if (limit !== false) {
-        state.list = data?.list || []
-        state.total = data?.total || 0
-      } else {
-        state.list = data as any
-      }
-      state.extra = data?.extra || {}
-    } else {
-      state.list = []
-    }
-    nextTick(() => {
-      state.loading = false
-    })
-  }
   // 新增
   function add(state: State, row?: any) {
     _pageHandle(state, { type: 'add' }, row)
@@ -127,13 +110,27 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     }
     state.loading = true
     const { data } = await shiki.get(path, query)
+    state.loading = false
     // 返回数据
     if (config?.custom) {
-      state.loading = false
       return data
     }
     // 数据处理
     dataDeal(state, data, config?.limit)
+  }
+  // 数据处理
+  function dataDeal(state: State, data?: any, limit?: boolean) {
+    if (data) {
+      if (limit !== false) {
+        state.list = data?.list || []
+        state.total = data?.total || 0
+        state.extra = data?.extra || {}
+      } else {
+        state.list = data as any
+      }
+    } else {
+      state.list = []
+    }
   }
   // 获取查询参数
   function getQuery(state: State) {

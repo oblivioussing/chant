@@ -40,12 +40,7 @@ function getDetail() {
 }
 // 保存
 function onSave() {
-  const map = {
-    add: 'trade/add',
-    edit: 'trade/update'
-  } as any
-  const path = map[props.pageType]
-  former.save(path, state)
+  former.save(`trade/${former.api}`, state)
 }
 </script>
 

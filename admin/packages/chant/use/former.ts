@@ -14,6 +14,8 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
       ['file-list', 'picture-card'].includes(item.uploadType!)
     )
   })
+  const apiMap = { add: 'add', edit: 'update' }
+  const api = apiMap[props?.pageType as 'add' | 'edit'] as 'add' | 'update'
   const state = {
     continueAdd: false,
     copyFlag: props?.copyFlag as 0 | 1,
@@ -176,6 +178,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   }
 
   return {
+    api,
     state,
     bindInstance,
     close,

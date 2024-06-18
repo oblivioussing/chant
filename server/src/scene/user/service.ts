@@ -1,5 +1,5 @@
 import { compare, hash } from 'bcrypt'
-import type { Prisma, User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
 import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
@@ -103,23 +103,8 @@ export class UserService extends BaseService {
   async list(user: User, page: Page) {
     const pageData = new PageData<User>()
     const result = new Result<typeof pageData>()
-    const rows = await queryRaw.getList(user)
-    // const rows = await prisma.user.findMany({
-    //   ...base.pageHelper(page, 'desc'),
-    //   select: {
-    //     ...base.toSelect(userEntity),
-    //     Org: {
-    //       select: {
-    //         name: true
-    //       }
-    //     }
-    //   },
-    //   where
-    // })
-    // 模糊查询
-    const where = base.toContains(user, ['loginName', 'name', 'phone'])
-    const total = await prisma.user.count({ where })
-    pageData.list = rows as User[]
+    const { rows, total } = await queryRaw.getList(user, page)
+    pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
     return result

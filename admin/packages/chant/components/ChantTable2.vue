@@ -238,13 +238,13 @@ function valueFmt(column: Column, value: any) {
     return '-'
   }
   // date
-  if (column.datepickerType) {
+  if (column.datepicker) {
     const map = {
       date: 'YYYY-MM-DD',
       datetime: 'YYYY-MM-DD HH:mm:ss',
       month: 'YYYY-MM'
     } as any
-    const template = map[column.datepickerType]
+    const template = map[column.datepicker]
     return dayjs(value).format(template)
   }
   // format

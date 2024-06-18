@@ -48,6 +48,24 @@ export default [
         component: () => import('@app-base/views/auth/org/edit.vue'),
         meta: { title: '组织架构编辑' }
       },
+      // 职位
+      {
+        path: 'position',
+        component: () => import('@app-base/views/auth/position/index.vue'),
+        meta: { title: '职位', menu: 1 }
+      },
+      // 职位新增
+      {
+        path: 'position/add',
+        component: () => import('@app-base/views/auth/position/add.vue'),
+        meta: { title: '职位新增' }
+      },
+      // 职位编辑
+      {
+        path: 'position/edit',
+        component: () => import('@app-base/views/auth/position/edit.vue'),
+        meta: { title: '职位编辑' }
+      },
       // 角色
       {
         path: 'role',

@@ -1,5 +1,6 @@
 import { type User } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
+import { Page } from '@/type'
 import { userEntity } from './model'
 
 function getSelect() {
@@ -17,7 +18,8 @@ function getWhere(user: User) {
 
 export default {
   // 获取列表
-  async getList(user: User) {
+  async getList(user: User, page: Page) {
+    const offset = (page.pageNum - 1) * page.pageSize
     const rows = await prisma.$queryRaw<User[]>`
       SELECT 
         ${getSelect()},
@@ -35,8 +37,14 @@ export default {
       GROUP BY 
         u.id, u.name, o.name
       ORDER BY
-        u.create_time desc;
+        u.create_time desc
+      LIMIT
+        ${page.pageSize} OFFSET ${offset};
     `
-    return rows
+    const row = await prisma.$queryRaw`
+      SELECT COUNT(id) as total FROM user as u ${getWhere(user)}
+    `
+    const total = Number(row[0]?.total)
+    return { rows, total }
   }
 }

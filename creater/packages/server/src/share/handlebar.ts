@@ -27,6 +27,9 @@ handlebars.registerHelper({
     if (type.includes('decimal')) {
       return `new Prisma.Decimal(0)`
     }
+    if (type.includes('int')) {
+      return `0`
+    }
     return new handlebars.SafeString(`''`)
   }
 })

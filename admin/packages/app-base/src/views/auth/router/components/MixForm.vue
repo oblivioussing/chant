@@ -71,12 +71,7 @@ async function getParentNode() {
 }
 // 保存
 function onSave() {
-  const map = {
-    add: 'router/add',
-    edit: 'router/update'
-  } as any
-  const path = map[props.pageType]
-  former.save(path, state)
+  former.save(`router/${former.api}`, state)
 }
 </script>
 

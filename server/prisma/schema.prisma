@@ -35,6 +35,19 @@ model Org {
   @@map("org")
 }
 
+model Position {
+  id         String    @id @db.VarChar(20)
+  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
+  orgId      String    @map("org_id") @db.VarChar(20)
+  isDelete   Int       @map("is_delete")
+  createId   String    @map("create_id") @db.VarChar(20)
+  createTime DateTime  @map("create_time") @db.DateTime(0)
+  updateId   String?   @map("update_id") @db.VarChar(20)
+  updateTime DateTime? @map("update_time") @db.DateTime(0)
+
+  @@map("position")
+}
+
 model Role {
   id         String    @id @db.VarChar(20)
   level      Int
@@ -108,7 +121,7 @@ model User {
   Org        Org       @relation(fields: [orgId], references: [id])
   Role       Role      @relation(fields: [roleId], references: [id])
 
-  @@index([orgId])
-  @@index([roleId])
+  @@index([orgId], map: "org_INDEX")
+  @@index([roleId], map: "role_INDEX")
   @@map("user")
 }

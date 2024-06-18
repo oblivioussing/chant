@@ -45,12 +45,7 @@ function getDetail() {
 }
 // 保存
 function onSave() {
-  const map = {
-    add: 'user/add',
-    edit: 'user/update'
-  } as any
-  const path = map[props.pageType]
-  former.save(path, state)
+  former.save(`user/${former.api}`, state)
 }
 </script>
 
