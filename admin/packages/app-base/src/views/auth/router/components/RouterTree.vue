@@ -16,6 +16,7 @@
         :data="state.list"
         default-expand-all
         highlight-current
+        :indent="10"
         node-key="id"
         ref="treeRef"
         @node-click="onNode">

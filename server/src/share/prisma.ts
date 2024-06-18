@@ -1,5 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 
+const { empty, raw, sql } = Prisma
+
 // prisma实例
 export const prisma = new PrismaClient()
 // 实体转查询字段
@@ -25,7 +27,7 @@ export function toSelect<T>(
       list.push(field)
     }
   }
-  return Prisma.raw(list.join(','))
+  return raw(list.join(','))
 }
 // 实体转查询条件
 export function toWhere<T extends Record<string, any>>(
@@ -37,21 +39,22 @@ export function toWhere<T extends Record<string, any>>(
 ) {
   const keys = Object.keys(entity)
   if (!keys.length) {
-    return Prisma.empty
+    return empty
   }
   const alias = config?.alias
   return keys.reduce((acc: any, cur, index) => {
+    const value = entity[cur]
     let field = cur.replace(/([A-Z])/g, '_$1').toLowerCase()
     if (alias) {
       field = `${alias}.${field}`
     }
-    const column = Prisma.raw(field)
-    let value
+    const column = sql`${index ? sql`AND` : empty} ${raw(field)}`
+    let columnValue
     if (config?.like.includes(cur)) {
-      value = Prisma.sql`${Prisma.raw('LIKE')} '%${entity[cur]}%'`
+      columnValue = sql`LIKE ${`%${value}%`}`
     } else {
-      value = Prisma.sql`= ${entity[cur]}`
+      columnValue = sql`= ${value}`
     }
-    return Prisma.sql`${acc} ${column} ${value}`
-  }, Prisma.sql`WHERE`)
+    return sql`${acc} ${column} ${columnValue}`
+  }, sql`WHERE`)
 }

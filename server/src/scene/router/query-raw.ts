@@ -9,7 +9,7 @@ function getSelect(alias?: string) {
   })
 }
 function like(val = '') {
-  return Prisma.raw(`'%${val}%'`)
+  return Prisma.sql`${`%${val}%`}`
 }
 
 export default {

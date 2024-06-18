@@ -3,7 +3,7 @@ import { prisma, toSelect } from '@/share'
 import { orgEntity } from './model'
 
 function like(val = '') {
-  return Prisma.raw(`'%${val}%'`)
+  return Prisma.sql`${`%${val}%`}`
 }
 function getSelect(alias?: string) {
   return toSelect(orgEntity, {

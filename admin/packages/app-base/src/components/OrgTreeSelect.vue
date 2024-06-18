@@ -6,9 +6,11 @@
     :data="state.data"
     default-expand-all
     filterable
+    :indent="10"
     node-key="id"
     placeholder="请选择部门"
-    :props="{ label: 'name' }">
+    :props="{ label: 'name' }"
+    @node-click="onNode">
   </el-tree-select>
 </template>
 
@@ -16,6 +18,8 @@
 import { onMounted, reactive } from 'vue'
 import { shiki } from 'chant'
 
+// emits
+const emits = defineEmits(['change'])
 // model
 const vModel = defineModel()
 // state
@@ -31,6 +35,11 @@ onMounted(() => {
 async function getList() {
   const { data } = await shiki.get('org/tree')
   state.data = data
+}
+// 节点点击
+function onNode(row: any) {
+  vModel.value = row.id
+  emits('change', row)
 }
 </script>
 

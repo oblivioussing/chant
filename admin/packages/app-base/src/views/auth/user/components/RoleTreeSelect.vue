@@ -7,6 +7,7 @@
     :data="state.data"
     default-expand-all
     filterable
+    :indent="10"
     multiple
     node-key="id"
     placeholder="请选择角色"

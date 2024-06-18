@@ -4,9 +4,11 @@
       <div>源路由</div>
       <div class="tree-container">
         <el-tree
+          check-on-click-node
           :data="state.sourceList"
           default-expand-all
           :expand-on-click-node="false"
+          :indent="10"
           node-key="id"
           :props="{ label: 'name' }"
           show-checkbox
@@ -18,9 +20,11 @@
       <div>目标路由</div>
       <div class="tree-container">
         <el-tree
+          check-on-click-node
           :data="state.targetList"
           default-expand-all
           :expand-on-click-node="false"
+          :indent="10"
           node-key="id"
           :props="{ label: 'name' }"
           ref="targetRef"
