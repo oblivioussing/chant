@@ -13,29 +13,6 @@ function like(val = '') {
 }
 
 export default {
-  // 获取列表
-  async getList(router: Router) {
-    const rows = await prisma.$queryRaw<Router[]>`
-      WITH RECURSIVE descendants AS (
-        SELECT ${getSelect()}
-        FROM router
-        WHERE parent_id = ${router.id} 
-        AND name LIKE ${like(router.name)}
-        AND path LIKE ${like(router.path)}
-        AND is_delete = 0
-        UNION ALL
-        SELECT ${getSelect('r')}
-        FROM router r 
-        INNER JOIN descendants d 
-        ON r.parent_id = d.id 
-        AND r.level = d.level
-        AND r.menu = '1'
-      )
-      SELECT * FROM descendants 
-      ORDER BY sequence ASC;
-    `
-    return rows
-  },
   // 获取树列表
   async getTreeList(router?: Router) {
     const rows = await prisma.$queryRaw<Router[]>`

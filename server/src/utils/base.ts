@@ -140,13 +140,13 @@ export function toTree(
 // 数据转查询条件
 export function toWhere<T>(
   data: T,
-  config: {
-    like: (keyof T)[]
+  config?: {
+    like?: (keyof T)[]
   }
 ) {
   const obj = {} as any
   for (const item in data) {
-    if (config.like.includes(item)) {
+    if (config?.like.includes(item)) {
       obj[item] = { contains: data[item] } as any
     } else {
       obj[item] = data[item]

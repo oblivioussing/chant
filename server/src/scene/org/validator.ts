@@ -7,9 +7,6 @@ class Base {
   // name
   @IsNotEmpty({ message: '名称不能为空' })
   name: string
-  // 父节点id
-  @IsNotEmpty({ message: '父节点id不能为空' })
-  parentId: string
 }
 // 跟节点
 export class RootVali {
@@ -18,7 +15,11 @@ export class RootVali {
   name: string
 }
 // 新增
-export class AddVali extends Base {}
+export class AddVali extends Base {
+  // 父节点id
+  @IsNotEmpty({ message: '父节点id不能为空' })
+  parentId: string
+}
 // 更新
 export class UpdateVali extends Base {
   // id

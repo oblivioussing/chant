@@ -14,7 +14,7 @@ export class {{upper module}}Service extends BaseService {
     const data = base.toEntity({{module}}, {{module}}Entity, true)
     data.createId = this.getUid()
     data.createTime = new Date()
-    data.id = base.createUid()
+    data.id = base.createId()
     const row = await prisma.{{module}}.create({ data })
     if (row) {
       result.success({ msg: '{{tableComment}}新增成功' })

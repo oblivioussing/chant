@@ -8,6 +8,7 @@ export const userEntity = {
   name: '', // 姓名
   orgId: '', // 部门id
   phone: '', // 手机号
+  positionId: '', // 职位id
   roleId: '', // 角色id
   roleIds: [] // 角色ids
 } as User

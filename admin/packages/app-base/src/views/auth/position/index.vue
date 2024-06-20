@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useLister } from 'chant'
 import { columns, dict } from './share'
 import MixForm from './components/MixForm.vue'
@@ -51,13 +51,6 @@ let state = reactive({
   ...lister.state,
   columns: columns(),
   node: {} as any
-})
-// onMounted
-onMounted(() => {
-  if (state.keepQuery.id) {
-    // 获取列表
-    getList()
-  }
 })
 // 获取列表
 function getList() {

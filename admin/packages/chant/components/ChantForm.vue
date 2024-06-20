@@ -61,6 +61,7 @@
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
               :data="props?.dict?.[item.prop]"
+              :filterable="item.filterable"
               :lang="lang"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
@@ -153,7 +154,7 @@
             </chant-radio>
             <!-- custom-picker -->
             <dynamic-picker
-              v-if="item.dynamicPicker"
+              v-else-if="item.dynamicPicker"
               v-model:id="vModel!.form[item.dynamicId || item.prop]"
               v-model:text="vModel!.form[getDynamicText(item)]"
               :disabled="isDisabled(item)"

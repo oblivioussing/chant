@@ -1,8 +1,9 @@
-import { type Position } from '@prisma/client'
-import { prisma, BaseService, PageData, Result } from '@/share'
-import { Many, Page } from '@/type'
+import { type Position, type Prisma } from '@prisma/client'
+import { prisma, BaseService, Result } from '@/share'
+import { Many } from '@/type'
 import { base } from '@/utils'
 import { positionEntity } from './model'
+import queryRaw from './query-raw'
 
 export class PositionService extends BaseService {
   constructor() {
@@ -14,7 +15,7 @@ export class PositionService extends BaseService {
     const data = base.toEntity(position, positionEntity, true)
     data.createId = this.getUid()
     data.createTime = new Date()
-    data.id = base.createUid()
+    data.id = base.createId()
     const row = await prisma.position.create({ data })
     if (row) {
       result.success({ msg: '职位新增成功' })
@@ -81,11 +82,7 @@ export class PositionService extends BaseService {
   // 列表
   async list(position: Position) {
     const result = new Result<Position[]>()
-    const rows = await prisma.position.findMany({
-      select: base.toSelect(positionEntity),
-      where: position,
-      orderBy: { createTime: 'desc' }
-    })
+    const rows = await queryRaw.getList(position)
     result.success({ data: rows, msg: '职位列表查询成功' })
     return result
   }

@@ -78,7 +78,7 @@ function onDeletes() {
 // tree节点
 function onNode(row: Model) {
   state.node = row
-  state.keepQuery.id = row.id
+  state.keepQuery.parentId = row.id
   // 获取列表
   getList()
 }

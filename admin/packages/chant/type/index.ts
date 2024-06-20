@@ -28,6 +28,7 @@ type BaseColumn = {
   dynamicStart?: string // 范围选择start字段
   dynamicEnd?: string // 动态范围选择end字段
   dynamicPicker?: DynamicPicker // 自定义picker
+  filterable?: boolean // 是否可筛选,仅type为select时有效
   hide?: boolean // 是否隐藏
   hideInPages?: ColumnPage[] // 在特定页面类型中隐藏
   inputType?: 'password' | 'text' | 'textarea'

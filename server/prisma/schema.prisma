@@ -19,17 +19,19 @@ model File {
 }
 
 model Org {
-  id         String    @id @db.VarChar(20)
+  id         String     @id @db.VarChar(20)
   level      Int
-  name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
-  parentId   String    @map("parent_id") @db.VarChar(20)
+  name       String     @unique(map: "name_UNIQUE") @db.VarChar(50)
+  parentId   String     @map("parent_id") @db.VarChar(20)
+  roleIds    Json?      @map("role_ids")
   sequence   Int
-  isDelete   Int       @map("is_delete")
-  createId   String    @map("create_id") @db.VarChar(20)
-  createTime DateTime  @map("create_time") @db.DateTime(0)
-  updateId   String?   @map("update_id") @db.VarChar(20)
-  updateTime DateTime? @map("update_time") @db.DateTime(0)
+  isDelete   Int        @map("is_delete")
+  createId   String     @map("create_id") @db.VarChar(20)
+  createTime DateTime   @map("create_time") @db.DateTime(0)
+  updateId   String?    @map("update_id") @db.VarChar(20)
+  updateTime DateTime?  @map("update_time") @db.DateTime(0)
   User       User[]
+  Position   Position[]
 
   @@index([isDelete], map: "index")
   @@map("org")
@@ -39,12 +41,16 @@ model Position {
   id         String    @id @db.VarChar(20)
   name       String    @unique(map: "name_UNIQUE") @db.VarChar(50)
   orgId      String    @map("org_id") @db.VarChar(20)
+  roleIds    Json?     @map("role_ids")
   isDelete   Int       @map("is_delete")
   createId   String    @map("create_id") @db.VarChar(20)
   createTime DateTime  @map("create_time") @db.DateTime(0)
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
+  User       User[]
+  Org        Org       @relation(fields: [orgId], references: [id])
 
+  @@index([orgId], map: "org_INDEX")
   @@map("position")
 }
 
@@ -112,6 +118,7 @@ model User {
   orgId      String    @map("org_id") @db.VarChar(20)
   password   String    @default("") @db.VarChar(100)
   phone      String    @unique(map: "phone_UNIQUE") @default("") @db.VarChar(13)
+  positionId String    @map("position_id") @db.VarChar(20)
   roleId     String    @map("role_id") @db.VarChar(20)
   roleIds    Json      @map("role_ids")
   createId   String    @map("create_id") @db.VarChar(20)
@@ -119,9 +126,11 @@ model User {
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
   Org        Org       @relation(fields: [orgId], references: [id])
+  Position   Position  @relation(fields: [positionId], references: [id])
   Role       Role      @relation(fields: [roleId], references: [id])
 
   @@index([orgId], map: "org_INDEX")
+  @@index([positionId], map: "position_INDEX")
   @@index([roleId], map: "role_INDEX")
   @@map("user")
 }

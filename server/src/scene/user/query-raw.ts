@@ -24,11 +24,14 @@ export default {
       SELECT 
         ${getSelect()},
         o.name as orgName,
+        p.name as positionName,
         GROUP_CONCAT(r.name ORDER BY r.name SEPARATOR ',') as roleNames
       FROM 
         user u 
       LEFT JOIN 
         org o ON u.org_id = o.id
+      LEFT JOIN
+        position p ON u.position_id = p.id
       JOIN 
         JSON_TABLE(u.role_ids, '$[*]' COLUMNS (roleId varchar(20) PATH '$')) AS jt
       JOIN 

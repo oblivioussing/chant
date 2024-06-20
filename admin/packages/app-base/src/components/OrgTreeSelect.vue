@@ -10,6 +10,7 @@
     node-key="id"
     placeholder="请选择部门"
     :props="{ label: 'name' }"
+    @clear="emits('change', {})"
     @node-click="onNode">
   </el-tree-select>
 </template>

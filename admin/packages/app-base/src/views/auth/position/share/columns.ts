@@ -9,8 +9,11 @@ export default () => {
       search: true
     },
     {
-      prop: 'roleName',
-      label: '角色'
+      prop: 'roleIds',
+      propList: 'roleNames',
+      label: '角色',
+      newlineFull: true,
+      slot: ['form']
     }
   ] as Column[]
 }

@@ -122,11 +122,11 @@ export class RoleService extends BaseService {
     return result
   }
   // 路由列表
-  async router(id: string) {
+  async router(roleId: string) {
     const result = new Result()
     const role = await prisma.role.findUnique({
       select: { routerIds: true },
-      where: { id }
+      where: { id: roleId }
     })
     const rows = await prisma.router.findMany({
       select: base.toSelect(routerEntity),

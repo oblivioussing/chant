@@ -3,6 +3,10 @@
     v-model="state"
     :columns="columns()"
     @instance="former.bindInstance">
+    <!-- 角色 -->
+    <template #roleIds>
+      <role-tree-select v-model="state.form.roleIds"></role-tree-select>
+    </template>
   </chant-form>
   <chant-form-footer
     v-model="state"
@@ -16,6 +20,7 @@ import { reactive } from 'vue'
 import { useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns } from '../share'
+import RoleTreeSelect from '@app-base/views/auth/components/RoleTreeSelect.vue'
 
 // props
 const props = defineProps<FormProps>()

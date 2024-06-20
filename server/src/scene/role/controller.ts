@@ -48,8 +48,8 @@ export class RoleController {
   }
   // 路由列表
   @Get('router')
-  async router(@Query('id') id: string) {
-    const result = await this.roleService.router(id)
+  async router(@Query('roleId') roleId: string) {
+    const result = await this.roleService.router(roleId)
     return result
   }
   // 树

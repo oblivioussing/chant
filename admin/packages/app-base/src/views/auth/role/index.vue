@@ -130,7 +130,7 @@ function getCheckedIds() {
 }
 // tree节点
 function onNode(row: { id: string }) {
-  state.keepQuery.id = row.id
+  state.keepQuery.roleId = row.id
   // 获取列表
   getList()
 }

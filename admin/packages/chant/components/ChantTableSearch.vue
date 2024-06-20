@@ -24,7 +24,8 @@
           <slot
             v-if="item.slot?.includes('search')"
             :name="item.prop"
-            :row="item"></slot>
+            :row="item">
+          </slot>
           <!-- input -->
           <el-input
             v-else-if="!item.type && !item.dynamicPicker && !item.datepicker"
@@ -51,6 +52,7 @@
             v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
             :data="props.dict?.[item.prop]"
+            :filterable="item.filterable"
             :lang="lang"
             :placeholder="translate(item, 'select')"
             @change="emits('query')">
@@ -98,7 +100,7 @@
           </div>
           <!-- custom-picker -->
           <dynamic-picker
-            v-if="item.dynamicPicker"
+            v-else-if="item.dynamicPicker"
             v-model:id="vModel.query[item.dynamicId || item.prop]"
             v-model:text="vModel.pickerText[getDynamicText(item)]"
             :title="translate(item)"

@@ -34,7 +34,19 @@ export default () => {
       label: '部门',
       dynamicPicker: 'org-tree',
       required: true,
-      search: true
+      search: true,
+      slot: ['search'],
+      change(form) {
+        form.positionId = ''
+      }
+    },
+    {
+      prop: 'positionId',
+      propList: 'positionName',
+      label: '职位',
+      required: true,
+      search: true,
+      slot: ['form', 'search']
     },
     {
       prop: 'roleIds',

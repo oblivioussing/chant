@@ -1,4 +1,4 @@
-import { type Router } from '@prisma/client'
+import { Prisma, type Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
 import { TypeEnum } from './enum'
@@ -152,7 +152,17 @@ export class RouterService extends BaseService {
   // 列表
   async list(router: Router) {
     const result = new Result<Router[]>()
-    const rows = await queryRaw.getList(router)
+    const where = base.toWhere(router, {
+      like: ['name', 'path']
+    }) as Prisma.RouterWhereInput
+    where.isDelete = 0
+    const rows = await prisma.router.findMany({
+      select: base.toSelect(routerEntity, ['icon']),
+      where,
+      orderBy: {
+        sequence: 'asc'
+      }
+    })
     result.success({ data: rows, msg: '路由列表查询成功' })
     return result
   }
