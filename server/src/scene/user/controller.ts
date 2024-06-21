@@ -1,12 +1,11 @@
-import { Body, Controller, Headers, Get, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import type { User } from '@prisma/client'
 import { Auth, QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
-import { getUidByToken } from '@/utils/base'
 import { IdVali } from '@/validator'
-import { userEntity, type UserDto } from './model'
+import { userEntity } from './model'
 import { UserService } from './service'
-import { LoginVali, AddVali } from './validator'
+import { LoginVali, AddVali, UpdateVali, RoleIdVali } from './validator'
 
 @Controller('user')
 export class UserController {
@@ -20,8 +19,14 @@ export class UserController {
   }
   // 更新
   @Post('update')
-  async update(@Body() user: UserDto) {
+  async update(@Body() user: UpdateVali) {
     const result = await this.userService.update(user as User)
+    return result
+  }
+  // 更新角色
+  @Post('updateRole')
+  async updateRole(@Body() user: RoleIdVali) {
+    const result = await this.userService.updateRole(user as User)
     return result
   }
   // 删除
@@ -42,10 +47,23 @@ export class UserController {
     const result = await this.userService.detail(user.id)
     return result
   }
+  // 用户信息
+  @Get('info')
+  async info() {
+    const result = await this.userService.info()
+    return result
+  }
   // 列表
   @Get('list')
   async list(@QueryModel(userEntity) user: User, @QueryPage() page: Page) {
     const result = await this.userService.list(user, page)
+    return result
+  }
+  // 登陆
+  @Auth(false)
+  @Post('login')
+  async login(@Body() user: LoginVali) {
+    const result = await this.userService.login(user as User)
     return result
   }
   // 菜单
@@ -54,18 +72,10 @@ export class UserController {
     const result = await this.userService.menu()
     return result
   }
-  // 用户信息
-  @Get('info')
-  async info(@Headers('token') token: string) {
-    const uid = getUidByToken(token)
-    const result = await this.userService.detail(uid)
-    return result
-  }
-  // 登陆
-  @Auth(false)
-  @Post('login')
-  async login(@Body() user: LoginVali) {
-    const result = await this.userService.login(user as User)
+  // 角色
+  @Get('roles')
+  async roles() {
+    const result = await this.userService.roles()
     return result
   }
 }

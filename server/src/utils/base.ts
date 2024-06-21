@@ -19,6 +19,15 @@ export function createUid() {
   const nanoid = customAlphabet('1234567890', 20)
   return nanoid()
 }
+// 对象数组去重
+export function distinct(arr: any[], key?: string) {
+  if (key) {
+    const res = new Map()
+    return arr.filter((item) => !res.has(item[key]) && res.set(item[key], 1))
+  } else {
+    return Array.from(new Set(arr))
+  }
+}
 // 根据token获取uid
 export function getUidByToken(token: string) {
   const [iv, hash] = token?.split('.') || []

@@ -73,5 +73,22 @@ export default {
       SELECT * FROM descendants;
     `
     return rows
+  },
+  // 获取祖先数据
+  async getAncestors(id: string) {
+    const rows = await prisma.$queryRaw<Role[]>`
+      WITH RECURSIVE descendants AS (
+        SELECT id, router_ids, parent_id
+        FROM role
+        WHERE id = ${id}
+        UNION ALL
+        SELECT r.id, r.router_ids, r.parent_id
+        FROM role r
+        INNER JOIN descendants d ON r.id = d.parent_id
+      )
+      SELECT id, router_ids as routerIds
+      FROM descendants;
+    `
+    return rows
   }
 }

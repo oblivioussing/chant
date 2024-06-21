@@ -1,4 +1,4 @@
-import { type User } from '@prisma/client'
+import { type Role, type User } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
 import { Page } from '@/type'
 import { userEntity } from './model'
@@ -49,5 +49,25 @@ export default {
     `
     const total = Number(row[0]?.total)
     return { rows, total }
+  },
+  // 获取角色
+  async getRoles(id: string) {
+    const rows = await prisma.$queryRaw<Role[]>`
+      SELECT 
+        r.id,
+        r.name
+      FROM 
+          user u
+      LEFT JOIN 
+        JSON_TABLE(
+            u.role_ids,
+            '$[*]' COLUMNS (roleId varchar(20) PATH '$')
+        ) AS jt ON jt.roleId IS NOT NULL
+      LEFT JOIN 
+        role r ON jt.roleId = r.id COLLATE utf8mb4_unicode_ci
+      WHERE 
+        u.id = ${id};
+    `
+    return rows
   }
 }

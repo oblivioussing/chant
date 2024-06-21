@@ -9,7 +9,8 @@
       <position-select
         v-model="state.form.positionId"
         :disabled="!state.form.orgId"
-        :org-id="state.form.orgId">
+        :org-id="state.form.orgId"
+        @change="onPosition">
       </position-select>
     </template>
     <!-- 角色 -->
@@ -26,7 +27,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useFormer } from 'chant'
+import { base, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict } from '../share'
 import PositionSelect from './PositionSelect.vue'
@@ -51,6 +52,13 @@ former.created(async (status) => {
 // 获取详情
 function getDetail() {
   former.getData('user/detail', state)
+}
+// 职位change
+function onPosition(row: any) {
+  const roleIds = row?.roleIds?.concat(state.form.roleIds)
+  if (roleIds) {
+    state.form.roleIds = base.distinct(roleIds)
+  }
 }
 // 保存
 function onSave() {

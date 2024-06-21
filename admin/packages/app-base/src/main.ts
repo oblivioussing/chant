@@ -7,6 +7,7 @@ import vxe from './plugs/vxe'
 import router, { factory } from './router'
 
 // element css
+import 'element-plus/theme-chalk/el-loading.css'
 import 'element-plus/theme-chalk/el-message.css'
 import 'element-plus/theme-chalk/el-message-box.css'
 

@@ -51,13 +51,18 @@
         </template>
       </chant-table>
       <div class="footer toolbar">
-        <el-checkbox
-          v-model="state.allChecked"
-          label="全选"
-          :false-value="0"
-          :true-value="1"
-          @change="onAll">
-        </el-checkbox>
+        <div>
+          <el-checkbox
+            v-model="state.allChecked"
+            label="全选"
+            :false-value="0"
+            :true-value="1"
+            @change="onAll">
+          </el-checkbox>
+          <el-checkbox v-model="state.relate" :false-value="0" :true-value="1">
+            关联至上级
+          </el-checkbox>
+        </div>
         <el-button :loading="state.loading" type="primary" @click="onSave">
           保存
         </el-button>
@@ -94,6 +99,7 @@ let state = reactive({
   ...lister.state,
   list: [] as Item[],
   columns: columns(),
+  relate: 1 as 0 | 1, // 关联至上级
   allChecked: 0 as 0 | 1, // 全选
   span1Arr: [] as number[], // 第一列合并规则
   span2Arr: [] as number[] // 第二列合并规则
@@ -109,9 +115,10 @@ async function getList() {
 // 保存
 async function onSave() {
   const id = state.keepQuery.id
+  const relate = state.relate
   const routerIds = getCheckedIds()
   state.loading = true
-  await shiki.post('role/updateRouter', { id, routerIds })
+  await shiki.post('role/updateRouter', { id, relate, routerIds })
   state.loading = false
 }
 // 获取选中的ids
@@ -126,11 +133,11 @@ function getCheckedIds() {
     })
     return acc
   }, [])
-  return base.sole(ids)
+  return base.distinct(ids)
 }
 // tree节点
 function onNode(row: { id: string }) {
-  state.keepQuery.roleId = row.id
+  state.keepQuery.id = row.id
   // 获取列表
   getList()
 }

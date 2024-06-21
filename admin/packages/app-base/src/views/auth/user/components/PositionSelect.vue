@@ -1,5 +1,10 @@
 <template>
-  <el-select v-model="vModel" clearable filterable placeholder="请选择职位">
+  <el-select
+    v-model="vModel"
+    clearable
+    filterable
+    placeholder="请选择职位"
+    @change="onChange">
     <el-option
       v-for="item in state.list"
       :key="item.id"
@@ -17,6 +22,8 @@ import { shiki } from 'chant'
 const props = defineProps<{
   orgId?: string
 }>()
+// emits
+const emits = defineEmits(['change'])
 // model
 const vModel = defineModel<string>()
 // state
@@ -41,6 +48,11 @@ async function getList() {
   const orgId = props.orgId
   const { data } = await shiki.get('position/list', { orgId })
   state.list = data
+}
+// change
+function onChange(val: string) {
+  const row = state.list.find((item) => item.id === val)
+  emits('change', row)
 }
 </script>
 

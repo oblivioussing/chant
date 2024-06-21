@@ -64,6 +64,24 @@ export class UserService extends BaseService {
     }
     return result
   }
+  // 更新角色
+  async updateRole(user: User) {
+    const result = new Result<User>()
+    const row = await prisma.user.update({
+      data: {
+        roleId: user.roleId,
+        updateId: this.getUid(),
+        updateTime: new Date()
+      },
+      where: { id: this.getUid() }
+    })
+    if (row) {
+      result.success({ msg: '角色更新成功' })
+    } else {
+      result.fail('角色更新失败')
+    }
+    return result
+  }
   // 删除
   async delete(id: string) {
     const result = new Result()
@@ -99,6 +117,31 @@ export class UserService extends BaseService {
     }
     return result
   }
+  // 用户信息
+  async info() {
+    const result = new Result<any>()
+    const row = await prisma.user.findUnique({
+      select: {
+        id: true,
+        loginName: true,
+        name: true,
+        roleId: true,
+        Role: { select: { name: true } }
+      },
+      where: { id: this.getUid() }
+    })
+    if (row) {
+      const { Role, ...other } = row
+      result.data = {
+        ...other,
+        roleName: Role.name
+      }
+      result.success({ msg: '用户信息查询成功' })
+    } else {
+      result.fail('用户信息查询失败')
+    }
+    return result
+  }
   // 列表
   async list(user: User, page: Page) {
     const pageData = new PageData<User>()
@@ -107,22 +150,6 @@ export class UserService extends BaseService {
     pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '查询用户列表成功' })
-    return result
-  }
-  // 菜单
-  async menu() {
-    const result = new Result<{ menu: any[] }>()
-    const rows = await prisma.router.findMany({
-      select: base.toSelect(routerEntity),
-      where: { parentId: { not: '' } },
-      orderBy: { sequence: 'asc' }
-    })
-    if (rows) {
-      result.data = { menu: base.toTree(rows) }
-      result.success({ msg: '权限信息查询成功' })
-    } else {
-      result.fail('权限信息查询失败')
-    }
     return result
   }
   // 登陆
@@ -150,6 +177,34 @@ export class UserService extends BaseService {
       }
     } else {
       result.fail('密码错误')
+    }
+    return result
+  }
+  // 菜单
+  async menu() {
+    const result = new Result<{ menu: any[] }>()
+    const rows = await prisma.router.findMany({
+      select: base.toSelect(routerEntity),
+      where: { level: { gt: 0 } },
+      orderBy: { sequence: 'asc' }
+    })
+    if (rows) {
+      result.data = { menu: base.toTree(rows) }
+      result.success({ msg: '权限信息查询成功' })
+    } else {
+      result.fail('权限信息查询失败')
+    }
+    return result
+  }
+  // 角色
+  async roles() {
+    const result = new Result<any[]>()
+    const rows = await queryRaw.getRoles(this.getUid())
+    if (rows) {
+      result.data = rows
+      result.success({ msg: '用户角色查询成功' })
+    } else {
+      result.fail('用户角色查询失败')
     }
     return result
   }

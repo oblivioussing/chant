@@ -1,4 +1,4 @@
-import { AcceptEnum, type Column } from 'chant'
+import { base, AcceptEnum, type Column } from 'chant'
 
 export default () => {
   return [
@@ -36,7 +36,11 @@ export default () => {
       required: true,
       search: true,
       slot: ['search'],
-      change(form) {
+      change(form, row) {
+        if (row.roleIds) {
+          const roleIds = row.roleIds.concat(form.roleIds)
+          form.roleIds = base.distinct(roleIds)
+        }
         form.positionId = ''
       }
     },

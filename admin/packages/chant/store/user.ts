@@ -7,6 +7,8 @@ export type User = {
   id: string
   loginName: string
   name: string
+  roleId: string
+  roleName: string
 }
 
 const token = storage.getLocal(StorageEnum.Token) || ''

@@ -73,7 +73,7 @@ async function onLogin() {
     return
   }
   state.loading = true
-  const { data } = await shiki.post('user/login', state.form, { failTip: true })
+  const { data } = await shiki.post('user/login', state.form)
   if (data) {
     userStore.state.token = data
     // 缓存token
@@ -86,7 +86,7 @@ async function onLogin() {
 }
 // 获取用户信息
 async function getUser() {
-  const { data } = await shiki.get('user/info', null)
+  const { data } = await shiki.get('user/info')
   state.loading = false
   if (data) {
     userStore.state.user = data

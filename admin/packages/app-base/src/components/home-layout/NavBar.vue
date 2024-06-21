@@ -12,6 +12,25 @@
       </el-icon>
     </div>
     <div class="right">
+      <!-- 角色 -->
+      <el-dropdown @command="onRole">
+        <div class="dropdown">
+          <div>{{ user.roleName }}</div>
+          <el-icon class="arrow-down-icon">
+            <caret-bottom />
+          </el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="item in state.roles"
+              :key="item.id"
+              :command="item">
+              {{ item.name }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
       <!-- 语言 -->
       <el-dropdown @command="onLang">
         <div class="dropdown">
@@ -56,11 +75,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { ElLoading } from 'element-plus'
+import { computed, onMounted, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { CaretBottom, Expand, Fold } from '@element-plus/icons-vue'
 import {
+  shiki,
   storage,
   useAppStore,
   useUserStore,
@@ -87,18 +108,43 @@ const langDict = new Map([
 ])
 // state
 let state = reactive({
+  roles: [] as any[],
   isCollapse: false
 })
 // computed
 const avatarUrl = computed(() => '')
 const locale = computed(() => appStore.state.lang)
 const user = computed(() => userStore.state.user)
+// onMounted
+onMounted(() => {
+  // 获取角色
+  getRoles()
+})
+// 获取角色
+async function getRoles() {
+  const { data } = await shiki.get('user/roles')
+  state.roles = data
+}
 // 切换
 function onCollapse() {
   state.isCollapse = !state.isCollapse
   emits('update:modelValue', state.isCollapse)
 }
-// 设置语言
+// 角色change
+async function onRole({ id, name }: any) {
+  const config = { failTip: true, successTip: false }
+  const loading = ElLoading.service({
+    background: 'rgba(0, 0, 0, 0.5)'
+  })
+  const { code } = await shiki.post('user/updateRole', { roleId: id }, config)
+  loading.close()
+  if (code === '1') {
+    user.value.roleId = id
+    user.value.roleName = name
+    storage.setLocal(StorageEnum.User, user.value)
+  }
+}
+// 语言change
 function onLang(lang: LangEnum) {
   vuei18n.global.locale.value = lang
   appStore.state.lang = lang

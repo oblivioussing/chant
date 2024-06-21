@@ -19,3 +19,9 @@ export class UpdateVali extends Base {
   @IsNotEmpty({ message: 'id不能为空' })
   id: string
 }
+// 路由校验
+export class RouterVali {
+  // id
+  @IsNotEmpty({ message: 'id不能为空' })
+  id: string
+}

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import type { Role } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { roleEntity } from './model'
+import { roleEntity, type RouterParams } from './model'
 import { RoleService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -30,8 +30,8 @@ export class RoleController {
   }
   // 更新路由
   @Post('updateRouter')
-  async updateRouter(@Body() role: IdVali) {
-    const result = await this.roleService.updateRouter(role as Role)
+  async updateRouter(@Body() params: IdVali) {
+    const result = await this.roleService.updateRouter(params as RouterParams)
     return result
   }
   // 删除
@@ -48,8 +48,8 @@ export class RoleController {
   }
   // 路由列表
   @Get('router')
-  async router(@Query('roleId') roleId: string) {
-    const result = await this.roleService.router(roleId)
+  async router(@Query('id') id: string) {
+    const result = await this.roleService.router(id)
     return result
   }
   // 树

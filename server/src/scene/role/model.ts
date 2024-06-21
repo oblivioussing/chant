@@ -39,3 +39,9 @@ export type RouterItem = {
   third: MenuItem
   funs: MenuItem[]
 }
+
+export type RouterParams = {
+  id: string
+  relate?: 0 | 1
+  routerIds?: string[]
+}

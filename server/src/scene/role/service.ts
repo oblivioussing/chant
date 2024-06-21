@@ -5,7 +5,8 @@ import {
   roleEntity,
   type MenuItem,
   type RoleTree,
-  type RouterItem
+  type RouterItem,
+  type RouterParams
 } from './model'
 import { routerEntity } from '../router/model'
 import queryRaw from './query-raw'
@@ -70,21 +71,45 @@ export class RoleService extends BaseService {
     return result
   }
   // 更新路由
-  async updateRouter(role: Role) {
-    const result = new Result<Role>()
-    const data = base.toEntity(role, roleEntity) as Role
-    data.updateId = this.getUid()
-    data.updateTime = new Date()
-    const row = await prisma.role.update({
-      data,
-      where: { id: role.id }
-    })
-    if (row) {
+  async updateRouter(params: RouterParams) {
+    const result = new Result()
+    let status = false
+    if (Number(params.relate) === 1) {
+      status = await this.updateRoles(params)
+    } else {
+      const row = await prisma.role.update({
+        data: { routerIds: params.routerIds },
+        where: { id: params.id }
+      })
+      status = !!row
+    }
+    if (status) {
       result.success({ msg: '角色路由更新成功' })
     } else {
       result.fail('角色路由更新失败')
     }
     return result
+  }
+  // 批量修改角色
+  private async updateRoles(params: RouterParams) {
+    let routerIds = params.routerIds as string[]
+    const ancestors = await queryRaw.getAncestors(params.id)
+    const updates = ancestors.map((item) => {
+      if (item.id !== params.id) {
+        routerIds = routerIds.concat(item.routerIds as string[])
+        routerIds = base.distinct(routerIds)
+      }
+      return prisma.role.update({
+        data: {
+          routerIds,
+          updateId: this.getUid(),
+          updateTime: new Date()
+        },
+        where: { id: item.id }
+      })
+    })
+    const rows = await prisma.$transaction(updates)
+    return rows.length > 0
   }
   // 删除
   async delete(id: string) {
@@ -122,11 +147,11 @@ export class RoleService extends BaseService {
     return result
   }
   // 路由列表
-  async router(roleId: string) {
+  async router(id: string) {
     const result = new Result()
     const role = await prisma.role.findUnique({
       select: { routerIds: true },
-      where: { id: roleId }
+      where: { id }
     })
     const rows = await prisma.router.findMany({
       select: base.toSelect(routerEntity),

@@ -22,9 +22,13 @@ export function closePage(path?: string) {
   bus.emit(BusEnum.ClosePage, path || '')
 }
 // 对象数组去重
-export function distinct(arr: any[], field = 'id') {
-  const res = new Map()
-  return arr.filter((item) => !res.has(item[field]) && res.set(item[field], 1))
+export function distinct(arr: any[], key?: string) {
+  if (key) {
+    const res = new Map()
+    return arr.filter((item) => !res.has(item[key]) && res.set(item[key], 1))
+  } else {
+    return Array.from(new Set(arr))
+  }
 }
 // 下载根据blob
 export function downloadByBlob(row: {
@@ -103,10 +107,6 @@ export function setPageStorage(
   pageStorage[type] = data
   obj[path] = pageStorage
   storage.setLocal(StorageEnum.Page, obj)
-}
-// 简单数组去重
-export function sole(arr: any[]) {
-  return Array.from(new Set(arr))
 }
 // 修改字段
 export function updateColumn<T extends Columns>(
