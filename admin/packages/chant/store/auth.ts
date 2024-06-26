@@ -1,19 +1,9 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { shiki } from '@chant'
+import { shiki } from '../api'
+import factory from '../router/factory'
+import type { MenuItem } from '../type'
 import { useUserStore } from './user'
-
-type MenuItem = {
-  children?: MenuItem[]
-  meta: {
-    funs?: string[]
-    title?: string
-  }
-  icon?: string
-  id: string
-  path: string
-  threeMenu?: 0 | 1
-}
 
 export const useAuthStore = defineStore('menu', () => {
   // state
@@ -30,6 +20,8 @@ export const useAuthStore = defineStore('menu', () => {
     if (data) {
       state.menu = data.menu || []
     }
+    // 构建路由
+    factory()
   }
   return { state, getAuth }
 })

@@ -1,4 +1,4 @@
-import router from '@app-base/router'
+import router from '../router'
 import { useUserStore } from '../store'
 import { type RequestConfig } from './ryougi'
 import shiki, { type Result } from './shiki'

@@ -4,7 +4,9 @@ import {
   createWebHistory,
   type RouteLocationNormalized
 } from 'vue-router'
-import { storage, StorageEnum } from 'chant'
+import { StorageEnum } from '../enum'
+import { storage } from '../utils'
+
 import app from './app' // app
 
 const router = createRouter({

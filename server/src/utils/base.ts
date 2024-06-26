@@ -132,7 +132,7 @@ export function toTree(
   })
   const list = [] as any[]
   function exclude(row: any) {
-    if (config.exclude) {
+    if (config?.exclude) {
       config.exclude.forEach((item) => {
         Reflect.deleteProperty(row, item)
       })

@@ -13,6 +13,7 @@ export default { install }
 export * from './api'
 export * from './enum'
 export * from './plugs'
+export { default as router } from './router'
 export * from './store'
 export * from './type'
 export * from './use'

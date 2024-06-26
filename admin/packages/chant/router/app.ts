@@ -2,7 +2,7 @@ export default [
   // 404
   {
     path: '/:pathMatch(.*)*',
-    name: '*',
+    name: '/404',
     component: () => import('@app-base/views/app/404.vue')
   },
   // 登陆

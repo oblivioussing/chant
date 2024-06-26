@@ -142,6 +142,19 @@ export type ListState = {
   total: number // 总数
 }
 
+export type MenuItem = {
+  children?: MenuItem[]
+  icon?: string
+  id: string
+  level?: number
+  meta: {
+    funs?: string[]
+    title?: string
+  }
+  path: string
+  threeMenu?: 0 | 1
+}
+
 export type TablePickerProps = {
   apiPath: string // 接口地址
   columns: ListColumn[] // 列表字段

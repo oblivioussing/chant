@@ -187,6 +187,7 @@ export class UserService extends BaseService {
         code: true,
         id: true,
         icon: true,
+        level: true,
         name: true,
         path: true,
         parentId: true,
@@ -209,6 +210,7 @@ export class UserService extends BaseService {
       const row = {} as any
       row.id = item.id
       row.meta = { title: item.name }
+      row.level = item.level
       row.parentId = item.parentId
       if (funsMap[item.id]) {
         row.meta.funs = funsMap[item.id]
