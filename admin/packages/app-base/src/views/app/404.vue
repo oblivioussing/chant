@@ -3,11 +3,19 @@
     <img class="img" src="/image/404.png" />
     <div>
       <!-- 返回上一页 -->
-      <el-button style="width: 100px" type="primary" @click="onPrevious">
+      <el-button
+        style="width: 80px"
+        size="small"
+        type="primary"
+        @click="onPrevious">
         {{ t('backToPrevious') }}
       </el-button>
       <!-- 返回首页 -->
-      <el-button style="width: 100px" type="primary" @click="onIndex">
+      <el-button
+        style="width: 80px"
+        size="small"
+        type="primary"
+        @click="onIndex">
         {{ t('backToIndex') }}
       </el-button>
     </div>

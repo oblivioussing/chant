@@ -27,6 +27,8 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     selections: [] as any[],
     total: 0
   }
+  const meta = chaoser.getMetaByPath()
+  const funs = meta?.funs as string[] | undefined
   const method = config?.method
   let tableInstance: TableInstance
 
@@ -178,6 +180,10 @@ function useLister(config?: { method?: Function; type?: FormType }) {
       method ? method() : bus.emit(route.path)
     }
   }
+  // 权限校验
+  function permission(val: string) {
+    return funs?.includes(val)
+  }
   // 删除
   function remove(path: string, state: State, params: any) {
     operate(path, state, {
@@ -266,6 +272,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     isSelected,
     jump,
     operate,
+    permission,
     remove,
     removes,
     title,

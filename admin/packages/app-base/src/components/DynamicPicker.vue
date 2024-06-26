@@ -9,7 +9,10 @@
     @change="emits('change', $event)">
   </user-picker>
   <!-- org-tree -->
-  <org-tree-select v-model="id" @change="emits('change', $event)">
+  <org-tree-select
+    v-if="props.type === 'org-tree'"
+    v-model="id"
+    @change="emits('change', $event)">
   </org-tree-select>
 </template>
 

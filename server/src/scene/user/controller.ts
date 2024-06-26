@@ -59,17 +59,17 @@ export class UserController {
     const result = await this.userService.list(user, page)
     return result
   }
+  // 权限
+  @Get('auth')
+  async auth() {
+    const result = await this.userService.auth()
+    return result
+  }
   // 登陆
   @Auth(false)
   @Post('login')
   async login(@Body() user: LoginVali) {
     const result = await this.userService.login(user as User)
-    return result
-  }
-  // 菜单
-  @Get('menu')
-  async menu() {
-    const result = await this.userService.menu()
     return result
   }
   // 角色

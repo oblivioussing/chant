@@ -7,13 +7,15 @@
       ref="menuRef"
       unique-opened
       @open="onMenuOpen">
-      <el-sub-menu v-for="item in menus" :key="item.path" :index="item.path">
+      <el-sub-menu
+        v-for="item in authStore.state.menu"
+        :key="item.id"
+        :index="item.id">
         <template #title>
           <div class="menu-item">
             <div class="menu-item-collapse-box">
               <el-icon>
-                <chant-icon-font :icon="icon(item.meta?.icon)">
-                </chant-icon-font>
+                <chant-icon-font :icon="icon(item.icon)"></chant-icon-font>
               </el-icon>
               <el-text v-if="props.isCollapse" truncated>
                 {{ title(item.meta) }}
@@ -24,17 +26,14 @@
             </div>
           </div>
         </template>
-        <template v-for="item1 in item.children" :key="`${item1.path}`">
+        <template v-for="item1 in item.children" :key="item1.id">
           <el-menu-item
-            v-if="!item1.meta?.sub"
-            :index="`${item.path}/${item1.path}`"
-            @click="onTab(`${item.path}/${item1.path}`)">
+            v-if="!item1.threeMenu"
+            :index="item1.id"
+            @click="onTab(item1.path)">
             <el-text truncated>{{ title(item1.meta) }}</el-text>
           </el-menu-item>
-          <el-sub-menu
-            v-else
-            class="nest"
-            :index="`${item.path}/${item1.path}`">
+          <el-sub-menu v-else class="nest" :index="item1.id">
             <template #title>
               <el-text style="padding-left: 20px" truncated>
                 {{ title(item1.meta) }}
@@ -42,9 +41,9 @@
             </template>
             <el-menu-item
               v-for="item2 in item1.children"
-              :key="item2.path"
-              :index="`${item.path}/${item1.path}/${item2.path}`"
-              @click="onTab(`${item.path}/${item1.path}/${item2.path}`)">
+              :key="item2.id"
+              :index="item2.id"
+              @click="onTab(item2.path)">
               <el-text truncated>{{ title(item2.meta) }}</el-text>
             </el-menu-item>
           </el-sub-menu>
@@ -64,6 +63,7 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from 'chant'
 
 // props
 const props = defineProps<{
@@ -71,6 +71,7 @@ const props = defineProps<{
 }>()
 // use
 const { t: gt } = useI18n({ useScope: 'global' })
+const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 // var
@@ -83,15 +84,6 @@ const menuRef = ref(null)
 // computed
 const active = computed(() => {
   return route.path.replace(/\/(add|edit|detail)/, '')
-})
-const menus = computed(() => {
-  const routes = router.options.routes
-  return routes.filter((item) => {
-    if (item.children) {
-      item.children = item.children.filter((item) => item.meta?.menu)
-    }
-    return item.children?.length
-  })
 })
 // watch
 watch(
@@ -107,7 +99,7 @@ watch(
 // 标题
 function title(meta?: any) {
   return meta?.title
-  // return gt(`router.${meta.title}`)
+  // return gt(`router.${name}`)
 }
 // 菜单切换
 function onTab(path: string) {

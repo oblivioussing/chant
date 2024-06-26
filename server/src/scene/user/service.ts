@@ -5,7 +5,6 @@ import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
-import { routerEntity } from '../router/model'
 import { userEntity } from './model'
 import queryRaw from './query-raw'
 
@@ -180,16 +179,54 @@ export class UserService extends BaseService {
     }
     return result
   }
-  // 菜单
-  async menu() {
-    const result = new Result<{ menu: any[] }>()
+  // 权限
+  async auth() {
+    const result = new Result<any>()
     const rows = await prisma.router.findMany({
-      select: base.toSelect(routerEntity),
-      where: { level: { gt: 0 } },
+      select: {
+        code: true,
+        id: true,
+        icon: true,
+        name: true,
+        path: true,
+        parentId: true,
+        threeMenu: true
+      },
+      where: { level: { gt: 0 }, isDelete: 0 },
       orderBy: { sequence: 'asc' }
     })
+    const funsMap = rows.reduce((acc, cur) => {
+      if (cur.code) {
+        if (acc[cur.parentId]) {
+          acc[cur.parentId].push(cur.code)
+        } else {
+          acc[cur.parentId] = [cur.code]
+        }
+      }
+      return acc
+    }, {})
+    const list = rows.map((item) => {
+      const row = {} as any
+      row.id = item.id
+      row.meta = { title: item.name }
+      row.parentId = item.parentId
+      if (funsMap[item.id]) {
+        row.meta.funs = funsMap[item.id]
+      }
+      if (item.icon) {
+        row.icon = item.icon
+      }
+      if (item.path) {
+        row.path = item.path
+      }
+      if (item.threeMenu) {
+        row.threeMenu = item.threeMenu
+      }
+      return row
+    })
     if (rows) {
-      result.data = { menu: base.toTree(rows) }
+      const menu = base.toTree(list, { exclude: ['parentId'] })
+      result.data = { menu }
       result.success({ msg: '权限信息查询成功' })
     } else {
       result.fail('权限信息查询失败')

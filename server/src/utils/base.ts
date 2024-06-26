@@ -122,7 +122,7 @@ export function toSelect<T>(
 // 列表转树
 export function toTree(
   data: any[],
-  config?: { idKey?: string; parentKey?: string }
+  config?: { idKey?: string; parentKey?: string; exclude?: string[] }
 ) {
   const idKey = config?.idKey || 'id'
   const parentKey = config?.parentKey || 'parentId'
@@ -131,17 +131,25 @@ export function toTree(
     obj[item[idKey]] = item
   })
   const list = [] as any[]
+  function exclude(row: any) {
+    if (config.exclude) {
+      config.exclude.forEach((item) => {
+        Reflect.deleteProperty(row, item)
+      })
+    }
+    return row
+  }
   data.forEach((item: any) => {
     if (item[idKey] === item[parentKey]) {
-      list.push(item)
+      list.push(exclude(item))
       return
     }
     const parent = obj[item[parentKey]]
     if (parent) {
       parent.children = parent.children || []
-      parent.children.push(item)
+      parent.children.push(exclude(item))
     } else {
-      list.push(item)
+      list.push(exclude(item))
     }
   })
   return list

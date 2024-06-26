@@ -11,10 +11,9 @@ export default () => {
     {
       prop: 'userName', // 销售员
       dynamicId: 'userId',
+      dynamicPicker: 'user',
       required: true,
-      search: true,
-      type: 'dynamic-picker',
-      dynamicPicker: 'user'
+      search: true
     },
     {
       prop: 'commission', // 提成
@@ -24,9 +23,9 @@ export default () => {
     {
       prop: 'belongName', // 所属人
       dynamicId: 'belongId',
+      dynamicPicker: 'user',
       search: true,
-      type: 'dynamic-picker',
-      dynamicPicker: 'user'
+      type: 'dynamic-picker'
     },
     {
       prop: 'status', // 状态 1-正常 2-作废

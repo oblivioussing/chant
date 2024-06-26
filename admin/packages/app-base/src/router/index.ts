@@ -5,19 +5,20 @@ import {
   type RouteLocationNormalized
 } from 'vue-router'
 import { storage, StorageEnum } from 'chant'
-
 import app from './app' // app
-import trade from './trade' // 交易管理
-import salary from './salary' // 工资管理
-import auth from './auth' // 权限管理
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...app, ...trade, ...salary, ...auth]
+  routes: [...app]
 })
 
 // 全局解析守卫
-router.beforeResolve((to: RouteLocationNormalized) => {
+router.beforeResolve((to) => {
+  // url参数处理
+  queryDeal(to)
+})
+// url参数处理
+function queryDeal(to: RouteLocationNormalized) {
   // 跳转的页面参数
   const queryMap = storage.getSession(StorageEnum.PageQuery) || ({} as any)
   const { path, query } = to
@@ -35,7 +36,7 @@ router.beforeResolve((to: RouteLocationNormalized) => {
       storage.setSession(StorageEnum.PageQuery, queryMap)
     }
   }
-})
+}
 // 是否为空对象
 function isEmptyObject(data: object) {
   if (typeof data === 'object') {
@@ -47,5 +48,3 @@ function isEmptyObject(data: object) {
 }
 
 export default router
-
-export { default as factory } from './factory'

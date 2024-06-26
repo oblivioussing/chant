@@ -152,8 +152,10 @@ function onLang(lang: LangEnum) {
 }
 // 退出
 async function onQuit() {
+  storage.rmLocal(StorageEnum.Token)
   storage.rmLocal(StorageEnum.User)
-  userStore.$state = {} as any
+  userStore.state.token = ''
+  userStore.state.user = {} as any
   router.push('/login')
 }
 </script>

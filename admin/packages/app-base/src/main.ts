@@ -2,9 +2,9 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'
-import chant, { vuei18n } from 'chant'
+import chant, { useAuthStore, vuei18n } from 'chant'
 import vxe from './plugs/vxe'
-import router, { factory } from './router'
+import router from './router'
 
 // element css
 import 'element-plus/theme-chalk/el-loading.css'
@@ -20,6 +20,10 @@ app.use(createPinia())
 app.use(router)
 app.use(vuei18n)
 
-app.mount('#app')
+async function init() {
+  const authStore = useAuthStore()
+  await authStore.getAuth()
+  app.mount('#app')
+}
 
-factory()
+init()

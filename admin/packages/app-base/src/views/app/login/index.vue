@@ -45,11 +45,12 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Lock, User } from '@element-plus/icons-vue'
-import { shiki, storage, useUserStore, StorageEnum } from 'chant'
+import { shiki, storage, useAuthStore, useUserStore, StorageEnum } from 'chant'
 import { app as lang } from '@app-base/lang'
 
 // use
 const router = useRouter()
+const authStore = useAuthStore()
 const userStore = useUserStore()
 const { t } = useI18n({ messages: lang })
 // ref
@@ -78,6 +79,8 @@ async function onLogin() {
     userStore.state.token = data
     // 缓存token
     storage.setLocal(StorageEnum.Token, data)
+    // 权限
+    await authStore.getAuth()
     // 获取用户信息
     getUser()
   } else {
