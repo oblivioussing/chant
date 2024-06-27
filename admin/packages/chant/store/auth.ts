@@ -3,7 +3,6 @@ import { reactive } from 'vue'
 import { shiki } from '../api'
 import factory from '../router/factory'
 import type { MenuItem } from '../type'
-import { useUserStore } from './user'
 
 export const useAuthStore = defineStore('menu', () => {
   // state
@@ -12,16 +11,13 @@ export const useAuthStore = defineStore('menu', () => {
   })
   // 获取权限
   async function getAuth() {
-    const userStore = useUserStore()
-    if (!userStore.state.token) {
-      return
-    }
-    const { data } = await shiki.get('user/auth')
+    const { code, data } = await shiki.get('user/auth')
     if (data) {
       state.menu = data.menu || []
+      // 构建路由
+      factory()
     }
-    // 构建路由
-    factory()
+    return { code }
   }
   return { state, getAuth }
 })

@@ -64,21 +64,24 @@ const indexRaw = {
   path: '/',
   title: '首页'
 }
-const tabs = (storage.getSession(StorageEnum.HomeNavTab) || [
-  indexRaw
-]) as PathMapping[]
+let tabs = storage.getSession(StorageEnum.HomeNavTab) as PathMapping[]
+tabs = tabs || [indexRaw]
 // ref
 const dropdownRef = ref()
 const tabRef = ref()
 // state
 let state = reactive({
   path: route?.path,
-  tabs: tabs
+  tabs
 })
 // 监听页面关闭
 bus.on(BusEnum.ClosePage, (path) => {
   path = path || route.path
   onTabRemove(path as string)
+})
+// 监听tabs关闭
+bus.on(BusEnum.CloseTabs, () => {
+  state.tabs = [indexRaw]
 })
 // 监听tabs变化
 watch(

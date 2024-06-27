@@ -6,11 +6,8 @@
       :default-active="active"
       ref="menuRef"
       unique-opened
-      @open="onMenuOpen">
-      <el-sub-menu
-        v-for="item in authStore.state.menu"
-        :key="item.id"
-        :index="item.id">
+      @open="onOpen">
+      <el-sub-menu v-for="item in menu" :key="item.id" :index="item.id">
         <template #title>
           <div class="menu-item">
             <div class="menu-item-collapse-box">
@@ -29,7 +26,7 @@
         <template v-for="item1 in item.children" :key="item1.id">
           <el-menu-item
             v-if="!item1.threeMenu"
-            :index="item1.id"
+            :index="item1.path"
             @click="onTab(item1.path)">
             <el-text truncated>{{ title(item1.meta) }}</el-text>
           </el-menu-item>
@@ -42,7 +39,7 @@
             <el-menu-item
               v-for="item2 in item1.children"
               :key="item2.id"
-              :index="item2.id"
+              :index="item2.path"
               @click="onTab(item2.path)">
               <el-text truncated>{{ title(item2.meta) }}</el-text>
             </el-menu-item>
@@ -60,10 +57,11 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuInstance } from 'element-plus'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from 'chant'
+import { base, useAuthStore } from 'chant'
 
 // props
 const props = defineProps<{
@@ -75,24 +73,28 @@ const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 // var
-let subIndex = ''
 const appVersion = window.__APP_VERSION__
 const isDev = import.meta.env.DEV
 const stage = import.meta.env.VITE_STAGE
+let indexs = [] as string[] // sub-menu indexs
 // state
-const menuRef = ref(null)
+const menuRef = ref<MenuInstance>()
 // computed
 const active = computed(() => {
   return route.path.replace(/\/(add|edit|detail)/, '')
 })
+const menu = computed(() => authStore.state.menu)
 // watch
 watch(
   () => route.path,
   () => {
     // path为/折叠menu
-    if (active.value === '/' && subIndex) {
-      const menu = menuRef.value as any
-      menu?.close(subIndex)
+    if (active.value === '/') {
+      indexs = base.distinct(indexs)
+      indexs.forEach((item) => {
+        menuRef.value?.close(item)
+      })
+      indexs = []
     }
   }
 )
@@ -101,17 +103,17 @@ function title(meta?: any) {
   return meta?.title
   // return gt(`router.${name}`)
 }
+// 图标
+function icon(icon?: unknown) {
+  return icon as string
+}
 // 菜单切换
 function onTab(path: string) {
   router.push({ path })
 }
-// sub-menu 展开的回调
-function onMenuOpen(index: string) {
-  subIndex = index
-}
-// 图标
-function icon(icon?: unknown) {
-  return icon as string
+// sub-menu展开的回调
+function onOpen(index: string) {
+  indexs.push(index)
 }
 </script>
 

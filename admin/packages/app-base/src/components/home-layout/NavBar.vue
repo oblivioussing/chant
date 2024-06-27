@@ -81,11 +81,14 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { CaretBottom, Expand, Fold } from '@element-plus/icons-vue'
 import {
+  bus,
   shiki,
   storage,
   useAppStore,
+  useAuthStore,
   useUserStore,
   vuei18n,
+  BusEnum,
   LangEnum,
   StorageEnum
 } from 'chant'
@@ -93,13 +96,12 @@ import { app as lang } from '@app-base/lang'
 
 // emits
 const emits = defineEmits(['update:modelValue'])
-// i18n
+// use
 const { t } = useI18n({ messages: lang })
 const { t: gt } = useI18n({ useScope: 'global' })
-// router
-const router = useRouter()
-// store
 const appStore = useAppStore()
+const authStore = useAuthStore()
+const router = useRouter()
 const userStore = useUserStore()
 // var
 const langDict = new Map([
@@ -137,12 +139,19 @@ async function onRole({ id, name }: any) {
     background: 'rgba(0, 0, 0, 0.5)'
   })
   const { code } = await shiki.post('user/updateRole', { roleId: id }, config)
-  loading.close()
   if (code === '1') {
     user.value.roleId = id
     user.value.roleName = name
     storage.setLocal(StorageEnum.User, user.value)
+    // 获取权限
+    await authStore.getAuth()
+    // 清空nav-tab
+    storage.rmSession(StorageEnum.HomeNavTab)
+    bus.emit(BusEnum.CloseTabs)
+    // 跳转至首页
+    router.push({ path: '/' })
   }
+  loading.close()
 }
 // 语言change
 function onLang(lang: LangEnum) {

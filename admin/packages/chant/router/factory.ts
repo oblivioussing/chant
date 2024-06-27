@@ -1,16 +1,25 @@
+import Develop from '@app-base/components/Develop.vue'
 import { useAuthStore } from '../store'
 import type { MenuItem } from '../type'
+import app from './app'
 import router from './index'
 
 export type Modules = Record<string, () => Promise<{ [key: string]: any }>>
 const modules = import.meta.glob('@app-base/views/**/*.vue') as Modules
+const appPaths = app.map((item) => item.path)
 
 function factory() {
+  const routes = router.getRoutes()
+  routes.forEach((item) => {
+    if (!appPaths.includes(item.path)) {
+      router.removeRoute(item.name!)
+    }
+  })
   // store
   const authStore = useAuthStore()
-  // routes
-  const routes = authStore.state.menu
-  routes?.forEach((item) => {
+  // menu
+  const menu = authStore.state.menu
+  menu?.forEach((item) => {
     // 加载路由
     addRoute(item)
   })
@@ -25,7 +34,7 @@ function addRoute(row: MenuItem) {
     } else {
       url = `/src/views${path}.vue`
     }
-    const component = modules[url]
+    const component = modules[url] || Develop
     router.addRoute('/', {
       path,
       name: path,

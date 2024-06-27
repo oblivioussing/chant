@@ -182,6 +182,15 @@ export class UserService extends BaseService {
   // 权限
   async auth() {
     const result = new Result<any>()
+    const user = await prisma.user.findUnique({
+      select: {
+        Role: {
+          select: { routerIds: true }
+        }
+      },
+      where: { id: this.getUid() }
+    })
+    const routerIds = user.Role.routerIds as string[]
     const rows = await prisma.router.findMany({
       select: {
         code: true,
@@ -193,7 +202,11 @@ export class UserService extends BaseService {
         parentId: true,
         threeMenu: true
       },
-      where: { level: { gt: 0 }, isDelete: 0 },
+      where: {
+        level: { gt: 0 },
+        isDelete: 0,
+        id: { in: routerIds }
+      },
       orderBy: { sequence: 'asc' }
     })
     const funsMap = rows.reduce((acc, cur) => {

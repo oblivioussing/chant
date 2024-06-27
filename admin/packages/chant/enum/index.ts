@@ -7,7 +7,8 @@ export enum ContentTypeEnum {
 }
 
 export enum BusEnum {
-  ClosePage = 'close-page'
+  ClosePage = 'close-page',
+  CloseTabs = 'close-tabs'
 }
 
 export enum LangEnum {
