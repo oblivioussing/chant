@@ -4,10 +4,10 @@ import { APP_GUARD } from '@nestjs/core'
 import { ScheduleModule } from '@nestjs/schedule'
 import { HeaderResolver, I18nModule } from 'nestjs-i18n'
 import * as path from 'path'
-import { AuthGuard } from '../guard/auth'
+import { AuthGuard } from '../components'
+import { ScheduleService } from '../schedule'
 import { RedisModule } from './redis/module'
 import sence from './scene'
-import { ScheduleService } from '../schedule'
 
 @Module({
   imports: [

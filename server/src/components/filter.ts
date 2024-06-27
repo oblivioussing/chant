@@ -24,7 +24,7 @@ body:${body}
 message:${exception?.message}
 `
     logger.error(content)
-    console.error(exception?.message)
+    console.log(exception)
     const result = new Result()
     result.code = '5'
     result.msg = exception?.message

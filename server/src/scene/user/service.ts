@@ -184,6 +184,7 @@ export class UserService extends BaseService {
     const result = new Result<any>()
     const user = await prisma.user.findUnique({
       select: {
+        loginName: true,
         Role: {
           select: { routerIds: true }
         }
@@ -205,7 +206,7 @@ export class UserService extends BaseService {
       where: {
         level: { gt: 0 },
         isDelete: 0,
-        id: { in: routerIds }
+        id: user.loginName === 'admin' ? undefined : { in: routerIds }
       },
       orderBy: { sequence: 'asc' }
     })
