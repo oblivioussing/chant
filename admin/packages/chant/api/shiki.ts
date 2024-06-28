@@ -41,8 +41,7 @@ class Shiki {
   }
 
   constructor() {
-    const apiUrl = import.meta.env.VITE_API_URL
-    this.ryougi.baseurl = apiUrl
+    this.ryougi.baseurl = import.meta.env.DEV ? '/proxy/' : '/'
   }
 
   // get请求

@@ -2,13 +2,14 @@ import { fileURLToPath, URL } from 'node:url'
 import autoImport from 'unplugin-auto-import/vite'
 import components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { lazyImport, VxeResolver } from 'vite-plugin-lazy-import'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import setupName from './vite-plugins/setup-name'
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const { VITE_API_URL } = loadEnv(mode, 'env')
   return {
     base: '/',
     define: {
@@ -47,7 +48,16 @@ export default defineConfig(() => {
       }
     },
     server: {
-      port: 7001
+      port: 7001,
+      proxy: {
+        // api请求
+        '/proxy': {
+          target: VITE_API_URL,
+          rewrite: (path) => path.replace(/proxy/, ''),
+          changeOrigin: true,
+          secure: false
+        }
+      }
     }
   }
 })

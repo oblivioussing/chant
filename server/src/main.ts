@@ -8,8 +8,7 @@ import {
 import {
   GlobalExceptionFilter,
   HttpExceptionFilter,
-  TransformInterceptor,
-  LoggerMiddleware
+  TransformInterceptor
 } from './components'
 import { AppModule } from './module/app'
 
@@ -18,10 +17,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   )
-  app.enableCors()
   app.register(multipart as any)
   app.setGlobalPrefix('/chant/')
-  app.use(new LoggerMiddleware().use)
   app.useGlobalFilters(new GlobalExceptionFilter(), new HttpExceptionFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
   app.useGlobalPipes(new ValidationPipe())
