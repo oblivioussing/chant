@@ -30,7 +30,6 @@ export class TransformInterceptor implements NestInterceptor {
           content += `code:${data.code}\n`
           content += `msg:${data.msg}\n`
           logger.info(content)
-          console.log(content)
         }
         // post默认的201状态码改为200
         if (request.method === 'POST' && response.statusCode === 201) {
