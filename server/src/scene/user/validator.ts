@@ -38,9 +38,6 @@ export class UpdateVali extends Base {
   // id
   @IsNotEmpty({ message: 'id不能为空' })
   id: string
-
-  // @IsNotEmpty({ message: 'avatar不能为空' })
-  // avatar: string
 }
 // 更新角色
 export class RoleIdVali {

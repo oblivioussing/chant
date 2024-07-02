@@ -5,11 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify'
-import {
-  GlobalExceptionFilter,
-  HttpExceptionFilter,
-  TransformInterceptor
-} from './components'
+import { GlobalExceptionFilter, TransformInterceptor } from './components'
 import { AppModule } from './module/app'
 
 async function bootstrap() {
@@ -19,7 +15,7 @@ async function bootstrap() {
   )
   app.register(multipart as any)
   app.setGlobalPrefix('/chant/')
-  app.useGlobalFilters(new GlobalExceptionFilter(), new HttpExceptionFilter())
+  app.useGlobalFilters(new GlobalExceptionFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
   app.useGlobalPipes(new ValidationPipe())
   await app.listen(7000, '0.0.0.0')
