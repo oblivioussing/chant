@@ -53,7 +53,7 @@ export default () => {
       label: '图标',
       hideInPages: ['list'],
       required: true,
-      slotForm: true,
+      slot: ['form'],
       showCustom(row: Model) {
         return row.level === 1
       }

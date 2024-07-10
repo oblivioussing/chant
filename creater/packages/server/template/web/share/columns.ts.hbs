@@ -6,8 +6,17 @@ export default () => {
     {
       prop: '{{columnName}}', {{#if dict }}// {{dictNote dict}} {{/if}}
       label: '{{columnComment}}',
+      {{#if datepicker}}
+      datepicker: '{{datepicker}}',
+      {{/if}}
+      {{#if dynamicPicker}}
+      dynamicPicker: '{{dynamicPicker}}',
+      {{/if}}
       {{#if hideInPages}}
       hideInPages: [{{#each hideInPages}}'{{this}}'{{#if @last}}{{else}},{{/if}}{{/each}}],
+      {{/if}}
+      {{#if inputType}}
+      inputType: '{{inputType}}',
       {{/if}}
       {{#if required}}
       required: {{required}},
@@ -17,12 +26,6 @@ export default () => {
       {{/if}}
       {{#if type}}
       type: '{{type}}',
-      {{/if}}
-      {{#if datepickerType}}
-      datepickerType: '{{datepickerType}}',
-      {{/if}}
-      {{#if inputType}}
-      inputType: '{{inputType}}',
       {{/if}}
     }{{comma @last}}
   {{/each}}

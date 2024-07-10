@@ -37,12 +37,24 @@
         </el-option>
       </el-select>
     </div>
-    <!-- datepickerType -->
-    <div v-if="row.type === 'date-picker'" class="config-item">
-      <div class="label">datepickerType:</div>
-      <el-select v-model="row.datepickerType" clearable size="small">
+    <!-- datepicker -->
+    <div v-if="row.type === 'datePicker'" class="config-item">
+      <div class="label">datepicker:</div>
+      <el-select v-model="row.datepicker" clearable size="small">
         <el-option
-          v-for="item in datepickerTypeList"
+          v-for="item in datepickerList"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+    </div>
+    <!-- dynamicPicker -->
+    <div v-if="row.type === 'dynamicPicker'" class="config-item">
+      <div class="label">dynamicPicker:</div>
+      <el-select v-model="row.dynamicPicker" clearable size="small">
+        <el-option
+          v-for="item in dynamicPickerList"
           :key="item"
           :label="item"
           :value="item">
@@ -68,8 +80,8 @@ defineProps<{
 }>()
 // var
 const typeList = [
-  'date-picker',
-  'input',
+  'datePicker',
+  'dynamicPicker',
   'input-number',
   'input-number-range',
   'radio',
@@ -77,7 +89,7 @@ const typeList = [
   'time-picker',
   'upload'
 ]
-const datepickerTypeList = [
+const datepickerList = [
   'year',
   'month',
   'date',
@@ -88,6 +100,7 @@ const datepickerTypeList = [
   'daterange',
   'monthrange'
 ]
+const dynamicPickerList = ['user', 'org-tree']
 </script>
 
 <style scoped lang="scss">

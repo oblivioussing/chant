@@ -6,7 +6,7 @@
     @instance="former.bindInstance">
     <!-- 图标 -->
     <template #icon>
-      <chant-icon-picker v-model="state.form.icon"></chant-icon-picker>
+      <icon-picker v-model="state.form.icon"></icon-picker>
     </template>
   </chant-form>
   <chant-form-footer
@@ -22,6 +22,7 @@ import { reactive } from 'vue'
 import { shiki, useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict, type Model } from '../share'
+import IconPicker from '@app-base/components/IconPicker.vue'
 
 // props
 const props = defineProps<FormProps>()

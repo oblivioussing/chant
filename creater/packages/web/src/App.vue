@@ -82,7 +82,6 @@
 
 <script setup lang="ts">
 import { ElMessage, type TableInstance } from 'element-plus'
-// @ts-ignore
 import Sortable from 'sortablejs'
 import { computed, onMounted, reactive, ref } from 'vue'
 import Ryougi, { type RequestConfig } from './api/ryougi'
@@ -202,7 +201,6 @@ async function onStart() {
 .page-box {
   display: flex;
   flex-direction: column;
-  flex: 1;
   overflow: hidden;
   padding: 10px;
 }

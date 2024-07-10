@@ -18,6 +18,9 @@ export async function generate(data: Form) {
   data.list?.forEach((item) => {
     item.required = !!item.required
     item.search = !!item.search
+    if (['datePicker', 'dynamicPicker'].includes(item.type)) {
+      Reflect.deleteProperty(item, 'type')
+    }
   })
   const routePath = data.routePath?.replace(/^\/+|\/+$/g, '')
   const routes = routePath?.split('/') || []
