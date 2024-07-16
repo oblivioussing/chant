@@ -17,7 +17,8 @@
         <slot
           v-else-if="item.slot?.includes('form-item')"
           :name="item.prop"
-          :row="item"></slot>
+          :row="item">
+        </slot>
         <!-- form-item -->
         <div
           v-else
@@ -40,7 +41,7 @@
             </slot>
             <!-- input -->
             <el-input
-              v-else-if="!item.type && !item.dynamicPicker && !item.datepicker"
+              v-else-if="!item.type && !item.dynamicPicker && !item.datePicker"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
@@ -77,9 +78,9 @@
               :value-format="item.valueFormat || 'HH:mm:ss'">
             </el-time-picker>
             <!-- date-picker -->
-            <template v-else-if="item.datepicker">
+            <template v-else-if="item.datePicker">
               <el-date-picker
-                v-if="formUtils.isDateRange(item.datepicker)"
+                v-if="formUtils.isDateRange(item.datePicker)"
                 v-model="state.range[item.prop]"
                 :clearable="item.clearable !== false"
                 :disabled="isDisabled(item)"
@@ -87,7 +88,7 @@
                 :placeholder="translate(item, 'select')"
                 :start-placeholder="translate(item)"
                 :end-placeholder="translate(item)"
-                :type="item.datepicker"
+                :type="item.datePicker"
                 :value-format="item.valueFormat"
                 @change="onDateRangeChange(item)">
               </el-date-picker>
@@ -98,7 +99,7 @@
                 :disabled="isDisabled(item)"
                 :disabled-date="item.disabledDate"
                 :placeholder="translate(item, 'select')"
-                :type="item.datepicker"
+                :type="item.datePicker"
                 :value-format="item.valueFormat">
               </el-date-picker>
             </template>
@@ -259,7 +260,7 @@ function init() {
       vModel.value!.form[item.prop] = item.default
     }
     // date range
-    if (formUtils.isDateRange(item.datepicker)) {
+    if (formUtils.isDateRange(item.datePicker)) {
       const start = rangeField(item, 'start')
       // watch
       watch(

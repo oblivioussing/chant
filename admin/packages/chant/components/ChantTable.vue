@@ -6,7 +6,7 @@
     :data="list"
     :height="state.height || undefined"
     ref="tableRef"
-    :row-key="(row) => row[props.rowKey]"
+    :row-key="(row: any) => row[props.rowKey]"
     @row-click="onRowClick"
     @row-dblclick="onRowDbClick"
     @selection-change="onSelectChange">
@@ -19,6 +19,7 @@
       :selectable="selectable"
       type="selection"
       width="35" />
+    <!-- table-column -->
     <el-table-column
       v-for="item in availableColumns"
       :key="item.prop"
@@ -276,13 +277,13 @@ function valueFmt(column: Column, value: any) {
     return '-'
   }
   // date
-  if (column.datepickerType) {
+  if (column.datePicker) {
     const map = {
       date: 'YYYY-MM-DD',
       datetime: 'YYYY-MM-DD HH:mm:ss',
       month: 'YYYY-MM'
     } as any
-    const template = map[column.datepickerType]
+    const template = map[column.datePicker]
     return dayjs(value).format(template)
   }
   // format

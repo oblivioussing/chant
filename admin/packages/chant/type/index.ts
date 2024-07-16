@@ -21,7 +21,7 @@ export type ColumnPage = PageType | 'list'
 type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
-  datepicker?: DatePickType // date-picker显示类型
+  datePicker?: DatePickType // date-picker显示类型
   disabledDate?: (data: Date) => boolean // 日期是否禁用,仅date-picker时有效
   dynamicId?: string // 动态id字段
   dynamicText?: string // 动态text字段
