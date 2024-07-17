@@ -52,7 +52,7 @@
           <template v-else-if="item.editable">
             <!-- input -->
             <el-input
-              v-if="!item.type"
+              v-if="!item.type && !item.dynamicPicker && !item.datePicker"
               v-model="row[item.prop]"
               :placeholder="translate(item)">
             </el-input>
