@@ -28,7 +28,7 @@
           </slot>
           <!-- input -->
           <el-input
-            v-else-if="!item.type && !item.dynamicPicker && !item.datepicker"
+            v-else-if="showInput(item)"
             v-model="vModel.query[item.prop]"
             :clearable="item.clearable !== false"
             :placeholder="translate(item, 'enter')">
@@ -58,7 +58,7 @@
             @change="emits('query')">
           </chant-select>
           <!-- date-picker -->
-          <template v-else-if="item.datepicker">
+          <template v-else-if="item.datePicker">
             <el-date-picker
               v-if="isDateRange(item)"
               v-model="state.range[item.prop]"
@@ -67,7 +67,7 @@
               :placeholder="translate(item, 'select')"
               :start-placeholder="translate(item)"
               :end-placeholder="translate(item)"
-              :type="item.searchDatepicker || item.datepicker"
+              :type="item.searchDatepicker || item.datePicker"
               :value-format="item.valueFormat"
               @change="onDateRangeChange(item)">
             </el-date-picker>
@@ -77,7 +77,7 @@
               :clearable="item.clearable !== false"
               :disabled-date="item.disabledDate"
               :placeholder="translate(item, 'select')"
-              :type="item.searchDatepicker || item.datepicker"
+              :type="item.searchDatepicker || item.datePicker"
               :value-format="item.valueFormat"
               @change="emits('query')">
             </el-date-picker>
@@ -157,6 +157,7 @@ import {
 } from '@chant'
 import { chant as chantLang } from '@chant/lang'
 import DynamicPicker from '@app-base/components/DynamicPicker.vue'
+import { showInput } from './share'
 
 // props
 const props = defineProps<{
@@ -256,7 +257,7 @@ function containerAuto() {
 }
 // 是否为date range
 function isDateRange(column: Column) {
-  const dateType = column.searchDatepicker || column.datepicker
+  const dateType = column.searchDatepicker || column.datePicker
   return formUtils.isDateRange(dateType)
 }
 // range field

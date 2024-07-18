@@ -41,7 +41,7 @@
             </slot>
             <!-- input -->
             <el-input
-              v-else-if="!item.type && !item.dynamicPicker && !item.datePicker"
+              v-else-if="showInput(item)"
               v-model="vModel!.form[item.prop]"
               :clearable="item.clearable !== false"
               :disabled="isDisabled(item)"
@@ -116,7 +116,7 @@
             </el-input-number>
             <!-- upload -->
             <chant-upload
-              v-else-if="item.type === 'upload'"
+              v-else-if="item.uploader"
               v-model="vModel!.form[item.prop]"
               :accept="item.accept"
               :disabled="isDisabled(item)"
@@ -124,7 +124,7 @@
               :file-size="item.fileSize"
               :limit="item.limit"
               :multiple="item.multiple"
-              :type="item.uploadType!">
+              :type="item.uploader">
             </chant-upload>
             <!-- range -->
             <div
@@ -193,6 +193,7 @@ import {
   type PageType
 } from '@chant'
 import DynamicPicker from '@app-base/components/DynamicPicker.vue'
+import { showInput } from './share'
 
 // props
 const props = defineProps<{
