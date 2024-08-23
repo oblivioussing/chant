@@ -10,8 +10,7 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   const route = useRoute()
   const fileColumns = config?.columns?.filter((item) => {
     return (
-      item.type === 'upload' &&
-      ['file-list', 'picture-card'].includes(item.uploadType!)
+      item.uploader && ['file-list', 'picture-card'].includes(item.uploader!)
     )
   })
   const apiMap = { add: 'add', edit: 'update' }
@@ -72,9 +71,8 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
     // 添加文件所需属性
     if (fileColumns) {
       fileColumns.forEach((item) => {
-        const type = item.uploadType
         state.form[item.prop]?.forEach((item1: any) => {
-          if (type === 'file-list') {
+          if (item.uploader === 'file-list') {
             item1.name = item1.filenameOriginal
           } else {
             item1.url = item1.filePath + item1.filename
