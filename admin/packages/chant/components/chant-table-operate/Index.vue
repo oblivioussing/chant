@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, type ModelRef } from 'vue'
+import { computed, nextTick, onMounted, ref, type ModelRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Setting, More } from '@element-plus/icons-vue'
@@ -129,8 +129,10 @@ const isSelected = computed(() => {
 })
 // onMounted
 onMounted(() => {
-  // 按钮组
-  buttonGroup()
+  nextTick(() => {
+    // 按钮组
+    buttonGroup()
+  })
   // 获取缓存formType
   getStorageFormType()
 })
@@ -141,11 +143,12 @@ function buttonGroup() {
       '.el-button-group'
     ) as NodeListOf<Element>
     groups?.forEach((item) => {
-      if (item.children.length === 1) {
+      const nodes = item?.querySelectorAll('.el-button')
+      if (nodes.length === 1) {
         item.removeAttribute('class')
       }
     })
-  }, 300)
+  }, 1000)
 }
 // 获取缓存formType
 function getStorageFormType() {
