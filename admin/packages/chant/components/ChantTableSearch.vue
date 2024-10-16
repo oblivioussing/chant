@@ -36,7 +36,7 @@
               {{ gt(item.prepend) }}
             </template>
             <template v-else-if="item.append" #append>
-              {{ gt(item.append) }}
+              {{ gt(item.append!) }}
             </template>
           </el-input>
           <!-- input-number -->
