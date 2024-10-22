@@ -10,63 +10,62 @@
       </el-checkbox>
     </div>
     <div class="button-box" ref="groupsRef">
-      <slot name="alone"></slot>
-      <!-- 自定义按钮(组) -->
-      <el-button-group class="m-l-10">
+      <el-button-group class="flex">
         <slot></slot>
+        <!-- 新增 -->
+        <chant-icon-button
+          v-if="show('add')"
+          :content="gt('button.add')"
+          icon-type="plus"
+          type="primary"
+          @click="emits('add')">
+        </chant-icon-button>
+        <!-- 批量设置 -->
+        <el-dropdown
+          v-if="show('set')"
+          :disabled="!isSelected"
+          @command="emits('set', $event)">
+          <el-button
+            class="dropdown-button edit"
+            :disabled="!isSelected"
+            type="primary">
+            <el-icon><Setting /></el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <slot name="edit-option"></slot>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <!-- 批量删除 -->
+        <chant-icon-button
+          v-if="show('delete')"
+          :content="t('chant.batchDelete')"
+          :disabled="!isSelected"
+          icon-type="delete"
+          type="danger"
+          @click="emits('delete')">
+        </chant-icon-button>
+        <!-- 更多操作 -->
+        <el-dropdown v-if="show('more')" @command="emits('more', $event)">
+          <el-button class="dropdown-button" type="primary">
+            <el-icon><More /></el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <slot name="more-option"></slot>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </el-button-group>
-      <div :class="{ 'm-l-10': props.options?.length }">
-        <el-button-group class="flex">
-          <!-- 新增 -->
-          <chant-icon-button
-            v-if="show('add')"
-            :content="gt('button.add')"
-            icon-type="plus"
-            type="primary"
-            @click="emits('add')">
-          </chant-icon-button>
-          <!-- 批量设置 -->
-          <el-dropdown
-            v-if="show('set')"
-            :disabled="!isSelected"
-            @command="emits('set', $event)">
-            <el-button
-              class="dropdown-button edit"
-              :disabled="!isSelected"
-              type="primary">
-              <el-icon><Setting /></el-icon>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <slot name="edit-option"></slot>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-          <!-- 批量删除 -->
-          <chant-icon-button
-            v-if="show('delete')"
-            :content="t('chant.batchDelete')"
-            :disabled="!isSelected"
-            icon-type="delete"
-            type="danger"
-            @click="emits('delete')">
-          </chant-icon-button>
-          <!-- 更多操作 -->
-          <el-dropdown v-if="show('more')" @command="emits('more', $event)">
-            <el-button class="dropdown-button" type="primary">
-              <el-icon><More /></el-icon>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <slot name="more-option"></slot>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </el-button-group>
-      </div>
-      <el-button-group class="m-l-10">
+      <el-button-group
+        v-if="vModel.columns && props.showFilter && props.showFormType"
+        class="m-l-10">
         <!-- 表单操作方式 -->
-        <chant-button :content="t('chant.formType')" @click="onFormType">
+        <chant-button
+          v-if="props.showFormType"
+          :content="t('chant.formType')"
+          @click="onFormType">
           <chant-icon-font :icon="formTypeIcon"></chant-icon-font>
         </chant-button>
         <!-- 字段筛选 -->
@@ -98,10 +97,12 @@ interface Props {
   options?: Option[] // 按钮选项
   showCheckedAll?: boolean // 是否显示全选
   showFilter?: boolean // 是否显示过滤按钮
+  showFormType?: boolean // 是否显示表单类型
 }
 // props
 const props = withDefaults(defineProps<Props>(), {
-  showFilter: true
+  showFilter: true,
+  showFormType: true
 })
 // emits
 const emits = defineEmits(['add', 'set', 'delete', 'more'])

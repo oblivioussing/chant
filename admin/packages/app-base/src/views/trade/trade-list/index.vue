@@ -10,8 +10,8 @@
   <chant-table-operate
     v-model="state"
     :lang="lang"
-    show-checked-all
     :options="['add', 'set', 'delete', 'more']"
+    show-checked-all
     @add="lister.add(state)"
     @set="onSet"
     @delete="onDeletes"
