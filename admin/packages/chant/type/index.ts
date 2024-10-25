@@ -58,7 +58,7 @@ export type FormColumn = {
   required?: boolean // 是否必填
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: FormItemRule[] // 表单验证规则
-  showCustom?: (row: any) => boolean // 自定义显示逻辑
+  show?: (row: any) => boolean // 自定义显示逻辑
   tips?: string // 提示
   title?: string // 标题
   accept?: string // 接受上传的文件类型,仅uploader有值时有效

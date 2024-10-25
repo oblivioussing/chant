@@ -14,7 +14,7 @@ export default () => {
       label: '路径',
       required: true,
       search: true,
-      showCustom(row: Model) {
+      show(row: Model) {
         if (row.type === '4') {
           return true
         }
@@ -30,7 +30,7 @@ export default () => {
       prop: 'type',
       label: '类型',
       type: 'radio',
-      showCustom(row: Model) {
+      show(row: Model) {
         if (row.threeMenu) {
           return row.level === 4
         }
@@ -41,7 +41,7 @@ export default () => {
       prop: 'code',
       label: '编号',
       required: true,
-      showCustom(row: Model) {
+      show(row: Model) {
         if (row.threeMenu) {
           return row.level === 4
         }
@@ -54,7 +54,7 @@ export default () => {
       hideInPages: ['list'],
       required: true,
       slot: ['form'],
-      showCustom(row: Model) {
+      show(row: Model) {
         return row.level === 1
       }
     },
@@ -63,7 +63,7 @@ export default () => {
       label: '三级菜单',
       hideInPages: ['list'],
       type: 'radio',
-      showCustom(row: Model) {
+      show(row: Model) {
         return row.level === 2
       }
     }

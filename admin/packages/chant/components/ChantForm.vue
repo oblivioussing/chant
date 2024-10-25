@@ -229,8 +229,8 @@ const availableColumns = computed(() => {
     if (item.hideInPages?.includes(vModel.value?.pageType!)) {
       return false
     }
-    if (item.showCustom) {
-      return item?.showCustom(vModel.value?.form)
+    if (item.show) {
+      return item?.show(vModel.value?.form)
     }
     return true
   })
