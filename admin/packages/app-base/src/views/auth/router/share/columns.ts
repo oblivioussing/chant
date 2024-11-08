@@ -14,15 +14,15 @@ export default () => {
       label: '路径',
       required: true,
       search: true,
-      show(row: Model) {
-        if (row.type === '4') {
+      show(model: Model) {
+        if (model.type === '4') {
           return true
         }
-        if (row.level === 2) {
-          return !row.threeMenu
+        if (model.level === 2) {
+          return !model.threeMenu
         }
-        if (row.level === 3) {
-          return row.threeMenu
+        if (model.level === 3) {
+          return model.threeMenu
         }
       }
     },
@@ -30,22 +30,22 @@ export default () => {
       prop: 'type',
       label: '类型',
       type: 'radio',
-      show(row: Model) {
-        if (row.threeMenu) {
-          return row.level === 4
+      show(model: Model) {
+        if (model.threeMenu) {
+          return model.level === 4
         }
-        return row.level === 3
+        return model.level === 3
       }
     },
     {
       prop: 'code',
       label: '编号',
       required: true,
-      show(row: Model) {
-        if (row.threeMenu) {
-          return row.level === 4
+      show(model: Model) {
+        if (model.threeMenu) {
+          return model.level === 4
         }
-        return row.level === 3
+        return model.level === 3
       }
     },
     {
@@ -54,8 +54,8 @@ export default () => {
       hideInPages: ['list'],
       required: true,
       slot: ['form'],
-      show(row: Model) {
-        return row.level === 1
+      show(model: Model) {
+        return model.level === 1
       }
     },
     {
@@ -63,8 +63,8 @@ export default () => {
       label: '三级菜单',
       hideInPages: ['list'],
       type: 'radio',
-      show(row: Model) {
-        return row.level === 2
+      show(model: Model) {
+        return model.level === 2
       }
     }
   ] as Column[]

@@ -66,7 +66,7 @@
               :lang="lang"
               :multiple="item.selectMultiple"
               :placeholder="translate(item, 'select')"
-              @change="onChange(item, $event)">
+              @change="onChange(item)">
             </chant-select>
             <!-- timepicker -->
             <el-time-picker
@@ -151,7 +151,7 @@
               :disabled="isDisabled(item)"
               :data="props?.dict?.[item.prop]"
               :lang="lang"
-              @change="onChange(item, $event)">
+              @change="onChange(item)">
             </chant-radio>
             <!-- custom-picker -->
             <dynamic-picker
@@ -161,7 +161,7 @@
               :disabled="isDisabled(item)"
               :title="translate(item)"
               :type="item.dynamicPicker"
-              @change="item.change && onChange(item, $event)">
+              @change="item.change && onChange(item)">
             </dynamic-picker>
             <!-- tips -->
             <el-tooltip
@@ -340,8 +340,8 @@ function rules(column: Column) {
   return rules
 }
 // change
-function onChange(column: Column, row: any) {
-  return column.change && column.change(vModel.value!.form, row)
+function onChange(column: Column) {
+  return column.change && column.change(vModel.value!.form, vModel.value)
 }
 // 日期范围选择
 function onDateRangeChange(column: Column) {

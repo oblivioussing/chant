@@ -63,7 +63,7 @@
               v-if="isDateRange(item)"
               v-model="state.range[item.prop]"
               :clearable="item.clearable !== false"
-              :disabled-date="item.disabledDate"
+              :disabled-date="disabledDate(item)"
               :placeholder="translate(item, 'select')"
               :start-placeholder="translate(item)"
               :end-placeholder="translate(item)"
@@ -75,7 +75,7 @@
               v-else
               v-model="vModel.query[item.prop]"
               :clearable="item.clearable !== false"
-              :disabled-date="item.disabledDate"
+              :disabled-date="disabledDate(item)"
               :placeholder="translate(item, 'select')"
               :type="item.searchDatepicker || item.datePicker"
               :value-format="item.valueFormat"
@@ -297,6 +297,11 @@ function onDateRangeChange(column: Column) {
     vModel.value.query[rangeField(column, 'end')] = value[1]
   }
   emits('query')
+}
+// 日期禁用
+function disabledDate(column: Column) {
+  return (date: Date) =>
+    column?.disabledDate ? column?.disabledDate(date, vModel.value) : undefined
 }
 // 提交
 async function onSubmit(type: 'query' | 'reset') {

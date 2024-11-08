@@ -22,6 +22,7 @@ type BaseColumn = {
   append?: string // 输入框后置内容
   clearable?: boolean // 是否可清空
   datePicker?: DatePickType // date-picker显示类型
+  disabledDate?: (data: Date, form: any) => boolean // 日期是否禁用,仅date-picker时有效
   dynamicId?: string // 动态id字段
   dynamicText?: string // 动态text字段
   dynamicStart?: string // 范围选择start字段
@@ -44,11 +45,10 @@ type BaseColumn = {
 type SlotType = 'form' | 'form-item' | 'list' | 'search'
 
 export type FormColumn = {
-  change?: (form: any, row?: any) => void // 值变更事件
+  change?: (model: any, row?: any) => void // 值变更事件
   default?: any // 默认值
   defaultTime?: Date | [Date, Date] // 范围选择时选中日期所使用的当日内具体时刻
   disabled?: boolean | ((row: any) => boolean) // 是否禁用
-  disabledDate?: (data: Date, form: any) => boolean // 日期是否禁用,仅date-picker时有效
   disabledInPage?: ColumnPage // 在特定页面类型中禁用
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效
@@ -58,7 +58,7 @@ export type FormColumn = {
   required?: boolean // 是否必填
   rows?: number // 输入框行数,仅type为Textarea时有效
   rules?: FormItemRule[] // 表单验证规则
-  show?: (row: any) => boolean // 自定义显示逻辑
+  show?: (model: any, data?: any) => boolean // 自定义显示逻辑
   tips?: string // 提示
   title?: string // 标题
   accept?: string // 接受上传的文件类型,仅uploader有值时有效
