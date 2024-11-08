@@ -32,7 +32,7 @@
           </el-menu-item>
           <el-sub-menu v-else class="nest" :index="item1.id">
             <template #title>
-              <el-text style="padding-left: 20px" truncated>
+              <el-text class="nest-text" truncated>
                 {{ title(item1.meta) }}
               </el-text>
             </template>
@@ -145,6 +145,9 @@ function onOpen(index: string) {
       .el-sub-menu.nest {
         .el-sub-menu__title {
           padding-left: 20px !important;
+        }
+        .nest-text {
+          padding-left: 20px;
         }
       }
     }
