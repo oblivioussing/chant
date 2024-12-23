@@ -55,7 +55,7 @@
             :filterable="item.filterable"
             :lang="lang"
             :placeholder="translate(item, 'select')"
-            @change="emits('query')">
+            @change="onSubmit('query')">
           </chant-select>
           <!-- date-picker -->
           <template v-else-if="item.datePicker">
@@ -79,7 +79,7 @@
               :placeholder="translate(item, 'select')"
               :type="item.searchDatepicker || item.datePicker"
               :value-format="item.valueFormat"
-              @change="emits('query')">
+              @change="onSubmit('query')">
             </el-date-picker>
           </template>
           <!-- input-number-range -->
@@ -105,7 +105,7 @@
             v-model:text="vModel.pickerText[getDynamicText(item)]"
             :title="translate(item)"
             :type="item.dynamicPicker"
-            @change="emits('query')">
+            @change="onSubmit('query')">
           </dynamic-picker>
         </el-form-item>
       </template>
@@ -306,11 +306,13 @@ function disabledDate(column: Column) {
 // 提交
 async function onSubmit(type: 'query' | 'reset') {
   try {
-    if (type === 'reset' && vModel.value) {
+    if (vModel.value) {
       vModel.value.pages.pageNum = 1
-      vModel.value.pickerText = {}
-      vModel.value.query = {}
-      bindQueryValue()
+      if (type === 'reset') {
+        vModel.value.pickerText = {}
+        vModel.value.query = {}
+        bindQueryValue()
+      }
     }
     const status = await formRef.value?.validate()
     status && emits('query')
