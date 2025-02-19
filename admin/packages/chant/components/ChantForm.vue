@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="vModel!.formLoading" class="chant-form">
+  <div v-loading="formLoading" class="chant-form">
     <el-form
       :label-width="labelWidthCpd"
       :model="vModel?.form"
@@ -39,6 +39,10 @@
               :row="item"
               :value="vModel!.form[item.prop]">
             </slot>
+            <!-- text -->
+            <div v-else-if="showText(item)">
+              {{ text(item) }}
+            </div>
             <!-- input -->
             <el-input
               v-else-if="showInput(item)"
@@ -180,6 +184,7 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import type { FormInstance } from 'element-plus'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -199,8 +204,10 @@ import { showInput } from './share'
 const props = defineProps<{
   columns?: Column[] // model
   dict?: any // 字典
+  form?: any // form
   labelWidth?: string // label宽度
   lang?: Lang // 国际化
+  readonly?: boolean // 只读
 }>()
 // emits
 const emits = defineEmits(['instance'])
@@ -234,6 +241,20 @@ const availableColumns = computed(() => {
     }
     return true
   })
+})
+const form = computed(() => {
+  if (props.form) {
+    return props.form
+  } else {
+    return vModel.value?.form
+  }
+})
+const formLoading = computed(() => {
+  if (vModel.value?.formLoading) {
+    return vModel.value?.formLoading
+  } else {
+    return false
+  }
 })
 const labelWidthCpd = computed(() => {
   if (props.labelWidth) {
@@ -351,6 +372,69 @@ function onDateRangeChange(column: Column) {
   }
   vModel.value!.form[rangeField(column, 'start')] = value[0]
   vModel.value!.form[rangeField(column, 'end')] = value[1]
+}
+// 显示文本
+function showText(column: Column) {
+  return props.readonly && !column.uploader && !column.tips
+}
+// 文本渲染
+function text(column: Column) {
+  const value = form.value[column.prop]
+  if (typeof value == 'string' && !value) {
+    return '-'
+  }
+  // input
+  if (showInput(column)) {
+    if (column.prepend) {
+      return gt(column.prepend) + value
+    }
+    if (column.append) {
+      return gt(column.append) + value
+    }
+    return value
+  }
+  // select
+  if (column.type === 'select') {
+    return props.dict?.[column.prop]?.[value]
+  }
+  // timepicker
+  if (column.type === 'time-picker') {
+    return dayjs(value).format(column.valueFormat || 'HH:mm:ss')
+  }
+  // date-picker
+  if (column.datePicker) {
+    // date range
+    if (formUtils.isDateRange(column.datePicker)) {
+      let start = state.range[column.prop]?.[0]
+      start = start ? dayjs(start).format(column.valueFormat || 'x') : ''
+      let end = state.range[column.prop]?.[1]
+      end = end ? dayjs(end).format(column.valueFormat || 'x') : ''
+      return `${start} - ${end}`
+    }
+    // dates
+    if (column.datePicker === 'dates') {
+      return dayjs(value).format(column.valueFormat || 'x')
+    }
+  }
+  // input-number
+  if (column.type === 'input-number') {
+    return value
+  }
+  // range
+  if (column.type === 'input-number-range') {
+    const start = form.value[rangeField(column, 'start')]
+    const end = form.value[rangeField(column, 'end')]
+    return `${start} ~ ${end}`
+  }
+  // radio
+  if (column.type === 'radio') {
+    return props.dict?.[column.prop]?.[value]
+  }
+  // dynamic-picker
+  if (column.dynamicPicker) {
+    return form.value?.[getDynamicText(column)]
+  }
+  return value
 }
 // 翻译
 function translate(column: Column, type?: 'enter' | 'select') {
