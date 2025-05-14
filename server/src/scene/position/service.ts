@@ -1,4 +1,4 @@
-import { type Position, type Prisma } from '@prisma/client'
+import { type Position } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { Many } from '@/type'
 import { base } from '@/utils'
