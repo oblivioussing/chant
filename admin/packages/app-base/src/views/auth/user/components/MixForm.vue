@@ -42,6 +42,9 @@ const former = useFormer(props, { columns: columns() })
 // state
 let state = reactive({
   ...former.state,
+  form: {
+    roleIds: []
+  } as any,
   orgTree: []
 })
 // create
