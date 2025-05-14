@@ -83,13 +83,14 @@ export function toEntity<T>(
 ): T {
   const obj = {} as any
   for (const item in entity) {
-    if (!fill && isEmpty(data[item])) {
-      continue
-    }
     const value = data[item]
     const entityValue = entity[item]
     const isNumber = typeof entityValue === 'number'
     const isDecimal = entityValue instanceof Prisma.Decimal
+    if (!fill && (value === '' || value === null)) {
+      obj[item] = value
+      continue
+    }
     if (isDate(entityValue)) {
       if (value) {
         obj[item] = new Date(value)

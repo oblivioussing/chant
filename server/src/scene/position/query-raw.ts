@@ -25,7 +25,7 @@ export default {
         ) AS jt ON jt.roleId IS NOT NULL
       LEFT JOIN 
         role r ON jt.roleId = r.id COLLATE utf8mb4_unicode_ci
-      ${toWhere(position)}
+      ${toWhere(position, { alias: 'p' })}
       AND
         p.is_delete = 0
       GROUP BY 
