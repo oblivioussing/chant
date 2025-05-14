@@ -19,7 +19,7 @@ export class RoleService extends BaseService {
   // 根节点初始化
   async root() {
     const result = new Result()
-    const data = base.toEntity({}, roleEntity, true)
+    const data = base.toEntity({}, roleEntity)
     data.name = '管理员'
     data.id = base.createId()
     data.createId = this.getUid()

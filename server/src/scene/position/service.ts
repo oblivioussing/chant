@@ -6,9 +6,6 @@ import { positionEntity } from './model'
 import queryRaw from './query-raw'
 
 export class PositionService extends BaseService {
-  constructor() {
-    super()
-  }
   // 新增
   async add(position: Position) {
     const result = new Result()

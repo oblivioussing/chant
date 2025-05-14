@@ -5,17 +5,17 @@
     v-model:file-list="vModel"
     v-bind="uploadAttrs"
     :limit="props.limit"
-    :list-type="props.type === 'picture-card' ? 'picture-card' : 'text'"
+    :list-type="props.uploader === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
     :on-change="onChange"
     :on-exceed="onExceed"
     :on-preview="onPreview">
     <!-- file-list -->
-    <el-button v-if="props.type === 'file-list'" type="primary">
+    <el-button v-if="props.uploader === 'file-list'" type="primary">
       {{ t('clickUpload') }}
     </el-button>
     <!-- picture-card -->
-    <el-icon v-else-if="props.type === 'picture-card'">
+    <el-icon v-else-if="props.uploader === 'picture-card'">
       <Plus />
     </el-icon>
     <!-- tip -->
@@ -31,7 +31,7 @@
     :on-change="onChange"
     :on-exceed="onExceed">
     <!-- single-image -->
-    <template v-if="props.type === 'single-image'">
+    <template v-if="props.uploader === 'single-image'">
       <el-image v-if="vModel" class="image" fit="cover" :src="vModel">
       </el-image>
       <el-icon v-else class="uploader-icon"><Plus /></el-icon>
@@ -53,7 +53,7 @@ import type { UploadFile, UploadInstance, UploadRawFile } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@element-plus/icons-vue'
-import { shiki, type FileBizType, type UploadType } from '@chant'
+import { shiki, type FileBizType, type Uploader } from '@chant'
 import { chant as lang } from '@chant/lang'
 
 // type
@@ -70,7 +70,7 @@ type Props = {
   fileSize?: number // 允许上传文件的大小(MB)
   limit?: number // 允许上传文件的最大数量
   multiple?: boolean // 是否支持多选文件
-  type: UploadType // 文件上传类型
+  uploader: Uploader // 风格样式
 }
 // props
 const props = withDefaults(defineProps<Props>(), {
@@ -95,8 +95,8 @@ let state = reactive({
 })
 // computed
 const showFileList = computed(() => {
-  const list: UploadType[] = ['file-list', 'picture-card']
-  return list.includes(props.type)
+  const list: Uploader[] = ['file-list', 'picture-card']
+  return list.includes(props.uploader)
 })
 const tip = computed(() => {
   const list = []
@@ -120,7 +120,7 @@ const uploadAttrs = computed(() => {
     action: '/',
     accept: props.accept,
     autoUpload: false,
-    class: ['chant-upload', props.type],
+    class: ['chant-upload', props.uploader],
     disabled: props.disabled,
     ref: uploadRef
   }
@@ -142,7 +142,7 @@ async function onChange(row: UploadFile) {
 }
 // 文件超出限制
 function onExceed(files: File[]) {
-  if (props.type === 'single-image' || props.limit === 1) {
+  if (props.uploader === 'single-image' || props.limit === 1) {
     uploadRef.value!.clearFiles()
     const file = files[0] as UploadRawFile
     file.uid = genFileId()

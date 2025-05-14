@@ -12,7 +12,7 @@ export class RouterService extends BaseService {
   // 根节点初始化
   async root() {
     const result = new Result()
-    const data = base.toEntity({}, routerEntity, true)
+    const data = base.toEntity({}, routerEntity)
     data.name = '系统'
     data.id = base.createId()
     data.createId = this.getUid()

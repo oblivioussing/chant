@@ -128,7 +128,7 @@
               :file-size="item.fileSize"
               :limit="item.limit"
               :multiple="item.multiple"
-              :type="item.uploader">
+              :uploader="item.uploader">
             </chant-upload>
             <!-- range -->
             <div

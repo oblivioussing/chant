@@ -73,7 +73,7 @@ export default () => {
       type: 'upload',
       accept: AcceptEnum.Image,
       fileBizType: 'avatar',
-      uploadType: 'single-image'
+      uploader: 'single-image'
     }
   ] as Column[]
 }

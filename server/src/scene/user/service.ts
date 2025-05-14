@@ -12,10 +12,6 @@ export class UserService extends BaseService {
   @Inject(RedisService)
   private redisService: RedisService
 
-  constructor() {
-    super()
-  }
-
   // 新增
   async add(user: User) {
     const result = new Result()
@@ -33,7 +29,7 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const data = base.toEntity(user, userEntity, true)
+    const data = base.toEntity(user, userEntity)
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()

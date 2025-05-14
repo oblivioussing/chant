@@ -45,10 +45,6 @@ export function isDate(value: any) {
 export function isEmpty(value: any) {
   return value === null || value === undefined || value === ''
 }
-// 是否不为空
-export function isNotEmpty(value: any) {
-  return value !== null && value !== undefined && value !== ''
-}
 // 批量操作查询条件
 export function manyWhere<T>(params: Many<T>, entity: object) {
   if (params.all === 1) {
@@ -75,11 +71,11 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
   }
   return config
 }
-// 数据转实体
+// 数据转实体(part:只处理data中包含的字段)
 export function toEntity<T>(
   data: Record<string, any>,
   entity: T,
-  fill?: boolean
+  part?: boolean
 ): T {
   const obj = {} as any
   for (const item in entity) {
@@ -87,8 +83,7 @@ export function toEntity<T>(
     const entityValue = entity[item]
     const isNumber = typeof entityValue === 'number'
     const isDecimal = entityValue instanceof Prisma.Decimal
-    if (!fill && (value === '' || value === null)) {
-      obj[item] = value
+    if (value === undefined && part) {
       continue
     }
     if (isDate(entityValue)) {
@@ -98,9 +93,9 @@ export function toEntity<T>(
         obj[item] = undefined
       }
     } else if (isNumber || isDecimal) {
-      obj[item] = isNotEmpty(value) ? Number(value) : entityValue
+      obj[item] = isEmpty(value) ? null : Number(value)
     } else if (typeof entityValue === 'string') {
-      obj[item] = isNotEmpty(value) ? String(value) : entityValue
+      obj[item] = isEmpty(value) ? '' : String(value)
     } else {
       obj[item] = value
     }

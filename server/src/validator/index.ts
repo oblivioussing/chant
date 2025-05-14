@@ -31,7 +31,7 @@ export function IsNotEqualTo(
 // 忽略null,undefined,''
 export function IsOptional(validationOptions?: ValidationOptions) {
   return ValidateIf((_, value) => {
-    return base.isNotEmpty(value)
+    return !base.isEmpty(value)
   }, validationOptions)
 }
 // id校验

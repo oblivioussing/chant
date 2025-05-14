@@ -50,7 +50,7 @@ export function toWhere<T extends Record<string, any>>(
     }
     const column = sql`${index ? sql`AND` : empty} ${raw(field)}`
     let columnValue
-    if (config?.like.includes(cur)) {
+    if (config?.like?.includes(cur)) {
       columnValue = sql`LIKE ${`%${value}%`}`
     } else {
       columnValue = sql`= ${value}`

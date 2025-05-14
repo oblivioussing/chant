@@ -13,7 +13,7 @@ export class OrgService extends BaseService {
   // 根节点初始化
   async root(org: Org) {
     const result = new Result()
-    const data = base.toEntity(org, orgEntity, true)
+    const data = base.toEntity(org, orgEntity)
     data.level = 0
     data.id = base.createId()
     data.createId = this.getUid()
@@ -30,7 +30,7 @@ export class OrgService extends BaseService {
   // 新增
   async add(org: Org) {
     const result = new Result()
-    const data = base.toEntity(org, orgEntity, true)
+    const data = base.toEntity(org, orgEntity)
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()

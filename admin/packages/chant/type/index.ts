@@ -61,11 +61,11 @@ export type FormColumn = {
   show?: (model: any, data?: any) => boolean // 自定义显示逻辑
   tips?: string // 提示
   title?: string // 标题
-  accept?: string // 接受上传的文件类型,仅uploader有值时有效
-  fileBizType?: FileBizType // 文件业务类型,仅uploader有值时有效
-  fileSize?: number // 允许上传文件的大小(MB),仅uploader有值时有效
-  limit?: number // 允许上传文件的最大数量,仅uploader有值时有效
-  uploader?: Uploader // 文件上传类型,仅uploader有值时有效
+  accept?: string // 接受上传的文件类型,仅type为upload有值时有效
+  fileBizType?: FileBizType // 文件业务类型,仅type为upload有值时有效
+  fileSize?: number // 允许上传文件的大小(MB),仅type为upload有值时有效
+  limit?: number // 允许上传文件的最大数量,仅type为upload有值时有效
+  uploader?: Uploader // 风格样式,仅type为upload有值时有效
 } & BaseColumn
 
 export type ListColumn = {

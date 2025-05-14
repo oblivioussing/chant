@@ -5,13 +5,10 @@ import { base } from '@/utils'
 import { {{module}}Entity } from './model'
 
 export class {{upper module}}Service extends BaseService {
-  constructor() {
-    super()
-  }
   // 新增
   async add({{module}}: {{upper module}}) {
     const result = new Result()
-    const data = base.toEntity({{module}}, {{module}}Entity, true)
+    const data = base.toEntity({{module}}, {{module}}Entity)
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
