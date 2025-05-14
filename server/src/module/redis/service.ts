@@ -10,13 +10,13 @@ export class RedisService {
     this.redis = new Redis(config.redisUrl)
   }
 
-  async set(prfix: Prefix, key: string, value: any) {
-    return await this.redis.set(`${prfix}_${key}`, value)
+  async set(prefix: Prefix, key: string, value: any) {
+    return await this.redis.set(`${prefix}_${key}`, value)
   }
-  async get(prfix: Prefix, key: string) {
-    return await this.redis.get(`${prfix}_${key}`)
+  async get(prefix: Prefix, key: string) {
+    return await this.redis.get(`${prefix}_${key}`)
   }
-  async expire(prfix: Prefix, key: string, ttl: number) {
-    await this.redis.expire(`${prfix}_${key}`, ttl)
+  async expire(prefix: Prefix, key: string, ttl: number) {
+    await this.redis.expire(`${prefix}_${key}`, ttl)
   }
 }
