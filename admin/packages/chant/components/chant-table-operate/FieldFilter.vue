@@ -147,11 +147,13 @@ function onSave() {
 }
 // 是否显示
 function show(column: Column) {
-  return !column.hideInPages?.includes('list')
+  const hideList = column.hideInPages?.includes('list')
+  const label = column.label || column.prop
+  return !hideList && label
 }
 // 翻译
 function translate(column: Column) {
-  let label = column.label || column.prop
+  const label = column.label || column.prop
   return props.lang ? t(label) : label
 }
 </script>
