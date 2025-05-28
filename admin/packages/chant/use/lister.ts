@@ -33,7 +33,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   let tableInstance: TableInstance
 
   // 批量操作
-  function batch(
+  async function batch(
     path: string,
     state: State,
     config: {
@@ -44,7 +44,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     const params = getListParams(state)
     const count = params.all ? state.total : state.selections.length
     const title = gt('tips.totalRecords', [count])
-    operate(path, state, { confirmTip, params, title })
+    return await operate(path, state, { confirmTip, params, title })
   }
   // 绑定列表实例
   function bindInstance(val: TableInstance) {
@@ -141,10 +141,15 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   }
   // 获取列表参数
   function getListParams(state: State) {
+    if (state.all) {
+      return {
+        ids: state.selections.map((item) => item.id),
+        all: state.all,
+        search: getQuery(state)
+      }
+    }
     return {
-      ids: state.selections.map((item) => item.id),
-      all: state.all,
-      search: getQuery(state)
+      ids: state.selections.map((item) => item.id)
     }
   }
   // 是否选中数据
@@ -179,14 +184,15 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     if (code === '1') {
       method ? method() : bus.emit(route.path)
     }
+    return code
   }
   // 权限校验
   function permission(val: string) {
     return funs?.includes(val)
   }
   // 删除
-  function remove(path: string, state: State, params: any) {
-    operate(path, state, {
+  async function remove(path: string, state: State, params: any) {
+    return await operate(path, state, {
       confirmTip: gt('tips.confirmDelete'),
       params
     })
