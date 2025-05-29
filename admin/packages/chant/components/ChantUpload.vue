@@ -1,15 +1,22 @@
 <template>
   <!-- list upload -->
   <el-upload
-    v-if="showFileList"
-    v-model:file-list="vModel"
     v-bind="uploadAttrs"
+    :file-list="showFileList ? vModel : undefined"
     :limit="props.limit"
     :list-type="props.uploader === 'picture-card' ? 'picture-card' : 'text'"
     :multiple="props.multiple"
     :on-change="onChange"
     :on-exceed="onExceed"
-    :on-preview="onPreview">
+    :on-preview="onPreview"
+    :show-file-list="showFileList"
+    @update:file-list="updateFileList">
+    <!-- single-image -->
+    <template v-if="props.uploader === 'single-image'">
+      <el-image v-if="vModel" class="image" fit="cover" :src="vModel">
+      </el-image>
+      <el-icon v-else class="uploader-icon"><Plus /></el-icon>
+    </template>
     <!-- file-list -->
     <el-button v-if="props.uploader === 'file-list'" type="primary">
       {{ t('clickUpload') }}
@@ -18,23 +25,22 @@
     <el-icon v-else-if="props.uploader === 'picture-card'">
       <Plus />
     </el-icon>
-    <!-- tip -->
-    <template #tip>
-      <div class="tip">{{ tip }}</div>
-    </template>
-  </el-upload>
-  <!-- single upload -->
-  <el-upload
-    v-else
-    v-bind="uploadAttrs"
-    :show-file-list="false"
-    :on-change="onChange"
-    :on-exceed="onExceed">
-    <!-- single-image -->
-    <template v-if="props.uploader === 'single-image'">
-      <el-image v-if="vModel" class="image" fit="cover" :src="vModel">
-      </el-image>
-      <el-icon v-else class="uploader-icon"><Plus /></el-icon>
+    <!-- file -->
+    <template v-if="props.uploader === 'file-list'" #file="{ file }">
+      <div class="file-item">
+        <el-icon><Document /></el-icon>
+        <div>{{ file.name }}</div>
+        <div class="flex-1"></div>
+        <el-icon
+          v-if="file.filePath"
+          class="file-icon"
+          @click="onDownload(file)">
+          <Download />
+        </el-icon>
+        <el-icon class="file-icon close" @click="onDelete(file)">
+          <Close />
+        </el-icon>
+      </div>
     </template>
     <!-- tip -->
     <template #tip>
@@ -52,8 +58,8 @@ import { genFileId, ElMessage } from 'element-plus'
 import type { UploadFile, UploadInstance, UploadRawFile } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Plus } from '@element-plus/icons-vue'
-import { shiki, type FileBizType, type Uploader } from '@chant'
+import { Close, Document, Download, Plus } from '@element-plus/icons-vue'
+import { base, shiki, type FileBizType, type Uploader } from '@chant'
 import { chant as lang } from '@chant/lang'
 
 // type
@@ -62,6 +68,7 @@ type DataItem = {
   filename: string
   filenameOriginal: string
   filePath: string
+  uid?: number
 }
 type Props = {
   accept?: string // 接受上传的文件类型
@@ -140,6 +147,12 @@ async function onChange(row: UploadFile) {
     emits('upload', data)
   }
 }
+// update file list
+function updateFileList(val: any) {
+  if (showFileList.value) {
+    vModel.value = val
+  }
+}
 // 文件超出限制
 function onExceed(files: File[]) {
   if (props.uploader === 'single-image' || props.limit === 1) {
@@ -150,6 +163,23 @@ function onExceed(files: File[]) {
     return
   }
   ElMessage.warning(t('limitTips'))
+}
+// 下载
+function onDownload(row: DataItem) {
+  const url = row.filePath + row.filename
+  base.downloadByUrl({ url })
+}
+// 删除
+function onDelete(row: DataItem) {
+  const list = vModel.value as DataItem[]
+  const index = list.findIndex((item) => {
+    if (item.uid) {
+      return item.uid === row.uid
+    } else {
+      return item.id === row.id
+    }
+  })
+  list.splice(index, 1)
 }
 // 预览
 function onPreview(row: any) {
@@ -216,8 +246,24 @@ async function upload(file: UploadRawFile) {
       }
     }
   }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 5px;
+    .file-icon {
+      color: var(--main-color);
+      cursor: pointer;
+      &:active {
+        opacity: 0.5;
+      }
+      &.close {
+        color: var(--red-color);
+      }
+    }
+  }
   .tip {
-    color: #f87171;
+    color: var(--red-color);
   }
 }
 @container (min-width: 600px) {

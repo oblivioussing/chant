@@ -30,7 +30,7 @@ export default () => {
     },
     {
       prop: 'orgId',
-      propList: 'orgName',
+      propInList: 'orgName',
       label: '部门',
       dynamicPicker: 'org-tree',
       required: true,
@@ -46,7 +46,7 @@ export default () => {
     },
     {
       prop: 'positionId',
-      propList: 'positionName',
+      propInList: 'positionName',
       label: '职位',
       required: true,
       search: true,
@@ -54,7 +54,7 @@ export default () => {
     },
     {
       prop: 'roleIds',
-      propList: 'roleNames',
+      propInList: 'roleNames',
       label: '角色',
       newlineFull: true,
       required: true,
@@ -70,10 +70,9 @@ export default () => {
       prop: 'avatar',
       label: '头像',
       hideInPages: ['list'],
-      type: 'upload',
+      uploader: 'single-image',
       accept: AcceptEnum.Image,
-      fileBizType: 'avatar',
-      uploader: 'single-image'
+      fileBizType: 'avatar'
     }
   ] as Column[]
 }

@@ -8,7 +8,6 @@ export type ElementType =
   | 'radio'
   | 'select'
   | 'time-picker'
-  | 'upload'
 
 export type FileBizType = 'avatar'
 
@@ -52,7 +51,6 @@ export type FormColumn = {
   disabledInPage?: ColumnPage // 在特定页面类型中禁用
   min?: number // 最小值,仅type为InputNumber时有效
   max?: number // 最大值,仅type为InputNumber时有效
-  multiple?: boolean // 是否支持多选文件
   newline?: boolean // 是否换行
   newlineFull?: boolean // 是否换行并显示为一整行
   required?: boolean // 是否必填
@@ -61,11 +59,12 @@ export type FormColumn = {
   show?: (model: any, data?: any) => boolean // 自定义显示逻辑
   tips?: string // 提示
   title?: string // 标题
-  accept?: string // 接受上传的文件类型,仅type为upload有值时有效
-  fileBizType?: FileBizType // 文件业务类型,仅type为upload有值时有效
-  fileSize?: number // 允许上传文件的大小(MB),仅type为upload有值时有效
-  limit?: number // 允许上传文件的最大数量,仅type为upload有值时有效
-  uploader?: Uploader // 风格样式,仅type为upload有值时有效
+  uploader?: Uploader // 文件上传风格样式
+  accept?: string // 接受上传的文件类型,仅uploader有值时有效
+  fileBizType?: FileBizType // 文件业务类型,仅uploader有值时有效
+  fileSize?: number // 允许上传文件的大小(MB),仅uploader有值时有效
+  limit?: number // 允许上传文件的最大数量,仅uploader有值时有效
+  multiple?: boolean // 是否支持多选文件,仅uploader为file-list|picture-card有值时有效
 } & BaseColumn
 
 export type ListColumn = {
@@ -75,7 +74,7 @@ export type ListColumn = {
   format?: string // 格式化
   link?: boolean // 超链
   onlySearch?: boolean // 只作为搜索条件
-  propList?: string // 列表显示的字段
+  propInList?: string // 列表显示的字段
   search?: boolean // 是否为搜索条件
   searchDatepicker?: DatePickType // date-picker显示类型,仅date-picker时有效
   searchRequired?: boolean // 搜索条件是否为必填

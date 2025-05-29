@@ -89,7 +89,7 @@
             }"
             truncated
             @click="item.link && onLink(row)">
-            {{ valueFmt(item, row[item.propList || item.prop]) }}
+            {{ valueFmt(item, row[item.propInList || item.prop]) }}
           </el-text>
           <!-- copy -->
           <el-icon

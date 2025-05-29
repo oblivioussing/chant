@@ -332,7 +332,7 @@ function isDisabled(row: Column) {
 }
 // 是否显示一整行
 function isFull(column: Column) {
-  if (column.type === 'upload') {
+  if (column.uploader) {
     return true
   }
   if (column.inputType === 'textarea') {

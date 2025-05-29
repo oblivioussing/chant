@@ -9,9 +9,8 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   const instance = getCurrentInstance()
   const route = useRoute()
   const fileColumns = config?.columns?.filter((item) => {
-    return (
-      item.uploader && ['file-list', 'picture-card'].includes(item.uploader!)
-    )
+    const uploader = item.uploader
+    return uploader && ['file-list', 'picture-card'].includes(uploader)
   })
   const apiMap = { add: 'add', edit: 'update' }
   const api = apiMap[props?.pageType as 'add' | 'edit'] as 'add' | 'update'
@@ -69,17 +68,15 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
       state.form.id = undefined
     }
     // 添加文件所需属性
-    if (fileColumns) {
-      fileColumns.forEach((item) => {
-        state.form[item.prop]?.forEach((item1: any) => {
-          if (item.uploader === 'file-list') {
-            item1.name = item1.filenameOriginal
-          } else {
-            item1.url = item1.filePath + item1.filename
-          }
-        })
+    fileColumns?.forEach((item) => {
+      state.form[item.prop]?.forEach((item1: any) => {
+        if (item.uploader === 'file-list') {
+          item1.name = item1.filenameOriginal
+        } else {
+          item1.url = item1.filePath + item1.filename
+        }
       })
-    }
+    })
   }
   // 保存
   async function save(
@@ -136,12 +133,15 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
   }
   // 上传文件
   async function _uploads(params: any) {
-    for (const item of fileColumns!) {
+    if (!fileColumns) {
+      return
+    }
+    for (const item of fileColumns) {
       const fileList = params[item.prop] as { raw?: any }[]
       const list = [] as any[]
       const formData = new FormData()
       formData.append('fileBizType', item.fileBizType || '')
-      fileList.forEach((item) => {
+      fileList?.forEach((item) => {
         if (item.raw) {
           formData.append('file', item.raw)
         } else {

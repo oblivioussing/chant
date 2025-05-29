@@ -218,7 +218,7 @@ function translate(column: Column) {
 }
 .btn-box {
   display: flex;
-  padding: 0 10px;
+  padding: 5px 10px 0;
   :deep(.el-button) {
     height: 24px;
   }

@@ -10,7 +10,7 @@ export default () => {
     },
     {
       prop: 'roleIds',
-      propList: 'roleNames',
+      propInList: 'roleNames',
       label: '角色',
       newlineFull: true,
       slot: ['form']
