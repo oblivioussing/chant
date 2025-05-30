@@ -31,10 +31,6 @@ export default () => {
       prop: 'status', // 状态 1-正常 2-作废
       hideInPages: ['add'],
       search: true,
-      tagType: {
-        1: 'success',
-        2: 'danger'
-      },
       type: 'select'
     },
     {

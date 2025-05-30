@@ -1,4 +1,4 @@
-import type { DatePickType, FormItemRule, TagProps } from 'element-plus'
+import type { DatePickType, FormItemRule } from 'element-plus'
 
 export type DynamicPicker = 'user' | 'org-tree'
 
@@ -43,6 +43,19 @@ type BaseColumn = {
 
 type SlotType = 'form' | 'form-item' | 'list' | 'search'
 
+type TagColor =
+  | 'blue'
+  | 'green'
+  | 'orange'
+  | 'red'
+  | 'purple'
+  | 'cyan'
+  | 'teal'
+  | 'yellow'
+  | 'pink'
+  | 'indigo'
+  | 'gray'
+
 export type FormColumn = {
   change?: (model: any, row?: any) => void // 值变更事件
   default?: any // 默认值
@@ -79,7 +92,7 @@ export type ListColumn = {
   searchDatepicker?: DatePickType // date-picker显示类型,仅date-picker时有效
   searchRequired?: boolean // 搜索条件是否为必填
   sortable?: boolean // 对应列是否可以排序
-  tagType?: Record<string, TagProps['type']> // tag类型
+  tagColor?: Record<string, TagColor> // tag类型
   width?: number // 对应列的宽度
 } & BaseColumn
 

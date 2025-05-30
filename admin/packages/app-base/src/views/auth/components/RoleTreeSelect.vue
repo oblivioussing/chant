@@ -1,6 +1,7 @@
 <template>
   <el-tree-select
     v-model="vModel"
+    v-loading="state.loading"
     check-on-click-node
     check-strictly
     clearable
@@ -24,7 +25,8 @@ import { shiki } from 'chant'
 const vModel = defineModel()
 // state
 const state = reactive({
-  data: [] as any[]
+  data: [] as any[],
+  loading: false
 })
 // onMounted
 onMounted(() => {
@@ -33,7 +35,9 @@ onMounted(() => {
 })
 // 获取树列表
 async function getList() {
+  state.loading = true
   const { data } = await shiki.get('role/tree')
+  state.loading = false
   state.data = data
 }
 </script>

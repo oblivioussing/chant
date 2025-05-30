@@ -38,7 +38,7 @@
         </chant-tooltip>
       </template>
       <template #default="{ row, $index }">
-        <div class="content-box">
+        <div v-if="$index >= 0" class="content-box">
           <!-- prop slot -->
           <slot
             v-if="item.slot?.includes('list')"
@@ -76,8 +76,11 @@
           <!-- tag -->
           <el-tag
             v-else-if="showTag(item)"
-            :effect="item.tagType ? 'dark' : 'plain'"
-            :type="item.tagType?.[row[item.prop]]">
+            :class="
+              item.tagColor?.[row[item.prop]] ||
+              tagColor(row[item.prop], item.prop)
+            "
+            effect="dark">
             {{ dictFmt(item.prop, row[item.prop]) }}
           </el-tag>
           <!-- text -->
@@ -160,6 +163,21 @@ const { toClipboard } = useClipboard()
 const { t } = useI18n({ messages: props?.lang })
 const { t: gt } = useI18n({ useScope: 'global' })
 const lister = useLister()
+// var
+const tagColorList = [
+  'blue',
+  'green',
+  'orange',
+  'red',
+  'purple',
+  'cyan',
+  'teal',
+  'yellow',
+  'pink',
+  'indigo',
+  'gray'
+]
+const tagValMap = {} as Record<string, Set<string>>
 // ref
 const tableRef = ref<TableInstance>()
 // state
@@ -307,6 +325,18 @@ function dictFmt(prop: string, value: any) {
     return val || '-'
   }
 }
+// tag颜色
+function tagColor(val: any, prop: string) {
+  let set = tagValMap[prop]
+  if (!set) {
+    set = new Set()
+  }
+  set.add(val)
+  tagValMap[prop] = set
+  const arr = Array.from(set)
+  const index = arr.indexOf(val)
+  return tagColorList[index]
+}
 // CheckBox是否可勾选
 function selectable() {
   return vModel.value?.all === 0
@@ -399,6 +429,74 @@ function translate(column: Column) {
     margin-left: 5px;
     position: absolute;
     right: 10px;
+  }
+  .el-tag.el-tag--dark {
+    --blue: #409eff;
+    --green: #67c23a;
+    --orange: #e6a23c;
+    --red: #f56c6c;
+    --purple: #9966cc;
+    --cyan: #17c0eb;
+    --teal: #20c997;
+    --yellow: #f7ba2a;
+    --pink: #eb5286;
+    --indigo: #5c6bc0;
+    --gray: #909399;
+    &.blue {
+      --el-tag-bg-color: var(--blue);
+      --el-tag-border-color: var(--blue);
+      --el-tag-hover-color: var(--blue);
+    }
+    &.gray {
+      --el-tag-bg-color: var(--gray);
+      --el-tag-border-color: var(--gray);
+      --el-tag-hover-color: var(--gray);
+    }
+    &.orange {
+      --el-tag-bg-color: var(--orange);
+      --el-tag-border-color: var(--orange);
+      --el-tag-hover-color: var(--orange);
+    }
+    &.red {
+      --el-tag-bg-color: var(--red);
+      --el-tag-border-color: var(--red);
+      --el-tag-hover-color: var(--red);
+    }
+    &.purple {
+      --el-tag-bg-color: var(--purple);
+      --el-tag-border-color: var(--purple);
+      --el-tag-hover-color: var(--purple);
+    }
+    &.cyan {
+      --el-tag-bg-color: var(--cyan);
+      --el-tag-border-color: var(--cyan);
+      --el-tag-hover-color: var(--cyan);
+    }
+    &.teal {
+      --el-tag-bg-color: var(--teal);
+      --el-tag-border-color: var(--teal);
+      --el-tag-hover-color: var(--teal);
+    }
+    &.yellow {
+      --el-tag-bg-color: var(--yellow);
+      --el-tag-border-color: var(--yellow);
+      --el-tag-hover-color: var(--yellow);
+    }
+    &.pink {
+      --el-tag-bg-color: var(--pink);
+      --el-tag-border-color: var(--pink);
+      --el-tag-hover-color: var(--pink);
+    }
+    &.indigo {
+      --el-tag-bg-color: var(--indigo);
+      --el-tag-border-color: var(--indigo);
+      --el-tag-hover-color: var(--indigo);
+    }
+    &.green {
+      --el-tag-bg-color: var(--green);
+      --el-tag-border-color: var(--green);
+      --el-tag-hover-color: var(--green);
+    }
   }
 }
 </style>
