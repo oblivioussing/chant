@@ -52,7 +52,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   }
   // created
   function created(
-    callback: () => void,
+    callback: (_init?: boolean) => void,
     state?: State,
     config?: {
       queryMerge?: boolean
@@ -79,7 +79,7 @@ function useLister(config?: { method?: Function; type?: FormType }) {
     // 事件监听
     _on(callback)
     // callback
-    callback()
+    callback(true)
   }
   // 新增
   function add(state: State, row?: any) {
