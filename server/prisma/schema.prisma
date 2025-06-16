@@ -89,7 +89,6 @@ model Router {
   updateId   String?   @map("update_id") @db.VarChar(20)
   updateTime DateTime? @map("update_time") @db.DateTime(0)
 
-  @@index([isDelete], map: "INDEX")
   @@map("router")
 }
 

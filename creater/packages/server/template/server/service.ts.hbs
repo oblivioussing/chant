@@ -2,13 +2,14 @@ import { type {{upper module}} } from '@prisma/client'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base } from '@/utils'
-import { {{module}}Entity } from './model'
+import { {{upper module}}Entity } from './model'
 
 export class {{upper module}}Service extends BaseService {
   // 新增
   async add({{module}}: {{upper module}}) {
     const result = new Result()
-    const data = base.toEntity({{module}}, {{module}}Entity)
+    const {{module}}Entity = base.toEntity({{module}}, {{upper module}}Entity)
+    const data = { ...{{module}}Entity } as {{upper module}}
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
@@ -22,8 +23,9 @@ export class {{upper module}}Service extends BaseService {
   }
   // 更新
   async update({{module}}: {{upper module}}) {
-    const result = new Result<{{upper module}}>()
-    const data = base.toEntity({{module}}, {{module}}Entity) as {{upper module}}
+    const result = new Result()
+    const {{module}}Entity = base.toEntity({{module}}, {{upper module}}Entity)
+    const data = { ...{{module}}Entity } as {{upper module}}
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.{{module}}.update({
@@ -51,7 +53,7 @@ export class {{upper module}}Service extends BaseService {
   // 批量删除
   async deletes(params: Many<{{upper module}}>) {
     const result = new Result()
-    const where = base.manyWhere(params, {{module}}Entity)
+    const where = base.manyWhere(params, {{upper module}}Entity)
     const row = await prisma.{{module}}.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '{{tableComment}}批量删除成功' })
@@ -62,14 +64,13 @@ export class {{upper module}}Service extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<{{upper module}}>()
+    const result = new Result<typeof {{upper module}}Entity>()
     const row = await prisma.{{module}}.findUnique({
-      select: base.toSelect({{module}}Entity),
+      select: base.toSelect({{upper module}}Entity),
       where: { id }
     })
     if (row) {
-      result.data = row as {{upper module}}
-      result.success({ msg: '{{tableComment}}查询成功' })
+      result.success({ data: row, msg: '{{tableComment}}查询成功' })
     } else {
       result.fail('{{tableComment}}查询失败')
     }
@@ -77,15 +78,15 @@ export class {{upper module}}Service extends BaseService {
   }
   // 列表
   async list({{module}}: {{upper module}}, page: Page) {
-    const pageData = new PageData<{{upper module}}>()
+    const pageData = new PageData<typeof {{upper module}}Entity>()
     const result = new Result<typeof pageData>()
     const rows = await prisma.{{module}}.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.toSelect({{module}}Entity),
+      select: base.toSelect({{upper module}}Entity),
       where: {{module}}
     })
     const total = await prisma.{{module}}.count({ where: {{module}} })
-    pageData.list = rows as {{upper module}}[]
+    pageData.list = rows
     pageData.total = total
     result.success({ data: pageData, msg: '{{tableComment}}列表查询成功' })
     return result

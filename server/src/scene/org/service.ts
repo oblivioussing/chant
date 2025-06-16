@@ -2,7 +2,7 @@ import { type Org } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import type { Many } from '@/type'
 import { base } from '@/utils'
-import { orgEntity, type OrgTree } from './model'
+import { OrgEntity, type OrgTree } from './model'
 import queryRaw from './query-raw'
 
 export class OrgService extends BaseService {
@@ -13,7 +13,8 @@ export class OrgService extends BaseService {
   // 根节点初始化
   async root(org: Org) {
     const result = new Result()
-    const data = base.toEntity(org, orgEntity)
+    const orgEntity = base.toEntity(org, OrgEntity)
+    const data = { ...orgEntity } as Org
     data.level = 0
     data.id = base.createId()
     data.createId = this.getUid()
@@ -30,7 +31,8 @@ export class OrgService extends BaseService {
   // 新增
   async add(org: Org) {
     const result = new Result()
-    const data = base.toEntity(org, orgEntity)
+    const orgEntity = base.toEntity(org, OrgEntity)
+    const data = { ...orgEntity } as Org
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
@@ -50,7 +52,8 @@ export class OrgService extends BaseService {
   // 更新
   async update(org: Org) {
     const result = new Result<Org>()
-    const data = base.toEntity(org, orgEntity) as Org
+    const orgEntity = base.toEntity(org, OrgEntity)
+    const data = { ...orgEntity } as Org
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.org.update({
@@ -87,7 +90,7 @@ export class OrgService extends BaseService {
   // 批量删除
   async deletes(params: Many<Org>) {
     const result = new Result()
-    const where = base.manyWhere(params, orgEntity)
+    const where = base.manyWhere(params, OrgEntity)
     const row = await prisma.org.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '组织架构批量删除成功' })
@@ -100,7 +103,7 @@ export class OrgService extends BaseService {
   async detail(id: string) {
     const result = new Result<Org>()
     const row = await prisma.org.findUnique({
-      select: base.toSelect(orgEntity),
+      select: base.toSelect(OrgEntity),
       where: { id }
     })
     if (row) {

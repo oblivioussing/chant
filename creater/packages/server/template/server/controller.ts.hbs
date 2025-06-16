@@ -3,7 +3,7 @@ import type { {{upper module}} } from '@prisma/client'
 import { QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { IdVali } from '@/validator'
-import { {{module}}Entity } from './model'
+import { {{upper module}}Entity } from './model'
 import { {{upper module}}Service } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -43,7 +43,7 @@ export class {{upper module}}Controller {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel({{module}}Entity) {{module}}: {{upper module}}, @QueryPage() page: Page) {
+  async list(@QueryModel({{upper module}}Entity) {{module}}: {{upper module}}, @QueryPage() page: Page) {
     const result = await this.{{module}}Service.list({{module}}, page)
     return result
   }

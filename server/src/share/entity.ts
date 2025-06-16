@@ -13,7 +13,7 @@ export class PageData<T> {
 
 export class Result<T = null> {
   code = '' as ApiCode
-  data = null as T
+  data = null as T | null
   msg = ''
   // 成功
   success(row?: { data?: any; msg?: string }) {

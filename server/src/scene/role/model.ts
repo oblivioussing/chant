@@ -1,6 +1,6 @@
 import { type Role } from '@prisma/client'
 
-export const roleEntity = {
+export const RoleEntity = {
   id: '', // id
   level: 0, // 等级
   name: '', // 名称
@@ -8,19 +8,15 @@ export const roleEntity = {
   routerIds: [], // 路由ids
   sequence: 0, // 序号
   isDelete: 0 // 删除 0-否 1-是
-} as Role
+} satisfies Partial<Role>
 
-export const roleDto = {
-  ...roleEntity
+export const RoleDto = {
+  ...RoleEntity
 }
 
-export const roleVo = {
-  ...roleEntity
+export const RoleVo = {
+  ...RoleEntity
 }
-
-export type RoleDto = typeof roleDto
-
-export type RoleVo = typeof roleVo
 
 export type RoleTree = Role & {
   children: RoleTree[]

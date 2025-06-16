@@ -2,13 +2,13 @@ import type { Role, Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
 import {
-  roleEntity,
+  RoleEntity,
   type MenuItem,
   type RoleTree,
   type RouterItem,
   type RouterParams
 } from './model'
-import { routerEntity } from '../router/model'
+import { RouterEntity } from '../router/model'
 import queryRaw from './query-raw'
 
 export class RoleService extends BaseService {
@@ -19,7 +19,8 @@ export class RoleService extends BaseService {
   // 根节点初始化
   async root() {
     const result = new Result()
-    const data = base.toEntity({}, roleEntity)
+    const routerEntity = structuredClone(RoleEntity)
+    const data = { ...routerEntity } as Role
     data.name = '管理员'
     data.id = base.createId()
     data.createId = this.getUid()
@@ -36,7 +37,8 @@ export class RoleService extends BaseService {
   // 新增
   async add(role: Role) {
     const result = new Result()
-    const data = base.toEntity(role, roleEntity, true)
+    const routerEntity = base.toEntity(role, RoleEntity)
+    const data = { ...routerEntity } as Role
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
@@ -56,7 +58,8 @@ export class RoleService extends BaseService {
   // 更新
   async update(role: Role) {
     const result = new Result<Role>()
-    const data = base.toEntity(role, roleEntity) as Role
+    const routerEntity = base.toEntity(role, RoleEntity)
+    const data = { ...routerEntity } as Role
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.role.update({
@@ -135,12 +138,11 @@ export class RoleService extends BaseService {
   async detail(id: string) {
     const result = new Result<Role>()
     const row = await prisma.role.findUnique({
-      select: base.toSelect(roleEntity),
+      select: base.toSelect(RoleEntity),
       where: { id }
     })
     if (row) {
-      result.data = row as Role
-      result.success({ msg: '角色查询成功' })
+      result.success({ data: row, msg: '角色查询成功' })
     } else {
       result.fail('角色查询失败')
     }
@@ -154,7 +156,7 @@ export class RoleService extends BaseService {
       where: { id }
     })
     const rows = await prisma.router.findMany({
-      select: base.toSelect(routerEntity),
+      select: base.toSelect(RouterEntity),
       where: { isDelete: 0, level: { gt: 0 } },
       orderBy: [{ level: 'asc' }, { sequence: 'asc' }]
     })

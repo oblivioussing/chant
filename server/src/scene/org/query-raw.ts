@@ -1,9 +1,9 @@
 import { type Org } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
-import { orgEntity } from './model'
+import { OrgEntity } from './model'
 
 function getSelect(alias?: string) {
-  return toSelect(orgEntity, {
+  return toSelect(OrgEntity, {
     exclude: ['isDelete'],
     alias
   })

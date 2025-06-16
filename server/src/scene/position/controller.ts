@@ -3,7 +3,7 @@ import type { Position } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import type { Many } from '@/type'
 import { IdVali } from '@/validator'
-import { positionEntity } from './model'
+import { PositionEntity } from './model'
 import { PositionService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -43,7 +43,7 @@ export class PositionController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(positionEntity) position: Position) {
+  async list(@QueryModel(PositionEntity) position: Position) {
     const result = await this.positionService.list(position)
     return result
   }

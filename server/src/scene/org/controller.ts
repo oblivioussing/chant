@@ -3,7 +3,7 @@ import { type Org } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import type { Many } from '@/type'
 import { IdVali } from '@/validator'
-import { orgEntity } from './model'
+import { OrgEntity } from './model'
 import { OrgService } from './service'
 import { AddVali, RootVali, UpdateVali } from './validator'
 
@@ -49,13 +49,13 @@ export class OrgController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(orgEntity) org: Org) {
+  async list(@QueryModel(OrgEntity) org: Org) {
     const result = await this.orgService.list(org)
     return result
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(orgEntity) org: Org) {
+  async tree(@QueryModel(OrgEntity) org: Org) {
     const result = await this.orgService.tree(org)
     return result
   }

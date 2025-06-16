@@ -3,7 +3,7 @@ import type { User } from '@prisma/client'
 import { Auth, QueryModel, QueryPage } from '@/decorator'
 import type { Many, Page } from '@/type'
 import { IdVali } from '@/validator'
-import { userEntity } from './model'
+import { UserEntity } from './model'
 import { UserService } from './service'
 import { LoginVali, AddVali, UpdateVali, RoleIdVali } from './validator'
 
@@ -55,7 +55,7 @@ export class UserController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(userEntity) user: User, @QueryPage() page: Page) {
+  async list(@QueryModel(UserEntity) user: User, @QueryPage() page: Page) {
     const result = await this.userService.list(user, page)
     return result
   }

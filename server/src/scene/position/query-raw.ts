@@ -1,10 +1,9 @@
 import { type Position } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
-import { positionEntity } from './model'
+import { PositionEntity } from './model'
 
 function getSelect(alias?: string) {
-  return toSelect(positionEntity, {
-    exclude: ['isDelete'],
+  return toSelect(PositionEntity, {
     alias
   })
 }

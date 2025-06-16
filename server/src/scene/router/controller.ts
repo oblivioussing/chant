@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { type Router } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { routerEntity } from './model'
+import { RouterEntity } from './model'
 import { RouterService } from './service'
 import { AddVali, TransferVali, UpdateVali } from './validator'
 
@@ -42,7 +42,7 @@ export class RouterController {
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(routerEntity) router: Router) {
+  async list(@QueryModel(RouterEntity) router: Router) {
     const result = await this.routerService.list(router)
     return result
   }
@@ -54,7 +54,7 @@ export class RouterController {
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(routerEntity) router: Router) {
+  async tree(@QueryModel(RouterEntity) router: Router) {
     const result = await this.routerService.tree(router)
     return result
   }

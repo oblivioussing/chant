@@ -1,12 +1,12 @@
 import { Prisma, type Role } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { roleEntity } from './model'
+import { RoleEntity } from './model'
 
 function like(val = '') {
   return Prisma.sql`${`%${val}%`}`
 }
 function getSelect(alias?: string) {
-  return toSelect(roleEntity, {
+  return toSelect(RoleEntity, {
     exclude: ['isDelete', 'routerIds'],
     alias
   })

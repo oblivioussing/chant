@@ -1,6 +1,6 @@
 import { type Org } from '@prisma/client'
 
-export const orgEntity = {
+export const OrgEntity = {
   id: '', // id
   level: 0, // 等级
   name: '', // 名称
@@ -8,19 +8,15 @@ export const orgEntity = {
   parentId: '', // 父节点id
   sequence: 0, // 序号
   isDelete: 0 // 删除 0-否 1-是
-} as Org
+} satisfies Partial<Org>
 
 export const orgDto = {
-  ...orgEntity
+  ...OrgEntity
 }
 
 export const orgVo = {
-  ...orgEntity
+  ...OrgEntity
 }
-
-export type OrgDto = typeof orgDto
-
-export type OrgVo = typeof orgVo
 
 export type OrgTree = Org & {
   children: OrgTree[]

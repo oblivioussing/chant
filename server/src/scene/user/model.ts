@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client'
 
-export const userEntity = {
+export const UserEntity = {
   id: '', // id
   avatar: '', // 头像
   gender: '', // 性别
@@ -10,18 +10,14 @@ export const userEntity = {
   phone: '', // 手机号
   positionId: '', // 职位id
   roleId: '', // 角色id
-  roleIds: [] // 角色ids
-} as User
+  roleIds: [] as string[] // 角色ids
+} satisfies Partial<User>
 
-export const userDto = {
-  ...userEntity,
+export const UserDto = {
+  ...UserEntity,
   password: '' // 密码
 }
 
-export const userVo = {
-  ...userEntity
+export const UserVo = {
+  ...UserEntity
 }
-
-export type UserDto = typeof userDto
-
-export type UserVo = typeof userVo

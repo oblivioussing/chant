@@ -1,9 +1,9 @@
 import { Prisma, type Router } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { routerEntity } from './model'
+import { RouterEntity } from './model'
 
 function getSelect(alias?: string) {
-  return toSelect(routerEntity, {
+  return toSelect(RouterEntity, {
     exclude: ['icon'],
     alias
   })

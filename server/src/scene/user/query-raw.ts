@@ -1,10 +1,10 @@
 import { type Role, type User } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
 import { Page } from '@/type'
-import { userEntity } from './model'
+import { UserEntity } from './model'
 
 function getSelect() {
-  return toSelect(userEntity, {
+  return toSelect(UserEntity, {
     alias: 'u',
     exclude: ['avatar', 'roleIds']
   })
@@ -20,7 +20,7 @@ export default {
   // 获取列表
   async getList(user: User, page: Page) {
     const offset = (page.pageNum - 1) * page.pageSize
-    const rows = await prisma.$queryRaw<User[]>`
+    const rows = await prisma.$queryRaw<(typeof UserEntity)[]>`
       SELECT 
         ${getSelect()},
         o.name as orgName,

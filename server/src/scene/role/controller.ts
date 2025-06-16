@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import type { Role } from '@prisma/client'
 import { QueryModel } from '@/decorator'
 import { IdVali } from '@/validator'
-import { roleEntity, type RouterParams } from './model'
+import { RoleEntity, type RouterParams } from './model'
 import { RoleService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -54,7 +54,7 @@ export class RoleController {
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(roleEntity) router: Role) {
+  async tree(@QueryModel(RoleEntity) router: Role) {
     const result = await this.roleService.tree(router)
     return result
   }

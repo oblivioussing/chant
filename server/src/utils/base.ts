@@ -71,19 +71,15 @@ export function pageHelper(page: Page, orderBy?: 'asc' | 'desc'): PageHelper {
   }
   return config
 }
-// 数据转实体(part:只处理data中包含的字段)
-export function toEntity<T>(
-  data: Record<string, any>,
-  entity: T,
-  part?: boolean
-): T {
+// 数据转实体
+export function toEntity<T>(data: Record<string, any>, entity: T): T {
   const obj = {} as any
   for (const item in entity) {
     const value = data[item]
     const entityValue = entity[item]
     const isNumber = typeof entityValue === 'number'
     const isDecimal = entityValue instanceof Prisma.Decimal
-    if (value === undefined && part) {
+    if (value === undefined) {
       continue
     }
     if (isDate(entityValue)) {
@@ -97,7 +93,7 @@ export function toEntity<T>(
     } else if (typeof entityValue === 'string') {
       obj[item] = isEmpty(value) ? '' : String(value)
     } else {
-      obj[item] = value
+      obj[item] = structuredClone(value)
     }
   }
   return obj

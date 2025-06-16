@@ -5,7 +5,7 @@ import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
-import { userEntity } from './model'
+import { UserEntity } from './model'
 import queryRaw from './query-raw'
 
 export class UserService extends BaseService {
@@ -29,7 +29,8 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const data = base.toEntity(user, userEntity)
+    const userEntity = base.toEntity(user, UserEntity)
+    const data = { ...userEntity } as User
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -45,9 +46,11 @@ export class UserService extends BaseService {
   }
   // 更新
   async update(user: User) {
-    const result = new Result<User>()
-    const data = base.toEntity(user, userEntity)
+    const result = new Result()
+    const userEntity = base.toEntity(user, UserEntity)
+    const data = { ...userEntity } as User
     data.updateTime = new Date()
+    data.updateId = this.getUid()
     const row = await prisma.user.update({
       data,
       where: { id: user.id }
@@ -91,7 +94,7 @@ export class UserService extends BaseService {
   // 批量删除
   async deletes(params: Many<User>) {
     const result = new Result()
-    const where = base.manyWhere(params, userEntity)
+    const where = base.manyWhere(params, UserEntity)
     const row = await prisma.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -102,10 +105,10 @@ export class UserService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<User>()
+    const result = new Result<typeof UserEntity>()
     const row = await prisma.user.findUnique({ where: { id } })
     if (row) {
-      result.data = base.toEntity(row, userEntity)
+      result.data = base.toEntity(row, UserEntity)
       result.success({ msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')
@@ -127,11 +130,11 @@ export class UserService extends BaseService {
     })
     if (row) {
       const { Role, ...other } = row
-      result.data = {
+      const data = {
         ...other,
         roleName: Role.name
       }
-      result.success({ msg: '用户信息查询成功' })
+      result.success({ data, msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')
     }
@@ -139,7 +142,7 @@ export class UserService extends BaseService {
   }
   // 列表
   async list(user: User, page: Page) {
-    const pageData = new PageData<User>()
+    const pageData = new PageData<typeof UserEntity>()
     const result = new Result<typeof pageData>()
     const { rows, total } = await queryRaw.getList(user, page)
     pageData.list = rows
