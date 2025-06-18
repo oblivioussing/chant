@@ -44,38 +44,73 @@ export class UserService extends BaseService {
     }
     return result
   }
-  // 更新
-  async update(user: UserEntity) {
-    const result = new Result()
-    const data = { ...user } as User
-    data.updateTime = new Date()
-    data.updateId = this.getUid()
-    const row = await prisma.user.update({
-      data,
-      where: { id: user.id }
-    })
-    if (row) {
-      result.success({ msg: '更新成功' })
-    } else {
-      result.fail('更新失败')
-    }
-    return result
-  }
-  // 更新角色
-  async updateRole(roleId: string) {
-    const result = new Result<User>()
-    const row = await prisma.user.update({
-      data: {
-        roleId: roleId,
-        updateId: this.getUid(),
-        updateTime: new Date()
+  // 权限
+  async auth() {
+    const result = new Result<any>()
+    const user = await prisma.user.findUnique({
+      select: {
+        loginName: true,
+        Role: {
+          select: { routerIds: true }
+        }
       },
       where: { id: this.getUid() }
     })
-    if (row) {
-      result.success({ msg: '角色更新成功' })
+    const routerIds = user.Role.routerIds as string[]
+    const rows = await prisma.router.findMany({
+      select: {
+        code: true,
+        id: true,
+        icon: true,
+        level: true,
+        name: true,
+        path: true,
+        parentId: true,
+        threeMenu: true
+      },
+      where: {
+        level: { gt: 0 },
+        isDelete: 0,
+        id: user.loginName === 'admin' ? undefined : { in: routerIds }
+      },
+      orderBy: { sequence: 'asc' }
+    })
+    const funsMap = rows.reduce((acc, cur) => {
+      if (cur.code) {
+        if (acc[cur.parentId]) {
+          acc[cur.parentId].push(cur.code)
+        } else {
+          acc[cur.parentId] = [cur.code]
+        }
+      }
+      return acc
+    }, {})
+    const list = rows.map((item) => {
+      const row = {} as any
+      row.id = item.id
+      row.meta = { title: item.name }
+      row.level = item.level
+      row.parentId = item.parentId
+      if (funsMap[item.id]) {
+        row.meta.funs = funsMap[item.id]
+      }
+      if (item.icon) {
+        row.icon = item.icon
+      }
+      if (item.path) {
+        row.path = item.path
+      }
+      if (item.threeMenu) {
+        row.threeMenu = item.threeMenu
+      }
+      return row
+    })
+    if (rows) {
+      const menu = base.toTree(list, { exclude: ['parentId'] })
+      result.data = { menu }
+      result.success({ msg: '权限信息查询成功' })
     } else {
-      result.fail('角色更新失败')
+      result.fail('权限信息查询失败')
     }
     return result
   }
@@ -180,76 +215,6 @@ export class UserService extends BaseService {
     }
     return result
   }
-  // 权限
-  async auth() {
-    const result = new Result<any>()
-    const user = await prisma.user.findUnique({
-      select: {
-        loginName: true,
-        Role: {
-          select: { routerIds: true }
-        }
-      },
-      where: { id: this.getUid() }
-    })
-    const routerIds = user.Role.routerIds as string[]
-    const rows = await prisma.router.findMany({
-      select: {
-        code: true,
-        id: true,
-        icon: true,
-        level: true,
-        name: true,
-        path: true,
-        parentId: true,
-        threeMenu: true
-      },
-      where: {
-        level: { gt: 0 },
-        isDelete: 0,
-        id: user.loginName === 'admin' ? undefined : { in: routerIds }
-      },
-      orderBy: { sequence: 'asc' }
-    })
-    const funsMap = rows.reduce((acc, cur) => {
-      if (cur.code) {
-        if (acc[cur.parentId]) {
-          acc[cur.parentId].push(cur.code)
-        } else {
-          acc[cur.parentId] = [cur.code]
-        }
-      }
-      return acc
-    }, {})
-    const list = rows.map((item) => {
-      const row = {} as any
-      row.id = item.id
-      row.meta = { title: item.name }
-      row.level = item.level
-      row.parentId = item.parentId
-      if (funsMap[item.id]) {
-        row.meta.funs = funsMap[item.id]
-      }
-      if (item.icon) {
-        row.icon = item.icon
-      }
-      if (item.path) {
-        row.path = item.path
-      }
-      if (item.threeMenu) {
-        row.threeMenu = item.threeMenu
-      }
-      return row
-    })
-    if (rows) {
-      const menu = base.toTree(list, { exclude: ['parentId'] })
-      result.data = { menu }
-      result.success({ msg: '权限信息查询成功' })
-    } else {
-      result.fail('权限信息查询失败')
-    }
-    return result
-  }
   // 角色
   async roles() {
     const result = new Result<any[]>()
@@ -259,6 +224,41 @@ export class UserService extends BaseService {
       result.success({ msg: '用户角色查询成功' })
     } else {
       result.fail('用户角色查询失败')
+    }
+    return result
+  }
+  // 更新
+  async update(user: UserEntity) {
+    const result = new Result()
+    const data = { ...user } as User
+    data.updateTime = new Date()
+    data.updateId = this.getUid()
+    const row = await prisma.user.update({
+      data,
+      where: { id: user.id }
+    })
+    if (row) {
+      result.success({ msg: '更新成功' })
+    } else {
+      result.fail('更新失败')
+    }
+    return result
+  }
+  // 更新角色
+  async updateRole(roleId: string) {
+    const result = new Result<User>()
+    const row = await prisma.user.update({
+      data: {
+        roleId: roleId,
+        updateId: this.getUid(),
+        updateTime: new Date()
+      },
+      where: { id: this.getUid() }
+    })
+    if (row) {
+      result.success({ msg: '角色更新成功' })
+    } else {
+      result.fail('角色更新失败')
     }
     return result
   }

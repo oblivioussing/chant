@@ -22,23 +22,6 @@ export class PositionService extends BaseService {
     }
     return result
   }
-  // 更新
-  async update(position: PositionEntity) {
-    const result = new Result<Position>()
-    const data = { ...position } as Position
-    data.updateId = this.getUid()
-    data.updateTime = new Date()
-    const row = await prisma.position.update({
-      data,
-      where: { id: position.id }
-    })
-    if (row) {
-      result.success({ msg: '职位更新成功' })
-    } else {
-      result.fail('职位更新失败')
-    }
-    return result
-  }
   // 删除
   async delete(id: string) {
     const result = new Result()
@@ -81,6 +64,23 @@ export class PositionService extends BaseService {
     const result = new Result<PositionEntity[]>()
     const rows = await queryRaw.getList(position)
     result.success({ data: rows, msg: '职位列表查询成功' })
+    return result
+  }
+  // 更新
+  async update(position: PositionEntity) {
+    const result = new Result<Position>()
+    const data = { ...position } as Position
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
+    const row = await prisma.position.update({
+      data,
+      where: { id: position.id }
+    })
+    if (row) {
+      result.success({ msg: '职位更新成功' })
+    } else {
+      result.fail('职位更新失败')
+    }
     return result
   }
 }

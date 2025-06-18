@@ -6,23 +6,6 @@ import { routerEntity, type RouterEntity, type RouterTree } from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
-  // 根节点初始化
-  async root() {
-    const result = new Result()
-    const data = base.toEntity({}, routerEntity) as Router
-    data.name = '系统'
-    data.id = base.createId()
-    data.createId = this.getUid()
-    data.createTime = new Date()
-    // create
-    const row = await prisma.router.create({ data })
-    if (row) {
-      result.success({ msg: '根节点初始化成功' })
-    } else {
-      result.fail('根节点初始化失败')
-    }
-    return result
-  }
   // 新增
   async add(router: RouterEntity) {
     let result = new Result()
@@ -46,28 +29,6 @@ export class RouterService extends BaseService {
       result.success({ msg: '路由新增成功' })
     } else {
       result.fail('路由新增失败')
-    }
-    return result
-  }
-  // 更新
-  async update(router: RouterEntity) {
-    let result = new Result()
-    const data = { ...router } as Router
-    data.updateId = this.getUid()
-    data.updateTime = new Date()
-    // 数据处理
-    result = await this.dataDeal(data)
-    if (result.code !== '1') {
-      return result
-    }
-    const row = await prisma.router.update({
-      data,
-      where: { id: data.id }
-    })
-    if (row) {
-      result.success({ msg: '路由更新成功' })
-    } else {
-      result.fail('路由更新失败')
     }
     return result
   }
@@ -163,6 +124,23 @@ export class RouterService extends BaseService {
     result.success({ data: rows, msg: '路由列表查询成功' })
     return result
   }
+  // 根节点初始化
+  async root() {
+    const result = new Result()
+    const data = structuredClone(routerEntity) as Router
+    data.name = '系统'
+    data.id = base.createId()
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    // create
+    const row = await prisma.router.create({ data })
+    if (row) {
+      result.success({ msg: '根节点初始化成功' })
+    } else {
+      result.fail('根节点初始化失败')
+    }
+    return result
+  }
   // 排序
   async sort(ids: string[]) {
     const result = new Result()
@@ -229,6 +207,28 @@ export class RouterService extends BaseService {
       orderBy: { sequence: 'asc' }
     })
     result.success({ data: base.toTree(rows), msg: '路由目标查询成功' })
+    return result
+  }
+  // 更新
+  async update(router: RouterEntity) {
+    let result = new Result()
+    const data = { ...router } as Router
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
+    // 数据处理
+    result = await this.dataDeal(data)
+    if (result.code !== '1') {
+      return result
+    }
+    const row = await prisma.router.update({
+      data,
+      where: { id: data.id }
+    })
+    if (row) {
+      result.success({ msg: '路由更新成功' })
+    } else {
+      result.fail('路由更新失败')
+    }
     return result
   }
 }

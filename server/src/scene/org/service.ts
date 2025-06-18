@@ -6,27 +6,6 @@ import { orgEntity, type OrgEntity, type OrgTree } from './model'
 import queryRaw from './query-raw'
 
 export class OrgService extends BaseService {
-  constructor() {
-    super()
-  }
-
-  // 根节点初始化
-  async root(org: OrgEntity) {
-    const result = new Result()
-    const data = { ...org } as Org
-    data.level = 0
-    data.id = base.createId()
-    data.createId = this.getUid()
-    data.createTime = new Date()
-    // create
-    const row = await prisma.org.create({ data })
-    if (row) {
-      result.success({ msg: '组织架构新增成功' })
-    } else {
-      result.fail('组织架构新增失败')
-    }
-    return result
-  }
   // 新增
   async add(org: OrgEntity) {
     const result = new Result()
@@ -44,23 +23,6 @@ export class OrgService extends BaseService {
       result.success({ msg: '组织架构新增成功' })
     } else {
       result.fail('组织架构新增失败')
-    }
-    return result
-  }
-  // 更新
-  async update(org: OrgEntity) {
-    const result = new Result<Org>()
-    const data = { ...org } as Org
-    data.updateId = this.getUid()
-    data.updateTime = new Date()
-    const row = await prisma.org.update({
-      data,
-      where: { id: org.id }
-    })
-    if (row) {
-      result.success({ msg: '组织架构更新成功' })
-    } else {
-      result.fail('组织架构更新失败')
     }
     return result
   }
@@ -117,11 +79,45 @@ export class OrgService extends BaseService {
     result.success({ data: rows, msg: '组织架构列表查询成功' })
     return result
   }
+  // 根节点初始化
+  async root(org: OrgEntity) {
+    const result = new Result()
+    const data = { ...org } as Org
+    data.level = 0
+    data.id = base.createId()
+    data.createId = this.getUid()
+    data.createTime = new Date()
+    // create
+    const row = await prisma.org.create({ data })
+    if (row) {
+      result.success({ msg: '组织架构新增成功' })
+    } else {
+      result.fail('组织架构新增失败')
+    }
+    return result
+  }
   // 树
   async tree(org: OrgEntity) {
     const result = new Result<OrgTree>()
     const rows = await queryRaw.getTreeList(org)
     result.success({ data: base.toTree(rows), msg: '组织架构树查询成功' })
+    return result
+  }
+  // 更新
+  async update(org: OrgEntity) {
+    const result = new Result<Org>()
+    const data = { ...org } as Org
+    data.updateId = this.getUid()
+    data.updateTime = new Date()
+    const row = await prisma.org.update({
+      data,
+      where: { id: org.id }
+    })
+    if (row) {
+      result.success({ msg: '组织架构更新成功' })
+    } else {
+      result.fail('组织架构更新失败')
+    }
     return result
   }
 }

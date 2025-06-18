@@ -23,6 +23,12 @@ export class UserController {
     const result = await this.userService.add(user)
     return result
   }
+  // 权限
+  @Get('auth')
+  async auth() {
+    const result = await this.userService.auth()
+    return result
+  }
   // 删除
   @Post('delete')
   @UsePipes(new ZodValidation(IdVali))
@@ -56,12 +62,6 @@ export class UserController {
     @QueryPage() page: Page
   ) {
     const result = await this.userService.list(user, page)
-    return result
-  }
-  // 权限
-  @Get('auth')
-  async auth() {
-    const result = await this.userService.auth()
     return result
   }
   // 登陆

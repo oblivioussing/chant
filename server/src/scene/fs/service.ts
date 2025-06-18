@@ -2,10 +2,6 @@ import type { File } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 
 export class FsService extends BaseService {
-  constructor() {
-    super()
-  }
-
   // 上传
   async upload(data: File) {
     const result = new Result<File>()
