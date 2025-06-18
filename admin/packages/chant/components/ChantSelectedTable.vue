@@ -24,6 +24,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { type ListColumn as Column } from '@chant'
+import ChantTable from './ChantTable.vue'
+import ChantColumnOperate from './ChantColumnOperate.vue'
+import ChantPagination from './ChantPagination.vue'
 
 // props
 const props = defineProps<{

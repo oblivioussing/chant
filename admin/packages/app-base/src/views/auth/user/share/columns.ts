@@ -35,7 +35,6 @@ export default () => {
       dynamicPicker: 'org-tree',
       required: true,
       search: true,
-      slot: ['search'],
       change(form, row) {
         if (row.roleIds) {
           const roleIds = row.roleIds.concat(form.roleIds)

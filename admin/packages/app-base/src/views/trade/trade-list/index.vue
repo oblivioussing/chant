@@ -29,9 +29,9 @@
     <!-- 操作 -->
     <chant-column-operate
       :options="['edit', 'copy', 'delete']"
-      @edit="lister.edit(state, $event)"
-      @copy="lister.copy(state, $event)"
-      @delete="onDelete($event)">
+      @edit="lister.edit(state, { id: $event.id })"
+      @copy="lister.copy(state, { id: $event.id })"
+      @delete="onDelete($event.id)">
       <template #default="{ row }">
         <!-- more -->
         <chant-more-dropdown @command="onColumnMore($event, row)">
@@ -82,7 +82,7 @@ function getList() {
   lister.getData('trade/list', state)
 }
 // 删除
-function onDelete({ id }: any) {
+function onDelete(id: string) {
   lister.remove('trade/delete', state, { id })
 }
 // 批量设置

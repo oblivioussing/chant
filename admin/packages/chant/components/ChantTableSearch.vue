@@ -156,7 +156,7 @@ import {
   type ListState
 } from '@chant'
 import { chant as chantLang } from '@chant/lang'
-import DynamicPicker from '@app-base/components/DynamicPicker.vue'
+import DynamicPicker from '@app-base/components/dynamic-picker/Index.vue'
 import { showInput } from './share'
 
 // props

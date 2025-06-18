@@ -24,8 +24,7 @@ export default () => {
       prop: 'belongName', // 所属人
       dynamicId: 'belongId',
       dynamicPicker: 'user',
-      search: true,
-      type: 'dynamic-picker'
+      search: true
     },
     {
       prop: 'status', // 状态 1-正常 2-作废

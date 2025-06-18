@@ -24,7 +24,7 @@ import OrgTreeSelect from './OrgTreeSelect.vue'
 // props
 const props = defineProps<{
   disabled?: boolean
-  title: string
+  title?: string
   type: DynamicPicker
 }>()
 // emits

@@ -14,6 +14,13 @@
           :lang="props.lang"
           @query="getList"
           @reset="getList">
+          <!-- slot -->
+          <template
+            v-for="item in props.searchSlots"
+            v-slot:[item.prop]="{ row }">
+            <slot :name="`${item.prop}-search`" :query="state.query" :row="row">
+            </slot>
+          </template>
         </chant-table-search>
         <!-- table -->
         <chant-table
@@ -26,6 +33,12 @@
           :show-selection="isMultiple"
           @instance="lister.bindInstance"
           @row-click="onRowClick">
+          <!-- slot -->
+          <template
+            v-for="item in props.tableSlots"
+            v-slot:[item.prop]="{ row }">
+            <slot :name="`${item.prop}-table`" :row="row"></slot>
+          </template>
         </chant-table>
         <!-- pagination -->
         <chant-pagination
@@ -61,6 +74,11 @@ import { computed, onMounted, reactive, type ModelRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLister } from '@chant'
 import type { TablePickerProps } from '@chant/type'
+import ChantDialog from './ChantDialog.vue'
+import ChantTableSearch from './ChantTableSearch.vue'
+import ChantTable from './ChantTable.vue'
+import ChantPagination from './ChantPagination.vue'
+import ChantSelectedTable from './ChantSelectedTable.vue'
 
 // props
 const props = defineProps<TablePickerProps>()
@@ -88,9 +106,16 @@ onMounted(() => {
   // 获取列表
   getList()
 })
+// defineExpose
+defineExpose({ query })
 // 获取列表
 function getList() {
   lister.getData(props.apiPath, state)
+}
+// 查询
+function query() {
+  state.pages.pageNum = 1
+  getList()
 }
 // 行点击
 function onRowClick(row: any) {

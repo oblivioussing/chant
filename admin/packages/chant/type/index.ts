@@ -174,6 +174,8 @@ export type TablePickerProps = {
   disabled?: boolean // 禁用
   dict?: any // 字典
   lang?: any // 国际化
+  searchSlots?: Column[]
+  tableSlots?: Column[]
   title: string // 显示的标题
   width?: string | number // 宽度
 }

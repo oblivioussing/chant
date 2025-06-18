@@ -1,17 +1,12 @@
 <template>
   <!-- search -->
   <chant-table-search v-model="state" :dict="dict" @query="getList">
-    <!-- 部门 -->
-    <template #orgId>
-      <org-tree-select v-model="state.query.orgId" @change="onOrg">
-      </org-tree-select>
-    </template>
     <!-- 职位 -->
     <template #positionId>
       <position-select
         v-model="state.query.positionId"
         :org-id="state.query.orgId"
-        @change="getList">
+        @change="onPosition">
       </position-select>
     </template>
   </chant-table-search>
@@ -53,7 +48,6 @@
 import { reactive } from 'vue'
 import { useLister } from 'chant'
 import { columns, dict } from './share'
-import OrgTreeSelect from '@app-base/components/OrgTreeSelect.vue'
 import MixForm from './components/MixForm.vue'
 import PositionSelect from './components/PositionSelect.vue'
 
@@ -81,10 +75,9 @@ function onDelete(id: string) {
 function onDeletes() {
   lister.removes('user/deletes', state)
 }
-// 部门change
-function onOrg() {
-  state.query.positionId = ''
-  // 获取列表
+// 职位
+function onPosition() {
+  state.pages.pageNum = 1
   getList()
 }
 </script>

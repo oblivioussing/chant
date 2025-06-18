@@ -197,7 +197,7 @@ import {
   type Lang,
   type PageType
 } from '@chant'
-import DynamicPicker from '@app-base/components/DynamicPicker.vue'
+import DynamicPicker from '@app-base/components/dynamic-picker/Index.vue'
 import { showInput } from './share'
 
 // props

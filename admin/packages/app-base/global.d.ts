@@ -19,6 +19,7 @@ import ChantTablePicker from '../chant/components/ChantTablePicker.vue'
 import ChantTableSearch from '../chant/components/ChantTableSearch.vue'
 import ChantTooltip from '../chant/components/ChantTooltip.vue'
 import ChantUpload from '../chant/components/ChantUpload.vue'
+import DynamicPicker from './src/components/dynamic-picker/Index.vue'
 
 export {}
 
@@ -45,5 +46,6 @@ declare module 'vue' {
     ChantTableSearch: typeof ChantTableSearch
     ChantTooltip: typeof ChantTooltip
     ChantUpload: typeof ChantUpload
+    DynamicPicker: typeof DynamicPicker
   }
 }
