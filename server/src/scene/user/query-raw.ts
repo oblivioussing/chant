@@ -1,15 +1,15 @@
-import { type Role, type User } from '@prisma/client'
+import { type Role } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
 import { Page } from '@/type'
-import { UserEntity } from './model'
+import { userEntity, type UserEntity } from './model'
 
 function getSelect() {
-  return toSelect(UserEntity, {
+  return toSelect(userEntity, {
     alias: 'u',
     exclude: ['avatar', 'roleIds']
   })
 }
-function getWhere(user: User) {
+function getWhere(user: UserEntity) {
   return toWhere(user, {
     alias: 'u',
     like: ['loginName', 'name', 'phone']
@@ -18,9 +18,9 @@ function getWhere(user: User) {
 
 export default {
   // 获取列表
-  async getList(user: User, page: Page) {
+  async getList(user: UserEntity, page: Page) {
     const offset = (page.pageNum - 1) * page.pageSize
-    const rows = await prisma.$queryRaw<(typeof UserEntity)[]>`
+    const rows = await prisma.$queryRaw<UserEntity[]>`
       SELECT 
         ${getSelect()},
         o.name as orgName,

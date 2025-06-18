@@ -1,11 +1,15 @@
-import { IsNotEmpty } from 'class-validator'
+import { z, ZodType } from 'zod'
+import { type {{upper module}}Entity } from './model'
 
-class Base {}
+type Keys = keyof {{upper module}}Entity
+type ZodObj = Partial<Record<Keys, ZodType>>
+
+const Base = z
+  .object({} satisfies ZodObj)
+  .passthrough()
 // 新增
-export class AddVali extends Base {}
+export const AddVali = Base.extend({} satisfies ZodObj)
 // 更新
-export class UpdateVali extends Base {
-  // id
-  @IsNotEmpty({ message: 'id不能为空' })
-  id: string
-}
+export const UpdateVali = Base.extend({
+  id: z.string().nonempty('id不能为空')
+} satisfies ZodObj)

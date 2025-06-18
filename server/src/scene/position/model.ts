@@ -1,6 +1,6 @@
 import { type Position } from '@prisma/client'
 
-export const PositionEntity = {
+export const positionEntity = {
   id: '', // id
   name: '', // 名称
   orgId: '', // 组织id
@@ -8,9 +8,15 @@ export const PositionEntity = {
 } satisfies Partial<Position>
 
 export const positionDto = {
-  ...PositionEntity
+  ...positionEntity
 }
 
 export const positionVo = {
-  ...PositionEntity
+  ...positionEntity
 }
+
+export type PositionEntity = typeof positionEntity
+
+export type PositionDto = typeof positionDto
+
+export type PositionVo = typeof positionVo

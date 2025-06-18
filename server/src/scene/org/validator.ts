@@ -1,28 +1,24 @@
-import { IsNotEmpty } from 'class-validator'
+import { z, ZodType } from 'zod'
+import { type OrgEntity } from './model'
 
-class Base {
-  // 等级
-  @IsNotEmpty({ message: '等级不能为空' })
-  level: number
-  // name
-  @IsNotEmpty({ message: '名称不能为空' })
-  name: string
-}
-// 跟节点
-export class RootVali {
-  // name
-  @IsNotEmpty({ message: '名称不能为空' })
-  name: string
-}
+type Keys = keyof OrgEntity
+type ZodObj = Partial<Record<Keys, ZodType>>
+
+const Base = z
+  .object({
+    level: z.number({ required_error: '等级不能为空' }),
+    name: z.string().nonempty('名称不能为空')
+  } satisfies ZodObj)
+  .passthrough()
 // 新增
-export class AddVali extends Base {
-  // 父节点id
-  @IsNotEmpty({ message: '父节点id不能为空' })
-  parentId: string
-}
+export const AddVali = Base.extend({
+  parentId: z.string().nonempty('父节点id不能为空')
+} satisfies ZodObj)
 // 更新
-export class UpdateVali extends Base {
-  // id
-  @IsNotEmpty({ message: 'id不能为空' })
-  id: string
-}
+export const UpdateVali = Base.extend({
+  id: z.string().nonempty('id不能为空')
+} satisfies ZodObj)
+// 根节点
+export const RootVali = Base.extend({
+  name: z.string().nonempty('名称不能为空')
+})

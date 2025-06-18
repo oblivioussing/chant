@@ -46,7 +46,7 @@ export class BaseService {
   // 用户id转为name
   async userIdToName<T extends Record<string, any>>(
     data: T,
-    list: (keyof T)[]
+    list: Extract<keyof T, string>[]
   ) {
     const ids = list.map((item) => data[item])
     const userName = await this.getUserName(ids)
@@ -60,7 +60,7 @@ export class BaseService {
   // 用户ids转为name
   async userIdsToName<T extends Record<string, any>>(
     data: T[],
-    list: (keyof T)[]
+    list: Extract<keyof T, string>[]
   ) {
     let ids = data.reduce((acc, cur) => {
       list.forEach((item) => {

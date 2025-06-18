@@ -1,27 +1,19 @@
-import { IsNotEmpty } from 'class-validator'
+import { z, ZodType } from 'zod'
+import { RoleEntity } from './model'
 
-class Base {
-  // 等级
-  @IsNotEmpty({ message: '等级不能为空' })
-  level: number
-  // name
-  @IsNotEmpty({ message: '名称不能为空' })
-  name: string
-  // 父节点id
-  @IsNotEmpty({ message: '父节点id不能为空' })
-  parentId: string
-}
+type Keys = keyof typeof RoleEntity
+type ZodObj = Partial<Record<Keys, ZodType>>
+
+const Base = z
+  .object({
+    level: z.number({ required_error: '等级不能为空' }),
+    name: z.string().nonempty('名称不能为空'),
+    parentId: z.string().nonempty('父节点id不能为空')
+  } satisfies ZodObj)
+  .passthrough()
 // 新增
-export class AddVali extends Base {}
+export const AddVali = Base.extend({} satisfies ZodObj)
 // 更新
-export class UpdateVali extends Base {
-  // id
-  @IsNotEmpty({ message: 'id不能为空' })
-  id: string
-}
-// 路由校验
-export class RouterVali {
-  // id
-  @IsNotEmpty({ message: 'id不能为空' })
-  id: string
-}
+export const UpdateVali = Base.extend({
+  id: z.string().nonempty('id不能为空')
+} satisfies ZodObj)

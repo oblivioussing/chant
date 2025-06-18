@@ -1,6 +1,5 @@
 import multipart from '@fastify/multipart'
 import { NestFactory } from '@nestjs/core'
-import { ValidationPipe } from '@nestjs/common'
 import {
   FastifyAdapter,
   NestFastifyApplication
@@ -17,7 +16,6 @@ async function bootstrap() {
   app.setGlobalPrefix('/chant/')
   app.useGlobalFilters(new GlobalExceptionFilter())
   app.useGlobalInterceptors(new TransformInterceptor())
-  app.useGlobalPipes(new ValidationPipe())
   await app.listen(7000, '0.0.0.0')
 }
 bootstrap()

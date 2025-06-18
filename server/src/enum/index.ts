@@ -1,4 +1,7 @@
 export enum BooleanEnum {
-  No = 0,
-  Yes = 1
+  False = 0,
+  True = 1
+}
+export enum RedisEnum {
+  Token = 'token'
 }

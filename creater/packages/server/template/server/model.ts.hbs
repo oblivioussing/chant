@@ -1,17 +1,22 @@
 import { type {{upper module}} } from '@prisma/client'
 
-export const {{upper module}}Entity = {
+export const {{module}}Entity = {
   id: '', // id
   {{#each list}}
   {{columnName}}: {{valueType columnType}}{{comma @last}} // {{columnComment}} {{dictNote dict}}
   {{/each}}
 } satisfies Partial<{{upper module}}>
 
-export const {{upper module}}Dto = {
-  ...{{upper module}}Entity
+export const {{module}}Dto = {
+  ...{{module}}Entity
 }
 
-export const {{upper module}}Vo = {
-  ...{{upper module}}Entity
+export const {{module}}Vo = {
+  ...{{module}}Entity
 }
 
+export type {{upper module}}Entity = typeof {{module}}Entity
+
+export type {{upper module}}Dto = typeof {{module}}Dto
+
+export type {{upper module}}Vo = typeof {{module}}Vo

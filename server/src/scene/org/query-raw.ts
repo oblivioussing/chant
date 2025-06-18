@@ -1,9 +1,8 @@
-import { type Org } from '@prisma/client'
 import { prisma, toSelect, toWhere } from '@/share'
-import { OrgEntity } from './model'
+import { orgEntity, type OrgEntity } from './model'
 
 function getSelect(alias?: string) {
-  return toSelect(OrgEntity, {
+  return toSelect(orgEntity, {
     exclude: ['isDelete'],
     alias
   })
@@ -11,8 +10,8 @@ function getSelect(alias?: string) {
 
 export default {
   // 获取列表
-  async getList(org: Org) {
-    const rows = await prisma.$queryRaw<Org[]>`
+  async getList(org: OrgEntity) {
+    const rows = await prisma.$queryRaw<OrgEntity[]>`
       SELECT 
         ${getSelect('o')},
         COALESCE(GROUP_CONCAT(r.name ORDER BY r.name SEPARATOR ','), '') AS roleNames
@@ -37,8 +36,8 @@ export default {
     return rows
   },
   // 获取树列表
-  async getTreeList(org?: Org) {
-    const rows = await prisma.$queryRaw<Org[]>`
+  async getTreeList(org?: OrgEntity) {
+    const rows = await prisma.$queryRaw<OrgEntity[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
         FROM org
@@ -64,7 +63,7 @@ export default {
   },
   // 获取后代id
   async getDescendantIds(id: string) {
-    const rows = await prisma.$queryRaw<Org[]>`
+    const rows = await prisma.$queryRaw<OrgEntity[]>`
       WITH RECURSIVE descendants AS (
         SELECT id
         FROM org

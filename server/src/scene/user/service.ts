@@ -1,11 +1,12 @@
 import { compare, hash } from 'bcrypt'
 import type { User } from '@prisma/client'
 import { Inject } from '@nestjs/common'
+import { RedisEnum } from '@/enum'
 import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
-import { UserEntity } from './model'
+import { userEntity, type UserDto, type UserEntity } from './model'
 import queryRaw from './query-raw'
 
 export class UserService extends BaseService {
@@ -13,7 +14,7 @@ export class UserService extends BaseService {
   private redisService: RedisService
 
   // 新增
-  async add(user: User) {
+  async add(user: UserDto) {
     const result = new Result()
     const { loginName, phone } = user
     const userData = await prisma.user.findFirst({
@@ -29,8 +30,7 @@ export class UserService extends BaseService {
       }
       return result
     }
-    const userEntity = base.toEntity(user, UserEntity)
-    const data = { ...userEntity } as User
+    const data = base.toEntity(user, userEntity) as User
     data.id = base.createUid()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -45,10 +45,9 @@ export class UserService extends BaseService {
     return result
   }
   // 更新
-  async update(user: User) {
+  async update(user: UserEntity) {
     const result = new Result()
-    const userEntity = base.toEntity(user, UserEntity)
-    const data = { ...userEntity } as User
+    const data = { ...user } as User
     data.updateTime = new Date()
     data.updateId = this.getUid()
     const row = await prisma.user.update({
@@ -63,11 +62,11 @@ export class UserService extends BaseService {
     return result
   }
   // 更新角色
-  async updateRole(user: User) {
+  async updateRole(roleId: string) {
     const result = new Result<User>()
     const row = await prisma.user.update({
       data: {
-        roleId: user.roleId,
+        roleId: roleId,
         updateId: this.getUid(),
         updateTime: new Date()
       },
@@ -92,9 +91,9 @@ export class UserService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<User>) {
+  async deletes(params: Many<UserEntity>) {
     const result = new Result()
-    const where = base.manyWhere(params, UserEntity)
+    const where = base.manyWhere(params, userEntity)
     const row = await prisma.user.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -105,11 +104,13 @@ export class UserService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<typeof UserEntity>()
-    const row = await prisma.user.findUnique({ where: { id } })
+    const result = new Result<UserEntity>()
+    const row = await prisma.user.findUnique({
+      select: base.toSelect(userEntity),
+      where: { id }
+    })
     if (row) {
-      result.data = base.toEntity(row, UserEntity)
-      result.success({ msg: '用户信息查询成功' })
+      result.success({ data: row, msg: '用户信息查询成功' })
     } else {
       result.fail('用户信息查询失败')
     }
@@ -141,8 +142,8 @@ export class UserService extends BaseService {
     return result
   }
   // 列表
-  async list(user: User, page: Page) {
-    const pageData = new PageData<typeof UserEntity>()
+  async list(user: UserEntity, page: Page) {
+    const pageData = new PageData<UserEntity>()
     const result = new Result<typeof pageData>()
     const { rows, total } = await queryRaw.getList(user, page)
     pageData.list = rows
@@ -151,10 +152,10 @@ export class UserService extends BaseService {
     return result
   }
   // 登陆
-  async login(user: User) {
+  async login(userDto: UserDto) {
     const result = new Result<string>()
     const row = await prisma.user.findUnique({
-      where: { loginName: user.loginName },
+      where: { loginName: userDto.loginName },
       select: { id: true, password: true }
     })
     if (!row) {
@@ -162,13 +163,14 @@ export class UserService extends BaseService {
       return result
     }
     // 判断密码是否相同
-    const isMatch = await compare(user.password, row.password)
+    const isMatch = await compare(userDto.password, row.password)
     if (isMatch) {
       const { iv, hash } = encrypt(row.id)
+      const redisKey = `${RedisEnum.Token}:${row.id}`
       const token = `${iv}.${hash}`
-      const ret = await this.redisService.set('token', row.id, token)
+      const ret = await this.redisService.set(redisKey, token)
       if (ret) {
-        await this.redisService.expire('token', token, 60 * 60 * 24 * 30)
+        await this.redisService.expire(redisKey, 60 * 60 * 24 * 30)
         result.success({ data: token, msg: '登陆成功' })
       } else {
         result.fail('登录失败')

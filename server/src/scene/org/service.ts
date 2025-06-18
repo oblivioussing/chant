@@ -2,7 +2,7 @@ import { type Org } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import type { Many } from '@/type'
 import { base } from '@/utils'
-import { OrgEntity, type OrgTree } from './model'
+import { orgEntity, type OrgEntity, type OrgTree } from './model'
 import queryRaw from './query-raw'
 
 export class OrgService extends BaseService {
@@ -11,10 +11,9 @@ export class OrgService extends BaseService {
   }
 
   // 根节点初始化
-  async root(org: Org) {
+  async root(org: OrgEntity) {
     const result = new Result()
-    const orgEntity = base.toEntity(org, OrgEntity)
-    const data = { ...orgEntity } as Org
+    const data = { ...org } as Org
     data.level = 0
     data.id = base.createId()
     data.createId = this.getUid()
@@ -29,10 +28,9 @@ export class OrgService extends BaseService {
     return result
   }
   // 新增
-  async add(org: Org) {
+  async add(org: OrgEntity) {
     const result = new Result()
-    const orgEntity = base.toEntity(org, OrgEntity)
-    const data = { ...orgEntity } as Org
+    const data = { ...org } as Org
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
@@ -50,10 +48,9 @@ export class OrgService extends BaseService {
     return result
   }
   // 更新
-  async update(org: Org) {
+  async update(org: OrgEntity) {
     const result = new Result<Org>()
-    const orgEntity = base.toEntity(org, OrgEntity)
-    const data = { ...orgEntity } as Org
+    const data = { ...org } as Org
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.org.update({
@@ -88,9 +85,9 @@ export class OrgService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<Org>) {
+  async deletes(params: Many<OrgEntity>) {
     const result = new Result()
-    const where = base.manyWhere(params, OrgEntity)
+    const where = base.manyWhere(params, orgEntity)
     const row = await prisma.org.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '组织架构批量删除成功' })
@@ -101,28 +98,27 @@ export class OrgService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<Org>()
+    const result = new Result<OrgEntity>()
     const row = await prisma.org.findUnique({
-      select: base.toSelect(OrgEntity),
+      select: base.toSelect(orgEntity),
       where: { id }
     })
     if (row) {
-      result.data = row as Org
-      result.success({ msg: '组织架构查询成功' })
+      result.success({ data: row, msg: '组织架构查询成功' })
     } else {
       result.fail('组织架构查询失败')
     }
     return result
   }
   // 列表
-  async list(org: Org) {
-    const result = new Result<Org[]>()
+  async list(org: OrgEntity) {
+    const result = new Result<OrgEntity[]>()
     const rows = await queryRaw.getList(org)
     result.success({ data: rows, msg: '组织架构列表查询成功' })
     return result
   }
   // 树
-  async tree(org: Org) {
+  async tree(org: OrgEntity) {
     const result = new Result<OrgTree>()
     const rows = await queryRaw.getTreeList(org)
     result.success({ data: base.toTree(rows), msg: '组织架构树查询成功' })

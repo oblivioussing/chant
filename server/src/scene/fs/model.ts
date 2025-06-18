@@ -1,6 +1,6 @@
 import { type File } from '@prisma/client'
 
-export const FileEntity = {
+export const fileEntity = {
   id: '', // id
   createTime: new Date(), // 创建时间
   filename: '', // 文件名

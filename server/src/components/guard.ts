@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import { RedisEnum } from '@/enum'
 import { Result } from '@/share'
 import { base } from '@/utils'
 import { RedisService } from '@/module/redis/service'
@@ -37,10 +38,11 @@ export class AuthGuard implements CanActivate {
       response.status(200).send(result)
       return false
     }
-    const value = await this.redisService.get('token', uid)
+    const redisKey = `${RedisEnum.Token}:${uid}`
+    const value = await this.redisService.get(redisKey)
     if (token === value) {
       // 重置token过期时间
-      this.redisService.expire('token', uid, 60 * 60 * 24 * 30)
+      this.redisService.expire(redisKey, 60 * 60 * 24 * 30)
     } else {
       result.code = '3'
       result.msg = '登陆失效,请重新登陆'

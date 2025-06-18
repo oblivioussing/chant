@@ -2,18 +2,14 @@ import { Prisma, type Router } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
 import { TypeEnum } from './enum'
-import { RouterEntity, type RouterTree } from './model'
+import { routerEntity, type RouterEntity, type RouterTree } from './model'
 import queryRaw from './query-raw'
 
 export class RouterService extends BaseService {
-  constructor() {
-    super()
-  }
   // 根节点初始化
   async root() {
     const result = new Result()
-    const routerEntity = base.toEntity({}, RouterEntity)
-    const data = { ...routerEntity } as Router
+    const data = base.toEntity({}, routerEntity) as Router
     data.name = '系统'
     data.id = base.createId()
     data.createId = this.getUid()
@@ -28,10 +24,9 @@ export class RouterService extends BaseService {
     return result
   }
   // 新增
-  async add(router: Router) {
+  async add(router: RouterEntity) {
     let result = new Result()
-    const routerEntity = base.toEntity(router, RouterEntity)
-    const data = { ...routerEntity } as Router
+    const data = { ...router } as Router
     data.id = base.createId()
     data.createId = this.getUid()
     data.createTime = new Date()
@@ -55,10 +50,9 @@ export class RouterService extends BaseService {
     return result
   }
   // 更新
-  async update(router: Router) {
+  async update(router: RouterEntity) {
     let result = new Result()
-    const routerEntity = base.toEntity(router, RouterEntity)
-    const data = { ...routerEntity } as Router
+    const data = { ...router } as Router
     data.updateId = this.getUid()
     data.updateTime = new Date()
     // 数据处理
@@ -139,9 +133,9 @@ export class RouterService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<typeof RouterEntity>()
+    const result = new Result<RouterEntity>()
     const row = await prisma.router.findUnique({
-      select: base.toSelect(RouterEntity),
+      select: base.toSelect(routerEntity),
       where: { id }
     })
     if (row) {
@@ -153,14 +147,14 @@ export class RouterService extends BaseService {
     return result
   }
   // 列表
-  async list(router: Router) {
-    const result = new Result<Router[]>()
+  async list(router: RouterEntity) {
+    const result = new Result<RouterEntity[]>()
     const where = base.toWhere(router, {
       like: ['name', 'path']
     }) as Prisma.RouterWhereInput
     where.isDelete = 0
     const rows = await prisma.router.findMany({
-      select: base.toSelect(RouterEntity, ['icon']),
+      select: base.toSelect(routerEntity, ['icon']),
       where,
       orderBy: {
         sequence: 'asc'
@@ -201,7 +195,7 @@ export class RouterService extends BaseService {
     return result
   }
   // 树
-  async tree(router: Router) {
+  async tree(router: RouterEntity) {
     const result = new Result<RouterTree>()
     const rows = await queryRaw.getTreeList(router)
     result.success({ data: base.toTree(rows), msg: '路由树查询成功' })
@@ -211,7 +205,7 @@ export class RouterService extends BaseService {
   async source() {
     const result = new Result<RouterTree>()
     const rows = await prisma.router.findMany({
-      select: base.toSelect(RouterEntity),
+      select: base.toSelect(routerEntity),
       where: {
         parentId: { not: '' },
         level: { not: 3 },
@@ -226,7 +220,7 @@ export class RouterService extends BaseService {
   async target() {
     const result = new Result<RouterTree>()
     const rows = await prisma.router.findMany({
-      select: base.toSelect(RouterEntity),
+      select: base.toSelect(routerEntity),
       where: {
         parentId: { not: '' },
         level: 1,

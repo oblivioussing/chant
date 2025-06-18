@@ -1,6 +1,6 @@
 import { type Router } from '@prisma/client'
 
-export const RouterEntity = {
+export const routerEntity = {
   id: '', // id
   code: '', // 编号
   icon: '', // 图标
@@ -15,13 +15,20 @@ export const RouterEntity = {
   isDelete: 0 // 删除
 } satisfies Partial<Router>
 
-export const RouterDto = {
-  ...RouterEntity
+export const routerDto = {
+  ...routerEntity
 }
 
-export const RouterVo = {
-  ...RouterEntity
+export const routerVo = {
+  ...routerEntity
 }
+
+export type RouterEntity = typeof routerEntity
+
+export type RouterDto = typeof routerDto
+
+export type RouterVo = typeof routerVo
+
 export type RouterTree = Router & {
   children: RouterTree[]
 }

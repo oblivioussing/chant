@@ -7,7 +7,15 @@ import { base } from '@/utils'
 
 // 是否需要校验权限
 export const Auth = (isAuth: boolean) => SetMetadata('isAuth', isAuth)
-// 获取query参数根据model
+// 获取body根据model
+export const BodyModel = createParamDecorator(
+  (entity: object, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest()
+    const data = base.toEntity(request.body, entity)
+    return data
+  }
+)
+// 获取query根据model
 export const QueryModel = createParamDecorator(
   (entity: object, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest()
@@ -17,7 +25,7 @@ export const QueryModel = createParamDecorator(
         Reflect.deleteProperty(query, item)
       }
     }
-    const data = base.toEntity(query, entity)
+    const data = base.toEntity(query, entity, true)
     return data
   }
 )

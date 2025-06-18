@@ -34,8 +34,8 @@ export default {
     return rows
   },
   // 获取树列表
-  async getTreeList(role?: Role) {
-    const rows = await prisma.$queryRaw<Role[]>`
+  async getTreeList(role?: typeof RoleEntity) {
+    const rows = await prisma.$queryRaw<(typeof RoleEntity)[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
         FROM role

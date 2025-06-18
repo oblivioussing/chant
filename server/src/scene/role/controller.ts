@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
-import type { Role } from '@prisma/client'
-import { QueryModel } from '@/decorator'
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
+import { BodyModel, QueryModel, ZodValidation } from '@/components'
 import { IdVali } from '@/validator'
 import { RoleEntity, type RouterParams } from './model'
 import { RoleService } from './service'
@@ -10,40 +9,31 @@ import { AddVali, UpdateVali } from './validator'
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
-  // 根节点初始化
-  @Post('root')
-  async root() {
-    const result = await this.roleService.root()
-    return result
-  }
   // 新增
   @Post('add')
-  async add(@Body() role: AddVali) {
-    const result = await this.roleService.add(role as Role)
-    return result
-  }
-  // 更新
-  @Post('update')
-  async update(@Body() role: UpdateVali) {
-    const result = await this.roleService.update(role as Role)
-    return result
-  }
-  // 更新路由
-  @Post('updateRouter')
-  async updateRouter(@Body() params: IdVali) {
-    const result = await this.roleService.updateRouter(params as RouterParams)
+  @UsePipes(new ZodValidation(AddVali))
+  async add(@BodyModel(RoleEntity) role: typeof RoleEntity) {
+    const result = await this.roleService.add(role)
     return result
   }
   // 删除
   @Post('delete')
-  async delete(@Body() role: IdVali) {
+  @UsePipes(new ZodValidation(IdVali))
+  async delete(@Body() role: typeof RoleEntity) {
     const result = await this.roleService.delete(role.id)
     return result
   }
   // 详情
   @Get('detail')
-  async detail(@Query() role: IdVali) {
+  @UsePipes(new ZodValidation(IdVali))
+  async detail(@Query() role: typeof RoleEntity) {
     const result = await this.roleService.detail(role.id)
+    return result
+  }
+  // 根节点初始化
+  @Post('root')
+  async root() {
+    const result = await this.roleService.root()
     return result
   }
   // 路由列表
@@ -54,8 +44,22 @@ export class RoleController {
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(RoleEntity) router: Role) {
+  async tree(@QueryModel(RoleEntity) router: typeof RoleEntity) {
     const result = await this.roleService.tree(router)
+    return result
+  }
+  // 更新
+  @Post('update')
+  @UsePipes(new ZodValidation(UpdateVali))
+  async update(@BodyModel(RoleEntity) role: typeof RoleEntity) {
+    const result = await this.roleService.update(role)
+    return result
+  }
+  // 更新路由
+  @Post('updateRouter')
+  @UsePipes(new ZodValidation(IdVali))
+  async updateRouter(@Body() params: RouterParams) {
+    const result = await this.roleService.updateRouter(params)
     return result
   }
 }

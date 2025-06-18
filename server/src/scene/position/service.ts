@@ -2,15 +2,14 @@ import { type Position } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { Many } from '@/type'
 import { base } from '@/utils'
-import { PositionEntity } from './model'
+import { positionEntity, type PositionEntity } from './model'
 import queryRaw from './query-raw'
 
 export class PositionService extends BaseService {
   // 新增
-  async add(position: Position) {
+  async add(position: PositionEntity) {
     const result = new Result()
-    const positionEntity = base.toEntity(position, PositionEntity)
-    const data = { ...positionEntity } as Position
+    const data = { ...position } as Position
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createId()
@@ -24,10 +23,9 @@ export class PositionService extends BaseService {
     return result
   }
   // 更新
-  async update(position: Position) {
+  async update(position: PositionEntity) {
     const result = new Result<Position>()
-    const positionEntity = base.toEntity(position, PositionEntity)
-    const data = { ...positionEntity } as Position
+    const data = { ...position } as Position
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.position.update({
@@ -53,9 +51,9 @@ export class PositionService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<Position>) {
+  async deletes(params: Many<PositionEntity>) {
     const result = new Result()
-    const where = base.manyWhere(params, PositionEntity)
+    const where = base.manyWhere(params, positionEntity)
     const row = await prisma.position.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '职位批量删除成功' })
@@ -66,9 +64,9 @@ export class PositionService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<typeof PositionEntity>()
+    const result = new Result<PositionEntity>()
     const row = await prisma.position.findUnique({
-      select: base.toSelect(PositionEntity),
+      select: base.toSelect(positionEntity),
       where: { id }
     })
     if (row) {
@@ -79,8 +77,8 @@ export class PositionService extends BaseService {
     return result
   }
   // 列表
-  async list(position: Position) {
-    const result = new Result<Position[]>()
+  async list(position: PositionEntity) {
+    const result = new Result<PositionEntity[]>()
     const rows = await queryRaw.getList(position)
     result.success({ data: rows, msg: '职位列表查询成功' })
     return result

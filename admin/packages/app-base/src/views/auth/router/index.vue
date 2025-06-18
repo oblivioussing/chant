@@ -91,7 +91,7 @@ function onDelete(id: string) {
 // 保存排序
 async function onSort() {
   const ids = state.list.map((item) => item.id)
-  const { code } = await shiki.post('router/sort', ids)
+  const { code } = await shiki.post('router/sort', { ids })
   if (code === '1') {
     treeRef.value?.getList()
   }

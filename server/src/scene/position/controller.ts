@@ -1,9 +1,8 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
-import type { Position } from '@prisma/client'
-import { QueryModel } from '@/decorator'
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
+import { BodyModel, QueryModel, ZodValidation } from '@/components'
 import type { Many } from '@/type'
 import { IdVali } from '@/validator'
-import { PositionEntity } from './model'
+import { positionEntity, type PositionEntity } from './model'
 import { PositionService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -13,38 +12,42 @@ export class PositionController {
 
   // 新增
   @Post('add')
-  async add(@Body() position: AddVali) {
-    const result = await this.positionService.add(position as Position)
-    return result
-  }
-  // 更新
-  @Post('update')
-  async update(@Body() position: UpdateVali) {
-    const result = await this.positionService.update(position as Position)
+  @UsePipes(new ZodValidation(AddVali))
+  async add(@BodyModel(positionEntity) position: PositionEntity) {
+    const result = await this.positionService.add(position)
     return result
   }
   // 删除
   @Post('delete')
-  async delete(@Body() position: IdVali) {
+  @UsePipes(new ZodValidation(IdVali))
+  async delete(@Body() position: PositionEntity) {
     const result = await this.positionService.delete(position.id)
     return result
   }
   // 批量删除
   @Post('deletes')
-  async deletes(@Body() params: Many<Position>) {
+  async deletes(@Body() params: Many<PositionEntity>) {
     const result = await this.positionService.deletes(params)
     return result
   }
   // 详情
   @Get('detail')
-  async detail(@Query() position: IdVali) {
-    const result = await this.positionService.detail(position.id)
+  @UsePipes(new ZodValidation(IdVali))
+  async detail(@Query('id') id: string) {
+    const result = await this.positionService.detail(id)
     return result
   }
   // 列表
   @Get('list')
-  async list(@QueryModel(PositionEntity) position: Position) {
+  async list(@QueryModel(positionEntity) position: PositionEntity) {
     const result = await this.positionService.list(position)
+    return result
+  }
+  // 更新
+  @Post('update')
+  @UsePipes(new ZodValidation(UpdateVali))
+  async update(@BodyModel(positionEntity) position: PositionEntity) {
+    const result = await this.positionService.update(position)
     return result
   }
 }

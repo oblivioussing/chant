@@ -1,47 +1,35 @@
-import { ArrayNotEmpty, IsMobilePhone, IsNotEmpty } from 'class-validator'
+import { z, ZodType } from 'zod'
+import { UserDto } from './model'
 
-class Base {
-  // 用户名
-  @IsNotEmpty({ message: '登录名不能为空' })
-  loginName: string
-  // 姓名
-  @IsNotEmpty({ message: '姓名不能为空' })
-  name: string
-  // 部门
-  @IsNotEmpty({ message: '部门不能为空' })
-  orgId: string
-  // 电话号码
-  @IsMobilePhone('zh-CN', {}, { message: '手机号码格式不正确' })
-  @IsNotEmpty({ message: '电话号码不能为空' })
-  phone: string
-  // 角色组
-  @ArrayNotEmpty({ message: '角色组不能为空' })
-  roleIds: string[]
-}
-// 登陆
-export class LoginVali {
-  // 用户名
-  @IsNotEmpty({ message: '登录名不能为空' })
-  loginName: string
-  // 密码
-  @IsNotEmpty({ message: '密码不能为空' })
-  password: string
-}
+type Keys = keyof UserDto
+type ZodObj = Partial<Record<Keys, ZodType>>
+
+const Base = z
+  .object({
+    loginName: z.string().nonempty('登录名不能为空'),
+    name: z.string().nonempty('姓名不能为空'),
+    orgId: z.string().nonempty('部门不能为空'),
+    phone: z
+      .string()
+      .nonempty('电话号码不能为空')
+      .regex(/^1[3-9]\d{9}$/, '手机号码格式不正确'),
+    roleIds: z.array(z.string()).nonempty('角色组不能为空')
+  } satisfies ZodObj)
+  .passthrough()
 // 新增
-export class AddVali extends Base {
-  // 密码
-  @IsNotEmpty({ message: '密码不能为空' })
-  password: string
-}
+export const AddVali = Base.extend({
+  password: z.string().nonempty('密码不能为空')
+} satisfies ZodObj)
 // 更新
-export class UpdateVali extends Base {
-  // id
-  @IsNotEmpty({ message: 'id不能为空' })
-  id: string
-}
+export const UpdateVali = Base.extend({
+  id: z.string().nonempty('id不能为空')
+} satisfies ZodObj)
+// 登陆
+export const LoginVali = Base.extend({
+  loginName: z.string().nonempty('登录名不能为空'),
+  password: z.string().nonempty('密码不能为空')
+} satisfies ZodObj)
 // 更新角色
-export class RoleIdVali {
-  // id
-  @IsNotEmpty({ message: '角色id不能为空' })
-  roleId: string
-}
+export const RoleIdVali = Base.extend({
+  roleId: z.string().nonempty('角色id不能为空')
+} satisfies ZodObj)

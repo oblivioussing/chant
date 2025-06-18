@@ -1,6 +1,6 @@
 import { Prisma, type Trade } from '@prisma/client'
 
-export const TradeEntity = {
+export const tradeEntity = {
   id: '', // id
   amount: new Prisma.Decimal(0), // 售价
   belongId: '', // 所属人id
@@ -10,12 +10,18 @@ export const TradeEntity = {
   userId: '' // 销售员id
 } satisfies Partial<Trade>
 
-export const TradeDto = {
-  ...TradeEntity
+export const tradeDto = {
+  ...tradeEntity
 }
 
-export const TradeVo = {
-  ...TradeEntity,
+export const tradeVo = {
+  ...tradeEntity,
   belongName: '', // 所属人name
   userName: '' // 销售员name
 }
+
+export type TradeEntity = typeof tradeEntity
+
+export type TradeDto = typeof tradeDto
+
+export type TradeVo = typeof tradeVo

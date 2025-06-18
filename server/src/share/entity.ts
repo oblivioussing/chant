@@ -1,9 +1,4 @@
-type ApiCode =
-  | '1' // 成功
-  | '2' // 失败
-  | '3' // 权限校验失败
-  | '4' // 参数错误
-  | '5' // 系统异常
+import { type ApiCode } from '@/type'
 
 export class PageData<T> {
   extra?: any

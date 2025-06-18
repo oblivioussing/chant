@@ -3,17 +3,13 @@ import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base } from '@/utils'
 import { StatusEnum } from './enum'
-import { TradeEntity, TradeVo } from './model'
+import { tradeEntity, type TradeEntity, type TradeVo } from './model'
 
 export class TradeService extends BaseService {
-  constructor() {
-    super()
-  }
   // 新增
-  async add(trade: Trade) {
+  async add(trade: TradeEntity) {
     const result = new Result()
-    const tradeEntity = base.toEntity(trade, TradeEntity)
-    const data = { ...tradeEntity } as Trade
+    const data = { ...trade } as Trade
     data.createId = this.getUid()
     data.createTime = new Date()
     data.id = base.createUid()
@@ -38,9 +34,9 @@ export class TradeService extends BaseService {
     return result
   }
   // 批量删除
-  async deletes(params: Many<Trade>) {
+  async deletes(params: Many<TradeEntity>) {
     const result = new Result()
-    const where = base.manyWhere(params, TradeEntity)
+    const where = base.manyWhere(params, tradeEntity)
     const row = await prisma.trade.deleteMany({ where })
     if (row.count) {
       result.success({ msg: '批量删除成功' })
@@ -51,27 +47,26 @@ export class TradeService extends BaseService {
   }
   // 详情
   async detail(id: string) {
-    const result = new Result<typeof TradeVo>()
+    const result = new Result<TradeVo>()
     const row = await prisma.trade.findUnique({
-      select: base.toSelect(TradeEntity),
+      select: base.toSelect(tradeEntity),
       where: { id }
     })
     if (row) {
-      const data = base.toEntity(row, TradeEntity)
-      result.data = await this.userIdToName(data, ['belongId', 'userId'])
-      result.success({ msg: '交易信息查询成功' })
+      const data = await this.userIdToName(row, ['belongId', 'userId'])
+      result.success({ data, msg: '交易信息查询成功' })
     } else {
       result.fail('交易信息查询失败')
     }
     return result
   }
   // 列表
-  async list(trade: Trade, page: Page) {
-    const pageData = new PageData<typeof TradeVo>()
+  async list(trade: TradeEntity, page: Page) {
+    const pageData = new PageData<TradeVo>()
     const result = new Result<typeof pageData>()
     const rows = await prisma.trade.findMany({
       ...base.pageHelper(page, 'desc'),
-      select: base.toSelect(TradeEntity),
+      select: base.toSelect(tradeEntity),
       where: trade
     })
     const total = await prisma.trade.count({ where: trade })
@@ -81,10 +76,9 @@ export class TradeService extends BaseService {
     return result
   }
   // 更新
-  async update(trade: Trade) {
+  async update(trade: TradeEntity) {
     const result = new Result()
-    const tradeEntity = base.toEntity(trade, TradeEntity)
-    const data = { ...tradeEntity } as Trade
+    const data = { ...trade } as Trade
     data.updateId = this.getUid()
     data.updateTime = new Date()
     const row = await prisma.trade.update({

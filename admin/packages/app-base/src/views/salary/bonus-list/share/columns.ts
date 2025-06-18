@@ -9,17 +9,16 @@ export default () => {
     {
       prop: 'userName',
       label: '员工',
+      dynamicPicker: 'user',
       dynamicId: 'userId',
       required: true,
-      search: true,
-      type: 'custom-picker',
-      customPicker: 'user'
+      search: true
     },
     {
       prop: 'date',
       label: '日期',
       search: true,
-      datepicker: 'month',
+      datePicker: 'month',
       valueFormat: 'YYYY-MM'
     }
   ] as Column[]

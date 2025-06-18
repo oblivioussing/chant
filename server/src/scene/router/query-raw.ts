@@ -1,9 +1,9 @@
 import { Prisma, type Router } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { RouterEntity } from './model'
+import { routerEntity, type RouterEntity } from './model'
 
 function getSelect(alias?: string) {
-  return toSelect(RouterEntity, {
+  return toSelect(routerEntity, {
     exclude: ['icon'],
     alias
   })
@@ -14,7 +14,7 @@ function like(val = '') {
 
 export default {
   // 获取树列表
-  async getTreeList(router?: Router) {
+  async getTreeList(router?: RouterEntity) {
     const rows = await prisma.$queryRaw<Router[]>`
       WITH RECURSIVE descendants AS (
         SELECT 

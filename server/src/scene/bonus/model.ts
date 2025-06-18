@@ -9,5 +9,5 @@ export const bonusVo = {
   userName: '' // 用户姓名
 }
 
-export type Bonus = typeof bonusEntity
+export type BonusEntity = typeof bonusEntity
 export type BonusVo = typeof bonusVo
