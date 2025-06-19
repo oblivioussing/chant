@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { base, useFormer } from 'chant'
+import { useFormer } from 'chant'
 import type { FormProps, FormEmits } from 'chant/type'
 import { columns, dict } from '../share'
 import PositionSelect from './PositionSelect.vue'
@@ -58,10 +58,7 @@ function getDetail() {
 }
 // 职位change
 function onPosition(row: any) {
-  const roleIds = row?.roleIds?.concat(state.form.roleIds)
-  if (roleIds) {
-    state.form.roleIds = base.distinct(roleIds)
-  }
+  state.form.roleIds = row?.roleIds
 }
 // 保存
 function onSave() {

@@ -33,8 +33,8 @@ export class PositionController {
   // 详情
   @Get('detail')
   @UsePipes(new ZodValidation(IdVali))
-  async detail(@Query('id') id: string) {
-    const result = await this.positionService.detail(id)
+  async detail(@Query() position: PositionEntity) {
+    const result = await this.positionService.detail(position.id)
     return result
   }
   // 列表

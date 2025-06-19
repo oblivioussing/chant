@@ -10,6 +10,30 @@ export default () => {
       search: true
     },
     {
+      prop: 'threeMenu',
+      label: '三级菜单',
+      hideInPages: ['list'],
+      newlineFull: true,
+      required: true,
+      type: 'radio',
+      show(model: Model) {
+        return model.level === 2
+      }
+    },
+    {
+      prop: 'type',
+      label: '类型',
+      newlineFull: true,
+      required: true,
+      type: 'radio',
+      show(model: Model) {
+        if (model.threeMenu) {
+          return model.level === 4
+        }
+        return model.level === 3
+      }
+    },
+    {
       prop: 'path',
       label: '路径',
       required: true,
@@ -24,17 +48,6 @@ export default () => {
         if (model.level === 3) {
           return model.threeMenu
         }
-      }
-    },
-    {
-      prop: 'type',
-      label: '类型',
-      type: 'radio',
-      show(model: Model) {
-        if (model.threeMenu) {
-          return model.level === 4
-        }
-        return model.level === 3
       }
     },
     {
@@ -56,15 +69,6 @@ export default () => {
       slot: ['form'],
       show(model: Model) {
         return model.level === 1
-      }
-    },
-    {
-      prop: 'threeMenu',
-      label: '三级菜单',
-      hideInPages: ['list'],
-      type: 'radio',
-      show(model: Model) {
-        return model.level === 2
       }
     }
   ] as Column[]

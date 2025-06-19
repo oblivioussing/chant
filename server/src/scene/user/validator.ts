@@ -25,11 +25,11 @@ export const UpdateVali = Base.extend({
   id: z.string().nonempty('id不能为空')
 } satisfies ZodObj)
 // 登陆
-export const LoginVali = Base.extend({
+export const LoginVali = z.object({
   loginName: z.string().nonempty('登录名不能为空'),
   password: z.string().nonempty('密码不能为空')
 } satisfies ZodObj)
 // 更新角色
-export const RoleIdVali = Base.extend({
+export const RoleIdVali = z.object({
   roleId: z.string().nonempty('角色id不能为空')
 } satisfies ZodObj)

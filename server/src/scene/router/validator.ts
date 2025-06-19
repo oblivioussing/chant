@@ -18,7 +18,7 @@ export const UpdateVali = Base.extend({
   id: z.string().nonempty('id不能为空')
 } satisfies ZodObj)
 // 转移
-export const TransferVali = Base.extend({
+export const TransferVali = z.object({
   id: z.string().nonempty('id不能为空'),
   ids: z.array(z.string()).nonempty('ids不能为空数组')
 })

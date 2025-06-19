@@ -19,6 +19,6 @@ export const UpdateVali = Base.extend({
   id: z.string().nonempty('id不能为空')
 } satisfies ZodObj)
 // 根节点
-export const RootVali = Base.extend({
+export const RootVali = z.object({
   name: z.string().nonempty('名称不能为空')
 })

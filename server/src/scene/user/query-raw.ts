@@ -45,7 +45,7 @@ export default {
         ${page.pageSize} OFFSET ${offset};
     `
     const row = await prisma.$queryRaw`
-      SELECT COUNT(id) as total FROM user as u ${getWhere(user)}
+      SELECT COUNT(*) as total FROM user as u ${getWhere(user)}
     `
     const total = Number(row[0]?.total)
     return { rows, total }

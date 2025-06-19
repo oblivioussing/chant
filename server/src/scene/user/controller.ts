@@ -89,7 +89,7 @@ export class UserController {
   @Post('updateRole')
   @UsePipes(new ZodValidation(RoleIdVali))
   async updateRole(@Body() user: UserEntity) {
-    const result = await this.userService.updateRole(user.id)
+    const result = await this.userService.updateRole(user.roleId)
     return result
   }
 }

@@ -246,7 +246,7 @@ export class UserService extends BaseService {
   }
   // 更新角色
   async updateRole(roleId: string) {
-    const result = new Result<User>()
+    const result = new Result<UserEntity>()
     const row = await prisma.user.update({
       data: {
         roleId: roleId,

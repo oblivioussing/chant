@@ -32,7 +32,10 @@
     </div>
   </div>
   <!-- mix-form -->
-  <chant-dialog v-model="state.mixForm" :title="lister.title(state)">
+  <chant-dialog
+    v-model="state.mixForm"
+    style="width: 500px"
+    :title="lister.title(state)">
     <mix-form
       v-if="state.mixForm"
       :copy-flag="state.copyFlag"

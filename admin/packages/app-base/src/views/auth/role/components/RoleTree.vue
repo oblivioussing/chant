@@ -55,7 +55,10 @@
     </div>
   </div>
   <!-- mix-form -->
-  <chant-dialog v-model="state.mixForm" :title="state.title">
+  <chant-dialog
+    v-model="state.mixForm"
+    style="width: 400px"
+    :title="state.title">
     <mix-form
       v-if="state.mixForm"
       :page-type="state.pageType"
