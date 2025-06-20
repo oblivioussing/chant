@@ -1,12 +1,12 @@
 import { Prisma, type Role } from '@prisma/client'
 import { prisma, toSelect } from '@/share'
-import { RoleEntity } from './model'
+import { roleEntity, type RoleEntity } from './model'
 
 function like(val = '') {
   return Prisma.sql`${`%${val}%`}`
 }
 function getSelect(alias?: string) {
-  return toSelect(RoleEntity, {
+  return toSelect(roleEntity, {
     exclude: ['isDelete', 'routerIds'],
     alias
   })
@@ -34,8 +34,8 @@ export default {
     return rows
   },
   // 获取树列表
-  async getTreeList(role?: typeof RoleEntity) {
-    const rows = await prisma.$queryRaw<(typeof RoleEntity)[]>`
+  async getTreeList(role?: RoleEntity) {
+    const rows = await prisma.$queryRaw<RoleEntity[]>`
       WITH RECURSIVE descendants AS (
         SELECT ${getSelect()}
         FROM role

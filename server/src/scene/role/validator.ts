@@ -1,7 +1,7 @@
 import { z, ZodType } from 'zod'
-import { RoleEntity } from './model'
+import { type RoleEntity } from './model'
 
-type Keys = keyof typeof RoleEntity
+type Keys = keyof RoleEntity
 type ZodObj = Partial<Record<Keys, ZodType>>
 
 const Base = z
