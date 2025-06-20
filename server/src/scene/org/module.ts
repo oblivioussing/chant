@@ -3,9 +3,9 @@ import { OrgController } from './controller'
 import { OrgService } from './service'
 
 @Module({
-  imports: [],
-  exports: [],
   controllers: [OrgController],
+  exports: [],
+  imports: [],
   providers: [OrgService]
 })
 export class OrgModule {}

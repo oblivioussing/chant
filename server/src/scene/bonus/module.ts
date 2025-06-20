@@ -3,9 +3,9 @@ import { BonusController } from './controller'
 import { BonusService } from './service'
 
 @Module({
-  imports: [],
-  exports: [],
   controllers: [BonusController],
+  exports: [],
+  imports: [],
   providers: [BonusService]
 })
 export class BonusModule {}

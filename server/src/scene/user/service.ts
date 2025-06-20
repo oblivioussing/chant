@@ -69,9 +69,9 @@ export class UserService extends BaseService {
         threeMenu: true
       },
       where: {
-        level: { gt: 0 },
+        id: user.loginName === 'admin' ? undefined : { in: routerIds },
         isDelete: 0,
-        id: user.loginName === 'admin' ? undefined : { in: routerIds }
+        level: { gt: 0 }
       },
       orderBy: { sequence: 'asc' }
     })
@@ -107,8 +107,7 @@ export class UserService extends BaseService {
     })
     if (rows) {
       const menu = base.toTree(list, { exclude: ['parentId'] })
-      result.data = { menu }
-      result.success({ msg: '权限信息查询成功' })
+      result.success({ data: { menu }, msg: '权限信息查询成功' })
     } else {
       result.fail('权限信息查询失败')
     }
@@ -187,10 +186,10 @@ export class UserService extends BaseService {
     return result
   }
   // 登陆
-  async login(userDto: UserDto) {
+  async login(user: UserDto) {
     const result = new Result<string>()
     const row = await prisma.user.findUnique({
-      where: { loginName: userDto.loginName },
+      where: { loginName: user.loginName },
       select: { id: true, password: true }
     })
     if (!row) {
@@ -198,7 +197,7 @@ export class UserService extends BaseService {
       return result
     }
     // 判断密码是否相同
-    const isMatch = await compare(userDto.password, row.password)
+    const isMatch = await compare(user.password, row.password)
     if (isMatch) {
       const { iv, hash } = encrypt(row.id)
       const redisKey = `${RedisEnum.Token}:${row.id}`

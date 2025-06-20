@@ -3,9 +3,9 @@ import { RoleController } from './controller'
 import { RoleService } from './service'
 
 @Module({
-  imports: [],
-  exports: [],
   controllers: [RoleController],
+  exports: [],
+  imports: [],
   providers: [RoleService]
 })
 export class RoleModule {}

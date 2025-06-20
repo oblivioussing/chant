@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
 import { BodyModel, QueryModel, ZodValidation } from '@/components'
 import { IdVali } from '@/validator'
-import { RoleEntity, type RouterParams } from './model'
+import { roleEntity, type RoleEntity, type RouterParams } from './model'
 import { RoleService } from './service'
 import { AddVali, UpdateVali } from './validator'
 
@@ -12,21 +12,21 @@ export class RoleController {
   // 新增
   @Post('add')
   @UsePipes(new ZodValidation(AddVali))
-  async add(@BodyModel(RoleEntity) role: typeof RoleEntity) {
+  async add(@BodyModel(roleEntity) role: RoleEntity) {
     const result = await this.roleService.add(role)
     return result
   }
   // 删除
   @Post('delete')
   @UsePipes(new ZodValidation(IdVali))
-  async delete(@Body() role: typeof RoleEntity) {
+  async delete(@Body() role: RoleEntity) {
     const result = await this.roleService.delete(role.id)
     return result
   }
   // 详情
   @Get('detail')
   @UsePipes(new ZodValidation(IdVali))
-  async detail(@Query() role: typeof RoleEntity) {
+  async detail(@Query() role: RoleEntity) {
     const result = await this.roleService.detail(role.id)
     return result
   }
@@ -44,14 +44,14 @@ export class RoleController {
   }
   // 树
   @Get('tree')
-  async tree(@QueryModel(RoleEntity) router: typeof RoleEntity) {
+  async tree(@QueryModel(roleEntity) router: RoleEntity) {
     const result = await this.roleService.tree(router)
     return result
   }
   // 更新
   @Post('update')
   @UsePipes(new ZodValidation(UpdateVali))
-  async update(@BodyModel(RoleEntity) role: typeof RoleEntity) {
+  async update(@BodyModel(roleEntity) role: RoleEntity) {
     const result = await this.roleService.update(role)
     return result
   }

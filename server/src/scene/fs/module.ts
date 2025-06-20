@@ -3,9 +3,9 @@ import { FsController } from './controller'
 import { FsService } from './service'
 
 @Module({
-  imports: [],
-  exports: [],
   controllers: [FsController],
+  exports: [],
+  imports: [],
   providers: [FsService]
 })
 export class FsModule {}

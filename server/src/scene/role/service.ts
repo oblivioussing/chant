@@ -2,8 +2,9 @@ import type { Role } from '@prisma/client'
 import { prisma, BaseService, Result } from '@/share'
 import { base } from '@/utils'
 import {
-  RoleEntity,
+  roleEntity,
   type MenuItem,
+  type RoleEntity,
   type RoleTree,
   type RouterItem,
   type RouterParams
@@ -13,9 +14,9 @@ import queryRaw from './query-raw'
 
 export class RoleService extends BaseService {
   // 新增
-  async add(roleDto: typeof RoleEntity) {
+  async add(role: RoleEntity) {
     const result = new Result()
-    const data = { ...roleDto } as Role
+    const data = { ...role } as Role
     data.createId = this.getUserId()
     data.createTime = new Date()
     data.id = base.createId()
@@ -23,7 +24,7 @@ export class RoleService extends BaseService {
     data.routerIds = []
     // 获取序号
     const count = await prisma.role.count({
-      where: { level: data.level, parentId: roleDto.id }
+      where: { level: data.level, parentId: role.id }
     })
     data.sequence = count
     const row = await prisma.role.create({ data })
@@ -58,7 +59,7 @@ export class RoleService extends BaseService {
   async detail(id: string) {
     const result = new Result<Role>()
     const row = await prisma.role.findUnique({
-      select: base.toSelect(RoleEntity),
+      select: base.toSelect(roleEntity),
       where: { id }
     })
     if (row) {
@@ -71,8 +72,7 @@ export class RoleService extends BaseService {
   // 根节点初始化
   async root() {
     const result = new Result()
-    const routerEntity = structuredClone(RoleEntity)
-    const data = { ...routerEntity } as Role
+    const data = { ...roleEntity } as Role
     data.name = '管理员'
     data.id = base.createId()
     data.createId = this.getUserId()
@@ -173,14 +173,14 @@ export class RoleService extends BaseService {
     }
   }
   // 树
-  async tree(role: typeof RoleEntity) {
+  async tree(role: RoleEntity) {
     const result = new Result<RoleTree>()
     const rows = await queryRaw.getTreeList(role)
     result.success({ data: base.toTree(rows), msg: '角色树查询成功' })
     return result
   }
   // 更新
-  async update(role: typeof RoleEntity) {
+  async update(role: RoleEntity) {
     const result = new Result<Role>()
     const data = { ...role } as Role
     data.updateId = this.getUserId()

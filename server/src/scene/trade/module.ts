@@ -3,9 +3,9 @@ import { TradeController } from './controller'
 import { TradeService } from './service'
 
 @Module({
-  imports: [],
-  exports: [],
   controllers: [TradeController],
+  exports: [],
+  imports: [],
   providers: [TradeService]
 })
 export class TradeModule {}
