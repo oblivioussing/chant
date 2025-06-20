@@ -28,8 +28,8 @@ export function distinct(arr: any[], key?: string) {
     return Array.from(new Set(arr))
   }
 }
-// 根据token获取uid
-export function getUidByToken(token: string) {
+// 根据token获取userId
+export function getUserIdByToken(token: string) {
   const [iv, hash] = token?.split('.') || []
   if (iv && hash) {
     return decrypt(iv, hash)

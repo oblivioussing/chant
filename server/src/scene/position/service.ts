@@ -10,7 +10,7 @@ export class PositionService extends BaseService {
   async add(position: PositionEntity) {
     const result = new Result()
     const data = { ...position } as Position
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     data.id = base.createId()
     data.isDelete = 0
@@ -70,7 +70,7 @@ export class PositionService extends BaseService {
   async update(position: PositionEntity) {
     const result = new Result<Position>()
     const data = { ...position } as Position
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     data.updateTime = new Date()
     const row = await prisma.position.update({
       data,

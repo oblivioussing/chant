@@ -15,7 +15,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const response = http.getResponse<FastifyReply>()
     const request = http.getRequest()
     const headers = request.headers
-    const uid = base.getUidByToken(headers.token)
+    const userId = base.getUserIdByToken(headers.token)
     const body = request.body && JSON.stringify(request.body)
     const result = new Result()
     if (exception instanceof HttpException) {
@@ -32,7 +32,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
     let content = `\n`
     content += `url:${request.url}\n`
-    content += `uid:${uid}\n`
+    content += `userId:${userId}\n`
     if (body) {
       content += `body:${body}\n`
     }

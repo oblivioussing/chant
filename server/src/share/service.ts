@@ -33,10 +33,10 @@ export class BaseService {
       return []
     }
   }
-  // 获取uid
-  getUid() {
+  // 获取user id
+  getUserId() {
     const token = this.request.headers['token']
-    return base.getUidByToken(token)
+    return base.getUserIdByToken(token)
   }
   // 国际化
   t(text: string) {

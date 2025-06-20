@@ -32,7 +32,7 @@ export class UserService extends BaseService {
     }
     const data = base.toEntity(user, userEntity) as User
     data.id = base.createUid()
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     data.password = await hash(user.password, 10)
     data.roleId = data.roleIds[0]
@@ -54,7 +54,7 @@ export class UserService extends BaseService {
           select: { routerIds: true }
         }
       },
-      where: { id: this.getUid() }
+      where: { id: this.getUserId() }
     })
     const routerIds = user.Role.routerIds as string[]
     const rows = await prisma.router.findMany({
@@ -162,7 +162,7 @@ export class UserService extends BaseService {
         roleId: true,
         Role: { select: { name: true } }
       },
-      where: { id: this.getUid() }
+      where: { id: this.getUserId() }
     })
     if (row) {
       const { Role, ...other } = row
@@ -218,7 +218,7 @@ export class UserService extends BaseService {
   // 角色
   async roles() {
     const result = new Result<any[]>()
-    const rows = await queryRaw.getRoles(this.getUid())
+    const rows = await queryRaw.getRoles(this.getUserId())
     if (rows) {
       result.data = rows
       result.success({ msg: '用户角色查询成功' })
@@ -232,7 +232,7 @@ export class UserService extends BaseService {
     const result = new Result()
     const data = { ...user } as User
     data.updateTime = new Date()
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     const row = await prisma.user.update({
       data,
       where: { id: user.id }
@@ -250,10 +250,10 @@ export class UserService extends BaseService {
     const row = await prisma.user.update({
       data: {
         roleId: roleId,
-        updateId: this.getUid(),
+        updateId: this.getUserId(),
         updateTime: new Date()
       },
-      where: { id: this.getUid() }
+      where: { id: this.getUserId() }
     })
     if (row) {
       result.success({ msg: '角色更新成功' })

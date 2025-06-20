@@ -11,7 +11,7 @@ export class RouterService extends BaseService {
     let result = new Result()
     const data = { ...router } as Router
     data.id = base.createId()
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     // 数据处理
     result = await this.dataDeal(data)
@@ -80,7 +80,7 @@ export class RouterService extends BaseService {
     const row = await prisma.router.updateMany({
       data: {
         isDelete: 1,
-        updateId: this.getUid(),
+        updateId: this.getUserId(),
         updateTime: new Date()
       },
       where: { id: { in: ids } }
@@ -100,8 +100,7 @@ export class RouterService extends BaseService {
       where: { id }
     })
     if (row) {
-      result.data = row
-      result.success({ msg: '路由查询成功' })
+      result.success({ data: row, msg: '路由查询成功' })
     } else {
       result.fail('路由查询失败')
     }
@@ -130,7 +129,7 @@ export class RouterService extends BaseService {
     const data = structuredClone(routerEntity) as Router
     data.name = '系统'
     data.id = base.createId()
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     // create
     const row = await prisma.router.create({ data })
@@ -213,7 +212,7 @@ export class RouterService extends BaseService {
   async update(router: RouterEntity) {
     let result = new Result()
     const data = { ...router } as Router
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     data.updateTime = new Date()
     // 数据处理
     result = await this.dataDeal(data)

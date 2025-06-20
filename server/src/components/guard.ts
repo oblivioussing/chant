@@ -31,14 +31,14 @@ export class AuthGuard implements CanActivate {
       response.status(200).send(result)
       return false
     }
-    const uid = base.getUidByToken(token)
-    if (!uid) {
+    const userId = base.getUserIdByToken(token)
+    if (!userId) {
       result.code = '3'
       result.msg = '权限校验失败,请重新登陆'
       response.status(200).send(result)
       return false
     }
-    const redisKey = `${RedisEnum.Token}:${uid}`
+    const redisKey = `${RedisEnum.Token}:${userId}`
     const value = await this.redisService.get(redisKey)
     if (token === value) {
       // 重置token过期时间

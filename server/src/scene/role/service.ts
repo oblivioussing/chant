@@ -16,7 +16,7 @@ export class RoleService extends BaseService {
   async add(roleDto: typeof RoleEntity) {
     const result = new Result()
     const data = { ...roleDto } as Role
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     data.id = base.createId()
     data.isDelete = 0
@@ -42,7 +42,7 @@ export class RoleService extends BaseService {
     const row = await prisma.role.updateMany({
       data: {
         isDelete: 1,
-        updateId: this.getUid(),
+        updateId: this.getUserId(),
         updateTime: new Date()
       },
       where: { id: { in: ids } }
@@ -75,7 +75,7 @@ export class RoleService extends BaseService {
     const data = { ...routerEntity } as Role
     data.name = '管理员'
     data.id = base.createId()
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     // create
     const row = await prisma.role.create({ data })
@@ -183,7 +183,7 @@ export class RoleService extends BaseService {
   async update(role: typeof RoleEntity) {
     const result = new Result<Role>()
     const data = { ...role } as Role
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     data.updateTime = new Date()
     const row = await prisma.role.update({
       data,
@@ -228,7 +228,7 @@ export class RoleService extends BaseService {
       return prisma.role.update({
         data: {
           routerIds,
-          updateId: this.getUid(),
+          updateId: this.getUserId(),
           updateTime: new Date()
         },
         where: { id: item.id }

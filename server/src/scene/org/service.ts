@@ -10,7 +10,7 @@ export class OrgService extends BaseService {
   async add(org: OrgEntity) {
     const result = new Result()
     const data = { ...org } as Org
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     data.id = base.createId()
     // 获取序号
@@ -34,7 +34,7 @@ export class OrgService extends BaseService {
     const row = await prisma.org.updateMany({
       data: {
         isDelete: 1,
-        updateId: this.getUid(),
+        updateId: this.getUserId(),
         updateTime: new Date()
       },
       where: { id: { in: ids } }
@@ -85,7 +85,7 @@ export class OrgService extends BaseService {
     const data = { ...org } as Org
     data.level = 0
     data.id = base.createId()
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
     // create
     const row = await prisma.org.create({ data })
@@ -107,7 +107,7 @@ export class OrgService extends BaseService {
   async update(org: OrgEntity) {
     const result = new Result<Org>()
     const data = { ...org } as Org
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     data.updateTime = new Date()
     const row = await prisma.org.update({
       data,

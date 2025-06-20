@@ -16,11 +16,11 @@ export class TransformInterceptor implements NestInterceptor {
     const request = http.getRequest<FastifyRequest>()
     const response = http.getResponse<FastifyReply>()
     const headers = request.headers as any
-    const uid = base.getUidByToken(headers.token)
+    const userId = base.getUserIdByToken(headers.token)
     const body = request.body && JSON.stringify(request.body)
     let content = `\n`
     content += `url:${request.url}\n`
-    content += `uid:${uid}\n`
+    content += `userId:${userId}\n`
     if (body) {
       content += `body:${body}\n`
     }

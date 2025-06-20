@@ -10,9 +10,9 @@ export class TradeService extends BaseService {
   async add(trade: TradeEntity) {
     const result = new Result()
     const data = { ...trade } as Trade
-    data.createId = this.getUid()
+    data.createId = this.getUserId()
     data.createTime = new Date()
-    data.id = base.createUid()
+    data.id = base.createId()
     data.status = StatusEnum.Normal
     const row = await prisma.trade.create({ data })
     if (row) {
@@ -79,7 +79,7 @@ export class TradeService extends BaseService {
   async update(trade: TradeEntity) {
     const result = new Result()
     const data = { ...trade } as Trade
-    data.updateId = this.getUid()
+    data.updateId = this.getUserId()
     data.updateTime = new Date()
     const row = await prisma.trade.update({
       data,
