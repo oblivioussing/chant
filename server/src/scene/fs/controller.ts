@@ -1,5 +1,5 @@
-import type { File } from 'prisma/prisma-client'
 import { Controller, Post, Request } from '@nestjs/common'
+import { type File } from '@prisma/client'
 import { Result } from '@/share'
 import { FsService } from './service'
 import { saveFile } from './utils'
