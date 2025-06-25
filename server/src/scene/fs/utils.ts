@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
-import type { File } from 'prisma/prisma-client'
+import type { File } from '@prisma/client'
 import { Result } from '@/share'
 import { base } from '@/utils'
 

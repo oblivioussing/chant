@@ -7,7 +7,6 @@ export type ApiCode =
 
 export type Many<T> = {
   all?: 0 | 1
-  extra?: Record<string, any>
   ids?: string[]
   search?: T
 }

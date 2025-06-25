@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
 import { BodyModel, QueryModel, QueryPage, ZodValidation } from '@/components'
 import type { Many, Page } from '@/type'
-import { IdVali } from '@/validator'
+import { IdVali, ManyVali } from '@/validator'
 import { tradeEntity, type TradeEntity } from './model'
 import { TradeService } from './service'
 import { AddVali, UpdateVali } from './validator'
@@ -26,6 +26,7 @@ export class TradeController {
   }
   // 批量删除
   @Post('deletes')
+  @UsePipes(new ZodValidation(ManyVali))
   async deletes(@Body() params: Many<TradeEntity>) {
     const result = await this.tradeService.deletes(params)
     return result

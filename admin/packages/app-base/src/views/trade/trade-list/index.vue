@@ -81,13 +81,13 @@ lister.created(() => {
 function getList() {
   lister.getData('trade/list', state)
 }
+// 更多操作column
+function onColumnMore(type: string, row: any) {
+  console.log(type, row)
+}
 // 删除
 function onDelete(id: string) {
   lister.remove('trade/delete', state, { id })
-}
-// 批量设置
-function onSet(val: string) {
-  console.log(val)
 }
 // 批量删除
 function onDeletes() {
@@ -97,9 +97,9 @@ function onDeletes() {
 function onMore(type: string) {
   console.log(type)
 }
-// 更多操作column
-function onColumnMore(type: string, row: any) {
-  console.log(type, row)
+// 批量设置
+function onSet(val: string) {
+  console.log(val)
 }
 </script>
 

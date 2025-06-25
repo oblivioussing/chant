@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
 import { BodyModel, QueryModel, ZodValidation } from '@/components'
 import type { Many } from '@/type'
-import { IdVali } from '@/validator'
+import { IdVali, ManyVali } from '@/validator'
 import { positionEntity, type PositionEntity } from './model'
 import { PositionService } from './service'
 import { AddVali, UpdateVali } from './validator'
@@ -26,6 +26,7 @@ export class PositionController {
   }
   // 批量删除
   @Post('deletes')
+  @UsePipes(new ZodValidation(ManyVali))
   async deletes(@Body() params: Many<PositionEntity>) {
     const result = await this.positionService.deletes(params)
     return result

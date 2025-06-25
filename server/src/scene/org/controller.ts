@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common'
 import { BodyModel, QueryModel, ZodValidation } from '@/components'
 import type { Many } from '@/type'
-import { IdVali } from '@/validator'
+import { IdVali, ManyVali } from '@/validator'
 import { orgEntity, type OrgEntity } from './model'
 import { OrgService } from './service'
 import { AddVali, RootVali, UpdateVali } from './validator'
@@ -26,6 +26,7 @@ export class OrgController {
   }
   // 批量删除
   @Post('deletes')
+  @UsePipes(new ZodValidation(ManyVali))
   async deletes(@Body() params: Many<OrgEntity>) {
     const result = await this.orgService.deletes(params)
     return result

@@ -7,7 +7,7 @@ import {
   ZodValidation
 } from '@/components'
 import type { Many, Page } from '@/type'
-import { IdVali } from '@/validator'
+import { IdVali, ManyVali } from '@/validator'
 import { userDto, userEntity, type UserDto, type UserEntity } from './model'
 import { UserService } from './service'
 import { LoginVali, AddVali, UpdateVali, RoleIdVali } from './validator'
@@ -38,6 +38,7 @@ export class UserController {
   }
   // 批量删除
   @Post('deletes')
+  @UsePipes(new ZodValidation(ManyVali))
   async deletes(@Body() params: Many<UserEntity>) {
     const result = await this.userService.deletes(params)
     return result

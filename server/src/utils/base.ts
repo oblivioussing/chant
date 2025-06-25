@@ -6,7 +6,7 @@ import { decrypt } from './crypto'
 type PageHelper = {
   skip: number
   take: number
-  orderBy?: any
+  orderBy?: Record<string, string>
 }
 
 // 创建id

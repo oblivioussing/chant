@@ -143,7 +143,6 @@ function useLister(config?: { method?: Function; type?: FormType }) {
   function getListParams(state: State) {
     if (state.all) {
       return {
-        ids: state.selections.map((item) => item.id),
         all: state.all,
         search: getQuery(state)
       }
