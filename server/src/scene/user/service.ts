@@ -6,7 +6,13 @@ import { RedisService } from '@/module/redis/service'
 import { prisma, BaseService, PageData, Result } from '@/share'
 import { Many, Page } from '@/type'
 import { base, encrypt } from '@/utils'
-import { userEntity, type UserDto, type UserEntity } from './model'
+import {
+  userEntity,
+  type Auth,
+  type MenuItem,
+  type UserDto,
+  type UserEntity
+} from './model'
 import queryRaw from './query-raw'
 
 export class UserService extends BaseService {
@@ -46,7 +52,7 @@ export class UserService extends BaseService {
   }
   // 权限
   async auth() {
-    const result = new Result<any>()
+    const result = new Result<Auth>()
     const user = await prisma.user.findUnique({
       select: {
         loginName: true,
@@ -86,7 +92,7 @@ export class UserService extends BaseService {
       return acc
     }, {})
     const list = rows.map((item) => {
-      const row = {} as any
+      const row = {} as Omit<MenuItem, 'children'> & { parentId: string }
       row.id = item.id
       row.meta = { title: item.name }
       row.level = item.level

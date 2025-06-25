@@ -27,3 +27,17 @@ export type UserEntity = typeof userEntity
 export type UserDto = typeof userDto
 
 export type UserVo = typeof userVo
+
+export type MenuItem = {
+  id: string
+  level: number
+  icon?: string
+  meta: { title: string; funs?: string[] }
+  path?: string
+  threeMenu?: number
+  children?: MenuItem[]
+}
+
+export type Auth = {
+  menu: MenuItem[]
+}

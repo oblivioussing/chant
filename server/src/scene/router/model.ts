@@ -29,6 +29,4 @@ export type RouterDto = typeof routerDto
 
 export type RouterVo = typeof routerVo
 
-export type RouterTree = Router & {
-  children: RouterTree[]
-}
+export type RouterTree = (RouterEntity & { children: RouterEntity[] })[]
