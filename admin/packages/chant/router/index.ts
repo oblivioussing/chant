@@ -6,7 +6,6 @@ import {
 } from 'vue-router'
 import { StorageEnum } from '../enum'
 import { storage } from '../utils'
-
 import app from './app' // app
 
 const router = createRouter({

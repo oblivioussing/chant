@@ -48,7 +48,8 @@ function useFormer(props?: FormProps, config?: { columns?: FormColumn[] }) {
         // 路由参数是否变化
         const isModify = _isRouterQueryModify(state)
         if (isModify) {
-          state.query = route?.query
+          state.selection = route?.query
+          state.query = { id: state.selection?.id }
           callback(_hasGetDetail(state))
         }
       })

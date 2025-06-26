@@ -1,5 +1,5 @@
 <template>
-  <div>首页</div>
+  <div class="gravity-center">首页</div>
 </template>
 
 <script setup lang="ts"></script>

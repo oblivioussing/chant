@@ -30,7 +30,7 @@
       :min-width="item.width ? undefined : columnWidth"
       :prop="item.prop"
       show-overflow-tooltip
-      :sortable="item.sortable">
+      sortable>
       <template #header>
         <chant-tooltip
           style="color: var(--el-table-header-text-color)"
@@ -128,10 +128,6 @@ import { DocumentCopy } from '@element-plus/icons-vue'
 import { useLister } from '@chant'
 import type { Lang, ListColumn as Column, ListState } from '@chant/type'
 
-// defineExpose
-defineExpose({
-  scrollToBottom // 滚动到底部
-})
 // type
 interface Props {
   columns?: Column[] // 列表字段
@@ -184,11 +180,6 @@ const tableRef = ref<TableInstance>()
 let state = reactive({
   height: 0
 })
-// resize
-window.addEventListener('resize', () => {
-  // 列表容器自适应
-  tableAdapter()
-})
 // computed
 const availableColumns = computed(() => {
   return columns.value?.filter((item) => {
@@ -208,6 +199,10 @@ const columns = computed(() => {
 const list = computed(() => {
   return vModel.value?.list || props.list
 })
+// defineExpose
+defineExpose({
+  scrollToBottom // 滚动到底部
+})
 // watch
 watch(
   () => vModel.value?.all,
@@ -216,6 +211,11 @@ watch(
     allCheckedStatus()
   }
 )
+// resize
+window.addEventListener('resize', () => {
+  // 列表容器自适应
+  tableAdapter()
+})
 // 初始化
 onMounted(() => {
   // 实例更新
@@ -403,6 +403,12 @@ function translate(column: Column) {
     line-height: 38px;
     .el-table__cell {
       background-color: var(--gray-color) !important;
+    }
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
     }
   }
   .cell {
