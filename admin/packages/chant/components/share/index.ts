@@ -1,4 +1,4 @@
-import { type Column } from '@chant2'
+import { type Column } from '@chant'
 
 // 显示input标签
 export function showInput(column: Column) {
