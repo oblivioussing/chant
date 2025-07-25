@@ -348,7 +348,6 @@ function onLink(row: any) {
 // 单元格点击
 function onRowClick(row: any) {
   if (props.rowChecked) {
-    // @ts-expect-error
     tableRef.value?.toggleRowSelection(row, undefined)
   }
   emits('row-click', row)
