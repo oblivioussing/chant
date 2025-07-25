@@ -7,7 +7,7 @@
       :pager-count="props.pagerCount"
       :page-size="vModel?.pageSize"
       :page-sizes="[10, 20, 50]"
-      small
+      size="small"
       :total="props.total"
       @current-change="onCurrent"
       @size-change="onSize">
