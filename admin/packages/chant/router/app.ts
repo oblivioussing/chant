@@ -18,8 +18,8 @@ export default [
     component: () => import('@app-base/components/home-layout/Index.vue'),
     children: [
       {
-        path: '/',
-        name: '/',
+        path: '',
+        name: '',
         component: () => import('@app-base/views/app/index/index.vue'),
         meta: { title: '首页' }
       }

@@ -73,35 +73,19 @@ const ColumnBox = defineComponent({
   setup() {
     const slots = useSlots()
     return () => {
-      if (props.vxe) {
-        return (
-          <vxe-column
-            align="center"
-            fixed="right"
-            title={t('operate')}
-            width={widthCpd.value}>
-            {{
-              default: ({ row }: any) => {
-                return slots.default ? slots.default({ row }) : null
-              }
-            }}
-          </vxe-column>
-        )
-      } else {
-        return (
-          <el-table-column
-            align="center"
-            fixed="right"
-            label={t('operate')}
-            width={widthCpd.value}>
-            {{
-              default: ({ row }: any) => {
-                return slots.default ? slots.default({ row }) : null
-              }
-            }}
-          </el-table-column>
-        )
-      }
+      return (
+        <el-table-column
+          align="center"
+          fixed="right"
+          label={t('operate')}
+          width={widthCpd.value}>
+          {{
+            default: ({ row }: any) => {
+              return slots.default ? slots.default({ row }) : null
+            }
+          }}
+        </el-table-column>
+      )
     }
   }
 })
